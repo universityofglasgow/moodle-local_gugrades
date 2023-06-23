@@ -33,7 +33,6 @@
         props.users.forEach((user) => {
             line = [
                 strings.value.hiddenuser + ' ' + user.uniqueid,
-                user.idnumber,
                 '',
                 '',
                 user.idnumber,
