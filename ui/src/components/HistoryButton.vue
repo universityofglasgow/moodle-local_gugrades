@@ -4,10 +4,16 @@
     <Teleport to="body">
         <ModalForm :show="showhistorymodal" @close="showhistorymodal = false">
             <template #header>
-                <h4>History</h4>
+                <h4>{{ strings.gradehistory }}</h4>
                 
             </template>
             <template #body>
+                <div>
+                    <ul class="list-unstyled">
+                        <li><b>Name:</b> {{ name }}</li>
+                        <li><b>Item name:</b> {{ itemname }}</li>
+                    </ul>
+                </div>
                 <div v-if="grades.length == 0" class="alert alert-warning">{{ strings.nohistory }}</div>
                 <div v-for="grade in grades" :key="grade.id" class="mb-3 border-bottom">
                     <ul>
@@ -36,7 +42,9 @@
 
     const props = defineProps({
         userid: Number,
-        itemid: Number
+        itemid: Number,
+        name: String,
+        itemname: String,
     });
 
     /**
@@ -75,7 +83,8 @@
         // Get the moodle strings for this page
         const stringslist = [
             'history',
-            'nohistory'
+            'nohistory',
+            'gradehistory',
         ];
         getstrings(stringslist)
         .then(results => {

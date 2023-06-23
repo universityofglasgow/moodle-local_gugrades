@@ -19,7 +19,8 @@
                 <table v-if="showtable" class="table table-striped table-sm mt-4 border rounded">
                     <thead class="thead-light">
                         <th v-if="!usershidden">{{ strings.userpicture }}</th>
-                        <th>{{ strings.firstnamelastname }}</th>
+                        <th v-if="!usershidden">{{ strings.firstnamelastname }}</th>
+                        <th v-if="usershidden">{{ strings.participant }}</th>
                         <th>{{ strings.idnumber }}</th>
                         <th>{{ strings.grade }}</th>
                         <th> </th>
@@ -34,7 +35,7 @@
                             <CaptureGrades :grades="user.grades"></CaptureGrades>
                             <td>
                                 <AddGradeButton :itemid="itemid" :userid="parseInt(user.id)"></AddGradeButton>&nbsp;
-                                <HistoryButton :userid="parseInt(user.id)" :itemid="itemid"></HistoryButton>
+                                <HistoryButton :userid="parseInt(user.id)" :itemid="itemid" :name="user.displayname" :itemname="itemname"></HistoryButton>
                             </td>
                         </tr>
                     </tbody>
@@ -213,6 +214,7 @@
             'importgrades',
             'userpicture',
             'gradenotsupported',
+            'participant',
         ];
         getstrings(stringslist)
         .then(results => {
