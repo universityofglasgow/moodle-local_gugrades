@@ -30,21 +30,11 @@ require_once($CFG->dirroot . '/mod/assign/locallib.php');
  * Access data in course activities
  * Specific implementation for assignment
  */
-class assign_activity implements activity_interface {
-
-    private $gradeitemid; 
-
-    private $courseid;
-
-    private $firstnamefilter;
-
-    private $lastnamefilter;
+class assign_activity extends base {
 
     private $cm;
 
     private $assign;
-
-    private $gradeitem;
 
     /**
      * Constructor, set grade itemid
@@ -52,13 +42,7 @@ class assign_activity implements activity_interface {
      * @param int $courseid
      */
     public function __construct(int $gradeitemid, int $courseid) {
-        global $DB;
-
-        $this->gradeitemid = $gradeitemid;
-        $this->courseid = $courseid;
-
-        // Get grade item
-        $this->gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
+        parent::__construct($gradeitemid, $courseid);
 
         // Get the assignment object
         $this->cm = \local_gugrades\users::get_cm_from_grade_item($gradeitemid, $courseid);
@@ -78,14 +62,6 @@ class assign_activity implements activity_interface {
         $assign = new \assign($coursemodulecontext, $cm, $course);
 
         return $assign;
-    }
-
-    /**
-     * Implement set_name_filter()
-     */
-    public function set_name_filter(string $firstnamefilter, string $lastnamefilter) {
-        $this->firstnamefilter = $firstnamefilter;
-        $this->lastnamefilter = $lastnamefilter;
     }
 
     /**
@@ -154,11 +130,4 @@ class assign_activity implements activity_interface {
         return 'assign';
     }
 
-    /**
-     * Get item name
-     * @return string
-     */
-    public function get_itemname() {
-        return $this->gradeitem->itemname;
-    }
 }

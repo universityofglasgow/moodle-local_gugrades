@@ -121,4 +121,20 @@ class users {
 
         return array_values($filteredusers);
     }
+
+    /**
+     * Add pictures to user records
+     * @param array $users
+     * @return array
+     */
+    public static function add_pictures_to_user_records(array $users) {
+        global $PAGE;
+
+        foreach ($users as $user) {
+            $user_picture = new \user_picture($user);
+            $user->pictureurl = $user_picture->get_url($PAGE)->out(false);
+        }
+
+        return $users;
+    }
 }

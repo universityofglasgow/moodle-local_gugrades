@@ -28,87 +28,7 @@ namespace local_gugrades\activities;
  * Access data in course activities
  * This is the default. Override for anything that differs (e.g. Assignment)
  */
-class default_activity implements activity_interface {
-
-    private $gradeitemid; 
-
-    private $courseid;
-
-    private $itemtype = '';
-
-    private $firstnamefilter;
-
-    private $lastnamefilter;
-
-    private $gradeitem;
-
-
-    /**
-     * Constructor, set grade itemid
-     * @param int $gradeitemid Grade item id
-     * @param int $courseid
-     * @param int $itemtype
-     */
-    public function __construct(int $gradeitemid, int $courseid, string $itemtype) {
-        global $DB;
-
-        $this->gradeitemid = $gradeitemid;
-        $this->courseid = $courseid;
-        $this->itemtype = $itemtype;
-
-        // Get grade item
-        $this->gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
-    }
-
-    /**
-     * Implement set_name_filter()
-     */
-    public function set_name_filter(string $firstnamefilter, string $lastnamefilter) {
-        $this->firstnamefilter = $firstnamefilter;
-        $this->lastnamefilter = $lastnamefilter;
-    }
-
-    /**
-     * Implement get_users()
-     */
-    public function get_users() {
-        $cm = \local_gugrades\users::get_cm_from_grade_item($this->gradeitemid, $this->courseid);
-
-        // Get *available* users
-        $context = \context_course::instance($this->courseid);
-        $users = \local_gugrades\users::get_available_users_from_cm($cm, $context, $this->firstnamefilter, $this->lastnamefilter);
-
-        // Displayname
-        foreach ($users as $user) {
-            $user->displayname = fullname($user);
-        }
-
-        return $users;
-    }   
-    
-    /**
-     * Implement is_names_hidden()
-     */
-    public function is_names_hidden() {
-        return false;
-    }
-
-    /**
-     * Implement get_first_grade
-     * This is currently just the same as a manual grade
-     * (this is pulling 'finalgrade' instead of 'rawgrade'. Not sure if this is correct/complete)
-     */
-    public function get_first_grade(int $userid) {
-        global $DB;
-        
-        if ($grade = $DB->get_record('grade_grades', ['itemid' => $this->gradeitemid, 'userid' => $userid])) {
-            if ($grade->finalgrade) {
-                return $grade->finalgrade;
-            }
-        }
-
-        return false;
-    }
+class default_activity extends base {
 
     /**
      * Get item type
@@ -118,11 +38,4 @@ class default_activity implements activity_interface {
         return $this->itemtype;
     }
 
-    /**
-     * Get item name
-     * @return string
-     */
-    public function get_itemname() {
-        return $this->gradeitem->itemname;
-    }
 }

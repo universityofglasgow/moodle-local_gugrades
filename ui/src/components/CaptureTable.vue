@@ -13,33 +13,25 @@
             </div>
 
             <NameFilter v-if="!usershidden" @selected="filter_selected" ref="namefilterref"></NameFilter>
-            <PagingBar :totalrows="totalrows" :perpage="perpage" @pagechange="pagechanged"></PagingBar>
 
-            <div class="table-responsive">
-                <table v-if="showtable" class="table table-striped table-sm mt-4 border rounded">
-                    <thead class="thead-light">
-                        <th v-if="!usershidden">{{ strings.userpicture }}</th>
-                        <th v-if="!usershidden">{{ strings.firstnamelastname }}</th>
-                        <th v-if="usershidden">{{ strings.participant }}</th>
-                        <th>{{ strings.idnumber }}</th>
-                        <th>{{ strings.grade }}</th>
-                        <th> </th>
-                    </thead>
-                    <tbody>
-                        <tr v-for="user in pagedusers" :key="user.id">
-                            <td v-if="!usershidden">
-                                <UserPicture :userid="parseInt(user.id)" :fullname="user.displayname"></UserPicture>
-                            </td>
-                            <td>{{ user.displayname }}</td>
-                            <td>{{ user.idnumber }}</td>
-                            <CaptureGrades :grades="user.grades"></CaptureGrades>
-                            <td>
-                                <AddGradeButton :itemid="itemid" :userid="parseInt(user.id)"></AddGradeButton>&nbsp;
-                                <HistoryButton :userid="parseInt(user.id)" :itemid="itemid" :name="user.displayname" :itemname="itemname"></HistoryButton>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div v-if="showtable">
+                <EasyDataTable
+                    buttons-pagination
+                    alternating
+                    :items="users"
+                    :headers="headers"
+                    >
+                    <template #item-slotuserpicture="item">
+                        <img :src="item.pictureurl" :alt="item.displayname" class="userpicture defaultuserpic" width="35" height="35"/>
+                    </template>
+                    <template #item-grade="item">
+                        <CaptureGrades :grades="item.grades"></CaptureGrades>
+                    </template>
+                    <template #item-actions="item">
+                        <AddGradeButton :itemid="itemid" :userid="parseInt(item.id)"></AddGradeButton>&nbsp;
+                        <HistoryButton :userid="parseInt(item.id)" :itemid="itemid" :name="item.displayname" :itemname="itemname"></HistoryButton>
+                    </template>
+                </EasyDataTable>
             </div>
 
             <h2 v-if="!showtable">{{ strings.nothingtodisplay }}</h2>
@@ -50,8 +42,6 @@
 <script setup>
     import {ref, defineProps, computed, watch, onMounted} from '@vue/runtime-core';
     import NameFilter from '@/components/NameFilter.vue';
-    import PagingBar from '@/components/PagingBar.vue';
-    import UserPicture from '@/components/UserPicture.vue';
     import CaptureGrades from '@/components/CaptureGrades.vue';
     import HistoryButton from '@/components/HistoryButton.vue';
     import ImportButton from '@/components/ImportButton.vue';
@@ -71,7 +61,6 @@
     const pagedusers = ref([]);
     const strings = ref({});
     const totalrows = ref(0);
-    const perpage = ref(PAGESIZE);
     const currentpage = ref(1);
     const usershidden = ref(false);
     const namefilterref = ref(null);
@@ -83,6 +72,24 @@
 
     let firstname = '';
     let lastname = '';
+
+    /**
+     * Get headers
+     */
+    const headers = computed(() => {
+        let heads = [];
+        if (!usershidden.value) {
+            heads.push({text: strings.value.userpicture, value: "slotuserpicture"});
+            heads.push({text: strings.value.firstnamelastname, value: "displayname", sortable: true})
+        } else {
+            heads.push({text: strings.value.participant, value: "displayname", sortable: true});
+        }
+        heads.push({text: strings.value.idnumber, value: "idnumber", sortable: true});
+        heads.push({text: strings.value.grade, value: "grade"});
+        heads.push({text: "", value: "actions"});
+
+        return heads;
+    });
 
     /**
      * filter out paged users
@@ -161,6 +168,7 @@
      * Page selected on paging bar
      * @param int page
      */
+    /*
     function pagechanged(page) {
         //window.console.log(namefilterref);
         if ('reset_filter' in namefilterref) {
@@ -170,6 +178,7 @@
         currentpage.value = page;
         get_pagedusers();
     }
+    */
 
     /**
      * Import grades function is complete

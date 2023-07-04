@@ -16,6 +16,7 @@
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
     "vue-toastification": "^2.0.0-rc.5",
+    "vue3-easy-data-table": "^1.5.45",
     "vue3-treeselect": "^0.1.10"
   },
   "devDependencies": {

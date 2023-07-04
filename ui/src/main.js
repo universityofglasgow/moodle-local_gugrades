@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router'
 import Toast  from "vue-toastification";
 import "vue-toastification/dist/index.css";
+import Vue3EasyDataTable from 'vue3-easy-data-table';
+import 'vue3-easy-data-table/dist/style.css';
 
 // This stuff makes sure that the window.GU variable
 // exists.
@@ -32,10 +34,13 @@ const options = {
     timeout: 5000,
 };
 
-
 ensureGUIsSet(timeout)
 .then(() => {
-    createApp(App).use(router).use(Toast, options).mount('#app');
+    const app = createApp(App);
+    app.use(router);
+    app.use(Toast, options);
+    app.component('EasyDataTable', Vue3EasyDataTable);
+    app.mount('#app');
 });
 
 
