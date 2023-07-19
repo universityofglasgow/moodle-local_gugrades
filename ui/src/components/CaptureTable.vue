@@ -85,7 +85,8 @@
             heads.push({text: strings.value.participant, value: "displayname", sortable: true});
         }
         heads.push({text: strings.value.idnumber, value: "idnumber", sortable: true});
-        heads.push({text: strings.value.grade, value: "grade"});
+        heads.push({text: strings.value.moodlegrade, value: "grade"});
+        //heads.push({text: strings.value.provisionalgrade, value: null});
         heads.push({text: "", value: "actions"});
 
         return heads;
@@ -129,13 +130,12 @@
         }])[0]
         .then((result) => {
             usershidden.value = result['hidden'];
-            users.value = JSON.parse(result['users']);
+            users.value = result['users'];
             itemtype.value = result['itemtype'];
             itemname.value = result['itemname'];
             gradesupported.value = result['gradesupported'];
             userids.value = users.value.map(u => u.id);
             totalrows.value = users.value.length;
-            //window.console.log(userids);
             get_pagedusers();
         })
         .catch((error) => {
@@ -220,6 +220,8 @@
             'idnumber',
             'nothingtodisplay',
             'grade',
+            'moodlegrade',
+            'provisionalgrade',
             'importgrades',
             'userpicture',
             'gradenotsupported',

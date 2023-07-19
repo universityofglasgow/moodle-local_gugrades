@@ -241,7 +241,8 @@ class grades {
                 'courseid' => $courseid,
                 'gradeitemid' => $gradeitemid,
                 'userid' => $userid,
-                'reason' => $reasonid
+                'reason' => $reasonid,
+                'iscurrent' => 1,
             ], 'audittimecreated DESC');
 
             return reset($gugrades);
@@ -250,19 +251,21 @@ class grades {
                 'courseid' => $courseid,
                 'gradeitemid' => $gradeitemid,
                 'userid' => $userid,
+                'iscurrent' => 1,
             ], 'audittimecreated ASC');
 
             // Get gradetypes
             $gradetypes = $DB->get_records('local_gugrades_gradetype');
 
             // Index by reason
-            $reasongrades = [];
+            //$reasongrades = [];
             foreach ($gugrades as $gugrade) {
                 $reasonshortname = $gradetypes[$gugrade->reason]->shortname;
-                $reasongrades[$reasonshortname] = $gugrade;
+                $gugrade->reasonshortname = $reasonshortname;
+                //$reasongrades[$reasonshortname] = $gugrade;
             }
 
-            return $reasongrades;
+            return $gugrades;
         }
     }
 
@@ -315,5 +318,27 @@ class grades {
         global $DB;
 
         return $DB->record_exists_sql('select * from {local_gugrades_grade} where gradeitemid=:gradeitemid', ['gradeitemid' => $gradeitemid]);
+    }
+
+    /**
+     * Get grade capture columns
+     * Get the different grade types used for this capture
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @return array
+     */
+    public static function get_grade_capture_columns(int $courseid, int $gradeitemid) {
+        global $DB;
+
+        $sql = "SELECT DISTINCT gt.id AS id, gt.shortname AS shortname FROM {local_gugrades_grade} gg
+            JOIN {local_gugrades_gradetype} gt ON gt.id = gg.reason
+            WHERE gg.courseid = :courseid
+            AND gg.gradeitemid = :gradeitemid";
+        $gradetypes = $DB->get_records_sql($sql, [
+            'courseid' => $courseid,
+            'gradeitemid' => $gradeitemid,
+        ]);
+
+        return array_values($gradetypes);
     }
 }

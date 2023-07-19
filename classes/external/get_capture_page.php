@@ -67,7 +67,25 @@ class get_capture_page extends \external_api {
 
     public static function execute_returns() {
         return new external_single_structure([
-            'users' => new external_value(PARAM_RAW, 'List of users (plus extras) for activity in JSON format'),
+            //'users' => new external_value(PARAM_RAW, 'List of users (plus extras) for activity in JSON format'),
+            'users' => new external_multiple_structure(
+                new external_single_structure([
+                    'id' => new external_value(PARAM_INT, 'User ID'),
+                    'displayname' => new external_value(PARAM_TEXT, 'Name to display for this user'),
+                    'pictureurl' => new external_value(PARAM_URL, 'URL of user avatar'),
+                    'grades' => new external_multiple_structure(
+                        new external_single_structure([
+                            'grade' => new external_value(PARAM_FLOAT, 'Raw grade value'),
+                            'reasonshortname' => new external_value(PARAM_TEXT, 'Reason for grade'),
+                        ])
+                    ),
+                ])
+            ),
+            'columns' => new external_multiple_structure(
+                new external_single_structure([
+                    'shortname' => new external_value(PARAM_TEXT, 'Shortname of column in use'),
+                ])
+            ),
             'hidden' => new external_value(PARAM_BOOL, 'True if student names are hidden'),
             'itemtype' => new external_value(PARAM_TEXT, 'Name of item type (quiz, assign, manual etc)'),
             'itemname' => new external_value(PARAM_TEXT, 'Name of item'),

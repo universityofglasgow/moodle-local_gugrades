@@ -74,9 +74,11 @@ class api {
         $users = $activity->get_users();
         $users = \local_gugrades\grades::add_grades_to_user_records($courseid, $gradeitemid, $users);
         $users = \local_gugrades\users::add_pictures_to_user_records($users);
+        $columns = \local_gugrades\grades::get_grade_capture_columns($courseid, $gradeitemid);
 
         return [
-            'users' => json_encode($users),
+            'users' => $users,
+            'columns' => $columns,
             'hidden' => $activity->is_names_hidden(),
             'itemtype' => $activity->get_itemtype(),
             'itemname' => $activity->get_itemname(),

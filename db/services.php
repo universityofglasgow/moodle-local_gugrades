@@ -24,8 +24,22 @@
 
  $services = array(
     'local_gugrades' => array(
-        'functions' => ['local_gugrades_get_user_grades'],
-        'requiredcapability' => '',
+        'functions' => [
+            'local_gugrades_get_levelonecategories',
+            'local_gugrades_get_activities',
+            'local_gugrades_get_user_grades',
+            'local_gugrades_get_capture_page',
+            'local_gugrades_get_grade_item',
+            'local_gugrades_import_grade',
+            'local_gugrades_import_grades_users',
+            'local_gugrades_get_user_picture_url',
+            'local_gugrades_get_user_grades',
+            'local_gugrades_get_history',
+            'local_gugrades_get_audit',
+            'local_gugrades_has_capability',
+            'local_gugrades_is_grades_imported',
+        ],
+        'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,
         'enabled' => 1,
     ),
