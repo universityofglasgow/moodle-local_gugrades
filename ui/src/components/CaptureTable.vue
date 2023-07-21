@@ -50,15 +50,12 @@
     import { getstrings } from '@/js/getstrings.js';
     import { useToast } from "vue-toastification";
 
-    const PAGESIZE = 20;
-
     const props = defineProps({
         itemid: Number,
     });
 
     const users = ref([]);
     const userids = ref([]);
-    const pagedusers = ref([]);
     const strings = ref({});
     const totalrows = ref(0);
     const currentpage = ref(1);
@@ -67,6 +64,7 @@
     const itemtype = ref('');
     const itemname = ref('');
     const gradesupported = ref(true);
+    const columns = ref([]);
 
     const toast = useToast();
 
@@ -87,24 +85,13 @@
         heads.push({text: strings.value.idnumber, value: "idnumber", sortable: true});
         heads.push({text: strings.value.moodlegrade, value: "grade"});
         //heads.push({text: strings.value.provisionalgrade, value: null});
+        columns.value.forEach(column => {
+            heads.push({text: column.description, value: column.gradetype});
+        });
         heads.push({text: "", value: "actions"});
 
         return heads;
     });
-
-    /**
-     * filter out paged users
-     */
-    function get_pagedusers() {
-        const first = (currentpage.value - 1) * PAGESIZE;
-        const last = first + PAGESIZE - 1;
-        pagedusers.value = [];
-        for (let i=first; i<=last; i++) {
-            if (users.value[i] != undefined) {
-                pagedusers.value.push(users.value[i]);
-            }
-        }
-    }
 
     /**
      * Get filtered/paged data
@@ -122,8 +109,6 @@
             args: {
                 courseid: courseid,
                 gradeitemid: itemid,
-                pageno: 0,
-                pagelength: 0,
                 firstname: first,
                 lastname: last,
             }
@@ -134,9 +119,9 @@
             itemtype.value = result['itemtype'];
             itemname.value = result['itemname'];
             gradesupported.value = result['gradesupported'];
+            columns.value = result['columns'];
             userids.value = users.value.map(u => u.id);
             totalrows.value = users.value.length;
-            get_pagedusers();
         })
         .catch((error) => {
             window.console.error(error);

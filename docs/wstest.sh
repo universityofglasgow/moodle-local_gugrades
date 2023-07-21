@@ -2,7 +2,7 @@
 
 # You need to install 'jq' to format the json output (sudo apt install jq)
 
-WSTOKEN="251ba299239d724d0f7e8d4702bb7083"
+WSTOKEN="4b91bdf225d551d33d10e8b59698d039"
 ENDPOINT="http://ubuntu2.local:8081/webservice/rest/server.php"
 
 # Get top level
@@ -16,10 +16,11 @@ WSFUNCTION="local_gugrades_get_activities"
 curl "${ENDPOINT}?wstoken=${WSTOKEN}&wsfunction=${WSFUNCTION}&moodlewsrestformat=json&courseid=${COURSEID}&categoryid=${CATEGORYID}" | jq
 
 # Get capture page
-GRADEITEMID=4
-PAGENO=0
-PAGELENGTH=0
+GRADEITEMID=6
 FIRSTNAME=""
 LASTNAME=""
 WSFUNCTION="local_gugrades_get_capture_page"
-curl "${ENDPOINT}?wstoken=${WSTOKEN}&wsfunction=${WSFUNCTION}&moodlewsrestformat=json&courseid=${COURSEID}&gradeitemid=${GRADEITEMID}&pageno=${PAGENO}&pagelength=${PAGELENGTH}&firstname=${FIRSTNAME}&lastname=${LASTNAME}" | jq
+curl "${ENDPOINT}?wstoken=${WSTOKEN}&wsfunction=${WSFUNCTION}&moodlewsrestformat=json&courseid=${COURSEID}&gradeitemid=${GRADEITEMID}&firstname=${FIRSTNAME}&lastname=${LASTNAME}" | jq
+
+# Import Grades
+# WSFUNCTION="local_gugrades_import_grade_users"

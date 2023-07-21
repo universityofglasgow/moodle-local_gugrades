@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/gugrades/db" VERSION="20230607" COMMENT="XMLDB file for Moodle local/gugrades"
+<XMLDB PATH="local/gugrades/db" VERSION="20230721" COMMENT="XMLDB file for Moodle local/gugrades"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -23,16 +23,6 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="local_gugrades_gradetype" COMMENT="The possible types of grades to store">
-      <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="shortname" TYPE="char" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="Abbreviated name for grade type"/>
-        <FIELD NAME="fullname" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="Full name for grade type"/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-      </KEYS>
-    </TABLE>
     <TABLE NAME="local_gugrades_grade" COMMENT="Contains each grade instance">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -41,7 +31,7 @@
         <FIELD NAME="userid" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false" COMMENT="Link to user.id"/>
         <FIELD NAME="grade" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5" COMMENT="Point value or scale index"/>
         <FIELD NAME="weightedgrade" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5" COMMENT="Grade after any weighting applied"/>
-        <FIELD NAME="reason" TYPE="int" LENGTH="11" NOTNULL="false" SEQUENCE="false" COMMENT="link to local_gugrades_gradetype.id"/>
+        <FIELD NAME="gradetype" TYPE="char" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="FIRST, SECOND and so on"/>
         <FIELD NAME="other" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="If reason is 'other'"/>
         <FIELD NAME="iscurrent" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="is this the latest grade?"/>
         <FIELD NAME="auditby" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false" COMMENT="Who did this? Link to user.id"/>

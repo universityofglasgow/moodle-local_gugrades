@@ -35,36 +35,6 @@ require_once($CFG->dirroot . '/grade/lib.php');
 class grades {
 
     /**
-     * Get grade types from database
-     * @return array [shortname => gradetype]
-     */
-    private static function get_gradetypes() {
-        global $DB;
-
-        $gradetypes = $DB->get_records('local_gugrades_gradetype');
-        $gradetypesbyshortname = [];
-        foreach ($gradetypes as $gradetype) {
-            $gradetypesbyshortname[$gradetype->shortname] = $gradetype;
-        }
-
-        return $gradetypesbyshortname;
-    }
-
-    /**
-     * Get gradetype (reason) record given shortname
-     * @param string $shortname
-     * @return object
-     */
-    private static function get_gradetype(string $shortname) {
-        $gradetypes = self::get_gradetypes();
-        if (!array_key_exists($shortname, $gradetypes)) {
-            throw new \coding_exception('Gradetype with shortname "' . $shortname . '" does not exist.');
-        }
-        
-        return $gradetypes[$shortname];
-    }
-
-    /**
      * Get item name from gradeitemid
      * @param int $gradeitemid
      * @return string
@@ -176,7 +146,7 @@ class grades {
      * @param int $userid
      * @param float $grade
      * @param float $weightedgrade
-     * @param string $reason  - gradetype shortname
+     * @param string $gradetype
      * @param string $other
      * @param bool $iscurrent;
      */
@@ -186,21 +156,18 @@ class grades {
         int $userid,
         float $grade,
         float $weightedgrade,
-        string $reason,
+        string $gradetype,
         string $other,
-        bool $iscurrent,
+        bool $iscurrent
     ) {
         global $DB, $USER;
-
-        // Get id of reason code
-        $reasonid = self::get_gradetype($reason)->id;
 
         // Does this already exist
         if ($oldgrade = $DB->get_record('local_gugrades_grade', [
             'courseid' => $courseid,
             'gradeitemid' => $gradeitemid,
             'userid' => $userid,
-            'reason' => $reasonid,
+            'gradetype' => $gradetype,
         ])) {
             // It's not current any more
             $oldgrade->iscurrent = false;
@@ -213,7 +180,7 @@ class grades {
         $gugrade->userid = $userid;
         $gugrade->grade = $grade;
         $gugrade->weightedgrade = $weightedgrade;
-        $gugrade->reason = $reasonid;
+        $gugrade->gradetype = $gradetype;
         $gugrade->other = $other;
         $gugrade->iscurrent = true;
         $gugrade->auditby = $USER->id;
@@ -223,50 +190,31 @@ class grades {
     }
 
     /**
-     * Get user grades
-     * @param int $courseid,
-     * @param int $gradeitemid
-     * @param int $userid
-     * @param string $reason (FIRST, SECOND... null = get all)
-     * @param o
+     * Get grade from array by reason
+     * @param array $grades
+     * @param string reason
+     * @return object
      */
-    public static function get_user_grades(int $courseid, int $gradeitemid, int $userid, string $reason = null) {
-        global $DB;
+    private static function get_grade_by_reason(array $grades, string $reason) {
+        $grade = array_column($grades, null, 'reasonshortname')[$reason] ?? false;
 
-        if ($reason) {
+        return $grade->grade;
+    }
 
-            // Get the *latest* of this gradetype (possible there is more than one)
-            $reasonid = $self::get_gradetype($reason)->id;
-            $gugrades = $DB->get_records('local_gugrades_grade', [
-                'courseid' => $courseid,
-                'gradeitemid' => $gradeitemid,
-                'userid' => $userid,
-                'reason' => $reasonid,
-                'iscurrent' => 1,
-            ], 'audittimecreated DESC');
+    /**
+     * Work out provisional grade
+     * TODO: This is just a 'dummy' - needs lots more logic
+     * @param array $grades
+     * @return float
+     */
+    private static function get_provisional_grade($grades) {
 
-            return reset($gugrades);
-        } else {
-            $gugrades = $DB->get_records('local_gugrades_grade', [
-                'courseid' => $courseid,
-                'gradeitemid' => $gradeitemid,
-                'userid' => $userid,
-                'iscurrent' => 1,
-            ], 'audittimecreated ASC');
-
-            // Get gradetypes
-            $gradetypes = $DB->get_records('local_gugrades_gradetype');
-
-            // Index by reason
-            //$reasongrades = [];
-            foreach ($gugrades as $gugrade) {
-                $reasonshortname = $gradetypes[$gugrade->reason]->shortname;
-                $gugrade->reasonshortname = $reasonshortname;
-                //$reasongrades[$reasonshortname] = $gugrade;
-            }
-
-            return $gugrades;
+        // ATM provision grade is the same as FIRST grade
+        if ($grade = self::get_grade_by_reason($grades, 'FIRST')) {
+            return $grade;
         }
+
+        return false;
     }
 
     /**
@@ -278,8 +226,8 @@ class grades {
      */
     public static function add_grades_to_user_records(int $courseid, int $gradeitemid, array $users) {
         foreach ($users as $user) {
-            $grades = self::get_user_grades($courseid, $gradeitemid, $user->id);
-            $user->grades = $grades;
+            $usercapture = new usercapture($gradeitemid, $user->id);
+            $user->grades = $usercapture->get_grades();
         }
 
         return $users;
@@ -330,14 +278,27 @@ class grades {
     public static function get_grade_capture_columns(int $courseid, int $gradeitemid) {
         global $DB;
 
-        $sql = "SELECT DISTINCT gt.id AS id, gt.shortname AS shortname FROM {local_gugrades_grade} gg
-            JOIN {local_gugrades_gradetype} gt ON gt.id = gg.reason
-            WHERE gg.courseid = :courseid
-            AND gg.gradeitemid = :gradeitemid";
+        $sql = "SELECT DISTINCT gradetype FROM {local_gugrades_grade}
+            WHERE courseid = :courseid
+            AND gradeitemid = :gradeitemid
+            AND iscurrent = :iscurrent";
         $gradetypes = $DB->get_records_sql($sql, [
             'courseid' => $courseid,
             'gradeitemid' => $gradeitemid,
+            'iscurrent' => 1,
         ]);
+
+        // Add descriptions
+        foreach ($gradetypes as $gradetype) {
+            $gradetype->description = gradetype::get_description($gradetype->gradetype);
+        }
+
+        // If there are any grade columns then there must be provisional
+        //if (count($gradetypes)) {
+        //    $gradetypes[] = (object)[
+        //        'shortname' => 'PROVISIONAL',
+        //    ];
+        //}
 
         return array_values($gradetypes);
     }

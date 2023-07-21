@@ -39,21 +39,17 @@ class get_capture_page extends \external_api {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
             'gradeitemid' => new external_value(PARAM_INT, 'Grade item id number'),
-            'pageno' => new external_value(PARAM_INT, 'Page number (starts at 0)'),
-            'pagelength' => new external_value(PARAM_INT, 'Lines per page'),
             'firstname' => new external_value(PARAM_ALPHA, 'Firstname filter - first letter or empty for all'),
             'lastname' => new external_value(PARAM_ALPHA, 'Lastname filter - first letter or empty for all'),
         ]);
     }
 
-    public static function execute($courseid, $gradeitemid, $pageno, $pagelength, $firstname, $lastname) {
+    public static function execute($courseid, $gradeitemid, $firstname, $lastname) {
         
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
             'courseid' => $courseid,
             'gradeitemid' => $gradeitemid,
-            'pageno' => $pageno,
-            'pagelength' => $pagelength,
             'firstname' => $firstname,
             'lastname' => $lastname,
         ]);
@@ -62,7 +58,7 @@ class get_capture_page extends \external_api {
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        return \local_gugrades\api::get_capture_page($courseid, $gradeitemid, $pageno, $pagelength, $firstname, $lastname);
+        return \local_gugrades\api::get_capture_page($courseid, $gradeitemid, $firstname, $lastname);
     }
 
     public static function execute_returns() {
@@ -76,14 +72,15 @@ class get_capture_page extends \external_api {
                     'grades' => new external_multiple_structure(
                         new external_single_structure([
                             'grade' => new external_value(PARAM_FLOAT, 'Raw grade value'),
-                            'reasonshortname' => new external_value(PARAM_TEXT, 'Reason for grade'),
+                            'gradetype' => new external_value(PARAM_TEXT, 'FIRST, SECOND and so on'),
                         ])
                     ),
                 ])
             ),
             'columns' => new external_multiple_structure(
                 new external_single_structure([
-                    'shortname' => new external_value(PARAM_TEXT, 'Shortname of column in use'),
+                    'gradetype' => new external_value(PARAM_TEXT, 'FIRST, SECOND and so on'),
+                    'description' => new external_value(PARAM_TEXT, 'Heading for this grade type'),
                 ])
             ),
             'hidden' => new external_value(PARAM_BOOL, 'True if student names are hidden'),

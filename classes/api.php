@@ -43,13 +43,11 @@ class api {
      * Get capture page
      * @param int $courseid
      * @param int $gradeitemid
-     * @param int $pageno
-     * @param int $pagelength
      * @param string $firstname (first letter of)
      * @param string $lastname (last letter of)
      * @return array[users, hidden]
      */
-    public static function get_capture_page(int $courseid, int $gradeitemid, int $pageno, int $pagelength, string $firstname, string $lastname) {
+    public static function get_capture_page(int $courseid, int $gradeitemid, string $firstname, string $lastname) {
 
         // Sanity checks for selected grade item
         if (!\local_gugrades\grades::is_grade_supported($gradeitemid)) {
@@ -65,9 +63,6 @@ class api {
         // Instantiate object for this activity type
         $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid);
         $activity->set_name_filter($firstname, $lastname);
-
-        // Get start point for LIMIT
-        $pagingfrom = ($pageno - 1) * $pagelength;
 
         // Get list of users.
         // Will be everybody for 'manual' grades or filtered list for modules.
