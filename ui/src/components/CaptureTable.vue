@@ -150,22 +150,6 @@
     }
 
     /**
-     * Page selected on paging bar
-     * @param int page
-     */
-    /*
-    function pagechanged(page) {
-        //window.console.log(namefilterref);
-        if ('reset_filter' in namefilterref) {
-            window.console.log('GOT TO PAGE CHANGE RESET');
-            namefilterref.reset_filter();
-        }
-        currentpage.value = page;
-        get_pagedusers();
-    }
-    */
-
-    /**
      * Import grades function is complete
      */
     function gradesimported() {

@@ -39,8 +39,8 @@ class get_capture_page extends \external_api {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
             'gradeitemid' => new external_value(PARAM_INT, 'Grade item id number'),
-            'firstname' => new external_value(PARAM_ALPHA, 'Firstname filter - first letter or empty for all'),
-            'lastname' => new external_value(PARAM_ALPHA, 'Lastname filter - first letter or empty for all'),
+            'firstname' => new external_value(PARAM_ALPHA, 'Firstname filter - first letter or empty for all', VALUE_OPTIONAL, ""),
+            'lastname' => new external_value(PARAM_ALPHA, 'Lastname filter - first letter or empty for all', VALUE_OPTIONAL, ""),
         ]);
     }
 

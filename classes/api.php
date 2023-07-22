@@ -45,7 +45,7 @@ class api {
      * @param int $gradeitemid
      * @param string $firstname (first letter of)
      * @param string $lastname (last letter of)
-     * @return array[users, hidden]
+     * @return array
      */
     public static function get_capture_page(int $courseid, int $gradeitemid, string $firstname, string $lastname) {
 
@@ -159,7 +159,7 @@ class api {
     /**
      * Get user picture url
      * @param int $userid
-     * @return moodle_url
+     * @return \moodle_url
      */
     public static function get_user_picture_url(int $userid) {
         global $DB, $PAGE;
@@ -211,7 +211,7 @@ class api {
             $grade->reasonname = $gradetype->fullname;
 
             // Item into
-            $grade->itemname = $gradeobject->get_item_name_from_itemid($grade->gradeitemid);
+            $grade->itemname = grades::get_item_name_from_itemid($grade->gradeitemid);
 
             $newgrades[] = $grade;
         }
@@ -235,8 +235,7 @@ class api {
         // Additional info
         $newgrades = [];
         foreach ($grades as $grade) {
-            $gradetype = $DB->get_record('local_gugrades_gradetype', ['id' => $grade->reason], '*', MUST_EXIST);
-            $grade->reasonname = $gradetype->fullname;
+            $grade->description = gradetype::get_description($grade->gradetype);
             $grade->time = userdate($grade->audittimecreated);
             $grade->current = $grade->iscurrent ? get_string('yes') : get_string('no');
 
@@ -261,7 +260,7 @@ class api {
         }
         if ($USER->id != $userid) {
             $context = \context_course::instance($courseid);
-            require_cabability('local/gugrades:readotheraudit', $context);
+            require_capability('local/gugrades:readotheraudit', $context);
         }
 
         $items = $DB->get_records('local_gugrades_audit', ['courseid' => $courseid, 'userid' => $userid], 'timecreated DESC');

@@ -18,7 +18,7 @@
                 <div v-for="grade in grades" :key="grade.id" class="mb-3 border-bottom">
                     <ul>
                         <li>Grade {{ grade.grade }}</li>
-                        <li>Reason {{ grade.reasonname }}</li>
+                        <li>Grade type {{ grade.description }}</li>
                         <li>Time {{  grade.time }}</li>
                         <li>Current {{ grade.current }}</li>
                     </ul>
@@ -65,7 +65,6 @@
         }])[0]
         .then((result) => {
             grades.value = result;
-            window.console.log(result);
         })
         .catch((error) => {
             window.console.log(error);

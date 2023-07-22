@@ -75,7 +75,7 @@ class users {
 
     /**
      * Get users who can "be graded". Usually students.
-     * @param context $context
+     * @param \context $context
      * @param string $firstname (first letter of first name)
      * @param string $lastname (first letter of last name)
      * @return array
@@ -103,7 +103,7 @@ class users {
     /**
      * Get available users for given activity
      * @param object $cmi (cm_info)
-     * @param context $context
+     * @param \context $context
      * @param string $firstname (first letter of first name)
      * @param string $lastname (first letter of last name)
      * @return array

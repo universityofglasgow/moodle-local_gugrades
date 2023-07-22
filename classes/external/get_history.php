@@ -63,13 +63,13 @@ class get_history extends \external_api {
         return new external_multiple_structure(
             new external_single_structure([
                 'id' => new external_value(PARAM_INT, 'Mystery id'),
-                'reasonname' => new external_value(PARAM_TEXT, 'Reason description'),
                 'courseid' => new external_value(PARAM_INT, 'Course ID'),
                 'gradeitemid' => new external_value(PARAM_INT, 'Grade item ID'),
                 'userid' => new external_value(PARAM_INT, 'User ID'),
                 'grade' => new external_value(PARAM_NUMBER, 'Raw grade value'),
                 'weightedgrade' => new external_value(PARAM_NUMBER, 'Weighted grade'),
-                'reason' => new external_value(PARAM_INT, 'Reason ID'),
+                'gradetype' => new external_value(PARAM_TEXT, 'Gradetype short name'),
+                'description' => new external_value(PARAM_TEXT, 'Gradetype description'),
                 'other' => new external_value(PARAM_TEXT, 'if reason = other'),
                 'iscurrent' => new external_value(PARAM_BOOL, 'Is this the current value?'),
                 'current' => new external_value(PARAM_TEXT, 'Formatted is this current value?'),

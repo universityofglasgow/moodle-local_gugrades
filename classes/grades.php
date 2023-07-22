@@ -211,7 +211,7 @@ class grades {
 
         // ATM provision grade is the same as FIRST grade
         if ($grade = self::get_grade_by_reason($grades, 'FIRST')) {
-            return $grade;
+            return $grade->grade;
         }
 
         return false;
