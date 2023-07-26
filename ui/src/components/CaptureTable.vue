@@ -94,6 +94,31 @@
     });
 
     /**
+     * Add grade columns into 'users' data so the table component can display them
+     * @param users
+     * @param columns
+     * @return array
+     */
+    function add_grades(users, columns) {
+        let grade = {};
+
+        users.forEach(user => {
+            columns.forEach(column => {
+                grade = user.grades.find((element) => {
+                    return (element.gradetype == column.gradetype);
+                });
+                if (grade) {
+                    user[column.gradetype] = grade.grade;
+                } else {
+                    user[column.gradetype] = strings.value.awaitingcapture;
+                }
+            });
+        });
+
+        return users;
+    }
+
+    /**
      * Get filtered/paged data
      * @param int itemid
      * @param char first
@@ -122,6 +147,8 @@
             columns.value = result['columns'];
             userids.value = users.value.map(u => u.id);
             totalrows.value = users.value.length;
+
+            users.value = add_grades(users.value, columns.value);
         })
         .catch((error) => {
             window.console.error(error);

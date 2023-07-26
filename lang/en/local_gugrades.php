@@ -23,14 +23,18 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['activityname'] = 'Activity name';
 $string['addgrade'] = 'Add grade';
 $string['all'] = 'All';
 $string['assessmentgradecapture'] = 'Assessment grade capture';
 $string['auditlog'] = 'Audit log';
 $string['awaitingcapture'] = 'Awaiting capture';
+$string['by'] = 'By';
 $string['cancel'] = 'Cancel';
 $string['captureaggregation'] = 'Grade capture and aggregation';
+$string['comment'] = 'Comment';
 $string['coursegradeaggregation'] = 'Course grade aggregation';
+$string['current'] = 'Current';
 $string['date'] = 'Date';
 $string['description'] = 'Description';
 $string['eventviewgugrades'] = 'View grading tool';
@@ -43,6 +47,7 @@ $string['gradehistory'] = 'Grade history';
 $string['gradeitem'] = 'Grade item';
 $string['gradenotsupported'] = '<b><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Grade type is not supported</b><br/>Make sure grade is either points or a scale. If a scale, check that it is a supported one.';
 $string['gradenoun'] = 'Grade';
+$string['gradetype'] = 'Grade type';
 $string['gradetypefirst'] = '1st grade';
 $string['gradetypesecond'] = '2nd grade';
 $string['gradetypethird'] = '3rd grade';
@@ -56,12 +61,14 @@ $string['gradetypeother'] = 'Other grade';
 $string['hiddenuser'] = 'Participant';
 $string['history'] = 'History';
 $string['idnumber'] = 'ID number';
+$string['import'] = 'Import';
 $string['importgrades'] = 'Import grades';
 $string['importgradesusers'] = 'Importing grades for userlist for grade item \'{$a}\'';
 $string['lastmodifiedgrade'] = 'Last modified (grade)';
 $string['lastname'] = 'Last name';
 $string['manage'] = 'UofG Grade Tool Settings';
 $string['moodlegrade'] = 'Moodle grade';
+$string['name'] = 'Name';
 $string['noaudit'] = 'No audit logs for this course';
 $string['nohistory'] = 'No history';
 $string['notoplevel'] = 'Course has not been properly setup (no top-level Grade categories)';
@@ -78,6 +85,7 @@ $string['scalevaluesinfo'] = 'Define the numeric values for each scale to be ava
 $string['selected'] = 'Selected';
 $string['selectgradecategory'] = 'Select grade category';
 $string['settings'] = 'Settings';
+$string['time'] = 'Time';
 $string['type'] = 'Type';
 $string['userpicture'] = 'Pic';
 

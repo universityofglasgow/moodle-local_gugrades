@@ -74,6 +74,7 @@ class get_history extends \external_api {
                 'iscurrent' => new external_value(PARAM_BOOL, 'Is this the current value?'),
                 'current' => new external_value(PARAM_TEXT, 'Formatted is this current value?'),
                 'auditby' => new external_value(PARAM_INT, 'User ID. User who added grade'),
+                'auditbyname' => new external_value(PARAM_TEXT, 'User who added grade fullname()'),
                 'audittimecreated' => new external_value(PARAM_INT, 'Time created (unix time stamp)'),
                 'time' => new external_value(PARAM_TEXT, 'Formatted time'),
                 'auditcomment' => new external_value(PARAM_TEXT, 'Audit comment'),

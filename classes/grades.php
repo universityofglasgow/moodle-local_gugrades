@@ -148,7 +148,8 @@ class grades {
      * @param float $weightedgrade
      * @param string $gradetype
      * @param string $other
-     * @param bool $iscurrent;
+     * @param bool $iscurrent
+     * @param string $auditcomment
      */
     public static function write_grade(
         int $courseid,
@@ -158,20 +159,32 @@ class grades {
         float $weightedgrade,
         string $gradetype,
         string $other,
-        bool $iscurrent
+        bool $iscurrent,
+        string $auditcomment = ''
     ) {
         global $DB, $USER;
 
         // Does this already exist
-        if ($oldgrade = $DB->get_record('local_gugrades_grade', [
+        $gradetypecompare = $DB->sql_compare_text('gradetype');
+        $sql = 'SELECT * FROM {local_gugrades_grade} 
+            WHERE courseid = :courseid
+            AND gradeitemid = :gradeitemid
+            AND userid = :userid
+            AND iscurrent = :iscurrent
+            AND ' . $gradetypecompare . ' = :gradetype';
+        if ($oldgrades = $DB->get_records_sql($sql, [
             'courseid' => $courseid,
             'gradeitemid' => $gradeitemid,
             'userid' => $userid,
+            'iscurrent' => true,
             'gradetype' => $gradetype,
         ])) {
-            // It's not current any more
-            $oldgrade->iscurrent = false;
-            $DB->update_record('local_gugrades_grade', $oldgrade);
+            foreach ($oldgrades as $oldgrade) {
+
+                // It's not current any more
+                $oldgrade->iscurrent = false;
+                $DB->update_record('local_gugrades_grade', $oldgrade);
+            }
         }
 
         $gugrade = new \stdClass;
@@ -185,7 +198,7 @@ class grades {
         $gugrade->iscurrent = true;
         $gugrade->auditby = $USER->id;
         $gugrade->audittimecreated = time();
-        $gugrade->auditcomment = '';
+        $gugrade->auditcomment = $auditcomment;
         $DB->insert_record('local_gugrades_grade', $gugrade);
     }
 
@@ -301,5 +314,37 @@ class grades {
         //}
 
         return array_values($gradetypes);
+    }
+
+    /**
+     * Factory for conversion class
+     * TODO: May need some improvement in detecting correct/supported grade (type)
+     * @param int $courseid
+     * @param int $graditemid
+     * @return object
+     */
+    public static function conversion_factory(int $courseid, int $gradeitemid) {
+        global $DB;
+
+        $gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
+        $gradetype = $gradeitem->gradetype;
+
+        // Is it a scale of some sort
+        if ($gradetype == GRADE_TYPE_SCALE) {
+
+            // If it "looks like" a 22-point scale then we'll assume it is.
+            // TODO: Consider an explicit option for this in the setup
+            // 22-point scale has **23** items (0 to 22)
+            if ($DB->count_records('local_gugrades_scalevalue', ['scaleid' => $gradeitem->scaleid]) == 23) {
+                return new \local_gugrades\conversion\schedulea($courseid, $gradeitemid)
+            } else {
+                new \moodle_exception('Unsupported scale in conversion_factory');
+            }
+
+        } else {
+
+            // We're assuming it's a points scale (already checked for weird types)
+            return new \local_gugrades\conversion\points($courseid, $gradeitemid);
+        }
     }
 }

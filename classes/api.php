@@ -131,27 +131,33 @@ class api {
      * Import grade
      * @param int $courseid
      * @param int $gradeitemid
+     * @param \local_gugrades\conversion\base $conversion
      * @param int $userid
-     * @return 
      */
-    public static function import_grade(int $courseid, int $gradeitemid, int $userid) {
+    public static function import_grade(int $courseid, int $gradeitemid, \local_gugrades\conversion\base $conversion, int $userid) {
 
         // Instantiate object for this activity type
         $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid);
 
         // Ask activity for grade
-        $grade = $activity->get_first_grade($userid);
+        $rawgrade = $activity->get_first_grade($userid);
+
+        // Ask conversion object for converted grade and display grade
+        list[$convertedgrade, $displaygrade] = $conversion->import($rawgrade);
 
         if ($grade !== false) {
             \local_gugrades\grades::write_grade(
                 $courseid,
                 $gradeitemid,
                 $userid,
-                $grade,
+                $rawgrade,
+                $convertedgrade,
+                $displaygrade,
                 0,
                 'FIRST',
                 '',
-                1
+                1,
+                get_string('import', 'local_gugrades')
             );
         }
     }
@@ -238,6 +244,11 @@ class api {
             $grade->description = gradetype::get_description($grade->gradetype);
             $grade->time = userdate($grade->audittimecreated);
             $grade->current = $grade->iscurrent ? get_string('yes') : get_string('no');
+            if ($audituser = $DB->get_record('user', ['id' => $grade->auditby])) {
+                $grade->auditbyname = fullname($audituser);
+            } else {
+                $grade->auditbyname = '-';
+            }
 
             $newgrades[] = $grade;
         }

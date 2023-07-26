@@ -15,14 +15,9 @@
                     </ul>
                 </div>
                 <div v-if="grades.length == 0" class="alert alert-warning">{{ strings.nohistory }}</div>
-                <div v-for="grade in grades" :key="grade.id" class="mb-3 border-bottom">
-                    <ul>
-                        <li>Grade {{ grade.grade }}</li>
-                        <li>Grade type {{ grade.description }}</li>
-                        <li>Time {{  grade.time }}</li>
-                        <li>Current {{ grade.current }}</li>
-                    </ul>
-                </div>
+
+                <EasyDataTable v-else :headers="headers" :items="grades">
+                </EasyDataTable>
             </template>
         </ModalForm>
     </Teleport>
@@ -37,8 +32,11 @@
     const showhistorymodal = ref(false);
     const grades = ref([]);
     const strings = ref({});
+    const headers = ref([]);
 
     const toast = useToast();
+
+
 
     const props = defineProps({
         userid: Number,
@@ -84,10 +82,27 @@
             'history',
             'nohistory',
             'gradehistory',
+            'time',
+            'grade',
+            'current',
+            'gradetype',
+            'name',
+            'activityname',
+            'by',
+            'comment',
         ];
         getstrings(stringslist)
         .then(results => {
             Object.keys(results).forEach((name) => {strings.value[name] = results[name]});
+
+            headers.value = [
+               {text: strings.value.time, value: 'time'},
+               {text: strings.value.by, value: 'auditbyname'},
+               {text: strings.value.grade, value: 'grade'},
+               {text: strings.value.gradetype, value: 'description'},
+               {text: strings.value.current, value: 'current'},
+               {text: strings.value.comment, value: 'auditcomment'},
+            ];
         })
         .catch((error) => {
             window.console.log(error);
