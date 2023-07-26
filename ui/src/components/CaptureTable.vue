@@ -108,7 +108,7 @@
                     return (element.gradetype == column.gradetype);
                 });
                 if (grade) {
-                    user[column.gradetype] = grade.grade;
+                    user[column.gradetype] = grade.displaygrade;
                 } else {
                     user[column.gradetype] = strings.value.awaitingcapture;
                 }

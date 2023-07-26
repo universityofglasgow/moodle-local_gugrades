@@ -34,6 +34,8 @@ class schedulea extends base {
 
     protected array $scaleitems = [];
 
+    protected array $items = [];
+
     /**
      * Constructor. Get grade info
      * @param int $courseid
@@ -47,13 +49,19 @@ class schedulea extends base {
         // Get scale
         $scale = $DB->get_record('scale', ['id' => $this->gradeitem->scaleid], '*', MUST_EXIST);
         $this->scaleitems = explode(',', $scale->scale);
+
+        // Get scale conversion
+        $items = $DB->get_records('local_gugrades_scalevalue', ['scaleid' => $this->gradeitem->scaleid]);
+        foreach ($items as $item) {
+            $this->items[$item->item] = $item->value;
+        }
     }
 
     /**
      * Define scale mapping
      * @return array
      */
-    public static function get_map() {
+    public function get_map() {
         return [
             0 => 'H',
             1 => 'G2',
@@ -101,7 +109,16 @@ class schedulea extends base {
         } else {
             new \moodle_exception('Scale item does not exist. Scale id = ' . $this->gradeitem->scaleid . ', value = ' . $grade);
         }
-        return [null, $scaleitem];
+
+        // Convert to value using scalevalue
+        if (array_key_exists($scaleitem, $this->items)) {
+            $converted = $this->items[$scaleitem];
+        } else {
+            new \moodle_exception('Scale item "' . $scaleitem . '" does not exist in sacle id = ' . $this->gradeitem->scaleid);
+            $converted = 0;
+        }
+
+        return [$converted, $scaleitem];
     }
 
 }

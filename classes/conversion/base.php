@@ -68,7 +68,7 @@ abstract class base {
      * @return [float, string]
      */
     public function import(float $grade) {
-        return [null, null];
+        return [0, ''];
     }
 
 }

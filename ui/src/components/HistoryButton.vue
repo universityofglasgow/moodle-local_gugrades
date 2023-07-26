@@ -98,7 +98,7 @@
             headers.value = [
                {text: strings.value.time, value: 'time'},
                {text: strings.value.by, value: 'auditbyname'},
-               {text: strings.value.grade, value: 'grade'},
+               {text: strings.value.grade, value: 'displaygrade'},
                {text: strings.value.gradetype, value: 'description'},
                {text: strings.value.current, value: 'current'},
                {text: strings.value.comment, value: 'auditcomment'},

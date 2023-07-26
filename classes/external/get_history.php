@@ -66,7 +66,7 @@ class get_history extends \external_api {
                 'courseid' => new external_value(PARAM_INT, 'Course ID'),
                 'gradeitemid' => new external_value(PARAM_INT, 'Grade item ID'),
                 'userid' => new external_value(PARAM_INT, 'User ID'),
-                'grade' => new external_value(PARAM_NUMBER, 'Raw grade value'),
+                'displaygrade' => new external_value(PARAM_TEXT, 'Display grade value'),
                 'weightedgrade' => new external_value(PARAM_NUMBER, 'Weighted grade'),
                 'gradetype' => new external_value(PARAM_TEXT, 'Gradetype short name'),
                 'description' => new external_value(PARAM_TEXT, 'Gradetype description'),

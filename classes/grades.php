@@ -144,7 +144,9 @@ class grades {
      * @param int $courseid
      * @param int $gradeitemid
      * @param int $userid
-     * @param float $grade
+     * @param float $rawgrade
+     * @param float $convertedgrade
+     * @param string $displaygrade
      * @param float $weightedgrade
      * @param string $gradetype
      * @param string $other
@@ -155,7 +157,9 @@ class grades {
         int $courseid,
         int $gradeitemid,
         int $userid,
-        float $grade,
+        float $rawgrade,
+        float $convertedgrade,
+        string $displaygrade,
         float $weightedgrade,
         string $gradetype,
         string $other,
@@ -191,7 +195,9 @@ class grades {
         $gugrade->courseid = $courseid;
         $gugrade->gradeitemid = $gradeitemid;
         $gugrade->userid = $userid;
-        $gugrade->grade = $grade;
+        $gugrade->rawgrade = $rawgrade;
+        $gugrade->convertedgrade = $convertedgrade;
+        $gugrade->displaygrade = $displaygrade;
         $gugrade->weightedgrade = $weightedgrade;
         $gugrade->gradetype = $gradetype;
         $gugrade->other = $other;
@@ -336,9 +342,10 @@ class grades {
             // TODO: Consider an explicit option for this in the setup
             // 22-point scale has **23** items (0 to 22)
             if ($DB->count_records('local_gugrades_scalevalue', ['scaleid' => $gradeitem->scaleid]) == 23) {
-                return new \local_gugrades\conversion\schedulea($courseid, $gradeitemid)
+                return new \local_gugrades\conversion\schedulea($courseid, $gradeitemid);
             } else {
                 new \moodle_exception('Unsupported scale in conversion_factory');
+                return new \stdClass;
             }
 
         } else {

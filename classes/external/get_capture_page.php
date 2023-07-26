@@ -39,8 +39,8 @@ class get_capture_page extends \external_api {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
             'gradeitemid' => new external_value(PARAM_INT, 'Grade item id number'),
-            'firstname' => new external_value(PARAM_ALPHA, 'Firstname filter - first letter or empty for all', VALUE_OPTIONAL, ""),
-            'lastname' => new external_value(PARAM_ALPHA, 'Lastname filter - first letter or empty for all', VALUE_OPTIONAL, ""),
+            'firstname' => new external_value(PARAM_ALPHA, 'Firstname filter - first letter or empty for all'),
+            'lastname' => new external_value(PARAM_ALPHA, 'Lastname filter - first letter or empty for all'),
         ]);
     }
 
@@ -71,7 +71,7 @@ class get_capture_page extends \external_api {
                     'pictureurl' => new external_value(PARAM_URL, 'URL of user avatar'),
                     'grades' => new external_multiple_structure(
                         new external_single_structure([
-                            'grade' => new external_value(PARAM_FLOAT, 'Raw grade value'),
+                            'displaygrade' => new external_value(PARAM_TEXT, 'Grade for display'),
                             'gradetype' => new external_value(PARAM_TEXT, 'FIRST, SECOND and so on'),
                         ])
                     ),
