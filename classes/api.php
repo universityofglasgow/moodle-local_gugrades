@@ -304,6 +304,13 @@ class api {
                 $item->gradeitem = '';
             }
 
+            // Name of "by who"
+            if ($user = $DB->get_record('user', ['id' => $item->userid])) {
+                $item->fullname = fullname($user);
+            } else {
+                $item->fullname = '-';
+            }
+
             $newitems[] = $item;
         }
 

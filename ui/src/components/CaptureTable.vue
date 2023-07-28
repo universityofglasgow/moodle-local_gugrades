@@ -83,7 +83,7 @@
             heads.push({text: strings.value.participant, value: "displayname", sortable: true});
         }
         heads.push({text: strings.value.idnumber, value: "idnumber", sortable: true});
-        heads.push({text: strings.value.moodlegrade, value: "grade"});
+        //heads.push({text: strings.value.moodlegrade, value: "grade"});
         //heads.push({text: strings.value.provisionalgrade, value: null});
         columns.value.forEach(column => {
             heads.push({text: column.description, value: column.gradetype});

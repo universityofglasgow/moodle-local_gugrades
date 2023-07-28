@@ -39,7 +39,7 @@ class gradetype {
      */
     private static function define() {
         $gradetypes = [
-            'FIRST' => get_string('gradetypefirst', 'local_gugrades'),
+            'FIRST' => get_string('moodlegrade', 'local_gugrades'),
             'SECOND' => get_string('gradetypesecond', 'local_gugrades'),
             'THIRD' => get_string('gradetypethird', 'local_gugrades'),
             'AGREED' => get_string('gradetypeagreed', 'local_gugrades'),

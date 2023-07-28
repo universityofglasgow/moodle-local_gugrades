@@ -69,6 +69,7 @@ class get_capture_page extends \external_api {
                     'id' => new external_value(PARAM_INT, 'User ID'),
                     'displayname' => new external_value(PARAM_TEXT, 'Name to display for this user'),
                     'pictureurl' => new external_value(PARAM_URL, 'URL of user avatar'),
+                    'idnumber' => new external_value(PARAM_TEXT, 'Moodle IDnumber field'),
                     'grades' => new external_multiple_structure(
                         new external_single_structure([
                             'displaygrade' => new external_value(PARAM_TEXT, 'Grade for display'),
