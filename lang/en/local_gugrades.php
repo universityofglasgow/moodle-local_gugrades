@@ -76,6 +76,7 @@ $string['nothingtodisplay'] = 'Nothing to display';
 $string['participant'] = 'Participant';
 $string['participantnumber'] = 'Participant {$a}';
 $string['pluginname'] = 'UofG Grade Tool';
+$string['provisional'] = 'Provisional';
 $string['provisionalgrade'] = 'Provisional grade';
 $string['recordid'] = 'Identifier';
 $string['resetfilter'] = 'Reset filter';

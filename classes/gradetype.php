@@ -48,7 +48,8 @@ class gradetype {
             'GOODCAUSE' => get_string('gradetypegoodcause', 'local_gugrades'),
             'CAPPED' => get_string('gradetypecapped', 'local_gugrades'),
             'CONDUCT' => get_string('gradetypeconduct', 'local_gugrades'),
-            'OTHER' => get_string('gradetypeother', 'local_gugrades')
+            'OTHER' => get_string('gradetypeother', 'local_gugrades'),
+            'PROVISIONAL' => get_string('provisional', 'local_gugrades'),
         ];
 
         return $gradetypes;

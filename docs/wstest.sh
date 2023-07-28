@@ -2,7 +2,7 @@
 
 # You need to install 'jq' to format the json output (sudo apt install jq)
 
-WSTOKEN="4b91bdf225d551d33d10e8b59698d039"
+WSTOKEN="23c3bbd763587870a7a71d9c68b8b972"
 ENDPOINT="http://ubuntu2.local:8081/webservice/rest/server.php"
 
 # Get top level

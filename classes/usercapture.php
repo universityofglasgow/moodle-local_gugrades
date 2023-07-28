@@ -65,6 +65,17 @@ class usercapture {
             'iscurrent' => 1,
         ], 'audittimecreated ASC');
 
+        // Newest grade is also provisional grade
+        // TODO: Check if this is true
+        if ($grades) {
+            $newest = end($grades);
+            $provisional = new \stdClass;
+            $provisional->grade = $newest->grade;
+            $provisional->displaygrade = $newest->displaygrade;
+            $provisional->gradetype = 'PROVISIONAL';
+            $grades[] = $provisional;
+        }
+
         $this->grades = $grades;
     }
 

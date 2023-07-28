@@ -313,11 +313,12 @@ class grades {
         }
 
         // If there are any grade columns then there must be provisional
-        //if (count($gradetypes)) {
-        //    $gradetypes[] = (object)[
-        //        'shortname' => 'PROVISIONAL',
-        //    ];
-        //}
+        if (count($gradetypes)) {
+            $gradetypes[] = (object)[
+                'gradetype' => 'PROVISIONAL',
+                'description' => gradetype::get_description('PROVISIONAL'),
+            ];
+        }
 
         return array_values($gradetypes);
     }
