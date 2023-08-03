@@ -37,6 +37,9 @@ const options = {
 ensureGUIsSet(timeout)
 .then(() => {
     const app = createApp(App);
+    app.config.globalProperties.$strings = {
+        test: "Test string",
+    };
     app.use(router);
     app.use(Toast, options);
     app.component('EasyDataTable', Vue3EasyDataTable);

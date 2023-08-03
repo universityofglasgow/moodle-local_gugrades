@@ -8,7 +8,7 @@
             </template>
             <template #body>
                 <div v-if="is_importgrades" class="alert alert-danger">
-                    Already imported
+                    {{ $strings.test }}
                 </div>
                 <p><button class="btn btn-primary" @click="importgrades">Import</button></p>
             </template>

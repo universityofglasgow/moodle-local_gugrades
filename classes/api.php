@@ -319,4 +319,24 @@ class api {
     public static function is_grades_imported(int $courseid, int $gradeitemid) {
         return \local_gugrades\grades::is_grades_imported($courseid, $gradeitemid);
     }
+
+    /** 
+     * Get all the strings for this plugin as array of objects
+     * @return array
+     */
+    public static function get_all_strings() {
+        $stringmanager = get_string_manager();
+        $lang = current_language();
+        $cstrings = $stringmanager->load_component_strings('local_gugrades', $lang);
+
+        $strings = [];
+        foreach ($cstrings as $tag => $stringvalue) {
+            $strings[] = [
+                'tag' => $tag,
+                'stringvalue' => $stringvalue,
+            ];
+        }
+
+        return $strings;
+    }
 }

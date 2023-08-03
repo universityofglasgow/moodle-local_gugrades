@@ -38,6 +38,7 @@
             'local_gugrades_get_audit',
             'local_gugrades_has_capability',
             'local_gugrades_is_grades_imported',
+            'local_gugrades_get_all_strings',
         ],
         'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,
@@ -115,6 +116,12 @@ $functions = [
     'local_gugrades_is_grades_imported' => [
         'classname' => 'local_gugrades\external\is_grades_imported',
         'description' => 'Check if selected grade item has had any grades imported.',
+        'type' => 'read',
+        'ajax' => true,
+    ],
+    'local_gugrades_get_all_strings' => [
+        'classname' => 'local_gugrades\external\get_all_strings',
+        'description' => 'Load all the strings for this plugin.',
         'type' => 'read',
         'ajax' => true,
     ],
