@@ -4,14 +4,14 @@
     <Teleport to="body">
         <ModalForm :show="showhistorymodal" @close="showhistorymodal = false">
             <template #header>
-                <h4>{{ strings.gradehistory }}</h4>
+                <h4>{{ $strings.gradehistory }}</h4>
                 
             </template>
             <template #body>
                 <div>
                     <ul class="list-unstyled">
-                        <li><b>Name:</b> {{ name }}</li>
-                        <li><b>Item name:</b> {{ itemname }}</li>
+                        <li><b>{{ $strings.name }}:</b> {{ name }}</li>
+                        <li><b>{{ $strings.itemname }}:</b> {{ itemname }}</li>
                     </ul>
                 </div>
                 <div v-if="grades.length == 0" class="alert alert-warning">{{ strings.nohistory }}</div>
@@ -24,9 +24,8 @@
 </template>
 
 <script setup>
-    import {ref, defineProps, onMounted} from '@vue/runtime-core';
+    import {ref, defineProps, onMounted, getCurrentInstance} from '@vue/runtime-core';
     import ModalForm from '@/components/ModalForm.vue';
-    import { getstrings } from '@/js/getstrings.js';
     import { useToast } from "vue-toastification";
 
     const showhistorymodal = ref(false);
@@ -35,8 +34,6 @@
     const headers = ref([]);
 
     const toast = useToast();
-
-
 
     const props = defineProps({
         userid: Number,
@@ -76,37 +73,16 @@
      * Load strings (mostly for table) and get initial data for table.
      */
     onMounted(() => {
+        const { proxy } = getCurrentInstance();
+        const $strings = proxy.$strings;
 
-        // Get the moodle strings for this page
-        const stringslist = [
-            'history',
-            'nohistory',
-            'gradehistory',
-            'time',
-            'grade',
-            'current',
-            'gradetype',
-            'name',
-            'activityname',
-            'by',
-            'comment',
-        ];
-        getstrings(stringslist)
-        .then(results => {
-            Object.keys(results).forEach((name) => {strings.value[name] = results[name]});
-
-            headers.value = [
-               {text: strings.value.time, value: 'time'},
-               {text: strings.value.by, value: 'auditbyname'},
-               {text: strings.value.grade, value: 'displaygrade'},
-               {text: strings.value.gradetype, value: 'description'},
-               {text: strings.value.current, value: 'current'},
-               {text: strings.value.comment, value: 'auditcomment'},
+        headers.value = [
+               {text: $strings.time, value: 'time'},
+               {text: $strings.by, value: 'auditbyname'},
+               {text: $strings.grade, value: 'displaygrade'},
+               {text: $strings.gradetype, value: 'description'},
+               {text: $strings.current, value: 'current'},
+               {text: $strings.comment, value: 'auditcomment'},
             ];
-        })
-        .catch((error) => {
-            window.console.log(error);
-            toast.error('Error communicating with server (see console)');
-        });
     })
 </script>

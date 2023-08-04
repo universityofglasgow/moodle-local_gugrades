@@ -64,6 +64,7 @@ $string['idnumber'] = 'ID number';
 $string['import'] = 'Import';
 $string['importgrades'] = 'Import grades';
 $string['importgradesusers'] = 'Importing grades for userlist for grade item \'{$a}\'';
+$string['itemname'] = 'Item name';
 $string['lastmodifiedgrade'] = 'Last modified (grade)';
 $string['lastname'] = 'Last name';
 $string['manage'] = 'UofG Grade Tool Settings';

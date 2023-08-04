@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, reactive } from 'vue'
 import App from './App.vue'
 import router from './router'
 import Toast  from "vue-toastification";
@@ -37,13 +37,32 @@ const options = {
 ensureGUIsSet(timeout)
 .then(() => {
     const app = createApp(App);
-    app.config.globalProperties.$strings = {
+    app.config.globalProperties.$strings = reactive({
         test: "Test string",
-    };
+    });
     app.use(router);
     app.use(Toast, options);
     app.component('EasyDataTable', Vue3EasyDataTable);
     app.mount('#app');
+
+    // Read strings
+    const GU = window.GU;
+    const fetchMany = GU.fetchMany;
+
+    fetchMany([{
+        methodname: 'local_gugrades_get_all_strings',
+        args: {
+        }
+    }])[0]
+    .then((result) => {
+        const strings = result;
+        strings.forEach((string) => {
+            app.config.globalProperties.$strings[string.tag] = string.stringvalue;
+        });
+    })
+    .catch((error) => {
+        window.console.error(error);
+    })
 });
 
 
