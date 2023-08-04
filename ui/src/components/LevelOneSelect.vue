@@ -5,21 +5,21 @@
 <template>
     <div>
         <div v-if="notsetup" class="alert alert-warning">
-            <MString name="notoplevel"></MString>
+            {{ mstrings.notoplevel }}
         </div>
         <select v-else class="form-control border-dark" @change="levelOneChange($event)">
-            <option value="0"><MString name="selectgradecategory"></MString></option>
+            <option value="0">{{ mstrings.selectgradecategory }}</option>
             <option v-for="category in level1categories" :key="category.id" :value="category.id">{{ category.fullname }}</option>
         </select>
     </div>  
 </template>
 
 <script setup>
-    import MString from '@/components/MString.vue';
-    import {ref, onMounted, defineEmits} from '@vue/runtime-core';
+    import {ref, onMounted, defineEmits, inject} from '@vue/runtime-core';
 
     const level1categories = ref([]);
     const notsetup = ref(false);
+    const mstrings = inject('mstrings');
 
     const emit = defineEmits(['levelchange']);
 

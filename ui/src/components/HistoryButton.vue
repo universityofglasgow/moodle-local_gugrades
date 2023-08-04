@@ -1,20 +1,20 @@
 <template>
-    <button type="button" class="btn btn-outline-primary btn-sm" @click="read_history()">{{ strings.history }}</button>
+    <button type="button" class="btn btn-outline-primary btn-sm" @click="read_history()">{{ mstrings.history }}</button>
 
     <Teleport to="body">
         <ModalForm :show="showhistorymodal" @close="showhistorymodal = false">
             <template #header>
-                <h4>{{ $strings.gradehistory }}</h4>
+                <h4>{{ mstrings.gradehistory }}</h4>
                 
             </template>
             <template #body>
                 <div>
                     <ul class="list-unstyled">
-                        <li><b>{{ $strings.name }}:</b> {{ name }}</li>
-                        <li><b>{{ $strings.itemname }}:</b> {{ itemname }}</li>
+                        <li><b>{{ mstrings.name }}:</b> {{ name }}</li>
+                        <li><b>{{ mstrings.itemname }}:</b> {{ itemname }}</li>
                     </ul>
                 </div>
-                <div v-if="grades.length == 0" class="alert alert-warning">{{ strings.nohistory }}</div>
+                <div v-if="grades.length == 0" class="alert alert-warning">{{ mstrings.nohistory }}</div>
 
                 <EasyDataTable v-else :headers="headers" :items="grades">
                 </EasyDataTable>
@@ -24,13 +24,13 @@
 </template>
 
 <script setup>
-    import {ref, defineProps, onMounted, getCurrentInstance} from '@vue/runtime-core';
+    import {ref, defineProps, onMounted, inject} from '@vue/runtime-core';
     import ModalForm from '@/components/ModalForm.vue';
     import { useToast } from "vue-toastification";
 
     const showhistorymodal = ref(false);
     const grades = ref([]);
-    const strings = ref({});
+    const mstrings = inject('mstrings');
     const headers = ref([]);
 
     const toast = useToast();
@@ -70,19 +70,16 @@
     }
 
     /**
-     * Load strings (mostly for table) and get initial data for table.
+     * Setup the table.
      */
     onMounted(() => {
-        const { proxy } = getCurrentInstance();
-        const $strings = proxy.$strings;
-
         headers.value = [
-               {text: $strings.time, value: 'time'},
-               {text: $strings.by, value: 'auditbyname'},
-               {text: $strings.grade, value: 'displaygrade'},
-               {text: $strings.gradetype, value: 'description'},
-               {text: $strings.current, value: 'current'},
-               {text: $strings.comment, value: 'auditcomment'},
+               {text: mstrings.time, value: 'time'},
+               {text: mstrings.by, value: 'auditbyname'},
+               {text: mstrings.grade, value: 'displaygrade'},
+               {text: mstrings.gradetype, value: 'description'},
+               {text: mstrings.current, value: 'current'},
+               {text: mstrings.comment, value: 'auditcomment'},
             ];
     })
 </script>

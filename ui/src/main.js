@@ -37,15 +37,15 @@ const options = {
 ensureGUIsSet(timeout)
 .then(() => {
     const app = createApp(App);
-    app.config.globalProperties.$strings = reactive({
-        test: "Test string",
-    });
+    const mstrings = reactive([]);
+    app.provide('mstrings', mstrings);
     app.use(router);
     app.use(Toast, options);
     app.component('EasyDataTable', Vue3EasyDataTable);
     app.mount('#app');
 
     // Read strings
+    // Strings are pushed to individual components using provide() / inject()
     const GU = window.GU;
     const fetchMany = GU.fetchMany;
 
@@ -57,7 +57,7 @@ ensureGUIsSet(timeout)
     .then((result) => {
         const strings = result;
         strings.forEach((string) => {
-            app.config.globalProperties.$strings[string.tag] = string.stringvalue;
+            mstrings[string.tag] = string.stringvalue;
         });
     })
     .catch((error) => {

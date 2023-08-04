@@ -1,10 +1,10 @@
 <template>
-    <button type="button" class="btn btn-outline-dark  mr-1" @click="showimportmodal = true"><MString name="importgrades"></MString></button>
+    <button type="button" class="btn btn-outline-dark  mr-1" @click="showimportmodal = true">{{ mstrings.importgrades }}</button>
 
     <Teleport to="body">
         <ModalForm :show="showimportmodal" @close="showimportmodal = false">
             <template #header>
-                <h4><MString name="importgrades"></MString></h4>
+                <h4>{{ mstrings.importgrades }}</h4>
             </template>
             <template #body>
                 <div v-if="is_importgrades" class="alert alert-danger">
@@ -17,9 +17,8 @@
 </template>
 
 <script setup>
-    import {ref, defineProps, defineEmits, onMounted} from '@vue/runtime-core';
+    import {ref, defineProps, defineEmits, onMounted, inject} from '@vue/runtime-core';
     import ModalForm from '@/components/ModalForm.vue';
-    import MString from '@/components/MString.vue';
     import { useToast } from "vue-toastification";
 
     const props = defineProps({
@@ -33,6 +32,7 @@
 
     const showimportmodal = ref(false);
     const is_importgrades = ref(false);
+    const mstrings = inject('mstrings');
 
     /**
      * Import grades button clicked

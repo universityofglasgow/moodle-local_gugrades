@@ -2,7 +2,7 @@
     <div class="mt-2 border border-dark p-3 rounded" v-if="loaded">
         <div v-if="collapsed" @click="open_selection" class="cursor-pointer row">
             <div class="col-10">
-                <MString name="selected"></MString>: {{ selectedactivity.itemname }}
+                {{ mstrings.selected }}: {{ selectedactivity.itemname }}
             </div>
             <div class="col-2 text-right">
                 <i class="fa fa-chevron-down" aria-hidden="true"></i>
@@ -16,9 +16,8 @@
 </template>
 
 <script setup>
-    import {ref, onMounted, defineProps, defineEmits, watch} from 'vue';
+    import {ref, onMounted, defineProps, defineEmits, watch, inject} from 'vue';
     import ActivityTree from '@/components/ActivityTree.vue';
-    import MString from '@/components/MString.vue';
 
     const props = defineProps({
         categoryid: Number,
@@ -32,6 +31,7 @@
     const selectedactivity = ref({});
     const loaded = ref(false);
     const collapsed = ref(false);
+    const mstrings = inject('mstrings');
 
     // Get the sub-category / activity
     function getActivity() {

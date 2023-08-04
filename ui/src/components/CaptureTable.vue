@@ -2,7 +2,7 @@
     <div>
         <div v-if="!gradesupported">
             <div class="alert alert-danger mt-2">
-                <span v-html="strings.gradenotsupported"></span>
+                <span v-html="mstrings.gradenotsupported"></span>
             </div>
         </div>
 
@@ -34,20 +34,19 @@
                 </EasyDataTable>
             </div>
 
-            <h2 v-if="!showtable">{{ strings.nothingtodisplay }}</h2>
+            <h2 v-if="!showtable">{{ mstrings.nothingtodisplay }}</h2>
         </div>
     </div>   
 </template>
 
 <script setup>
-    import {ref, defineProps, computed, watch, onMounted} from '@vue/runtime-core';
+    import {ref, defineProps, computed, watch, onMounted, inject} from '@vue/runtime-core';
     import NameFilter from '@/components/NameFilter.vue';
     import CaptureGrades from '@/components/CaptureGrades.vue';
     import HistoryButton from '@/components/HistoryButton.vue';
     import ImportButton from '@/components/ImportButton.vue';
     import AddGradeButton from '@/components/AddGradeButton.vue';
     import ExportWorksheetButton from '@/components/ExportWorksheetButton.vue';
-    import { getstrings } from '@/js/getstrings.js';
     import { useToast } from "vue-toastification";
 
     const props = defineProps({
@@ -57,6 +56,7 @@
     const users = ref([]);
     const userids = ref([]);
     const strings = ref({});
+    const mstrings = inject('mstrings');
     const totalrows = ref(0);
     const currentpage = ref(1);
     const usershidden = ref(false);
@@ -77,14 +77,13 @@
     const headers = computed(() => {
         let heads = [];
         if (!usershidden.value) {
-            heads.push({text: strings.value.userpicture, value: "slotuserpicture"});
-            heads.push({text: strings.value.firstnamelastname, value: "displayname", sortable: true})
+            heads.push({text: mstrings.userpicture, value: "slotuserpicture"});
+            heads.push({text: mstrings.firstnamelastname, value: "displayname", sortable: true})
         } else {
-            heads.push({text: strings.value.participant, value: "displayname", sortable: true});
+            heads.push({text: mstrings.participant, value: "displayname", sortable: true});
         }
-        heads.push({text: strings.value.idnumber, value: "idnumber", sortable: true});
-        heads.push({text: strings.value.moodlegrade, value: "grade"});
-        //heads.push({text: strings.value.provisionalgrade, value: null});
+        heads.push({text: mstrings.idnumber, value: "idnumber", sortable: true});
+        heads.push({text: mstrings.moodlegrade, value: "grade"});
         columns.value.forEach(column => {
             heads.push({text: column.description, value: column.gradetype});
         });
@@ -204,33 +203,9 @@
     })
 
     /**
-     * Load strings (mostly for table) and get initial data for table.
+     * Get initial data for table.
      */
     onMounted(() => {
-
-        // Get the moodle strings for this page
-        const stringslist = [
-            'addgrade',
-            'awaitingcapture',
-            'firstnamelastname',
-            'idnumber',
-            'nothingtodisplay',
-            'grade',
-            'moodlegrade',
-            'provisionalgrade',
-            'importgrades',
-            'userpicture',
-            'gradenotsupported',
-            'participant',
-        ];
-        getstrings(stringslist)
-        .then(results => {
-            Object.keys(results).forEach((name) => {strings.value[name] = results[name]});
-        })
-        .catch((error) => {
-            window.console.log(error);
-            toast.error('Error communicating with server (see console)');
-        });
 
         // Get the data for the table
         get_page_data(props.itemid, firstname, lastname);

@@ -1,18 +1,16 @@
 <template>
     <button v-if="hascapability && (itemtype == 'assign')" type="button" class="btn btn-outline-info  mr-1" @click="export_worksheet()">
-        <MString name="exportworksheet"></MString>
+        {{ mstrings.exportworksheet }}
     </button>
 </template>
 
 <script setup>
-    import {ref, defineProps, onMounted} from '@vue/runtime-core';
-    import MString from '@/components/MString.vue';
+    import {ref, defineProps, onMounted, inject} from '@vue/runtime-core';
     import { useToast } from "vue-toastification";
     import { saveAs } from 'file-saver';
-    import { getstrings } from '@/js/getstrings.js';
 
     const hascapability = ref(false);
-    const strings = ref({});
+    const mstrings = inject('mstrings');
 
     const toast = useToast();
 
@@ -29,10 +27,10 @@
         let csv = '';
         let line = [];
 
-        csv += strings.value.recordid + ',' + strings.value.gradenoun + ',' + strings.value.lastmodifiedgrade + ',' + strings.value.idnumber + '\n';
+        csv += mstrings.value.recordid + ',' + mstrings.value.gradenoun + ',' + mstrings.value.lastmodifiedgrade + ',' + mstrings.value.idnumber + '\n';
         props.users.forEach((user) => {
             line = [
-                strings.value.hiddenuser + ' ' + user.uniqueid,
+                mstrings.value.hiddenuser + ' ' + user.uniqueid,
                 '',
                 '',
                 user.idnumber,
@@ -67,23 +65,6 @@
             toast.error('Error communicating with server (see console)');
         });
 
-        // Strings
-        // Get the moodle strings for this page
-        const stringslist = [
-            'gradenoun',
-            'recordid',
-            'lastmodifiedgrade',
-            'hiddenuser',
-            'idnumber'
-        ];
-        getstrings(stringslist)
-        .then(results => {
-            Object.keys(results).forEach((name) => {strings.value[name] = results[name]});
-        })
-        .catch((error) => {
-            window.console.log(error);
-            toast.error('Error communicating with server (see console)');
-        });
     });
 
 </script>

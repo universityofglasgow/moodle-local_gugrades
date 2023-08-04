@@ -5,7 +5,7 @@
         <nav class="initialbargroups d-flex flex-wrap justify-content-center justify-content-md-start">
             <ul class="pagination pagination-sm">
                 <li class="initialbarall page-item" :class="{active: is_active('all')}">
-                    <a data-initial="" class="page-link" href="#" @click="letterclicked('all', $event)"><MString name="all"></MString></a>
+                    <a data-initial="" class="page-link" href="#" @click="letterclicked('all', $event)">{{ mstrings.all }}</a>
                 </li>
             </ul>
             <ul class="pagination pagination-sm">
@@ -23,8 +23,7 @@
 </template>
 
 <script setup>
-    import {ref, computed, defineProps, defineEmits, watch} from '@vue/runtime-core';
-    import MString from '@/components/MString.vue';
+    import {ref, computed, defineProps, defineEmits, watch, inject} from '@vue/runtime-core';
 
     const props = defineProps({
         'label': String,
@@ -34,6 +33,7 @@
     const emit = defineEmits(['selected']);
 
     const activeletter = ref('all');
+    const mstrings = inject('mstrings');
 
     const letters1 = computed(() => {
         return Array.from("ABCDEFGHIJKLM");
