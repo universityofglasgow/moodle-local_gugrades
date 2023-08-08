@@ -44,6 +44,7 @@ $string['firstname'] = 'First name';
 $string['firstnamelastname'] = 'Firstname / lastname';
 $string['grade'] = 'Grade';
 $string['gradehistory'] = 'Grade history';
+$string['gradesimported'] = 'Grades have already been imported';
 $string['gradeitem'] = 'Grade item';
 $string['gradenotsupported'] = '<b><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Grade type is not supported</b><br/>Make sure grade is either points or a scale. If a scale, check that it is a supported one.';
 $string['gradenoun'] = 'Grade';
@@ -78,6 +79,7 @@ $string['participant'] = 'Participant';
 $string['participantnumber'] = 'Participant {$a}';
 $string['pluginname'] = 'UofG Grade Tool';
 $string['provisionalgrade'] = 'Provisional grade';
+$string['reasonforadditionalgrade'] = 'Reason for additional grade';
 $string['recordid'] = 'Identifier';
 $string['resetfilter'] = 'Reset filter';
 $string['scalevalues'] = 'Scale values';
@@ -88,6 +90,7 @@ $string['selectgradecategory'] = 'Select grade category';
 $string['settings'] = 'Settings';
 $string['time'] = 'Time';
 $string['type'] = 'Type';
+$string['username'] = 'User name';
 $string['userpicture'] = 'Pic';
 
 // Capabilities

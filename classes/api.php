@@ -339,4 +339,39 @@ class api {
 
         return $strings;
     }
+
+    /**
+     * Get add grade form
+     * Various 'stuff' to construct the form
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param int $userid
+     * @return array
+     */
+    public static function get_add_grade_form($courseid, $gradeitemid, $userid) {
+        global $DB;
+
+        // Get gradetype
+        $gradetypes = \local_gugrades\gradetype::get_menu();
+        $wsgradetypes = array_map(function($shortname, $description) {
+            $data = new \stdClass;
+            $data->value = $shortname;
+            $data->label = $description;
+            return $data;
+        }, array_keys($gradetypes), array_values($gradetypes));
+
+        // Grade item
+        $gradeitem = new \local_gugrades\gradeitem($courseid, $gradeitemid);
+
+        // Username
+        $user = $DB->get_record('user', ['id' => $userid], '*', MUST_EXIST);
+
+        //
+        return [
+            'gradetypes' => $wsgradetypes,
+            'itemname' => $gradeitem->get_name(),
+            'fullname' => fullname($user),
+            'idnumber' => $user->idnumber,
+        ];
+    }
 }

@@ -5,3 +5,13 @@ The [Vue.js](https://vuejs.org/) Javascript framework has been used to implement
 The Vue portion lives entirely within the 'ui/' subdirectory. 
 
 Note that Vue requires a build step to create its final code. This is normally done using a built-in node-based web server but as we are already servicing Moodle this has been done slightly differently.
+
+## Accessing Moodle resources
+
+See [amd.md](./amd.md) for full description
+
+## References
+
+* [Vue Toatification](https://vue-toastification.maronato.dev/) is used to render notifications
+* [FormKit](https://formkit.com/) is used to render form elements
+* [Vue3 Easy Data Table](https://github.com/HC200ok/vue3-easy-data-table) used to render tables

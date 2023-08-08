@@ -8,8 +8,9 @@
             </template>
             <template #body>
                 <div v-if="is_importgrades" class="alert alert-danger">
-                    {{ $strings.test }}
+                    {{ mstrings.gradesimported }}
                 </div>
+                <FormKit type="text"></FormKit>
                 <p><button class="btn btn-primary" @click="importgrades">Import</button></p>
             </template>
         </ModalForm>
@@ -42,8 +43,6 @@
         const courseid = GU.courseid;
         const fetchMany = GU.fetchMany; 
         
-        window.console.log(props);
-        
         fetchMany([{
             methodname: 'local_gugrades_import_grades_users',
             args: {
@@ -56,7 +55,7 @@
             emit('imported');
         })
         .catch((error) => {
-            window.console.log(error);
+            window.console.error(error);
             toast.error('Error communicating with server (see console)');
         });
 

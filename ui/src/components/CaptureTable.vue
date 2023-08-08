@@ -28,7 +28,7 @@
                         <CaptureGrades :grades="item.grades"></CaptureGrades>
                     </template>
                     <template #item-actions="item">
-                        <AddGradeButton :itemid="itemid" :userid="parseInt(item.id)"></AddGradeButton>&nbsp;
+                        <AddGradeButton :itemid="itemid" :userid="parseInt(item.id)" :name="item.displayname" :itemname="itemname"></AddGradeButton>&nbsp;
                         <HistoryButton :userid="parseInt(item.id)" :itemid="itemid" :name="item.displayname" :itemname="itemname"></HistoryButton>
                     </template>
                 </EasyDataTable>

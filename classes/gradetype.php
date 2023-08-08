@@ -64,4 +64,17 @@ class gradetype {
         return $gradetypes[$gradetype] ?? '[[' . $gradetype . ']]';
     }
 
+    /**
+     * Get gradetypes for menu
+     * @return array
+     */
+    public static function get_menu() {
+        $gradetypes = self::define();
+        
+        // The menu doesn't include FIRST grades
+        unset($gradetypes['FIRST']);
+
+        return $gradetypes;
+    }
+
 }

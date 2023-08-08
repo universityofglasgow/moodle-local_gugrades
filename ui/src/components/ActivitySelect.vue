@@ -87,7 +87,6 @@
     }
 
     onMounted(() => {
-        window.console.log('ActivitySelect ON MOUNTED');
         getActivity();
 
         // Could be mounted with something selected

@@ -38,14 +38,30 @@ class gradeitem {
 
     protected int $gradeitemid;
 
+    protected $gradeitem;
+
+    protected $course;
+
     /**
      * Constructor
      * @param int $courseid
      * @param int $gradeitemid
      */
     public  function __construct(int $courseid, int $gradeitemid) {
+        global $DB;
+
         $this->courseid = $courseid;
         $this->gradeitemid = $gradeitemid;
+        $this->gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
+        $this->course = get_course($courseid);
+    }
+
+    /**
+     * Get name
+     * @retrun string
+     */
+    public function get_name() {
+        return $this->gradeitem->itemname;
     }
 
 }

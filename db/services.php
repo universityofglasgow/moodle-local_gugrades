@@ -125,4 +125,10 @@ $functions = [
         'type' => 'read',
         'ajax' => true,
     ],
+    'local_gugrades_get_add_grade_form' => [
+        'classname' => 'local_gugrades\external\get_add_grade_form',
+        'description' => 'Get the stuff to construct the add grade form.',
+        'type' => 'read',
+        'ajax' => true,
+    ],
 ];    

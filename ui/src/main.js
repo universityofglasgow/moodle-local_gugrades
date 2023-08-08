@@ -5,6 +5,9 @@ import Toast  from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
+import { plugin, defaultConfig } from '@formkit/vue';
+
+import customConfig from '@/js/formkit.config.js'
 
 // This stuff makes sure that the window.GU variable
 // exists.
@@ -41,6 +44,9 @@ ensureGUIsSet(timeout)
     app.provide('mstrings', mstrings);
     app.use(router);
     app.use(Toast, options);
+    app.use(plugin, defaultConfig({
+        config: customConfig.config
+    }));
     app.component('EasyDataTable', Vue3EasyDataTable);
     app.mount('#app');
 
