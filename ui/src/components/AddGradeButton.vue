@@ -17,7 +17,20 @@
                     type="select"
                     :label="mstrings.reasonforadditionalgrade"
                     name="reason"
+                    v-model="reason"
                     :options="gradetypes"
+                />
+                <FormKit
+                    v-if = 'reason == "OTHER"'
+                    type="text"
+                    :placeholder="mstrings.pleasespecify"
+                    name="other"
+                />
+                <FormKit
+                    type="textarea"
+                    label="Notes"
+                    :placeholder="mstrings.reasonforammendment"
+                    name="notes"
                 />
             </template>
         </ModalForm>
@@ -33,6 +46,7 @@
     const mstrings = inject('mstrings');
     const gradetypes = ref({});
     const idnumber = ref('');
+    const reason = ref('');
 
     const toast = useToast();
 
