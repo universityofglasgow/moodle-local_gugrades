@@ -13,40 +13,42 @@
                     <li><b>{{ mstrings.username }}:</b> {{ name }}</li>
                     <li><b>{{ mstrings.idnumber }}:</b> {{ idnumber }}</li>
                 </ul>
-                <FormKit
-                    type="select"
-                    :label="mstrings.reasonforadditionalgrade"
-                    name="reason"
-                    v-model="reason"
-                    :options="gradetypes"
-                />
-                <FormKit
-                    v-if = 'reason == "OTHER"'
-                    type="text"
-                    :placeholder="mstrings.pleasespecify"
-                    name="other"
-                />
-                <FormKit
-                    v-if='usescale'
-                    type="select"
-                    :label="mstrings.grade"
-                    name="scale"
-                    :options="scalemenu"
-                ></FormKit>
-                <FormKit
-                    v-if="!usescale"
-                    type="text"
-                    :label="mstrings.grade"
-                    :validation="gradevalidation"
-                    validation-visibility="live"
-                    name="grade"
-                ></FormKit>
-                <FormKit
-                    type="textarea"
-                    label="Notes"
-                    :placeholder="mstrings.reasonforammendment"
-                    name="notes"
-                />
+                <FormKit type="form">
+                    <FormKit
+                        type="select"
+                        :label="mstrings.reasonforadditionalgrade"
+                        name="reason"
+                        v-model="reason"
+                        :options="gradetypes"
+                    />
+                    <FormKit
+                        v-if = 'reason == "OTHER"'
+                        type="text"
+                        :placeholder="mstrings.pleasespecify"
+                        name="other"
+                    />
+                    <FormKit
+                        v-if='usescale'
+                        type="select"
+                        :label="mstrings.grade"
+                        name="scale"
+                        :options="scalemenu"
+                    ></FormKit>
+                    <FormKit
+                        v-if="!usescale"
+                        type="text"
+                        :label="mstrings.grade"
+                        :validation="gradevalidation"
+                        validation-visibility="live"
+                        name="grade"
+                    ></FormKit>
+                    <FormKit
+                        type="textarea"
+                        label="Notes"
+                        :placeholder="mstrings.reasonforammendment"
+                        name="notes"
+                    />
+                </FormKit>
             </template>
         </ModalForm>
     </Teleport>

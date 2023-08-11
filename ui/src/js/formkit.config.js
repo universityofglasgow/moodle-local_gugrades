@@ -7,10 +7,12 @@ const config = {
         outer: '$reset mb-3',
         input: 'form-control',
         label: 'form-label',
-        help: 'form-text'
+        help: 'form-text',
+        messages: 'list-unstyled mt-1',
+        message: 'text-danger',
       },
       form: {
-        form: "col-md-4 col-lg-3 mt-5 mx-auto p-5 border rounded"
+        form: "mt-5 mx-auto p-5 border rounded"
       },
       range: {
         input: '$reset form-range',
