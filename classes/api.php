@@ -341,6 +341,27 @@ class api {
     }
 
     /**
+     * Convert to array to FormKit menu
+     * @param array $inputarray
+     * @param bool $reverse
+     * @return array (of objects)
+     */
+    private static function formkit_menu(array $inputarray, bool $reverse = false) {
+        $menu = array_map(function($key, $value) {
+            $item = new \stdClass;
+            $item->value = $key;
+            $item->label = $value;
+            return $item;
+        }, array_keys($inputarray), array_values($inputarray));
+
+        if ($reverse) {
+            $menu = array_reverse($menu, true);
+        }
+
+        return $menu;
+    }
+
+    /**
      * Get add grade form
      * Various 'stuff' to construct the form
      * @param int $courseid
@@ -353,25 +374,32 @@ class api {
 
         // Get gradetype
         $gradetypes = \local_gugrades\gradetype::get_menu();
-        $wsgradetypes = array_map(function($shortname, $description) {
-            $data = new \stdClass;
-            $data->value = $shortname;
-            $data->label = $description;
-            return $data;
-        }, array_keys($gradetypes), array_values($gradetypes));
-
-        // Grade item
-        $gradeitem = new \local_gugrades\gradeitem($courseid, $gradeitemid);
+        $wsgradetypes = self::formkit_menu($gradetypes);
 
         // Username
         $user = $DB->get_record('user', ['id' => $userid], '*', MUST_EXIST);
 
+        // Gradeitem
+        list($itemtype, $gradeitem) = \local_gugrades\grades::analyse_gradeitem($gradeitemid);
+        $grademax = $gradeitem->gradetype == GRADE_TYPE_VALUE ? $gradeitem->grademax : 0;
+
+        // scale
+        if ($gradeitem->gradetype == GRADE_TYPE_SCALE) {
+            $scale = \local_gugrades\grades::get_scale($gradeitem->scaleid);
+            $scalemenu = self::formkit_menu($scale, true);
+        } else {
+            $scalemenu = [];
+        }
+
         //
         return [
             'gradetypes' => $wsgradetypes,
-            'itemname' => $gradeitem->get_name(),
+            'itemname' => $gradeitem->itemname,
             'fullname' => fullname($user),
             'idnumber' => $user->idnumber,
+            'usescale' => ($itemtype == 'scale') || ($itemtype == 'scale22'),
+            'grademax' => $grademax,
+            'scalemenu' => $scalemenu,
         ];
     }
 }

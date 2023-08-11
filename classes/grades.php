@@ -276,6 +276,48 @@ class grades {
     }
 
     /**
+     * Analyse grade item. Is it...
+     * - is it valid at all (@link is_grade_supported)
+     * - points value
+     * - if so, is the max points 22 (proxy for 22 point scale)
+     * - scale
+     * - if so, is it the 22 point scale
+     * TODO: Need to look at Schedule B
+     * 
+     * Returns ['scale' | 'scale22' | 'value' | false, $gradeitem] or [false, false]
+     * @param int $gradeitemid
+     * @return array
+     */
+    public static function analyse_gradeitem(int $gradeitemid) {
+        global $DB;
+
+        // Is it valid at all
+        if (!self::is_grade_supported($gradeitemid)) {
+            return [false, false];
+        }
+
+        $gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
+        $gradetype = $gradeitem->gradetype;
+        if ($gradetype == GRADE_TYPE_VALUE) {
+            if ($gradeitem->grademax == 22) {
+
+                // TODO: May change but to get it working
+                return ['value', $gradeitem];
+            } else {
+                return ['value', $gradeitem];
+            }
+        } else if ($gradetype == GRADE_TYPE_SCALE) {
+            if (($gradeitem->grademin == 1) && ($gradeitem->grademax == 23)) {
+                return ['scale22', $gradeitem];
+            } else {
+                return ['scale', $gradeitem];
+            }
+        }
+
+        throw new \moodle_exception('Invalid gradeitem encountered in grades::analyse_gradeitem');
+    }
+
+    /**
      * Have any grades already been imported for gradeitem
      * @param int $courseid
      * @param int $gradeitemid
@@ -352,6 +394,29 @@ class grades {
 
             // We're assuming it's a points scale (already checked for weird types)
             return new \local_gugrades\conversion\points($courseid, $gradeitemid);
+        }
+    }
+
+    /**
+     * Get scale as value => name associative array
+     * This is from our 'scalevalue' table
+     * @param int $scaleid
+     * @return array
+     *
+     */
+    public static function get_scale(int $scaleid) {
+        global $DB;
+
+        if ($items = $DB->get_records('local_gugrades_scalevalue', ['scaleid' => $scaleid])) {
+            $output = [];
+            foreach ($items as $item) {
+                $output[$item->value] = $item->item;
+            }
+
+            return $output;
+        } else {
+            new \moodle_exception('Invalid scaleid in grades::get_scale');
+            return [];
         }
     }
 }

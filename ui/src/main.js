@@ -32,7 +32,7 @@ function ensureGUIsSet(timeout) {
 }
 
 // Toast defaults
-const options = {
+const toastoptions = {
     position: 'top-center',
     timeout: 5000,
 };
@@ -43,7 +43,7 @@ ensureGUIsSet(timeout)
     const mstrings = reactive([]);
     app.provide('mstrings', mstrings);
     app.use(router);
-    app.use(Toast, options);
+    app.use(Toast, toastoptions);
     app.use(plugin, defaultConfig({
         config: customConfig.config
     }));

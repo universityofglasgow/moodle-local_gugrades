@@ -27,6 +27,21 @@
                     name="other"
                 />
                 <FormKit
+                    v-if='usescale'
+                    type="select"
+                    :label="mstrings.grade"
+                    name="scale"
+                    :options="scalemenu"
+                ></FormKit>
+                <FormKit
+                    v-if="!usescale"
+                    type="text"
+                    :label="mstrings.grade"
+                    :validation="gradevalidation"
+                    validation-visibility="live"
+                    name="grade"
+                ></FormKit>
+                <FormKit
                     type="textarea"
                     label="Notes"
                     :placeholder="mstrings.reasonforammendment"
@@ -47,6 +62,10 @@
     const gradetypes = ref({});
     const idnumber = ref('');
     const reason = ref('');
+    const usescale = ref(false);
+    const grademax = ref(0);
+    const scalemenu = ref([]);
+    const gradevalidation = ref([]);
 
     const toast = useToast();
 
@@ -76,6 +95,16 @@
         .then((result) => {
             gradetypes.value = result['gradetypes'];
             idnumber.value = result['idnumber'];
+            usescale.value = result['usescale'];
+            grademax.value = result['grademax'];
+            scalemenu.value = result['scalemenu'];
+
+            gradevalidation.value = [
+                ['required'],
+                ['between', 0, result['grademax']],
+            ];
+
+            window.console.log(result);
         })
         .catch((error) => {
             window.console.error(error);
