@@ -23,6 +23,7 @@
                     />
                     <FormKit
                         v-if = 'reason == "OTHER"'
+                        :label="mstrings.pleasespecify"
                         type="text"
                         :placeholder="mstrings.pleasespecify"
                         name="other"

@@ -14,6 +14,8 @@
 
             <NameFilter v-if="!usershidden" @selected="filter_selected" ref="namefilterref"></NameFilter>
 
+            <PreLoader v-if="!loaded"></PreLoader>
+
             <div v-if="showtable">
                 <EasyDataTable
                     buttons-pagination
@@ -47,6 +49,7 @@
     import ImportButton from '@/components/ImportButton.vue';
     import AddGradeButton from '@/components/AddGradeButton.vue';
     import ExportWorksheetButton from '@/components/ExportWorksheetButton.vue';
+    import PreLoader from '@/components/PreLoader.vue';
     import { useToast } from "vue-toastification";
 
     const props = defineProps({
@@ -65,6 +68,7 @@
     const itemname = ref('');
     const gradesupported = ref(true);
     const columns = ref([]);
+    const loaded = ref(false);
 
     const toast = useToast();
 
@@ -126,7 +130,9 @@
      function get_page_data(itemid, first, last) {
         const GU = window.GU;
         const courseid = GU.courseid;
-        const fetchMany = GU.fetchMany;      
+        const fetchMany = GU.fetchMany;    
+        
+        loaded.value = false;
         
         fetchMany([{
             methodname: 'local_gugrades_get_capture_page',
@@ -148,6 +154,8 @@
             totalrows.value = users.value.length;
 
             users.value = add_grades(users.value, columns.value);
+
+            loaded.value = true;
         })
         .catch((error) => {
             window.console.error(error);
