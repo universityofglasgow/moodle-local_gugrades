@@ -107,14 +107,14 @@ class schedulea extends base {
         if (isset($this->scaleitems[$grade - 1])) {
             $scaleitem = $this->scaleitems[$grade - 1];
         } else {
-            new \moodle_exception('Scale item does not exist. Scale id = ' . $this->gradeitem->scaleid . ', value = ' . $grade);
+            throw new \moodle_exception('Scale item does not exist. Scale id = ' . $this->gradeitem->scaleid . ', value = ' . $grade);
         }
 
         // Convert to value using scalevalue
         if (array_key_exists($scaleitem, $this->items)) {
             $converted = $this->items[$scaleitem];
         } else {
-            new \moodle_exception('Scale item "' . $scaleitem . '" does not exist in sacle id = ' . $this->gradeitem->scaleid);
+            throw new \moodle_exception('Scale item "' . $scaleitem . '" does not exist in sacle id = ' . $this->gradeitem->scaleid);
             $converted = 0;
         }
 

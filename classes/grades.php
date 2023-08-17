@@ -386,8 +386,7 @@ class grades {
             if ($DB->count_records('local_gugrades_scalevalue', ['scaleid' => $gradeitem->scaleid]) == 23) {
                 return new \local_gugrades\conversion\schedulea($courseid, $gradeitemid);
             } else {
-                new \moodle_exception('Unsupported scale in conversion_factory');
-                return new \stdClass;
+                throw new \moodle_exception('Unsupported scale in conversion_factory');
             }
 
         } else {
@@ -415,8 +414,7 @@ class grades {
 
             return $output;
         } else {
-            new \moodle_exception('Invalid scaleid in grades::get_scale');
-            return [];
+            throw new \moodle_exception('Invalid scaleid in grades::get_scale');
         }
     }
 }

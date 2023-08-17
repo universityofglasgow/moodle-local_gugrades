@@ -369,7 +369,7 @@ class api {
      * @param int $userid
      * @return array
      */
-    public static function get_add_grade_form($courseid, $gradeitemid, $userid) {
+    public static function get_add_grade_form(int $courseid, int $gradeitemid, int $userid) {
         global $DB;
 
         // Get gradetype
@@ -394,6 +394,7 @@ class api {
         //
         return [
             'gradetypes' => $wsgradetypes,
+            'rawgradetypes' => $gradetypes,
             'itemname' => $gradeitem->itemname,
             'fullname' => fullname($user),
             'idnumber' => $user->idnumber,
@@ -401,5 +402,76 @@ class api {
             'grademax' => $grademax,
             'scalemenu' => $scalemenu,
         ];
+    }
+
+    /**
+     * Write additional grade
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param int $userid
+     * @param string $reason
+     * @param string $other
+     * @param int $scale
+     * @param float $grade
+     * @param string $notes
+     */
+    public static function write_additional_grade(int $courseid, int $gradeitemid, int $userid, string $reason, string $other, int $scale, float $grade, string $notes) {
+
+        // Conversion class
+        $conversion = \local_gugrades\grades::conversion_factory($courseid, $gradeitemid);
+
+        // Get the stuff we used to build the form for validation
+        $form = self::get_add_grade_form($courseid, $gradeitemid, $userid);
+
+        // Check 'reason' is valid
+        $gradetypes = $form['rawgradetypes'];
+        if (!array_key_exists($reason, $gradetypes)) {
+            throw new \moodle_exception('Attempting to write invalid reason - "' . $reason . '"');
+        }
+
+        // Check 'other' is valid
+        if ($other && ($reason != 'OTHER')) {
+            throw new \moodle_exception('Attemting to write invalid other text when reason is not other');
+        }
+        if (!$other && ($reason == 'OTHER')) {
+            throw new \moodle_exception('Attempting to write empty other text when reason is other');
+        }
+
+        // Check 'scale' is valid
+        $usescale = $form['usescale'];
+        if (!$usescale && ($scale != 0)) {
+            throw new \moodle_exception('Attempting to write scale value when item is not a scale');
+        }
+
+        // Check if 'grade' is valid
+        if ($usescale && ($grade != 0)) {
+            throw new \moodle_exception('Attempting to write non-zero grade when item type is a scale');
+        }
+
+        // Get converted and display grade
+        if ($usescale) {
+
+            // TODO: Check! +1 because internal values are 1 - based, our form is 0 - based
+            list($convertedgrade, $displaygrade) = $conversion->import($scale + 1);
+            $rawgrade = $scale + 1;
+        } else {
+            list($convertedgrade, $displaygrade) = $conversion->import($grade);
+            $rawgrade = $grade;
+        }
+
+        // Happy as we're going to get, so write the new data
+        \local_gugrades\grades::write_grade(
+            $courseid,
+            $gradeitemid,
+            $userid,
+            $rawgrade,
+            $convertedgrade,
+            $displaygrade,
+            0,
+            $reason,
+            $other,
+            true,
+            $notes
+        );
     }
 }

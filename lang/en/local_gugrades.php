@@ -100,3 +100,22 @@ $string['gugrades:exportworksheet'] = 'Export empty worksheet for selected assig
 $string['gugrades:readotheraudit'] = 'Read another user\'s audit trail';
 $string['gugrades:view'] = 'View gugrades tool';
 
+// Admin grades
+$string['admin7'] = 'Deferred result';
+$string['adminau'] = 'Audit only';
+$string['adminca'] = 'Credit awarded';
+$string['admincp'] = 'Complete';
+$string['admincr'] = 'Credit refused';
+$string['admincw'] = 'Credit withheld';
+$string['admindd'] = 'Distinction';
+$string['adminfc'] = 'Foreign credit';
+$string['adminfn'] = 'Fail - no resit';
+$string['adminfr'] = 'Fail - resit permitted';
+$string['adminmv'] = 'Medical, compassionate or other good cause';
+$string['adminnc'] = 'Not complete';
+$string['adminnp'] = 'Not pass';
+$string['adminp'] = 'Pass';
+$string['adminsat'] = 'Satisfactory';
+$string['adminuns'] = 'Unsatisfactory';
+
+

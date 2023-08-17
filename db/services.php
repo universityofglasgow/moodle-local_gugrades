@@ -131,4 +131,10 @@ $functions = [
         'type' => 'read',
         'ajax' => true,
     ],
+    'local_gugrades_write_additional_grade' => [
+        'classname' => 'local_gugrades\external\write_additional_grade',
+        'description' => 'Write a new grade for a given grade item / user.',
+        'type' => 'write',
+        'ajax' => true,
+    ],
 ];    

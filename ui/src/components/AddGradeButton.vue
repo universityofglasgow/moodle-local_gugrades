@@ -13,7 +13,7 @@
                     <li><b>{{ mstrings.username }}:</b> {{ name }}</li>
                     <li><b>{{ mstrings.idnumber }}:</b> {{ idnumber }}</li>
                 </ul>
-                <FormKit type="form">
+                <FormKit type="form" @submit="submit_form">
                     <FormKit
                         type="select"
                         :label="mstrings.reasonforadditionalgrade"
@@ -27,27 +27,32 @@
                         type="text"
                         :placeholder="mstrings.pleasespecify"
                         name="other"
+                        v-model="other"
                     />
                     <FormKit
                         v-if='usescale'
                         type="select"
                         :label="mstrings.grade"
                         name="scale"
+                        v-model="scale"
                         :options="scalemenu"
                     ></FormKit>
                     <FormKit
                         v-if="!usescale"
-                        type="text"
+                        type="number"
                         :label="mstrings.grade"
                         :validation="gradevalidation"
                         validation-visibility="live"
                         name="grade"
+                        v-model="grade"
+                        value="0.0"
                     ></FormKit>
                     <FormKit
                         type="textarea"
                         label="Notes"
                         :placeholder="mstrings.reasonforammendment"
                         name="notes"
+                        v-model="notes"
                     />
                 </FormKit>
             </template>
@@ -65,6 +70,10 @@
     const gradetypes = ref({});
     const idnumber = ref('');
     const reason = ref('');
+    const scale = ref('');
+    const grade = ref(0);
+    const notes = ref('');
+    const other = ref('');
     const usescale = ref(false);
     const grademax = ref(0);
     const scalemenu = ref([]);
@@ -104,16 +113,48 @@
 
             gradevalidation.value = [
                 ['required'],
+                ['number'],
                 ['between', 0, result['grademax']],
             ];
-
-            window.console.log(result);
         })
         .catch((error) => {
             window.console.error(error);
             toast.error('Error communicating with server (see console)');
-        })
+        });
 
         showaddgrademodal.value = true;
+    }
+
+    /**
+     * Process form submission
+     */
+    function submit_form() {
+        const GU = window.GU;
+        const courseid = GU.courseid;
+        const fetchMany = GU.fetchMany;
+
+        fetchMany([{
+            methodname: 'local_gugrades_write_additional_grade',
+            args: {
+                courseid: courseid,
+                gradeitemid: props.itemid,
+                userid: props.userid,
+                reason: reason.value,
+                other: other.value,
+                scale: scale.value,
+                grade: grade.value,
+                notes: notes.value,
+            }
+        }])[0]
+        .then(() => {
+            toast.success("Grade added");
+        })
+        .catch((error) => {
+            window.console.error(error);
+            toast.error('Error communicating with server (see console)');
+        });
+
+        // close the modal
+        showaddgrademodal.value = false;
     }
 </script>
