@@ -48,7 +48,7 @@ class schedulea extends base {
 
         // Get scale
         $scale = $DB->get_record('scale', ['id' => $this->gradeitem->scaleid], '*', MUST_EXIST);
-        $this->scaleitems = explode(',', $scale->scale);
+        $this->scaleitems = array_map('trim', explode(',', $scale->scale));
 
         // Get scale conversion
         $items = $DB->get_records('local_gugrades_scalevalue', ['scaleid' => $this->gradeitem->scaleid]);
@@ -114,8 +114,7 @@ class schedulea extends base {
         if (array_key_exists($scaleitem, $this->items)) {
             $converted = $this->items[$scaleitem];
         } else {
-            throw new \moodle_exception('Scale item "' . $scaleitem . '" does not exist in sacle id = ' . $this->gradeitem->scaleid);
-            $converted = 0;
+            throw new \moodle_exception('Scale item "' . $scaleitem . '" does not exist in scale id = ' . $this->gradeitem->scaleid);
         }
 
         return [$converted, $scaleitem];

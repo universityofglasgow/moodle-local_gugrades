@@ -73,7 +73,9 @@ class write_additional_grade extends \external_api {
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        return \local_gugrades\api::write_additional_grade($courseid, $gradeitemid, $userid, $reason, $other, $scale, $grade, $notes);
+        \local_gugrades\api::write_additional_grade($courseid, $gradeitemid, $userid, $reason, $other, $scale, $grade, $notes);
+
+        return [];
     }
 
     public static function execute_returns() {

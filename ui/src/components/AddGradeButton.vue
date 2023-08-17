@@ -12,6 +12,7 @@
                     <li><b>{{ mstrings.itemname }}:</b> {{ itemname }}</li>
                     <li><b>{{ mstrings.username }}:</b> {{ name }}</li>
                     <li><b>{{ mstrings.idnumber }}:</b> {{ idnumber }}</li>
+                    <li>{{ reason }}</li>
                 </ul>
                 <FormKit type="form" @submit="submit_form">
                     <FormKit
@@ -20,6 +21,8 @@
                         name="reason"
                         v-model="reason"
                         :options="gradetypes"
+                        placeholder="Select a reason"
+                        validation="required"
                     />
                     <FormKit
                         v-if = 'reason == "OTHER"'
@@ -133,6 +136,8 @@
         const courseid = GU.courseid;
         const fetchMany = GU.fetchMany;
 
+        window.console.log(reason.value);
+
         fetchMany([{
             methodname: 'local_gugrades_write_additional_grade',
             args: {
@@ -141,7 +146,7 @@
                 userid: props.userid,
                 reason: reason.value,
                 other: other.value,
-                scale: scale.value,
+                scale: scale.value ? scale.value : 0,
                 grade: grade.value,
                 notes: notes.value,
             }
