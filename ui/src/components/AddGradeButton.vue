@@ -64,7 +64,7 @@
 </template>
 
 <script setup>
-    import {ref, defineProps, inject} from '@vue/runtime-core';
+    import {ref, defineProps, defineEmits, inject} from '@vue/runtime-core';
     import ModalForm from '@/components/ModalForm.vue';
     import { useToast } from "vue-toastification";
 
@@ -81,6 +81,10 @@
     const grademax = ref(0);
     const scalemenu = ref([]);
     const gradevalidation = ref([]);
+
+    const emit = defineEmits([
+        'gradeadded'
+    ]);
 
     const toast = useToast();
 
@@ -146,12 +150,13 @@
                 userid: props.userid,
                 reason: reason.value,
                 other: other.value,
-                scale: scale.value ? scale.value : 0,
+                scale: scale.value ? scale.value : 0, // WS expecting int
                 grade: grade.value,
                 notes: notes.value,
             }
         }])[0]
         .then(() => {
+            emit('gradeadded');
             toast.success("Grade added");
         })
         .catch((error) => {

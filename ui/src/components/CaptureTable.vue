@@ -30,7 +30,7 @@
                         <CaptureGrades :grades="item.grades"></CaptureGrades>
                     </template>
                     <template #item-actions="item">
-                        <AddGradeButton :itemid="itemid" :userid="parseInt(item.id)" :name="item.displayname" :itemname="itemname"></AddGradeButton>&nbsp;
+                        <AddGradeButton :itemid="itemid" :userid="parseInt(item.id)" :name="item.displayname" :itemname="itemname" @gradeadded = "get_page_data(props.itemid, firstname, lastname)"></AddGradeButton>&nbsp;
                         <HistoryButton :userid="parseInt(item.id)" :itemid="itemid" :name="item.displayname" :itemname="itemname"></HistoryButton>
                     </template>
                 </EasyDataTable>
@@ -87,7 +87,7 @@
             heads.push({text: mstrings.participant, value: "displayname", sortable: true});
         }
         heads.push({text: mstrings.idnumber, value: "idnumber", sortable: true});
-        heads.push({text: mstrings.moodlegrade, value: "grade"});
+        // heads.push({text: mstrings.moodlegrade, value: "grade"});
         columns.value.forEach(column => {
             heads.push({text: column.description, value: column.gradetype});
         });
@@ -144,6 +144,8 @@
             }
         }])[0]
         .then((result) => {
+            window.console.log(result);
+
             usershidden.value = result['hidden'];
             users.value = result['users'];
             itemtype.value = result['itemtype'];

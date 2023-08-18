@@ -381,7 +381,7 @@ class api {
 
         // Gradeitem
         list($itemtype, $gradeitem) = \local_gugrades\grades::analyse_gradeitem($gradeitemid);
-        $grademax = $gradeitem->gradetype == GRADE_TYPE_VALUE ? $gradeitem->grademax : 0;
+        $grademax = ($gradeitem->gradetype == GRADE_TYPE_VALUE) ? $gradeitem->grademax : 0;
 
         // scale
         if ($gradeitem->gradetype == GRADE_TYPE_SCALE) {

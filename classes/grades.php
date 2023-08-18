@@ -245,7 +245,7 @@ class grades {
      */
     public static function add_grades_to_user_records(int $courseid, int $gradeitemid, array $users) {
         foreach ($users as $user) {
-            $usercapture = new usercapture($gradeitemid, $user->id);
+            $usercapture = new usercapture($courseid, $gradeitemid, $user->id);
             $user->grades = $usercapture->get_grades();
         }
 
@@ -349,17 +349,17 @@ class grades {
             'iscurrent' => 1,
         ]);
 
+        // If there are any grade columns then there must be provisional
+        if (count($gradetypes)) {
+            $gradetypes[] = (object)[
+                'gradetype' => 'PROVISIONAL',
+            ];
+        }
+
         // Add descriptions
         foreach ($gradetypes as $gradetype) {
             $gradetype->description = gradetype::get_description($gradetype->gradetype);
         }
-
-        // If there are any grade columns then there must be provisional
-        //if (count($gradetypes)) {
-        //    $gradetypes[] = (object)[
-        //        'shortname' => 'PROVISIONAL',
-        //    ];
-        //}
 
         return array_values($gradetypes);
     }

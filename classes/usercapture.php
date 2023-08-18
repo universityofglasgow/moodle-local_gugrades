@@ -40,14 +40,19 @@ class usercapture {
 
     protected $grades;
 
+    protected $rules;
+
     /**
      * Constructor
+     * @param int $courseid
      * @param int $gradeitemid
      * @param int $userid
      */
-    public function __construct(int $gradeitemid, $userid) {
+    public function __construct(int $courseid, int $gradeitemid, int $userid) {
         $this->gradeitemid = $gradeitemid;
         $this->userid = $userid;
+
+        $this->rules = new \local_gugrades\rules\base($courseid, $gradeitemid);
 
         $this->read_grades();
     }
@@ -64,6 +69,12 @@ class usercapture {
             'userid' => $this->userid,
             'iscurrent' => 1,
         ], 'audittimecreated ASC');
+
+        // Work out / add provisional grade
+        if ($grades) {
+            $provisional = $this->rules->get_provisional($grades);
+            $grades[] = $provisional;
+        }
 
         $this->grades = $grades;
     }
