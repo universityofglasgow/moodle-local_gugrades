@@ -9,6 +9,7 @@
         <div v-else>
             <div class="border rounded p-2 py-4 mt-2">
                 <ImportButton :itemid="parseInt(itemid)" :userids="userids" @imported="gradesimported"></ImportButton>
+                <ReleaseButton :itemid="parseInt(itemid)"></ReleaseButton>
                 <ExportWorksheetButton :users="users" :itemtype="itemtype" :itemname="itemname"></ExportWorksheetButton>
             </div>
 
@@ -47,6 +48,7 @@
     import CaptureGrades from '@/components/CaptureGrades.vue';
     import HistoryButton from '@/components/HistoryButton.vue';
     import ImportButton from '@/components/ImportButton.vue';
+    import ReleaseButton from '@/components/ReleaseButton.vue';
     import AddGradeButton from '@/components/AddGradeButton.vue';
     import ExportWorksheetButton from '@/components/ExportWorksheetButton.vue';
     import PreLoader from '@/components/PreLoader.vue';
@@ -87,10 +89,13 @@
             heads.push({text: mstrings.participant, value: "displayname", sortable: true});
         }
         heads.push({text: mstrings.idnumber, value: "idnumber", sortable: true});
-        // heads.push({text: mstrings.moodlegrade, value: "grade"});
+
+        // Add the grades columns
         columns.value.forEach(column => {
             heads.push({text: column.description, value: column.gradetype});
         });
+
+        // Space for the buttons
         heads.push({text: "", value: "actions"});
 
         return heads;

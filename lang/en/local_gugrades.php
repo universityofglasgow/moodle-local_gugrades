@@ -84,6 +84,7 @@ $string['provisionalgrade'] = 'Provisional grade';
 $string['reasonforadditionalgrade'] = 'Reason for additional grade';
 $string['reasonforammendment'] = 'Reason for ammendment';
 $string['recordid'] = 'Identifier';
+$string['releasegrades'] = 'Release grades';
 $string['resetfilter'] = 'Reset filter';
 $string['rulesdefault'] = 'Standard rules';
 $string['scalevalues'] = 'Scale values';

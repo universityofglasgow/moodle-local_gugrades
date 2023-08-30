@@ -74,6 +74,7 @@ class get_capture_page extends \external_api {
                         new external_single_structure([
                             'displaygrade' => new external_value(PARAM_TEXT, 'Grade for display'),
                             'gradetype' => new external_value(PARAM_TEXT, 'FIRST, SECOND and so on'),
+                            'other' => new external_value(PARAM_TEXT, 'If gradetype == other, what is the column header'),
                         ])
                     ),
                 ])

@@ -332,6 +332,7 @@ class grades {
     /**
      * Get grade capture columns
      * Get the different grade types used for this capture
+     * Each gradetype == OTHER with distinct 'other' text is considered a different column
      * @param int $courseid
      * @param int $gradeitemid
      * @return array
@@ -339,7 +340,7 @@ class grades {
     public static function get_grade_capture_columns(int $courseid, int $gradeitemid) {
         global $DB;
 
-        $sql = "SELECT DISTINCT gradetype FROM {local_gugrades_grade}
+        $sql = "SELECT DISTINCT gradetype, other FROM {local_gugrades_grade}
             WHERE courseid = :courseid
             AND gradeitemid = :gradeitemid
             AND iscurrent = :iscurrent";
@@ -358,7 +359,11 @@ class grades {
 
         // Add descriptions
         foreach ($gradetypes as $gradetype) {
-            $gradetype->description = gradetype::get_description($gradetype->gradetype);
+            if ($gradetype->gradetype == 'OTHER') {
+                $gradetype->description = $gradetype->other;
+            } else {
+                $gradetype->description = gradetype::get_description($gradetype->gradetype);
+            }
         }
 
         return array_values($gradetypes);
