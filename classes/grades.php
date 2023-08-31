@@ -340,15 +340,17 @@ class grades {
     public static function get_grade_capture_columns(int $courseid, int $gradeitemid) {
         global $DB;
 
-        $sql = "SELECT DISTINCT gradetype, other FROM {local_gugrades_grade}
+        // (The concat is to create a unique id in the first field which Moodle requires).
+        $sql = "SELECT DISTINCT CONCAT(gradetype, ' ', other) AS tag, gradetype, other FROM {local_gugrades_grade}
             WHERE courseid = :courseid
-            AND gradeitemid = :gradeitemid
-            AND iscurrent = :iscurrent";
+            AND gradeitemid = :gradeitemid";
+            //AND iscurrent = :iscurrent";
         $gradetypes = $DB->get_records_sql($sql, [
             'courseid' => $courseid,
             'gradeitemid' => $gradeitemid,
-            'iscurrent' => 1,
+            //'iscurrent' => 1,
         ]);
+        $gradetypes = array_values($gradetypes);
 
         // If there are any grade columns then there must be provisional
         if (count($gradetypes)) {
@@ -366,7 +368,7 @@ class grades {
             }
         }
 
-        return array_values($gradetypes);
+        return $gradetypes;
     }
 
     /**

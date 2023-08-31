@@ -149,8 +149,6 @@
             }
         }])[0]
         .then((result) => {
-            window.console.log(result);
-
             usershidden.value = result['hidden'];
             users.value = result['users'];
             itemtype.value = result['itemtype'];
@@ -161,6 +159,8 @@
             totalrows.value = users.value.length;
 
             users.value = add_grades(users.value, columns.value);
+
+            window.console.log(columns.value);
 
             loaded.value = true;
         })
