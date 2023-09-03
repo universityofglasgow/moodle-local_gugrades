@@ -139,6 +139,42 @@ class grades {
     }
 
     /**
+     * Get the grade column record for the gradetype and (optionally)
+     * 'other' text
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param string $gradetype
+     * @param string $other
+     * @return object
+     */
+    private static function get_column(int$courseid, int $gradeitemid, string $gradetype, string $other) {
+        global $DB;
+
+        // Check 'other' text is valid
+        $other = trim($other); 
+        if (($gradetype != 'OTHER') && !empty($other)) {
+            throw new \moodle_exception('Other text provided for non-other gradetype');
+        }
+        if (($gradetype == 'OTHER') && empty($other)) {
+            throw new \moodle_exception('No other text provided for other gradetype');
+        }
+
+        // Does record exist?
+        if ($column = $DB->get_record('local_gugrades_column', ['gradeitemid' => $gradeitemid, 'gradetype' => $gradetype, 'other' => $other])) {
+            return $column;
+        } else {
+            $column = new \stdClass;
+            $column->courseid = $courseid;
+            $column->gradeitemid = $gradeitemid;
+            $column->gradetype = $gradetype;
+            $column->other = $other;
+            $column->id = $DB->insert_record('local_gugrades', $column);
+
+            return $column;
+        }
+    }
+
+    /**
      * Write grade to local_gugrades_grade table
      *  
      * @param int $courseid
@@ -339,36 +375,30 @@ class grades {
      */
     public static function get_grade_capture_columns(int $courseid, int $gradeitemid) {
         global $DB;
+        
+        if ($columns = $DB->get_record('local_gugrades_column', ['gradeitemid' => $gradeitemid])) {
 
-        // (The concat is to create a unique id in the first field which Moodle requires).
-        $sql = "SELECT DISTINCT CONCAT(gradetype, ' ', other) AS tag, gradetype, other FROM {local_gugrades_grade}
-            WHERE courseid = :courseid
-            AND gradeitemid = :gradeitemid";
-            //AND iscurrent = :iscurrent";
-        $gradetypes = $DB->get_records_sql($sql, [
-            'courseid' => $courseid,
-            'gradeitemid' => $gradeitemid,
-            //'iscurrent' => 1,
-        ]);
-        $gradetypes = array_values($gradetypes);
+            $columns = array_values($columns);
 
-        // If there are any grade columns then there must be provisional
-        if (count($gradetypes)) {
-            $gradetypes[] = (object)[
+            // As there is at least one column then there must be a provisional
+            $columns[] = (object)[
                 'gradetype' => 'PROVISIONAL',
             ];
-        }
 
-        // Add descriptions
-        foreach ($gradetypes as $gradetype) {
-            if ($gradetype->gradetype == 'OTHER') {
-                $gradetype->description = $gradetype->other;
-            } else {
-                $gradetype->description = gradetype::get_description($gradetype->gradetype);
+            // Add descriptions
+            foreach ($columns as $column) {
+                if ($column->gradetype == 'OTHER') {
+                    $column->description = $column->other;
+                } else {
+                    $column->description = gradetype::get_description($column->gradetype);
+                }
             }
-        }
 
-        return $gradetypes;
+            return $columns;
+        } else {
+
+            return [];
+        }
     }
 
     /**
