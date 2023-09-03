@@ -72,17 +72,17 @@ class get_capture_page extends \external_api {
                     'idnumber' => new external_value(PARAM_TEXT, 'User ID number'),
                     'grades' => new external_multiple_structure(
                         new external_single_structure([
-                            'tag' => new external_value(PARAM_TEXT, 'Unique tag for column data'),
                             'displaygrade' => new external_value(PARAM_TEXT, 'Grade for display'),
                             'gradetype' => new external_value(PARAM_TEXT, 'FIRST, SECOND and so on'),
-                            'other' => new external_value(PARAM_TEXT, 'If gradetype == other, what is the column header'),
+                            'columnid' => new external_value(PARAM_INT, 'ID in column table'),
+                            //'other' => new external_value(PARAM_TEXT, 'If gradetype == other, what is the column header'),
                         ])
                     ),
                 ])
             ),
             'columns' => new external_multiple_structure(
                 new external_single_structure([
-                    'tag' => new external_value(PARAM_TEXT, 'Unique tag for column data'),
+                    'id' => new external_value(PARAM_INT, 'Column id'),
                     'gradetype' => new external_value(PARAM_TEXT, 'FIRST, SECOND and so on'),
                     'description' => new external_value(PARAM_TEXT, 'Heading for this grade type'),
                 ])

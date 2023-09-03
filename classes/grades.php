@@ -147,7 +147,7 @@ class grades {
      * @param string $other
      * @return object
      */
-    private static function get_column(int$courseid, int $gradeitemid, string $gradetype, string $other) {
+    private static function get_column(int $courseid, int $gradeitemid, string $gradetype, string $other) {
         global $DB;
 
         // Check 'other' text is valid
@@ -160,18 +160,32 @@ class grades {
         }
 
         // Does record exist?
-        if ($column = $DB->get_record('local_gugrades_column', ['gradeitemid' => $gradeitemid, 'gradetype' => $gradetype, 'other' => $other])) {
-            return $column;
+        if (!$other) {
+            if ($column = $DB->get_record('local_gugrades_column', ['gradeitemid' => $gradeitemid, 'gradetype' => $gradetype])) {
+                return $column;
+            }
         } else {
-            $column = new \stdClass;
-            $column->courseid = $courseid;
-            $column->gradeitemid = $gradeitemid;
-            $column->gradetype = $gradetype;
-            $column->other = $other;
-            $column->id = $DB->insert_record('local_gugrades', $column);
 
-            return $column;
+            // If other text, due to sql_compare_text it all gets a bit more complicated
+            $compareother = $DB->sql_compare_text('other');
+            $sql ="SELECT * FROM {local_gugrades_column}
+                WHERE gradeitemid = :gradeitemid
+                AND gradetype = :gradetype
+                AND $compareother = :other";
+            if ($column = $DB->get_record_sql($sql, ['gradeitemid' => $gradeitemid, 'gradetype' => $gradetype, 'other' => $other])) {
+                return $column;
+            }
         }
+
+        // Failing the above, we need a new column record
+        $column = new \stdClass;
+        $column->courseid = $courseid;
+        $column->gradeitemid = $gradeitemid;
+        $column->gradetype = $gradetype;
+        $column->other = $other;
+        $column->id = $DB->insert_record('local_gugrades_column', $column);
+
+        return $column;
     }
 
     /**
@@ -204,6 +218,9 @@ class grades {
     ) {
         global $DB, $USER;
 
+        // Get/create the column entry
+        $column = self::get_column($courseid, $gradeitemid, $gradetype, $other);
+
         // Does this already exist
         $gradetypecompare = $DB->sql_compare_text('gradetype');
         $sql = 'SELECT * FROM {local_gugrades_grade} 
@@ -211,12 +228,14 @@ class grades {
             AND gradeitemid = :gradeitemid
             AND userid = :userid
             AND iscurrent = :iscurrent
+            AND columnid = :columnid
             AND ' . $gradetypecompare . ' = :gradetype';
         if ($oldgrades = $DB->get_records_sql($sql, [
             'courseid' => $courseid,
             'gradeitemid' => $gradeitemid,
             'userid' => $userid,
             'iscurrent' => true,
+            'columnid' => $column->id,
             'gradetype' => $gradetype,
         ])) {
             foreach ($oldgrades as $oldgrade) {
@@ -238,6 +257,7 @@ class grades {
         $gugrade->gradetype = $gradetype;
         $gugrade->other = $other;
         $gugrade->iscurrent = true;
+        $gugrade->columnid = $column->id;
         $gugrade->auditby = $USER->id;
         $gugrade->audittimecreated = time();
         $gugrade->auditcomment = $auditcomment;
@@ -376,12 +396,13 @@ class grades {
     public static function get_grade_capture_columns(int $courseid, int $gradeitemid) {
         global $DB;
         
-        if ($columns = $DB->get_record('local_gugrades_column', ['gradeitemid' => $gradeitemid])) {
+        if ($columns = $DB->get_records('local_gugrades_column', ['gradeitemid' => $gradeitemid])) {
 
             $columns = array_values($columns);
 
             // As there is at least one column then there must be a provisional
             $columns[] = (object)[
+                'id' => 0,
                 'gradetype' => 'PROVISIONAL',
             ];
 

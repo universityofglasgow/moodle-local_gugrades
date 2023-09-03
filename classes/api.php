@@ -234,7 +234,12 @@ class api {
     public static function get_history(int $gradeitemid, int $userid) {
         global $DB;
 
-        if (!$grades = $DB->get_records('local_gugrades_grade', ['userid' => $userid, 'gradeitemid' => $gradeitemid], 'audittimecreated DESC')) {
+        $sql = "SELECT gg.*, gc.other FROM {local_gugrades_grade} gg
+            JOIN {local_gugrades_column} gc ON gc.id = gg.columnid
+            WHERE gg.userid = :userid
+            AND gg.gradeitemid = :gradeitemid
+            ORDER BY audittimecreated DESC";
+        if (!$grades = $DB->get_records_sql($sql, ['userid' => $userid, 'gradeitemid' => $gradeitemid])) {
             return [];
         }
 
@@ -248,6 +253,10 @@ class api {
                 $grade->auditbyname = fullname($audituser);
             } else {
                 $grade->auditbyname = '-';
+            }
+
+            if ($grade->gradetype == 'OTHER') {
+                $grade->description .= ' (' . $grade->other . ')';
             }
 
             $newgrades[] = $grade;
