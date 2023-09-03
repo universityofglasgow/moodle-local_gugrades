@@ -34,6 +34,8 @@ require_once($CFG->dirroot . '/grade/lib.php');
  */
 class usercapture {
 
+    protected $courseid;
+    
     protected $gradeitemid;
 
     protected $userid;
@@ -49,6 +51,7 @@ class usercapture {
      * @param int $userid
      */
     public function __construct(int $courseid, int $gradeitemid, int $userid) {
+        $this->courseid = $courseid;
         $this->gradeitemid = $gradeitemid;
         $this->userid = $userid;
 
@@ -72,7 +75,9 @@ class usercapture {
 
         // Work out / add provisional grade
         if ($grades) {
+            $provisionalcolumn = \local_gugrades\grades::get_column($this->courseid, $this->gradeitemid, 'PROVISIONAL');
             $provisional = $this->rules->get_provisional($grades);
+            $provisional->columnid = $provisionalcolumn->id;
             $grades[] = $provisional;
         }
 

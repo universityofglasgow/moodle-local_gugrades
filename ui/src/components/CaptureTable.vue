@@ -92,11 +92,14 @@
 
         // Add the grades columns
         columns.value.forEach(column => {
-            heads.push({text: column.description, value: column.gradetype});
+            // Make sure that the value is a string
+            heads.push({text: column.description, value: 'GRADE' + column.id});
         });
 
         // Space for the buttons
         heads.push({text: "", value: "actions"});
+
+        window.console.log(heads);
 
         return heads;
     });
@@ -113,12 +116,12 @@
         users.forEach(user => {
             columns.forEach(column => {
                 grade = user.grades.find((element) => {
-                    return (element.gradetype == column.gradetype);
+                    return (element.columnid == column.id);
                 });
                 if (grade) {
-                    user[column.gradetype] = grade.displaygrade;
+                    user['GRADE' + column.id] = grade.displaygrade;
                 } else {
-                    user[column.gradetype] = strings.value.awaitingcapture;
+                    user['GRADE' + column.id] = strings.value.awaitingcapture;
                 }
             });
         });

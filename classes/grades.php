@@ -147,7 +147,7 @@ class grades {
      * @param string $other
      * @return object
      */
-    private static function get_column(int $courseid, int $gradeitemid, string $gradetype, string $other) {
+    public static function get_column(int $courseid, int $gradeitemid, string $gradetype, string $other = '') {
         global $DB;
 
         // Check 'other' text is valid
@@ -398,13 +398,11 @@ class grades {
         
         if ($columns = $DB->get_records('local_gugrades_column', ['gradeitemid' => $gradeitemid])) {
 
-            $columns = array_values($columns);
-
             // As there is at least one column then there must be a provisional
-            $columns[] = (object)[
-                'id' => 0,
-                'gradetype' => 'PROVISIONAL',
-            ];
+            $provisionalcolumn = self::get_column($courseid, $gradeitemid, 'PROVISIONAL');
+            $columns[$provisionalcolumn->id] = $provisionalcolumn;
+
+            $columns = array_values($columns);
 
             // Add descriptions
             foreach ($columns as $column) {
