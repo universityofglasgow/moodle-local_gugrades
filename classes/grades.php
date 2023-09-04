@@ -401,8 +401,9 @@ class grades {
             // As there is at least one column then there must be a provisional
             // But it has to go at the end
             $provisionalcolumn = self::get_column($courseid, $gradeitemid, 'PROVISIONAL');
-            //$columns[$provisionalcolumn->id] = $provisionalcolumn;
-
+            if (isset($columns[$provisionalcolumn->id])) {
+                unset($columns[$provisionalcolumn->id]);
+            }
             $columns = array_values($columns);
             $columns[] = $provisionalcolumn;
 
