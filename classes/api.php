@@ -143,7 +143,8 @@ class api {
         $rawgrade = $activity->get_first_grade($userid);
 
         // Ask conversion object for converted grade and display grade
-        if ($rawgrade !== false) {
+        if (($rawgrade !== false) && $conversion->validate($rawgrade)) {
+            
             list($convertedgrade, $displaygrade) = $conversion->import($rawgrade);
 
             \local_gugrades\grades::write_grade(

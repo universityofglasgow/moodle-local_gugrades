@@ -71,4 +71,15 @@ abstract class base {
         return [0, ''];
     }
 
+    /**
+     * Validate the grade
+     * It should be within grademin and grademax otherwise we'll reject it
+     * This is because (I think) the old GCAT can write an invalid 0 into assign_grade / grade_grade
+     * @param float $grade
+     * @return bool
+     */
+    public function validate(float $grade) {
+        return ($grade >= $this->gradeitem->grademin) && ($grade <= $this->gradeitem->grademax);
+    }
+
 }
