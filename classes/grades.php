@@ -399,10 +399,12 @@ class grades {
         if ($columns = $DB->get_records('local_gugrades_column', ['gradeitemid' => $gradeitemid])) {
 
             // As there is at least one column then there must be a provisional
+            // But it has to go at the end
             $provisionalcolumn = self::get_column($courseid, $gradeitemid, 'PROVISIONAL');
-            $columns[$provisionalcolumn->id] = $provisionalcolumn;
+            //$columns[$provisionalcolumn->id] = $provisionalcolumn;
 
             $columns = array_values($columns);
+            $columns[] = $provisionalcolumn;
 
             // Add descriptions
             foreach ($columns as $column) {
