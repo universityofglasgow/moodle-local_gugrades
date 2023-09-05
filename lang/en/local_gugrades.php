@@ -37,6 +37,7 @@ $string['coursegradeaggregation'] = 'Course grade aggregation';
 $string['current'] = 'Current';
 $string['date'] = 'Date';
 $string['description'] = 'Description';
+$string['eventadditionalgrade'] = 'Add additional grade';
 $string['eventviewgugrades'] = 'View grading tool';
 $string['eventimportgradesusers'] = 'Import grades for user list';
 $string['exportworksheet'] = 'Export worksheet';

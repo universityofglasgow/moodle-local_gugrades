@@ -137,4 +137,16 @@ $functions = [
         'type' => 'write',
         'ajax' => true,
     ],
+    'local_gugrades_save_settings' => [
+        'classname' => 'local_gugrades\external\save_settings',
+        'description' => 'Save the settings page.',
+        'type' => 'write',
+        'ajax' => true,
+    ],
+    'local_gugrades_get_settings' => [
+        'classname' => 'local_gugrades\external\get_settings',
+        'description' => 'Get/read the settings page.',
+        'type' => 'read',
+        'ajax' => true,
+    ],
 ];    

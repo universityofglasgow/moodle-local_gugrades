@@ -75,6 +75,21 @@ class write_additional_grade extends \external_api {
 
         \local_gugrades\api::write_additional_grade($courseid, $gradeitemid, $userid, $reason, $other, $scale, $grade, $notes);
 
+        // Log
+        $event = \local_gugrades\event\additional_grade::create([
+            'objectid' => $gradeitemid,
+            'context' => \context_course::instance($courseid),
+            'relateduserid' => $userid,
+            'other' => [
+                'userid' => $userid,
+                'reason' => $reason,
+                'other' => $other,
+                'scale' => $scale,
+                'grade' => $grade,
+            ],
+        ]);
+        $event->trigger();
+
         return [];
     }
 

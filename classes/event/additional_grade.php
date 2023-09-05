@@ -15,19 +15,31 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Language EN
  *
  * @package    local_gugrades
- * @copyright  2022
+ * @copyright  2023
  * @author     Howard Miller
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace local_gugrades\event;
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version      = 2023090400;
-$plugin->requires     = 2022041900; // Moodle 4.0
-$plugin->component    = 'local_gugrades';
+class additional_grade extends \core\event\base {
 
-$plugin->maturity     = MATURITY_STABLE;
+    protected function init() {
+        $this->data['crud'] = 'c';
+        $this->data['edulevel'] = self::LEVEL_TEACHING;
+        $this->data['objecttable'] = 'local_gugrade_grade';
+    }
 
+    public static function get_name() {
+        return get_string('eventadditionalgrade', 'local_gugrades');
+    }
+
+    public function get_description() {
+        return "The user with id '$this->userid' added an additional grade for gradeitemid '$this->objectid'.";
+    }
+}
