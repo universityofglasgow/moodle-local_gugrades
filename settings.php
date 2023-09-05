@@ -39,10 +39,14 @@ if ($hassiteconfig) {
             $name = "local_gugrades/scalevalue_" . $scale->id;
             $items = explode(',', $scale->scale);
             $default = '';
-            $count = 0;
-            foreach ($items as $item) {
-                $default .= $item . ', ' . $count . PHP_EOL;
-                $count++;
+
+            // if id = 1 or 2 then leave them blank (built in scales)
+            if ($scale->id > 2) {
+                $count = 0;
+                foreach ($items as $item) {
+                    $default .= $item . ', ' . $count . PHP_EOL;
+                    $count++;
+                }
             }
             $scalesetting = new admin_setting_configtextarea($name, $scale->name, new lang_string('scalevalueshelp', 'local_gugrades'), $default, PARAM_RAW, 30, count($items)+1);
             $scalesetting->set_updatedcallback('scale_setting_updated');

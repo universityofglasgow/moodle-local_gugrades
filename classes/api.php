@@ -484,4 +484,34 @@ class api {
             $notes
         );
     }
+
+    /**
+     * Save settings
+     * Options in tool UI (not sitewide settings)
+     * @param int $courseid
+     * @param int $gradeitemid (0 if you don't need it)
+     * @param array $settings
+     */
+    public static function save_settings(int $courseid, int $gradeitemid, array $settings) {
+        global $DB;
+
+        foreach ($settings as $setting) {
+            $config = $DB->get_record('local_gugrades_config', [
+                'courseid' => $courseid,
+                'graditemid' => $gradeitemid,
+                'name' => $setting->name,
+            ]);
+            if ($config) {
+                $config->value = $setting->value;
+                $DB->update_record('local_gugrades_config', $config);
+            } else {
+                $config = new \stdClass;
+                $config->courseid = $courseid;
+                $config->gradeitemid = $gradeitemid;
+                $config->name = $setting->name;
+                $config->value = $setting->value;
+                $DB->insert_record('local_gugrades_config', $config);
+            }
+        }
+    }
 }
