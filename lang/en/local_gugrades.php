@@ -25,6 +25,7 @@
 
 $string['activityname'] = 'Activity name';
 $string['addgrade'] = 'Add grade';
+$string['admingrades'] = 'Admin grade';
 $string['all'] = 'All';
 $string['assessmentgradecapture'] = 'Assessment grade capture';
 $string['auditlog'] = 'Audit log';
@@ -94,10 +95,14 @@ $string['rulesdefault'] = 'Standard rules';
 $string['scalevalues'] = 'Scale values';
 $string['scalevalueshelp'] = 'Add scale value on each line followed by a space and then the numeric value';
 $string['scalevaluesinfo'] = 'Define the numeric values for each scale to be available in tool.';
+$string['selectareason'] = 'Select a reason';
 $string['selected'] = 'Selected';
 $string['selectgradecategory'] = 'Select grade category';
 $string['settings'] = 'Settings';
 $string['settingssaved'] = 'Settings saved';
+$string['specifyadmingrade'] = 'Specify admin grade';
+$string['specifyscale'] = 'Specify scale value';
+$string['specifygrade'] = 'Specify grade';
 $string['time'] = 'Time';
 $string['type'] = 'Type';
 $string['username'] = 'User name';

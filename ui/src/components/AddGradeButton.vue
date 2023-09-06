@@ -21,7 +21,7 @@
                         name="reason"
                         v-model="reason"
                         :options="gradetypes"
-                        placeholder="Select a reason"
+                        :placeholder="mstrings.selectareason"
                         validation="required"
                     />
                     <FormKit
@@ -35,6 +35,7 @@
                     <FormKit
                         type="select"
                         :label="mstrings.admingrades"
+                        :placeholder="mstrings.specifyadmingrade"
                         name="admingrades"
                         v-model="admingrade"
                         :options="adminmenu"
@@ -43,6 +44,7 @@
                         v-if='usescale'
                         type="select"
                         :label="mstrings.grade"
+                        :placeholder="mstrings.specifyscale"
                         name="scale"
                         v-model="scale"
                         :options="scalemenu"
@@ -51,6 +53,7 @@
                         v-if="!usescale"
                         type="number"
                         :label="mstrings.grade"
+                        :placeholder="mstrings.specifygrade"
                         :validation="gradevalidation"
                         validation-visibility="live"
                         name="grade"

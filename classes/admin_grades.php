@@ -40,7 +40,7 @@ class admin_grades {
     private static function define() {
         $admingrades = [
             'MV' => get_string('adminmv', 'local_gugrades'),
-            '7'  => get_string('admin7', 'local_gugrades'),
+            'X7'  => get_string('admin7', 'local_gugrades'),
             'AU' => get_string('adminau', 'local_gugrades'),
             'FC' => get_string('adminfc', 'local_gugrades'),
             'CA' => get_string('adminca', 'local_gugrades'),
@@ -56,6 +56,10 @@ class admin_grades {
             'SAT' => get_string('adminsat', 'local_gugrades'),
             'UNS' => get_string('adminuns', 'local_gugrades'),
         ];
+
+        foreach ($admingrades as $code => $admingrade) {
+            $admingrades[$code] = "$code - $admingrade";
+        }
 
         return $admingrades;
     }
