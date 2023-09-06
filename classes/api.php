@@ -498,8 +498,8 @@ class api {
         foreach ($settings as $setting) {
             $config = $DB->get_record('local_gugrades_config', [
                 'courseid' => $courseid,
-                'graditemid' => $gradeitemid,
-                'name' => $setting->name,
+                'gradeitemid' => $gradeitemid,
+                'name' => $setting['name'],
             ]);
             if ($config) {
                 $config->value = $setting->value;
@@ -508,10 +508,31 @@ class api {
                 $config = new \stdClass;
                 $config->courseid = $courseid;
                 $config->gradeitemid = $gradeitemid;
-                $config->name = $setting->name;
-                $config->value = $setting->value;
+                $config->name = $setting['name'];
+                $config->value = $setting['value'];
                 $DB->insert_record('local_gugrades_config', $config);
             }
         }
+    }
+
+    /**
+     * Get settings
+     * @param int $courseid
+     * @param int $gradeitemid (probably 0)
+     * @return array
+     */
+    public static function get_settings(int $courseid, int $gradeitemid) {
+        global $DB;
+
+        $configs = $DB->get_records('local_gugrades_config', ['courseid' => $courseid, 'gradeitemid' => $gradeitemid]);
+        $settings = [];
+        foreach ($configs as $config) {
+            $settings[] = [
+                'name' => $config->name,
+                'value' => $config->value,
+            ];
+        }
+
+        return $settings;
     }
 }

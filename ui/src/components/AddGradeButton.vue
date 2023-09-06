@@ -140,8 +140,6 @@
         const courseid = GU.courseid;
         const fetchMany = GU.fetchMany;
 
-        window.console.log(reason.value);
-
         fetchMany([{
             methodname: 'local_gugrades_write_additional_grade',
             args: {
@@ -157,7 +155,7 @@
         }])[0]
         .then(() => {
             emit('gradeadded');
-            toast.success("Grade added");
+            toast.success(mstrings.gradeadded);
         })
         .catch((error) => {
             window.console.error(error);
