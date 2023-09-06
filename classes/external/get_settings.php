@@ -45,7 +45,7 @@ class get_settings extends \external_api {
         ]);
     }
 
-    public static function execute($courseid, $gradeitemid,) {
+    public static function execute($courseid, $gradeitemid) {
         global $DB;
 
         // Security.

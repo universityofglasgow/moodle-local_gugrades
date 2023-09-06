@@ -70,8 +70,6 @@
         }])[0]
         .then((settings) => {
             settings.forEach((setting) => {
-            window.console.log(setting);
-
 
                 // TODO: Something a bit cleverer than this
                 if (setting.name == 'enabledashboard') {

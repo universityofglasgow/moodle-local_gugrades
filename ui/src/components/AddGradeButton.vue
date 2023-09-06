@@ -33,6 +33,13 @@
                         v-model="other"
                     />
                     <FormKit
+                        type="select"
+                        :label="mstrings.admingrades"
+                        name="admingrades"
+                        v-model="admingrade"
+                        :options="adminmenu"
+                    ></FormKit>
+                    <FormKit
                         v-if='usescale'
                         type="select"
                         :label="mstrings.grade"
@@ -73,6 +80,7 @@
     const gradetypes = ref({});
     const idnumber = ref('');
     const reason = ref('');
+    const admingrade = ref('');
     const scale = ref('');
     const grade = ref(0);
     const notes = ref('');
@@ -80,6 +88,7 @@
     const usescale = ref(false);
     const grademax = ref(0);
     const scalemenu = ref([]);
+    const adminmenu = ref([]);
     const gradevalidation = ref([]);
 
     const emit = defineEmits([
@@ -117,6 +126,7 @@
             usescale.value = result['usescale'];
             grademax.value = result['grademax'];
             scalemenu.value = result['scalemenu'];
+            adminmenu.value = result['adminmenu'];
 
             gradevalidation.value = [
                 ['required'],

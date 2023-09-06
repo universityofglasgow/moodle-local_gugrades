@@ -401,6 +401,10 @@ class api {
             $scalemenu = [];
         }
 
+        // Administrative grades
+        $admingrades = \local_gugrades\admin_grades::get_menu();
+        $adminmenu = self::formkit_menu($admingrades, true);
+
         //
         return [
             'gradetypes' => $wsgradetypes,
@@ -411,6 +415,7 @@ class api {
             'usescale' => ($itemtype == 'scale') || ($itemtype == 'scale22'),
             'grademax' => $grademax,
             'scalemenu' => $scalemenu,
+            'adminmenu' => $adminmenu,
         ];
     }
 

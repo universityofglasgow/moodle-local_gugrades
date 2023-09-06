@@ -163,8 +163,6 @@
 
             users.value = add_grades(users.value, columns.value);
 
-            window.console.log(columns.value);
-
             loaded.value = true;
         })
         .catch((error) => {

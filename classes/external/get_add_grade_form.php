@@ -84,6 +84,12 @@ class get_add_grade_form extends \external_api {
                     'value' => new external_value(PARAM_INT, 'Scale value'),
                     'label' => new external_value(PARAM_TEXT, 'Scale item name'),
                 ])
+            ),
+            'adminmenu' => new external_multiple_structure(
+                new external_single_structure([
+                    'value' => new external_value(PARAM_INT, 'Scale value'),
+                    'label' => new external_value(PARAM_TEXT, 'Scale item name'),
+                ])
             )
         ]);
     }
