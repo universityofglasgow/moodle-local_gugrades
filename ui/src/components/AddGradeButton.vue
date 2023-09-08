@@ -41,7 +41,7 @@
                         :options="adminmenu"
                     ></FormKit>
                     <FormKit
-                        v-if='usescale'
+                        v-if="usescale"
                         type="select"
                         :label="mstrings.grade"
                         :placeholder="mstrings.specifyscale"
@@ -51,14 +51,15 @@
                     ></FormKit>
                     <FormKit
                         v-if="!usescale"
-                        type="number"
+                        type="text"
+                        disabled
                         :label="mstrings.grade"
                         :placeholder="mstrings.specifygrade"
                         :validation="gradevalidation"
+                        number="float"
                         validation-visibility="live"
                         name="grade"
                         v-model="grade"
-                        value="0.0"
                     ></FormKit>
                     <FormKit
                         type="textarea"
@@ -130,6 +131,13 @@
             grademax.value = result['grademax'];
             scalemenu.value = result['scalemenu'];
             adminmenu.value = result['adminmenu'];
+
+            // Add 'use grade' option onto front of adminmenu
+            adminmenu.value.unshift({
+                value: 'GRADE',
+                label: mstrings.specifygrade,
+            });
+            window.console.log(adminmenu.value);
 
             gradevalidation.value = [
                 ['required'],
