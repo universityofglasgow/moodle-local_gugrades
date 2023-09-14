@@ -80,7 +80,7 @@ class admin_grades {
      */
     public static function get_menu() {
         $gradetypes = self::define();
-        
+
         return $gradetypes;
     }
 

@@ -35,7 +35,6 @@
                     <FormKit
                         type="select"
                         :label="mstrings.admingrades"
-                        :placeholder="mstrings.specifyadmingrade"
                         name="admingrades"
                         v-model="admingrade"
                         :options="adminmenu"
@@ -135,7 +134,7 @@
             // Add 'use grade' option onto front of adminmenu
             adminmenu.value.unshift({
                 value: 'GRADE',
-                label: mstrings.specifygrade,
+                label: mstrings.selectnormalgrade,
             });
             window.console.log(adminmenu.value);
 

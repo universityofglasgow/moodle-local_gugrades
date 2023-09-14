@@ -98,6 +98,7 @@ $string['scalevaluesinfo'] = 'Define the numeric values for each scale to be ava
 $string['selectareason'] = 'Select a reason';
 $string['selected'] = 'Selected';
 $string['selectgradecategory'] = 'Select grade category';
+$string['selectnormalgrade'] = 'Select normal grade instead';
 $string['settings'] = 'Settings';
 $string['settingssaved'] = 'Settings saved';
 $string['specifyadmingrade'] = 'Specify admin grade';
