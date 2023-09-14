@@ -426,11 +426,12 @@ class api {
      * @param int $userid
      * @param string $reason
      * @param string $other
+     * @param string $admingrade
      * @param int $scale
      * @param float $grade
      * @param string $notes
      */
-    public static function write_additional_grade(int $courseid, int $gradeitemid, int $userid, string $reason, string $other, int $scale, float $grade, string $notes) {
+    public static function write_additional_grade(int $courseid, int $gradeitemid, int $userid, string $reason, string $other, string $admingrade, int $scale, float $grade, string $notes) {
 
         // Conversion class
         $conversion = \local_gugrades\grades::conversion_factory($courseid, $gradeitemid);
@@ -464,7 +465,11 @@ class api {
         }
 
         // Get converted and display grade
-        if ($usescale) {
+        if (!empty($admingrade)) {
+            $rawgrade = 0;
+            $convertedgrade = 0.0;
+            $displaygrade = $admingrade;
+        } else if ($usescale) {
 
             // TODO: Check! +1 because internal values are 1 - based, our form is 0 - based
             list($convertedgrade, $displaygrade) = $conversion->import($scale + 1);
@@ -479,6 +484,7 @@ class api {
             $courseid,
             $gradeitemid,
             $userid,
+            $admingrade,
             $rawgrade,
             $convertedgrade,
             $displaygrade,

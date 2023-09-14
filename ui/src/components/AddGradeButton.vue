@@ -44,6 +44,7 @@
                         type="select"
                         :label="mstrings.grade"
                         :placeholder="mstrings.specifyscale"
+                        :disabled="admingrade != 'GRADE'"
                         name="scale"
                         v-model="scale"
                         :options="scalemenu"
@@ -51,10 +52,10 @@
                     <FormKit
                         v-if="!usescale"
                         type="text"
-                        disabled
                         :label="mstrings.grade"
                         :placeholder="mstrings.specifygrade"
                         :validation="gradevalidation"
+                        :disabled="admingrade != 'GRADE'"
                         number="float"
                         validation-visibility="live"
                         name="grade"
@@ -83,7 +84,7 @@
     const gradetypes = ref({});
     const idnumber = ref('');
     const reason = ref('');
-    const admingrade = ref('');
+    const admingrade = ref('GRADE'); // GRADE == not an admin grade (a real grade)
     const scale = ref('');
     const grade = ref(0);
     const notes = ref('');
@@ -166,6 +167,7 @@
                 courseid: courseid,
                 gradeitemid: props.itemid,
                 userid: props.userid,
+                admingrade: admingrade.value == 'GRADE' ? '' : admingrade.value, 
                 reason: reason.value,
                 other: other.value,
                 scale: scale.value ? scale.value : 0, // WS expecting int

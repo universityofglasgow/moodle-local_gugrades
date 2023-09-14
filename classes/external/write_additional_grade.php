@@ -45,13 +45,14 @@ class write_additional_grade extends \external_api {
             'userid' => new external_value(PARAM_INT, 'User id - for user we are adding grade'),
             'reason' => new external_value(PARAM_TEXT, 'Reason for grade - SECOND, AGREED etc.'),
             'other' => new external_value(PARAM_TEXT, 'Detail if reason == OTHER'),
+            'admingrade' => new external_value(PARAM_ALPHANUM, 'Admin grade code - overrides a grade'),
             'scale' => new external_value(PARAM_INT, 'Scale value'),
             'grade' => new external_value(PARAM_FLOAT, 'Points grade'),
             'notes' => new external_value(PARAM_TEXT, 'Optional notes'),
         ]);
     }
 
-    public static function execute($courseid, $gradeitemid, $userid, $reason, $other, $scale, $grade, $notes) {
+    public static function execute($courseid, $gradeitemid, $userid, $reason, $other, $admingrade, $scale, $grade, $notes) {
         global $DB;
 
         // Security.
@@ -61,6 +62,7 @@ class write_additional_grade extends \external_api {
             'userid' => $userid,
             'reason' => $reason,
             'other' => $other,
+            'admingrade' => $admingrade,
             'scale' => $scale,
             'grade' => $grade,
             'notes' => $notes,
@@ -73,7 +75,7 @@ class write_additional_grade extends \external_api {
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        \local_gugrades\api::write_additional_grade($courseid, $gradeitemid, $userid, $reason, $other, $scale, $grade, $notes);
+        \local_gugrades\api::write_additional_grade($courseid, $gradeitemid, $userid, $reason, $other, $admingrade, $scale, $grade, $notes);
 
         // Log
         $event = \local_gugrades\event\additional_grade::create([

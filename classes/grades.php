@@ -194,6 +194,7 @@ class grades {
      * @param int $courseid
      * @param int $gradeitemid
      * @param int $userid
+     * @param string $admingrade
      * @param float $rawgrade
      * @param float $convertedgrade
      * @param string $displaygrade
@@ -207,6 +208,7 @@ class grades {
         int $courseid,
         int $gradeitemid,
         int $userid,
+        string $admingrade,
         float $rawgrade,
         float $convertedgrade,
         string $displaygrade,
@@ -251,6 +253,7 @@ class grades {
         $gugrade->gradeitemid = $gradeitemid;
         $gugrade->userid = $userid;
         $gugrade->rawgrade = $rawgrade;
+        $gugrade->admingrade = $admingrade;
         $gugrade->convertedgrade = $convertedgrade;
         $gugrade->displaygrade = $displaygrade;
         $gugrade->weightedgrade = $weightedgrade;
