@@ -34,6 +34,9 @@
                         <AddGradeButton :itemid="itemid" :userid="parseInt(item.id)" :name="item.displayname" :itemname="itemname" @gradeadded = "get_page_data(props.itemid, firstname, lastname)"></AddGradeButton>&nbsp;
                         <HistoryButton :userid="parseInt(item.id)" :itemid="itemid" :name="item.displayname" :itemname="itemname"></HistoryButton>
                     </template>
+                    <template #item-alert="item">
+                        <span v-if="item.alert" class="badge badge-danger">{{ mstrings.discrepancy }}</span>
+                    </template>
                 </EasyDataTable>
             </div>
 
@@ -89,6 +92,7 @@
             heads.push({text: mstrings.participant, value: "displayname", sortable: true});
         }
         heads.push({text: mstrings.idnumber, value: "idnumber", sortable: true});
+        heads.push({text: mstrings.discrepancy, value: "alert"});
 
         // Add the grades columns
         columns.value.forEach(column => {
@@ -98,8 +102,6 @@
 
         // Space for the buttons
         heads.push({text: "", value: "actions"});
-
-        window.console.log(heads);
 
         return heads;
     });

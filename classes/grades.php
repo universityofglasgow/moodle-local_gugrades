@@ -306,6 +306,7 @@ class grades {
         foreach ($users as $user) {
             $usercapture = new usercapture($courseid, $gradeitemid, $user->id);
             $user->grades = $usercapture->get_grades();
+            $user->alert = $usercapture->alert();
         }
 
         return $users;

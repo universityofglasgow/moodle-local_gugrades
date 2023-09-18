@@ -42,7 +42,11 @@ class usercapture {
 
     protected $grades;
 
+    protected $gradesbygradetype;
+
     protected $rules;
+
+    protected $alert;
 
     /**
      * Constructor
@@ -58,6 +62,21 @@ class usercapture {
         $this->rules = new \local_gugrades\rules\base($courseid, $gradeitemid);
 
         $this->read_grades();
+    }
+
+    /**
+     * Organise grades by gradetype.
+     * For this we ignore OTHER types as they are not needed
+     * (e.g. for applying grade rules)
+     * @param array $grades
+     */
+    protected function get_gradesbygradetype($grades) {
+        $this->gradesbygradetype = [];
+        foreach ($grades as $grade) {
+            if ($grade->gradetype != 'OTHER') {
+                $this->gradesbygradetype[$grade->gradetype] = $grade;
+            }
+        }
     }
 
     /**
@@ -77,9 +96,16 @@ class usercapture {
         if ($grades) {
             $provisionalcolumn = \local_gugrades\grades::get_column($this->courseid, $this->gradeitemid, 'PROVISIONAL');
             $provisional = $this->rules->get_provisional($grades);
+            
             $provisional->columnid = $provisionalcolumn->id;
             $grades[] = $provisional;
         }
+
+        // organise by gradetype
+        $this->get_gradesbygradetype($grades);
+
+        // Check if there should be an alert
+        $this->alert = $this->rules->is_alert($this->gradesbygradetype);
 
         $this->grades = $grades;
     }
@@ -90,6 +116,15 @@ class usercapture {
      */
     public function get_grades() {
         return $this->grades;
+    }
+
+    /**
+     * Get alert status
+     * @return boolean
+     * 
+     */
+    public function alert() {
+        return $this->alert;
     }
 
 }

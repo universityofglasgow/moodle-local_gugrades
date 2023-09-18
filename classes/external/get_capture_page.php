@@ -70,6 +70,7 @@ class get_capture_page extends \external_api {
                     'displayname' => new external_value(PARAM_TEXT, 'Name to display for this user'),
                     'pictureurl' => new external_value(PARAM_URL, 'URL of user avatar'),
                     'idnumber' => new external_value(PARAM_TEXT, 'User ID number'),
+                    'alert' => new external_value(PARAM_BOOL, 'Show discrepancy alert'),
                     'grades' => new external_multiple_structure(
                         new external_single_structure([
                             'displaygrade' => new external_value(PARAM_TEXT, 'Grade for display'),

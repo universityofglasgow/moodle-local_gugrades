@@ -64,7 +64,7 @@ class base {
      * Get the provisional grade given the array of active grades
      * Default is just to return the most recent one
      * TODO: Figure out what to do with admin grades
-     * @param array $grades
+     * @param array $grades (indexed by gradetype)
      * @return object
      */
     public function get_provisional(array $grades) {
@@ -74,6 +74,38 @@ class base {
         $provisional->gradetype = 'PROVISIONAL';
 
         return $provisional;
+    }
+
+    /**
+     * Determine if we need to place an alert on the capture row
+     * For example, 1st and 2nd grade not matching plus no agreed grade
+     * @param array $gradesbygt (indexed by gradetype)
+     * @return boolean
+     */
+    public function is_alert(array $gradesbygt) {
+
+        // 1st, 2nd and 3rd grade have to agree
+        // unless there is an agreed grade
+        if (array_key_exists('AGREED', $gradesbygt)) {
+            return false;
+        }
+
+        // -1 if they don't exist (not existing is proxy for equal).
+        $first = array_key_exists('FIRST', $gradesbygt) ? $gradesbygt['FIRST'] : -1;
+        $second = array_key_exists('SECOND', $gradesbygt) ? $gradesbygt['SECOND'] : -1;
+        $third = array_key_exists('THIRD', $gradesbygt) ? $gradesbygt['THIRD'] : -1;
+
+        // Only 1st grade is acceptable
+        if (($second == -1) && ($third == -1)) {
+            return false;
+        }
+
+        // Failing all of above, must agree.
+        if (($first == $second) && ($second == $third)) {
+            return false; // All equal 
+        } else {
+            return true; // Not all equal
+        }
     }
 
 }

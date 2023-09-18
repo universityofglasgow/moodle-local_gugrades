@@ -38,6 +38,7 @@ $string['coursegradeaggregation'] = 'Course grade aggregation';
 $string['current'] = 'Current';
 $string['date'] = 'Date';
 $string['description'] = 'Description';
+$string['discrepancy'] = 'Discrepancy';
 $string['enabledashboard'] = 'Enable student dashboard for this course';
 $string['eventadditionalgrade'] = 'Add additional grade';
 $string['eventimportgradesusers'] = 'Import grades for user list';
