@@ -118,12 +118,6 @@ class api {
             ];
         }
 
-        // If there are no results then the course is not configured
-        if (!$results) {
-            $audit = new \local_gugrades\audit\notoplevel($courseid, 0  );
-            $audit->save();
-        }
-
         return $results;
     }
 
@@ -151,6 +145,7 @@ class api {
                 $courseid,
                 $gradeitemid,
                 $userid,
+                '',
                 $rawgrade,
                 $convertedgrade,
                 $displaygrade,
@@ -269,55 +264,19 @@ class api {
     /**
      * Get audit history
      * @param int $courseid
-     * @param int $userid
      * @return array
      */
-    public static function get_audit(int $courseid, int $userid) {
+    public static function get_audit(int $courseid) {
         global $USER, $DB;
 
-        // Must have capability to view somebody else's history
-        if (!$userid) {
-            $userid = $USER->id;
-        }
-        if ($USER->id != $userid) {
-            $context = \context_course::instance($courseid);
-            require_capability('local/gugrades:readotheraudit', $context);
+        $context = \context_course::instance($courseid);
+        if (has_capability('local/gugrades:readotheraudit', $context)) {
+            $audit = \local_gugrades\audit::read($courseid);
+        } else {
+            $audit = \local_gugrades\audit::read($courseid, $USER->id);
         }
 
-        $items = $DB->get_records('local_gugrades_audit', ['courseid' => $courseid, 'userid' => $userid], 'timecreated DESC');
-
-        // Additional info
-        $newitems = [];
-        $gradeitemcache = [];
-        foreach ($items as $item) {
-            $item->time = userdate($item->timecreated);
-            if ($item->type == 'error') {
-                $item->bgcolor = 'danger';
-            } else if ($item->type == 'warning') {
-                $item->bgcolor = 'warning';
-            } else {
-                $item->bgcolor = 'info';
-            }
-
-            // Get (if possible) name of grade item.
-            $gradeitem = null;
-            if (array_key_exists($item->gradeitemid, $gradeitemcache)) {
-                $gradeitem = $gradeitemcache[$item->gradeitemid];
-            } else {
-                if ($gradeitem = $DB->get_record('grade_items', ['id' => $item->gradeitemid])) {
-                    $gradeitemcache[$item->gradeitemid] = $gradeitem;
-                }
-            }
-            if ($gradeitem) {
-                $item->gradeitem = $gradeitem->itemname;
-            } else {
-                $item->gradeitem = '';
-            }
-
-            $newitems[] = $item;
-        }
-
-        return $newitems;
+        return $audit;
     }
 
     /**

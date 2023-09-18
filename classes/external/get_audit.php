@@ -38,23 +38,21 @@ class get_audit extends \external_api {
     public static function execute_parameters() {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
-            'userid' => new external_value(PARAM_INT, 'Userid or 0 for current user'),
         ]);
     }
 
-    public static function execute($courseid, $userid) {
+    public static function execute($courseid) {
         
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
             'courseid' => $courseid,
-            'userid' => $userid,
         ]);
 
         // Security
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        return \local_gugrades\api::get_audit($courseid, $userid);
+        return \local_gugrades\api::get_audit($courseid);
     }
 
     public static function execute_returns() {
@@ -63,14 +61,14 @@ class get_audit extends \external_api {
                 'id' => new external_value(PARAM_INT, 'Mystery id'),
                 'courseid' => new external_value(PARAM_INT, 'Course ID'),
                 'userid' => new external_value(PARAM_INT, 'User ID'),
+                'username' => new external_value(PARAM_TEXT, 'User name'),
+                'relateduserid' => new external_value(PARAM_INT, 'Related user ID'),
+                'relatedusername' => new external_value(PARAM_TEXT, 'Related user name'),
                 'gradeitemid' => new external_value(PARAM_INT, 'Grade item ID'),
                 'gradeitem' => new external_value(PARAM_TEXT, 'Grade item name'),
                 'timecreated' => new external_value(PARAM_INT, 'Time created (unix time stamp)'),
                 'time' => new external_value(PARAM_TEXT, 'Time, formatted'),
-                'type' => new external_value(PARAM_TEXT, 'Item type - error, warning, info'),
-                'level' => new external_value(PARAM_INT, 'Item level'),
                 'message' => new external_value(PARAM_TEXT, 'Message text'),
-                'bgcolor' => new external_value(PARAM_TEXT, 'Bootstrap color to suite type'),
             ])
         );
 

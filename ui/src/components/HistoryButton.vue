@@ -81,5 +81,5 @@
                {text: mstrings.current, value: 'current'},
                {text: mstrings.comment, value: 'auditcomment'},
             ];
-    })
+    });
 </script>

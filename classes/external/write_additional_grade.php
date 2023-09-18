@@ -83,6 +83,7 @@ class write_additional_grade extends \external_api {
             'context' => \context_course::instance($courseid),
             'relateduserid' => $userid,
             'other' => [
+                'gradeitemid' => $gradeitemid,
                 'userid' => $userid,
                 'reason' => $reason,
                 'other' => $other,
@@ -91,6 +92,9 @@ class write_additional_grade extends \external_api {
             ],
         ]);
         $event->trigger();
+
+        // Audit.
+        \local_gugrades\audit::write($courseid, $userid, $gradeitemid, 'Additional grade written');
 
         return [];
     }
