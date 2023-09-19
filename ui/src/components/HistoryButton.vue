@@ -1,5 +1,5 @@
 <template>
-    <button type="button" class="btn btn-outline-primary btn-sm" @click="read_history()">{{ mstrings.history }}</button>
+    <a class="dropdown-item" href="#" @click="read_history()">{{ mstrings.history }}</a>
 
     <Teleport to="body">
         <ModalForm :show="showhistorymodal" @close="showhistorymodal = false">

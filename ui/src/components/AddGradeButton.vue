@@ -1,5 +1,5 @@
 <template>
-    <button type="button" class="btn btn-outline-primary btn-sm" @click="add_grade()">Add grade</button>
+    <a class="dropdown-item" href="#" @click="add_grade()">{{ mstrings.addgrade }}</a>
 
     <Teleport to="body">
         <ModalForm :show="showaddgrademodal" @close="showaddgrademodal = false">

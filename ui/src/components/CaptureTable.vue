@@ -31,8 +31,7 @@
                         <CaptureGrades :grades="item.grades"></CaptureGrades>
                     </template>
                     <template #item-actions="item">
-                        <AddGradeButton :itemid="itemid" :userid="parseInt(item.id)" :name="item.displayname" :itemname="itemname" @gradeadded = "get_page_data(props.itemid, firstname, lastname)"></AddGradeButton>&nbsp;
-                        <HistoryButton :userid="parseInt(item.id)" :itemid="itemid" :name="item.displayname" :itemname="itemname"></HistoryButton>
+                        <CaptureMenu :itemid="itemid" :userid="parseInt(item.id)" :name="item.displayname" :itemname="itemname" @gradeadded = "get_page_data(props.itemid, firstname, lastname)"></CaptureMenu>
                     </template>
                     <template #item-alert="item">
                         <span v-if="item.alert" class="badge badge-danger">{{ mstrings.discrepancy }}</span>
@@ -49,10 +48,9 @@
     import {ref, defineProps, computed, watch, onMounted, inject} from '@vue/runtime-core';
     import NameFilter from '@/components/NameFilter.vue';
     import CaptureGrades from '@/components/CaptureGrades.vue';
-    import HistoryButton from '@/components/HistoryButton.vue';
+    import CaptureMenu from '@/components/CaptureMenu.vue';
     import ImportButton from '@/components/ImportButton.vue';
     import ReleaseButton from '@/components/ReleaseButton.vue';
-    import AddGradeButton from '@/components/AddGradeButton.vue';
     import ExportWorksheetButton from '@/components/ExportWorksheetButton.vue';
     import PreLoader from '@/components/PreLoader.vue';
     import { useToast } from "vue-toastification";
