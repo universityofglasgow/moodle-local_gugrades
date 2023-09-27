@@ -505,4 +505,47 @@ class api {
 
         return $settings;
     }
+
+    /**
+     * Get list of user's courses
+     * (and first level categories)
+     * @param int $userid
+     * @return array
+     */
+    public static function dashboard_get_courses(int $userid) {
+        global $DB, $USER;
+
+        // If this isn't current user, do they have the rights to look at other users
+        $context = \context_system::instance();
+        if ($USER->id != $userid) {
+            require_capability('local/gugrades:readotherdashboard', $context);
+        } else {
+            require_capability('local/gugrades:readdashboard', $context);
+        }
+
+        // Get basic list of enrolments for this user
+        $additionalfields = [
+            'enddate'
+        ];
+        $courses = enrol_get_users_courses($userid, true, $additionalfields);
+
+        // run through courses to establish which have gugrades enabled
+        // and also add TL grade category data
+        foreach ($courses as $id => $course) {
+            $sqlname = $DB->sql_compare_text('name');
+            $sql = "SELECT * FROM {local_gugrades_config}
+                WHERE courseid = :courseid
+                AND $sqlname = :name
+                AND value = :value";
+            if ($DB->get_record_sql($sql, ['courseid' => $id, 'name' => 'enabledashboard', 'value' => 1])) {
+
+                // Add first level grade categories
+                $course->firstlevel = \local_gugrades\grades::get_firstlevel($id);
+            } else {
+                unset($courses[$id]);
+            }
+        }
+
+        return $courses;
+    }
 }

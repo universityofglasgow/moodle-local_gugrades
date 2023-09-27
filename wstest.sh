@@ -1,0 +1,1 @@
+curl "http://ubuntu2.local:8081/webservice/rest/server.php?wstoken=a84b9243a1c3295f343bb779e019ae4f&wsfunction=local_gugrades_dashboard_get_courses&moodlewsrestformat=json&userid=757" | jq

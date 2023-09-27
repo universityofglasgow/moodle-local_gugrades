@@ -40,37 +40,37 @@ class dashboard_get_courses extends \external_api {
 
     public static function execute_parameters() {
         return new external_function_parameters([
-            'itemid' => new external_value(PARAM_INT, 'Grade item id'),
+            'userid' => new external_value(PARAM_INT, 'User to fetch courses for'),
         ]);
     }
 
-    public static function execute($itemid) {
-        global $DB;
+    public static function execute($userid) {
 
         // Security.
-        $params = self::validate_parameters(self::execute_parameters(), ['itemid' => $itemid]);
+        $params = self::validate_parameters(self::execute_parameters(), ['userid' => $userid]);
 
-        // Get item (if it exists)
-        $item = $DB->get_record('grade_items', ['id' => $itemid], '*', MUST_EXIST);
-
-        // More security
-        $courseid = $item->courseid;
-        $context = \context_course::instance($courseid);
+        $context = \context_system::instance();
         self::validate_context($context);
 
-        return \local_gugrades\api::get_grade_item($itemid);
+        return \local_gugrades\api::dashboard_get_courses($userid);
     }
 
     public static function execute_returns() {
-        return new external_single_structure([
-            'id' => new external_value(PARAM_INT, 'Grade item ID'),
-            'courseid' => new external_value(PARAM_INT, 'Course ID'),
-            'categoryid' => new external_value(PARAM_INT, 'Grade category ID'),
-            'itemname' => new external_value(PARAM_TEXT, 'Name of grade item'),
-            'itemtype' => new external_value(PARAM_ALPHA, 'course / mod / category / manual'),
-            'itemmodule' => new external_value(PARAM_ALPHA, 'Module type (if module)'),
-            'iteminstance' => new external_value(PARAM_INT, 'Module instance ID'),
-        ]);
+        return new external_multiple_structure(
+            new external_single_structure([
+                'id' => new external_value(PARAM_INT, 'Course ID'),
+                'shortname' => new external_value(PARAM_TEXT, 'Short name of course'),
+                'fullname' => new external_value(PARAM_TEXT, 'Fullname of course'),
+                'startdate' => new external_value(PARAM_INT, 'Start date (unix timestamp)'),
+                'enddate' => new external_value(PARAM_INT, 'End date (unix timestamp)'),   
+                'firstlevel' => new external_multiple_structure(
+                    new external_single_structure([
+                        'id' => new external_value(PARAM_INT, 'Category ID'),
+                        'fullname' => new external_value(PARAM_TEXT, 'Full name of grade category'),
+                    ])
+                ),
+            ])
+        );
     }
 
 }

@@ -43,6 +43,7 @@
             'local_gugrades_write_additional_grade',
             'local_gugrades_save_settings',
             'local_gugrades_get_settings',
+            'local_gugrades_dashboard_get_courses',
         ],
         'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,

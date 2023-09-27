@@ -47,4 +47,18 @@ $capabilities = array(
         'archetypes' => array(
         )
     ),
+    'local/gugrades:readdashboard' => array(
+        'riskbitmask' => RISK_PERSONAL,
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => array(
+        )
+    ),
+    'local/gugrades:readotherdashboard' => array(
+        'riskbitmask' => RISK_PERSONAL,
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => array(
+        )
+    ),
 );
