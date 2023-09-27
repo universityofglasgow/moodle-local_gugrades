@@ -548,4 +548,27 @@ class api {
 
         return $courses;
     }
+
+    /**
+     * Get grades and subcategories for given user and grade category
+     * @param int $userid
+     * @param int $gradecategoryid
+     * @return array
+     */
+    public static function dashboard_get_grades(int $userid, int $gradecategoryid) {
+        global $DB, $USER;
+
+        // If this isn't current user, do they have the rights to look at other users
+        $context = \context_system::instance();
+        if ($USER->id != $userid) {
+            require_capability('local/gugrades:readotherdashboard', $context);
+        } else {
+            require_capability('local/gugrades:readdashboard', $context);
+        }
+
+        // Get grade category and make some basic checks
+        $gradecategory = $DB->get_record('grade_categories', ['id' => $gradecategoryid], '*', MUST_EXIST);
+        $courseid = $gradecategory->courseid;
+        $coursecontext = \context_course::instance($courseid);
+    }
 }

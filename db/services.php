@@ -44,6 +44,7 @@
             'local_gugrades_save_settings',
             'local_gugrades_get_settings',
             'local_gugrades_dashboard_get_courses',
+            'local_gugrades_dashboard_get_grades',
         ],
         'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,
@@ -157,6 +158,12 @@ $functions = [
     'local_gugrades_dashboard_get_courses' => [
         'classname' => 'local_gugrades\external\dashboard_get_courses',
         'description' => 'Get the list of courses and top-level categories for give user.',
+        'type' => 'read',
+        'ajax' => true,
+    ],
+    'local_gugrades_dashboard_get_grades' => [
+        'classname' => 'local_gugrades\external\dashboard_get_grades',
+        'description' => 'Get the list of grades for a given user and grade category. Also returns sub-categories (if any).',
         'type' => 'read',
         'ajax' => true,
     ],
