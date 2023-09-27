@@ -39,6 +39,10 @@
             'local_gugrades_has_capability',
             'local_gugrades_is_grades_imported',
             'local_gugrades_get_all_strings',
+            'local_gugrades_get_add_grade_form',
+            'local_gugrades_write_additional_grade',
+            'local_gugrades_save_settings',
+            'local_gugrades_get_settings',
         ],
         'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,
@@ -146,6 +150,12 @@ $functions = [
     'local_gugrades_get_settings' => [
         'classname' => 'local_gugrades\external\get_settings',
         'description' => 'Get/read the settings page.',
+        'type' => 'read',
+        'ajax' => true,
+    ],
+    'local_gugrades_dashboard_get_courses' => [
+        'classname' => 'local_gugrades\external\dashboard_get_courses',
+        'description' => 'Get the list of courses and top-level categories for give user.',
         'type' => 'read',
         'ajax' => true,
     ],
