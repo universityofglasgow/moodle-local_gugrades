@@ -31,6 +31,8 @@ $capabilities = array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
+            'manager' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
         )
     ),
     'local/gugrades:readotheraudit' => array(
@@ -38,6 +40,7 @@ $capabilities = array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
+            'manager' => CAP_ALLOW,
         )
     ),
     'local/gugrades:exportworksheet' => array(
@@ -50,15 +53,19 @@ $capabilities = array(
     'local/gugrades:readdashboard' => array(
         'riskbitmask' => RISK_PERSONAL,
         'captype' => 'read',
-        'contextlevel' => CONTEXT_SYSTEM,
+        'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
+            'student' => CAP_ALLOW,
         )
     ),
     'local/gugrades:readotherdashboard' => array(
         'riskbitmask' => RISK_PERSONAL,
         'captype' => 'read',
-        'contextlevel' => CONTEXT_SYSTEM,
+        'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
+            'manager' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW,
         )
     ),
 );

@@ -517,11 +517,7 @@ class api {
 
         // If this isn't current user, do they have the rights to look at other users
         $context = \context_system::instance();
-        if ($USER->id != $userid) {
-            require_capability('local/gugrades:readotherdashboard', $context);
-        } else {
-            require_capability('local/gugrades:readdashboard', $context);
-        }
+
 
         // Get basic list of enrolments for this user
         $additionalfields = [
@@ -529,20 +525,44 @@ class api {
         ];
         $courses = enrol_get_users_courses($userid, true, $additionalfields);
 
-        // run through courses to establish which have gugrades enabled
+        // run through courses to establish which have gugrades/GCAT enabled
         // and also add TL grade category data
         foreach ($courses as $id => $course) {
+            $context = \context_course::instance($id);
+
+            // Check if gugrades is enabled for this course?
             $sqlname = $DB->sql_compare_text('name');
             $sql = "SELECT * FROM {local_gugrades_config}
                 WHERE courseid = :courseid
                 AND $sqlname = :name
                 AND value = :value";
-            if ($DB->get_record_sql($sql, ['courseid' => $id, 'name' => 'enabledashboard', 'value' => 1])) {
+            if ($DB->record_exists_sql($sql, ['courseid' => $id, 'name' => 'enabledashboard', 'value' => 1])) {
+
+                // If we're here, gugrades is enabled so do we have caps to view this data?
+                if ($USER->id != $userid) {
+                    $hascap = has_capability('local/gugrades:readotherdashboard', $context);
+                } else {
+                    $hascap = has_capability('local/gugrades:readdashboard', $context);
+                }
+                $course->gugradesenabled = $hascap;
 
                 // Add first level grade categories
                 $course->firstlevel = \local_gugrades\grades::get_firstlevel($id);
+            } 
+
+            // Check if (old) GCAT is enabled for this course?
+            $sqlshortname = $DB->sql_compare_text('shortname');
+            $sql = "SELECT * FROM {customfield_data} cd
+                JOIN {customfield_field} cf ON cf.id = cd.fieldid
+                WHERE cd.instanceid = :courseid
+                AND cd.intvalue = 1
+                AND $sqlshortname = 'showonstudentdashboard'";
+            if ($DB->record_exists_sql($sql, ['courseid' => $courseid])) {
+
+                // TODO: does this need any capability checks?
+                $course->gcatenabled = true;
             } else {
-                unset($courses[$id]);
+                $course->gcatenabled = false;
             }
         }
 

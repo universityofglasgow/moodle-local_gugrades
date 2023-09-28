@@ -41,7 +41,7 @@ class dashboard_get_grades extends \external_api {
     public static function execute_parameters() {
         return new external_function_parameters([
             'userid' => new external_value(PARAM_INT, 'User to fetch courses for'),
-            'gradecategoryid' = new external_value(PARAM_INT, 'Grade category ID'),
+            'gradecategoryid' => new external_value(PARAM_INT, 'Grade category ID'),
         ]);
     }
 

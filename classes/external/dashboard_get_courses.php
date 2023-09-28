@@ -63,6 +63,8 @@ class dashboard_get_courses extends \external_api {
                 'fullname' => new external_value(PARAM_TEXT, 'Fullname of course'),
                 'startdate' => new external_value(PARAM_INT, 'Start date (unix timestamp)'),
                 'enddate' => new external_value(PARAM_INT, 'End date (unix timestamp)'),   
+                'gugradesenabled' => new external_value(PARAM_BOOL, 'Is display on dashboard enabled for gugrades?'),
+                'gcatenabled' => new external_value(PARAM_BOOL, "Is display on dashboard endbaled for GCAT?"),
                 'firstlevel' => new external_multiple_structure(
                     new external_single_structure([
                         'id' => new external_value(PARAM_INT, 'Category ID'),
