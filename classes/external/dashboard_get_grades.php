@@ -57,21 +57,19 @@ class dashboard_get_grades extends \external_api {
     }
 
     public static function execute_returns() {
-        return new external_multiple_structure(
-            new external_single_structure([
-                'id' => new external_value(PARAM_INT, 'Course ID'),
-                'shortname' => new external_value(PARAM_TEXT, 'Short name of course'),
-                'fullname' => new external_value(PARAM_TEXT, 'Fullname of course'),
-                'startdate' => new external_value(PARAM_INT, 'Start date (unix timestamp)'),
-                'enddate' => new external_value(PARAM_INT, 'End date (unix timestamp)'),   
-                'firstlevel' => new external_multiple_structure(
-                    new external_single_structure([
-                        'id' => new external_value(PARAM_INT, 'Category ID'),
-                        'fullname' => new external_value(PARAM_TEXT, 'Full name of grade category'),
-                    ])
-                ),
-            ])
-        );
+        return new external_single_structure([
+            'grades' => new external_multiple_structure(
+                new external_single_structure([
+
+                ])
+            ),   
+            'childcategories' => new external_multiple_structure(
+                new external_single_structure([
+                    'id' => new external_value(PARAM_INT, 'Category ID'),
+                    'fullname' => new external_value(PARAM_TEXT, 'Full name of grade category'),
+                ])
+            ),
+        ]);
     }
 
 }
