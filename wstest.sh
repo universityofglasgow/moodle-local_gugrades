@@ -18,6 +18,6 @@ then
 fi
 
 # get courses / top-level
-curl "${host}/webservice/rest/server.php?wstoken=${token}&wsfunction=local_gugrades_dashboard_get_courses&moodlewsrestformat=json&userid=${userid}" | jq
+curl "${host}/webservice/rest/server.php?wstoken=${token}&wsfunction=local_gugrades_dashboard_get_courses&moodlewsrestformat=json&userid=${userid}" | jq --indent 4
 
-curl "${host}/webservice/rest/server.php?wstoken=${token}&wsfunction=local_gugrades_dashboard_get_grades&moodlewsrestformat=json&userid=${userid}&gradecategoryid=${gradecategoryid}" | jq
+curl "${host}/webservice/rest/server.php?wstoken=${token}&wsfunction=local_gugrades_dashboard_get_grades&moodlewsrestformat=json&userid=${userid}&gradecategoryid=${gradecategoryid}" | jq --indent 4
