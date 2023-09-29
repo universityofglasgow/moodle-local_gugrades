@@ -1,11 +1,12 @@
 # ubuntu2, laptop
-dev=laptop
+dev=ubuntu2
 
 if [ $dev = "ubuntu2" ]
 then
     token=a84b9243a1c3295f343bb779e019ae4f
     host=http://ubuntu2.local:8081
-    userid=9
+    userid=757
+    gradecategoryid=3
 fi
 
 if [ $dev = "laptop" ]

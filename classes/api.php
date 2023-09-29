@@ -472,7 +472,7 @@ class api {
                 'name' => $setting['name'],
             ]);
             if ($config) {
-                $config->value = $setting->value;
+                $config->value = $setting['value'];
                 $DB->update_record('local_gugrades_config', $config);
             } else {
                 $config = new \stdClass;
@@ -530,6 +530,11 @@ class api {
         foreach ($courses as $id => $course) {
             $context = \context_course::instance($id);
 
+            // These always need to exist for the webservice checks
+            $course->gugradesenabled = false;
+            $course->gcatenabled = false;
+            $course->firstlevel = [];
+
             // Check if gugrades is enabled for this course?
             $sqlname = $DB->sql_compare_text('name');
             $sql = "SELECT * FROM {local_gugrades_config}
@@ -557,12 +562,10 @@ class api {
                 WHERE cd.instanceid = :courseid
                 AND cd.intvalue = 1
                 AND $sqlshortname = 'showonstudentdashboard'";
-            if ($DB->record_exists_sql($sql, ['courseid' => $courseid])) {
+            if ($DB->record_exists_sql($sql, ['courseid' => $id])) {
 
                 // TODO: does this need any capability checks?
                 $course->gcatenabled = true;
-            } else {
-                $course->gcatenabled = false;
             }
         }
 
