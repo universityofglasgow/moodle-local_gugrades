@@ -518,7 +518,6 @@ class api {
         // If this isn't current user, do they have the rights to look at other users
         $context = \context_system::instance();
 
-
         // Get basic list of enrolments for this user
         $additionalfields = [
             'enddate'

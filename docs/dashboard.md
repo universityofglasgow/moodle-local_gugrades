@@ -14,7 +14,7 @@ further calls to access the grade data and sub-categories (if any)
 * Web services call:  `local_gugrades_dashboard_get_courses`
 * Call to PHP API:  `\local_gugrades\api::dashboard_get_courses(int $userid)`
 
-The web servoce call is AJAX enabled and can be called from Moodle Javascript using standard AJAX functions. If calling from other Moodle PHP, use the API function. 
+The web service call is AJAX enabled and can be called from Moodle Javascript using standard AJAX functions. If calling from other Moodle PHP, use the API function. 
 
 #### Parameter
 
@@ -59,5 +59,9 @@ Here is an example from the Web service call (which returns JSON)
         }
     ]
 
+(Bash script that generated this is [here](../wstest.sh))
+
 This returns data for two courses. The first has neither GCAT nor GuGrades enabled. The second has GuGrades enabled and therefore returns details of the top-level
 grade categories. 
+
+## local_gugrades_dashboard_get_grades
