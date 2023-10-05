@@ -604,4 +604,27 @@ class api {
             'childcategories' => $childcategories
         ];
     }
+
+    /**
+     * Release grades
+     * @param int $gradeitemid
+     */
+    public static function release_grades(int $gradeitemid) {
+        global $DB;
+
+        $gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
+        $courseid = $gradeitem->courseid;
+
+        // Get list of users
+        $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid);
+        $users = $activity->get_users();
+
+        // iterate over users releasing grades
+        foreach ($users as $user) {
+            $usercapture = new usercapture($courseid, $gradeitemid, $user->id);
+            $released = $usercapture->get_released();
+
+    
+        }
+    }
 }

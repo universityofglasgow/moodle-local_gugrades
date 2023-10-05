@@ -5,17 +5,28 @@
         <ModalForm :show="showreleasemodal" @close="showreleasemodal = false">
             <template #header>
                 <h4>{{ mstrings.releasegrades }}</h4>
-                
             </template>
             <template #body>
-                {{  props.itemid }}
+                <div class="alert alert-warning">{{ mstrings.releaseconfirm }}</div>
+            </template>
+            <template #footer>
+                <button
+                    class="modal-default-button btn btn-primary"
+                    @click="release_grades()"
+                    >{{ mstrings.yesrelease }}
+                </button>
+                <button
+                    class="modal-default-button btn btn-warning"
+                    @click="showreleasemodal = false"
+                    >{{ mstrings.cancel }}
+                </button>
             </template>
         </ModalForm>
     </Teleport>
 </template>
 
 <script setup>
-    import {ref, defineProps, inject} from '@vue/runtime-core';
+    import {ref, inject} from '@vue/runtime-core';
     import ModalForm from '@/components/ModalForm.vue';
     //import { useToast } from "vue-toastification";
 
@@ -25,7 +36,8 @@
     //const toast = useToast();
 
     const props = defineProps({
-        itemid: Number,
+        courseid: Number,
+        gradeitemid: Number,
     });
 
     /**

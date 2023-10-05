@@ -77,6 +77,18 @@ class base {
     }
 
     /**
+     * Get the released grade. For base this is exactly the same as provisional
+     * @param array $grades (indexed by gradetype)
+     * @return object
+     */
+    public function get_released(array $grades) {
+        $released = $this->get_provisional($grades);
+        $released->gradetype = 'RELEASED';
+
+        return $released;
+    }
+
+    /**
      * Determine if we need to place an alert on the capture row
      * For example, 1st and 2nd grade not matching plus no agreed grade
      * @param array $gradesbygt (indexed by gradetype)
