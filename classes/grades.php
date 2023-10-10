@@ -423,7 +423,13 @@ class grades {
             return $columns;
         } else {
 
-            return [];
+            // Just show an empty 'FIRST' column
+            $firstcolumn = (object)[
+                'id' => 1,
+                'gradetype' => 'FIRST',
+                'description' => gradetype::get_description('FIRST'),
+            ];
+            return [$firstcolumn];
         }
     }
 

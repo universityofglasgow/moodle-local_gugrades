@@ -61,7 +61,6 @@
 
     const users = ref([]);
     const userids = ref([]);
-    const strings = ref({});
     const mstrings = inject('mstrings');
     const totalrows = ref(0);
     const currentpage = ref(1);
@@ -72,6 +71,7 @@
     const gradesupported = ref(true);
     const columns = ref([]);
     const loaded = ref(false);
+    const showalert = ref(false);
 
     const toast = useToast();
 
@@ -90,7 +90,9 @@
             heads.push({text: mstrings.participant, value: "displayname", sortable: true});
         }
         heads.push({text: mstrings.idnumber, value: "idnumber", sortable: true});
-        heads.push({text: mstrings.discrepancy, value: "alert"});
+        if (showalert.value) {
+            heads.push({text: mstrings.discrepancy, value: "alert"});
+        }
 
         // Add the grades columns
         columns.value.forEach(column => {
@@ -113,7 +115,13 @@
     function add_grades(users, columns) {
         let grade = {};
 
+        showalert.value = false;
         users.forEach(user => {
+
+            // Only show alert/discrepancy column if there are any
+            if (user.alert) {
+                showalert.value = true;
+            }
             columns.forEach(column => {
                 grade = user.grades.find((element) => {
                     return (element.columnid == column.id);
@@ -121,7 +129,7 @@
                 if (grade) {
                     user['GRADE' + column.id] = grade.displaygrade;
                 } else {
-                    user['GRADE' + column.id] = strings.value.awaitingcapture;
+                    user['GRADE' + column.id] = mstrings.awaitingcapture;
                 }
             });
         });
