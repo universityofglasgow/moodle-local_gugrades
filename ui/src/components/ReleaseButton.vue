@@ -26,17 +26,16 @@
 </template>
 
 <script setup>
-    import {ref, inject} from '@vue/runtime-core';
+    import {ref, inject, defineProps} from '@vue/runtime-core';
     import ModalForm from '@/components/ModalForm.vue';
-    //import { useToast } from "vue-toastification";
+    import { useToast } from "vue-toastification";
 
     const showreleasemodal = ref(false);
     const mstrings = inject('mstrings');
 
-    //const toast = useToast();
+    const toast = useToast();
 
     const props = defineProps({
-        courseid: Number,
         gradeitemid: Number,
     });
 
@@ -44,11 +43,25 @@
      * Release grades on button click
      */
     function release_grades() {
-        //const GU = window.GU;
-        //const courseid = GU.courseid;
-        //const fetchMany = GU.fetchMany;
+        const GU = window.GU;
+        const courseid = GU.courseid;
+        const fetchMany = GU.fetchMany;
 
-
+        fetchMany([{
+            methodname: 'local_gugrades_release_grades',
+            args: {
+                courseid: courseid,
+                gradeitemid: props.itemid,
+            }
+        }])[0]
+        .then(() => {
+            //emit('released');
+            showreleasemodal.value = false;
+        })
+        .catch((error) => {
+            window.console.error(error);
+            toast.error('Error communicating with server (see console)');
+        });
 
         showreleasemodal.value = true;
     }

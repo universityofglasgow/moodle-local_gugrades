@@ -42,6 +42,8 @@ class usercapture {
 
     protected $grades;
 
+    protected $provisional;
+
     protected $gradesbygradetype;
 
     protected $rules;
@@ -59,18 +61,18 @@ class usercapture {
         $this->gradeitemid = $gradeitemid;
         $this->userid = $userid;
 
-        $this->rules = new \local_gugrades\rules\base($courseid, $gradeitemid);
+        $this->rules = new \local_gugrades\rules\base($this);
 
         $this->read_grades();
+        $this->get_gradesbygradetype();
     }
 
     /**
      * Organise grades by gradetype.
      * For this we ignore OTHER types as they are not needed
      * (e.g. for applying grade rules)
-     * @param array $grades
      */
-    protected function get_gradesbygradetype($grades) {
+    protected function find_gradesbygradetype($grades) {
         $this->gradesbygradetype = [];
         foreach ($grades as $grade) {
             if ($grade->gradetype != 'OTHER') {
@@ -86,6 +88,8 @@ class usercapture {
     private function read_grades() {
         global $DB;
 
+        $this->provisional = null;
+
         $grades = $DB->get_records('local_gugrades_grade', [
             'gradeitemid' => $this->gradeitemid,
             'userid' => $this->userid,
@@ -98,16 +102,28 @@ class usercapture {
             $provisional = $this->rules->get_provisional($grades);
             
             $provisional->columnid = $provisionalcolumn->id;
+            $this->provisional = $provisional;
             $grades[] = $provisional;
         }
 
         // organise by gradetype
-        $this->get_gradesbygradetype($grades);
+        $this->find_gradesbygradetype($grades);
 
         // Check if there should be an alert
-        $this->alert = $this->rules->is_alert($this->gradesbygradetype);
+        $this->alert = $this->rules->is_alert();
 
         $this->grades = $grades;
+    }
+
+    /**
+     * Get released grade
+     * 
+     */
+    public function get_released() {
+
+        // Released grade is probably just the provisional grade,
+        // but just in case there's something different...
+        $released = $this->rules->get_released();
     }
 
     /**
@@ -116,6 +132,22 @@ class usercapture {
      */
     public function get_grades() {
         return $this->grades;
+    }
+
+    /**
+     * Get the gradesbygradetype array
+     * @return array
+     */
+    public function get_gradesbygradetype() {
+        return $this->gradesbygradetype;
+    }
+
+    /**
+     * Get provisional grade
+     * @return object
+     */
+    public function get_provisional() {
+        return $this->provisional;
     }
 
     /**

@@ -420,17 +420,21 @@ class grades {
                 }
             }
 
-            return $columns;
         } else {
+            $columns = [];
+        }
 
-            // Just show an empty 'FIRST' column
+        // There has to be a first column
+        if (!in_array('FIRST', array_column($columns, 'gradetype'))) {
             $firstcolumn = (object)[
-                'id' => 1,
+                'id' => 0,
                 'gradetype' => 'FIRST',
                 'description' => gradetype::get_description('FIRST'),
             ];
-            return [$firstcolumn];
+            array_unshift($columns, $firstcolumn);
         }
+
+        return $columns;
     }
 
     /**

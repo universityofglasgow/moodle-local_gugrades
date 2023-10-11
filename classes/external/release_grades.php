@@ -37,6 +37,7 @@ class release_grades extends \external_api {
 
     public static function execute_parameters() {
         return new external_function_parameters([
+            'courseid' => new external_value(PARAM_INT, 'Course id'),
             'gradeitemid' => new external_value(PARAM_INT, 'Grade item id number'),
         ]);
     }
@@ -45,10 +46,13 @@ class release_grades extends \external_api {
 
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
+            'courseid' => $courseid,
             'gradeitemid' => $gradeitemid,
         ]);
+        $context = \context_course::instance($courseid);
+        self::validate_context($context);
 
-        \local_gugrades\api::release_grades($gradeitemid);
+        \local_gugrades\api::release_grades($courseid, $gradeitemid);
 
         return [];
     }

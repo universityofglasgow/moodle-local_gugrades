@@ -38,18 +38,16 @@ class base {
 
     protected $gradeitem;
 
+    protected $usercapture;
+
     /**
      * Constructor. Get grade info
-     * @param int $courseid
-     * @param int $gradeitemid
+     * @param \local_gugrades\usercapture $usercapture
      */
-    public function __construct(int $courseid, int $gradeitemid) {
+    public function __construct(\local_gugrades\usercapture $usercapture) {
         global $DB;
 
-        $this->courseid = $courseid;
-        $this->gradeitemid = $gradeitemid;
-
-        $this->gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
+        $this->usercapture = $usercapture;
     }
 
     /**
@@ -64,26 +62,33 @@ class base {
      * Get the provisional grade given the array of active grades
      * Default is just to return the most recent one
      * TODO: Figure out what to do with admin grades
-     * @param array $grades (indexed by gradetype)
-     * @return object
+     * (Grades array is required as object field hasn't been assigned yet)
+     * @param array $grades
+     * @return mixed
      */
     public function get_provisional(array $grades) {
 
         // We're just going to assume that the grades are in ascending date order
-        $provisional = clone end($grades);
-        $provisional->gradetype = 'PROVISIONAL';
+        if ($grades) {
+            $provisional = clone end($grades);
+            $provisional->gradetype = 'PROVISIONAL';
 
-        return $provisional;
+            return $provisional;
+        } else {
+
+            return null;
+        }
     }
 
     /**
      * Get the released grade. For base this is exactly the same as provisional
-     * @param array $grades (indexed by gradetype)
      * @return object
      */
-    public function get_released(array $grades) {
-        $released = $this->get_provisional($grades);
-        $released->gradetype = 'RELEASED';
+    public function get_released() {
+        $released = $this->usercapture->get_provisional();
+        if ($released) {
+            $released->gradetype = 'RELEASED';
+        }
 
         return $released;
     }
@@ -91,10 +96,10 @@ class base {
     /**
      * Determine if we need to place an alert on the capture row
      * For example, 1st and 2nd grade not matching plus no agreed grade
-     * @param array $gradesbygt (indexed by gradetype)
      * @return boolean
      */
-    public function is_alert(array $gradesbygt) {
+    public function is_alert() {
+        $gradesbygt = $this->usercapture->get_gradesbygradetype();
 
         // 1st, 2nd and 3rd grade have to agree
         // unless there is an agreed grade

@@ -607,13 +607,11 @@ class api {
 
     /**
      * Release grades
+     * @param int $courseid
      * @param int $gradeitemid
      */
-    public static function release_grades(int $gradeitemid) {
+    public static function release_grades(int $courseid, int $gradeitemid) {
         global $DB;
-
-        $gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
-        $courseid = $gradeitem->courseid;
 
         // Get list of users
         $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid);
