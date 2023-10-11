@@ -169,7 +169,7 @@ $functions = [
         'ajax' => true,
     ],
     'local_gugrades_release_grades' => [
-        'classname' => 'local_gugrades\external\dashboard_get_grades',
+        'classname' => 'local_gugrades\external\release_grades',
         'description' => 'Get the list of grades for a given user and grade category. Also returns sub-categories (if any).',
         'type' => 'write',
         'ajax' => true,

@@ -1,5 +1,5 @@
 <template>
-    <button type="button" class="btn btn-outline-success mr-1" @click="release_grades()">{{ mstrings.releasegrades }}</button>
+    <button type="button" class="btn btn-outline-success mr-1" @click="showreleasemodal=true">{{ mstrings.releasegrades }}</button>
 
     <Teleport to="body">
         <ModalForm :show="showreleasemodal" @close="showreleasemodal = false">
@@ -43,6 +43,7 @@
      * Release grades on button click
      */
     function release_grades() {
+        window.console.log('RELEASE PRESSED');
         const GU = window.GU;
         const courseid = GU.courseid;
         const fetchMany = GU.fetchMany;
@@ -51,7 +52,7 @@
             methodname: 'local_gugrades_release_grades',
             args: {
                 courseid: courseid,
-                gradeitemid: props.itemid,
+                gradeitemid: props.gradeitemid,
             }
         }])[0]
         .then(() => {
