@@ -34,11 +34,11 @@ require_once($CFG->dirroot . '/grade/lib.php');
  */
 class usercapture {
 
-    protected $courseid;
+    protected int $courseid;
     
-    protected $gradeitemid;
+    protected int $gradeitemid;
 
-    protected $userid;
+    protected int $userid;
 
     protected $grades;
 
@@ -48,7 +48,7 @@ class usercapture {
 
     protected $rules;
 
-    protected $alert;
+    protected bool $alert;
 
     /**
      * Constructor

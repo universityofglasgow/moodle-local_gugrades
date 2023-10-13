@@ -53,6 +53,10 @@ abstract class base {
         $this->gradeitemid = $gradeitemid;
         $this->courseid = $courseid;
 
+        // Default filter
+        $this->firstnamefilter = '';
+        $this->lastnamefilter = '';
+
         // Get grade item
         $this->gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
         $this->itemtype = $this->gradeitem->itemtype;

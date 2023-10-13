@@ -622,7 +622,21 @@ class api {
             $usercapture = new usercapture($courseid, $gradeitemid, $user->id);
             $released = $usercapture->get_released();
 
-    
+            if ($released) {
+                \local_gugrades\grades::write_grade(
+                    $courseid,
+                    $gradeitemid,
+                    $user->id,
+                    $released->admingrade,
+                    $released->rawgrade,
+                    $released->convertedgrade,
+                    $released->displaygrade,
+                    $released->weightedgrade,
+                    $released->gradetype,
+                    true,
+                    'Release grades'
+                );
+            }
         }
     }
 }
