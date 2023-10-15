@@ -124,6 +124,8 @@ class usercapture {
         // Released grade is probably just the provisional grade,
         // but just in case there's something different...
         $released = $this->rules->get_released();
+
+        return $released;
     }
 
     /**

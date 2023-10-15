@@ -92,6 +92,7 @@ $string['reasonforammendment'] = 'Reason for ammendment';
 $string['recordid'] = 'Identifier';
 $string['relateduser'] = 'Related user';
 $string['releaseconfirm'] = 'WARNING: You are about to release the provisional grades to students. Do you wish to continue?';
+$string['released'] = 'Released';
 $string['releasegrades'] = 'Release grades';
 $string['resetfilter'] = 'Reset filter';
 $string['rulesdefault'] = 'Standard rules';

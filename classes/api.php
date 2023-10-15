@@ -633,6 +633,7 @@ class api {
                     $released->displaygrade,
                     $released->weightedgrade,
                     $released->gradetype,
+                    '',
                     true,
                     'Release grades'
                 );
