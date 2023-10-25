@@ -42,13 +42,13 @@ class get_audit extends \external_api {
     }
 
     public static function execute($courseid) {
-        
+
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
             'courseid' => $courseid,
         ]);
 
-        // Security
+        // Security.
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 

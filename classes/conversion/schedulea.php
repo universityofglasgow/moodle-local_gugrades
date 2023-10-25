@@ -25,8 +25,6 @@
 
 namespace local_gugrades\conversion;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Handle 22-point scale / Schedule A
  */
@@ -46,11 +44,11 @@ class schedulea extends base {
 
         parent::__construct($courseid, $gradeitemid);
 
-        // Get scale
+        // Get scale.
         $scale = $DB->get_record('scale', ['id' => $this->gradeitem->scaleid], '*', MUST_EXIST);
         $this->scaleitems = array_map('trim', explode(',', $scale->scale));
 
-        // Get scale conversion
+        // Get scale conversion.
         $items = $DB->get_records('local_gugrades_scalevalue', ['scaleid' => $this->gradeitem->scaleid]);
         foreach ($items as $item) {
             $this->items[$item->item] = $item->value;
@@ -103,18 +101,20 @@ class schedulea extends base {
     public function import(float $grade) {
         global $DB;
 
-        // Get scale (scales start at 1 not 0)
+        // Get scale (scales start at 1 not 0).
         if (isset($this->scaleitems[$grade - 1])) {
             $scaleitem = $this->scaleitems[$grade - 1];
         } else {
-            throw new \moodle_exception('Scale item does not exist. Scale id = ' . $this->gradeitem->scaleid . ', value = ' . $grade);
+            throw new \moodle_exception('Scale item does not exist. Scale id = ' .
+                $this->gradeitem->scaleid . ', value = ' . $grade);
         }
 
-        // Convert to value using scalevalue
+        // Convert to value using scalevalue.
         if (array_key_exists($scaleitem, $this->items)) {
             $converted = $this->items[$scaleitem];
         } else {
-            throw new \moodle_exception('Scale item "' . $scaleitem . '" does not exist in scale id = ' . $this->gradeitem->scaleid);
+            throw new \moodle_exception('Scale item "' . $scaleitem . '" does not exist in scale id = ' .
+                $this->gradeitem->scaleid);
         }
 
         return [$converted, $scaleitem];

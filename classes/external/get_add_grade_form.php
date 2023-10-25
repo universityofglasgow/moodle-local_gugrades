@@ -56,10 +56,10 @@ class get_add_grade_form extends \external_api {
             'userid' => $userid,
         ]);
 
-        // Get item (if it exists)
+        // Get item (if it exists).
         $item = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
 
-        // More security
+        // More security.
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
@@ -90,7 +90,7 @@ class get_add_grade_form extends \external_api {
                     'value' => new external_value(PARAM_ALPHANUM, 'Scale value'),
                     'label' => new external_value(PARAM_TEXT, 'Scale item name'),
                 ])
-            )
+            ),
         ]);
     }
 

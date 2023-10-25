@@ -49,7 +49,7 @@ class api {
      */
     public static function get_capture_page(int $courseid, int $gradeitemid, string $firstname, string $lastname) {
 
-        // Sanity checks for selected grade item
+        // Sanity checks for selected grade item.
         if (!\local_gugrades\grades::is_grade_supported($gradeitemid)) {
             return [
                 'users' => json_encode([]),
@@ -60,7 +60,7 @@ class api {
             ];
         }
 
-        // Instantiate object for this activity type
+        // Instantiate object for this activity type.
         $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid);
         $activity->set_name_filter($firstname, $lastname);
 
@@ -89,7 +89,7 @@ class api {
     public static function get_grade_item(int $itemid) {
         global $DB;
 
-        // Get item (if it exists)
+        // Get item (if it exists).
         $item = $DB->get_record('grade_items', ['id' => $itemid], '*', MUST_EXIST);
 
         return [
@@ -99,7 +99,7 @@ class api {
             'itemname' => $item->itemname,
             'itemtype' => $item->itemtype,
             'itemmodule' => $item->itemmodule,
-            'iteminstance' => $item->iteminstance,            
+            'iteminstance' => $item->iteminstance,
         ];
     }
 
@@ -130,15 +130,15 @@ class api {
      */
     public static function import_grade(int $courseid, int $gradeitemid, \local_gugrades\conversion\base $conversion, int $userid) {
 
-        // Instantiate object for this activity type
+        // Instantiate object for this activity type.
         $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid);
 
-        // Ask activity for grade
+        // Ask activity for grade.
         $rawgrade = $activity->get_first_grade($userid);
 
-        // Ask conversion object for converted grade and display grade
+        // Ask conversion object for converted grade and display grade.
         if (($rawgrade !== false) && $conversion->validate($rawgrade)) {
-            
+
             list($convertedgrade, $displaygrade) = $conversion->import($rawgrade);
 
             \local_gugrades\grades::write_grade(
@@ -167,34 +167,34 @@ class api {
         global $DB, $PAGE;
 
         $user = $DB->get_record('user', ['id' => $userid], '*', MUST_EXIST);
-        $user_picture = new \user_picture($user);
+        $userpicture = new \user_picture($user);
 
-        return $user_picture->get_url($PAGE);
+        return $userpicture->get_url($PAGE);
     }
 
     /**
      * Get user grades
-     * Get site-wide grades for dashboard / Glasgow life / testing / etc. 
+     * Get site-wide grades for dashboard / Glasgow life / testing / etc.
      * @param int $userid
      * @return array
      */
     public static function get_user_grades(int $userid) {
         global $DB;
 
-        // Load *current* grades for this user
+        // Load *current* grades for this user.
         if (!$grades = $DB->get_records('local_gugrades_grade', ['userid' => $userid, 'iscurrent' => 1])) {
             return [];
         }
 
-        // "cache" course objects so we don't keep looking them up
+        // "cache" course objects so we don't keep looking them up.
         $courses = [];
 
-        // Iterate over grades adding additional information
+        // Iterate over grades adding additional information.
         $newgrades = [];
         foreach ($grades as $grade) {
             $courseid = $grade->courseid;
 
-            // Find course or just skip if it doesn't exist (deleted?)
+            // Find course or just skip if it doesn't exist (deleted?).
             if (array_key_exists($courseid, $courses)) {
                 $course = $courses[$courseid];
             } else {
@@ -204,15 +204,15 @@ class api {
                 $courses[$courseid] = $course;
             }
 
-            // Add course data
+            // Add course data.
             $grade->coursefullname = $course->fullname;
             $grade->courseshortname = $course->shortname;
 
-            // Additional grade data
+            // Additional grade data.
             $gradetype = $DB->get_record('local_gugrades_gradetype', ['id' => $grade->reason], '*', MUST_EXIST);
             $grade->reasonname = $gradetype->fullname;
 
-            // Item into
+            // Item into.
             $grade->itemname = grades::get_item_name_from_itemid($grade->gradeitemid);
 
             $newgrades[] = $grade;
@@ -239,7 +239,7 @@ class api {
             return [];
         }
 
-        // Additional info
+        // Additional info.
         $newgrades = [];
         foreach ($grades as $grade) {
             $grade->description = gradetype::get_description($grade->gradetype);
@@ -289,7 +289,7 @@ class api {
         return \local_gugrades\grades::is_grades_imported($courseid, $gradeitemid);
     }
 
-    /** 
+    /**
      * Get all the strings for this plugin as array of objects
      * @return array
      */
@@ -341,18 +341,18 @@ class api {
     public static function get_add_grade_form(int $courseid, int $gradeitemid, int $userid) {
         global $DB;
 
-        // Get gradetype
+        // Get gradetype.
         $gradetypes = \local_gugrades\gradetype::get_menu();
         $wsgradetypes = self::formkit_menu($gradetypes);
 
-        // Username
+        // Username.
         $user = $DB->get_record('user', ['id' => $userid], '*', MUST_EXIST);
 
-        // Gradeitem
+        // Gradeitem.
         list($itemtype, $gradeitem) = \local_gugrades\grades::analyse_gradeitem($gradeitemid);
         $grademax = ($gradeitem->gradetype == GRADE_TYPE_VALUE) ? $gradeitem->grademax : 0;
 
-        // scale
+        // Scale.
         if ($gradeitem->gradetype == GRADE_TYPE_SCALE) {
             $scale = \local_gugrades\grades::get_scale($gradeitem->scaleid);
             $scalemenu = self::formkit_menu($scale, true);
@@ -360,11 +360,10 @@ class api {
             $scalemenu = [];
         }
 
-        // Administrative grades
+        // Administrative grades.
         $admingrades = \local_gugrades\admin_grades::get_menu();
         $adminmenu = self::formkit_menu($admingrades, true);
 
-        //
         return [
             'gradetypes' => $wsgradetypes,
             'rawgradetypes' => $gradetypes,
@@ -390,21 +389,31 @@ class api {
      * @param float $grade
      * @param string $notes
      */
-    public static function write_additional_grade(int $courseid, int $gradeitemid, int $userid, string $reason, string $other, string $admingrade, int $scale, float $grade, string $notes) {
+    public static function write_additional_grade(
+        int $courseid,
+        int $gradeitemid,
+        int $userid,
+        string $reason,
+        string $other,
+        string $admingrade,
+        int $scale,
+        float $grade,
+        string $notes
+        ) {
 
-        // Conversion class
+        // Conversion class.
         $conversion = \local_gugrades\grades::conversion_factory($courseid, $gradeitemid);
 
-        // Get the stuff we used to build the form for validation
+        // Get the stuff we used to build the form for validation.
         $form = self::get_add_grade_form($courseid, $gradeitemid, $userid);
 
-        // Check 'reason' is valid
+        // Check 'reason' is valid.
         $gradetypes = $form['rawgradetypes'];
         if (!array_key_exists($reason, $gradetypes)) {
             throw new \moodle_exception('Attempting to write invalid reason - "' . $reason . '"');
         }
 
-        // Check 'other' is valid
+        // Check 'other' is valid.
         if ($other && ($reason != 'OTHER')) {
             throw new \moodle_exception('Attemting to write invalid other text when reason is not other');
         }
@@ -412,25 +421,25 @@ class api {
             throw new \moodle_exception('Attempting to write empty other text when reason is other');
         }
 
-        // Check 'scale' is valid
+        // Check 'scale' is valid.
         $usescale = $form['usescale'];
         if (!$usescale && ($scale != 0)) {
             throw new \moodle_exception('Attempting to write scale value when item is not a scale');
         }
 
-        // Check if 'grade' is valid
+        // Check if 'grade' is valid.
         if ($usescale && ($grade != 0)) {
             throw new \moodle_exception('Attempting to write non-zero grade when item type is a scale');
         }
 
-        // Get converted and display grade
+        // Get converted and display grade.
         if (!empty($admingrade)) {
             $rawgrade = 0;
             $convertedgrade = 0.0;
             $displaygrade = $admingrade;
         } else if ($usescale) {
 
-            // TODO: Check! +1 because internal values are 1 - based, our form is 0 - based
+            // TODO: Check! +1 because internal values are 1 - based, our form is 0 - based.
             list($convertedgrade, $displaygrade) = $conversion->import($scale + 1);
             $rawgrade = $scale + 1;
         } else {
@@ -438,7 +447,7 @@ class api {
             $rawgrade = $grade;
         }
 
-        // Happy as we're going to get, so write the new data
+        // Happy as we're going to get, so write the new data.
         \local_gugrades\grades::write_grade(
             $courseid,
             $gradeitemid,
@@ -499,7 +508,7 @@ class api {
         foreach ($configs as $config) {
             $settings[] = [
                 'name' => $config->name,
-                'value' => $config->value,
+                'value' => $config->value
             ];
         }
 
@@ -515,21 +524,21 @@ class api {
     public static function dashboard_get_courses(int $userid) {
         global $DB, $USER;
 
-        // If this isn't current user, do they have the rights to look at other users
+        // If this isn't current user, do they have the rights to look at other users.
         $context = \context_system::instance();
 
-        // Get basic list of enrolments for this user
+        // Get basic list of enrolments for this user.
         $additionalfields = [
             'enddate'
         ];
         $courses = enrol_get_users_courses($userid, true, $additionalfields);
 
-        // run through courses to establish which have gugrades/GCAT enabled
-        // and also add TL grade category data
+        // Run through courses to establish which have gugrades/GCAT enabled
+        // and also add TL grade category data.
         foreach ($courses as $id => $course) {
             $context = \context_course::instance($id);
 
-            // These always need to exist for the webservice checks
+            // These always need to exist for the webservice checks.
             $course->gugradesenabled = false;
             $course->gcatenabled = false;
             $course->firstlevel = [];
@@ -550,9 +559,9 @@ class api {
                 }
                 $course->gugradesenabled = $hascap;
 
-                // Add first level grade categories
+                // Add first level grade categories.
                 $course->firstlevel = \local_gugrades\grades::get_firstlevel($id);
-            } 
+            }
 
             // Check if (old) GCAT is enabled for this course?
             $sqlshortname = $DB->sql_compare_text('shortname');
@@ -581,22 +590,22 @@ class api {
     public static function dashboard_get_grades(int $userid, int $gradecategoryid) {
         global $DB, $USER;
 
-        // Get grade category and make some basic checks
+        // Get grade category and make some basic checks.
         $gradecategory = $DB->get_record('grade_categories', ['id' => $gradecategoryid], '*', MUST_EXIST);
         $courseid = $gradecategory->courseid;
         $context = \context_course::instance($courseid);
 
-        // If this isn't current user, do they have the rights to look at other users
+        // If this isn't current user, do they have the rights to look at other users.
         if ($USER->id != $userid) {
             require_capability('local/gugrades:readotherdashboard', $context);
         } else {
             require_capability('local/gugrades:readdashboard', $context);
         }
 
-        // TODO: Get grades
+        // TODO: Get grades.
         $grades = [];
 
-        // Get child categories
+        // Get child categories.
         $childcategories = $DB->get_records('grade_categories', ['parent' => $gradecategoryid]);
 
         return [
@@ -613,11 +622,11 @@ class api {
     public static function release_grades(int $courseid, int $gradeitemid) {
         global $DB;
 
-        // Get list of users
+        // Get list of users.
         $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid);
         $users = $activity->get_users();
 
-        // iterate over users releasing grades
+        // Iterate over users releasing grades.
         foreach ($users as $user) {
             $usercapture = new usercapture($courseid, $gradeitemid, $user->id);
             $released = $usercapture->get_released();

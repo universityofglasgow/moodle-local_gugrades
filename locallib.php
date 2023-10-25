@@ -23,8 +23,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Update scale settings in DB
  * This is called whenever the plugin settings are updated
@@ -53,7 +51,9 @@ function scale_setting_updated($name) {
             list($item, $value) = explode(',', $line);
             $item = trim($item);
             $value = trim($value);
-            $sql = 'SELECT * FROM {local_gugrades_scalevalue} WHERE scaleid=:scaleid AND ' . $DB->sql_compare_text('item') . '=:item';
+            $sql = 'SELECT * FROM {local_gugrades_scalevalue}
+                WHERE scaleid=:scaleid
+                AND ' . $DB->sql_compare_text('item') . '=:item';
             if ($record = $DB->get_record_sql($sql, ['item' => $item, 'scaleid' => $scale->id])) {
                 $record->value = $value;
                 $DB->update_record('local_gugrades_scalevalue', $record);

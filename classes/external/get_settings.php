@@ -54,7 +54,7 @@ class get_settings extends \external_api {
             'gradeitemid' => $gradeitemid,
         ]);
 
-        // More security
+        // More security.
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 

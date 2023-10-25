@@ -24,6 +24,8 @@
 
 namespace local_gugrades\activities;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once($CFG->dirroot . '/mod/assign/locallib.php');
 
 /**
@@ -44,7 +46,7 @@ class assign_activity extends base {
     public function __construct(int $gradeitemid, int $courseid) {
         parent::__construct($gradeitemid, $courseid);
 
-        // Get the assignment object
+        // Get the assignment object.
         $this->cm = \local_gugrades\users::get_cm_from_grade_item($gradeitemid, $courseid);
         $this->assign = $this->get_assign($this->cm);
     }
@@ -55,7 +57,7 @@ class assign_activity extends base {
      * @return object
      */
     private function get_assign($cm) {
-        global $DB; 
+        global $DB;
 
         $course = $DB->get_record('course', ['id' => $this->courseid], '*', MUST_EXIST);
         $coursemodulecontext = \context_module::instance($cm->id);
@@ -69,11 +71,12 @@ class assign_activity extends base {
      */
     public function get_users() {
         $context = \context_course::instance($this->courseid);
-        $users = \local_gugrades\users::get_available_users_from_cm($this->cm, $context, $this->firstnamefilter, $this->lastnamefilter);
+        $users = \local_gugrades\users::get_available_users_from_cm(
+            $this->cm, $context, $this->firstnamefilter, $this->lastnamefilter);
 
         $assigninstance = $this->assign->get_instance();
 
-        // Displayname and uniqueid
+        // Displayname and uniqueid.
         $hidden = $this->is_names_hidden();
         foreach ($users as $user) {
             $uniqueid = \assign::get_uniqueid_for_user_static($assigninstance->id, $user->id);
@@ -86,7 +89,7 @@ class assign_activity extends base {
             }
         }
 
-        // Re-order by uniqueid
+        // Re-order by uniqueid.
         if ($hidden) {
             usort($users, function($a, $b) {
                 return $a->uniqueid > $b->uniqueid;
@@ -108,16 +111,16 @@ class assign_activity extends base {
      * Implement get_first_grade
      */
     public function get_first_grade(int $userid) {
-        
+
         // This just pulls the grade from assign. Not sure it's that simple
         // False, means do not create grade if it does not exist
-        // This is the grade object from mdl_assign_grades (check negative values)
+        // This is the grade object from mdl_assign_grades (check negative values).
         $assigngrade = $this->assign->get_user_grade($userid, false);
 
         if ($assigngrade !== false) {
 
             return $assigngrade->grade;
-        } 
+        }
 
         return false;
     }

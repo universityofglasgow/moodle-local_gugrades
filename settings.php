@@ -31,16 +31,18 @@ if ($hassiteconfig) {
 
     if ($ADMIN->fulltree) {
         require_once(dirname(__FILE__) . '/locallib.php');
-        $settingspage->add(new admin_setting_heading('local_gugrades/headingscales', new lang_string('scalevalues', 'local_gugrades'), new lang_string('scalevaluesinfo', 'local_gugrades')));
+        $settingspage->add(new admin_setting_heading('local_gugrades/headingscales',
+            new lang_string('scalevalues', 'local_gugrades'),
+            new lang_string('scalevaluesinfo', 'local_gugrades')));
 
-        // Get current site-wide settings
+        // Get current site-wide settings.
         $scales = $DB->get_records('scale', ['courseid' => 0]);
         foreach ($scales as $scale) {
             $name = "local_gugrades/scalevalue_" . $scale->id;
             $items = explode(',', $scale->scale);
             $default = '';
 
-            // if id = 1 or 2 then leave them blank (built in scales)
+            // if id = 1 or 2 then leave them blank (built in scales).
             if ($scale->id > 2) {
                 $count = 0;
                 foreach ($items as $item) {
@@ -48,7 +50,9 @@ if ($hassiteconfig) {
                     $count++;
                 }
             }
-            $scalesetting = new admin_setting_configtextarea($name, $scale->name, new lang_string('scalevalueshelp', 'local_gugrades'), $default, PARAM_RAW, 30, count($items)+1);
+            $scalesetting = new admin_setting_configtextarea($name, $scale->name,
+                new lang_string('scalevalueshelp', 'local_gugrades'),
+                $default, PARAM_RAW, 30, count($items) + 1);
             $scalesetting->set_updatedcallback('scale_setting_updated');
             $settingspage->add($scalesetting);
         }

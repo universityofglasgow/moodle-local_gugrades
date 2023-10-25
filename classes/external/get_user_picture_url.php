@@ -52,10 +52,9 @@ class get_user_picture_url extends \external_api {
         $context = \context_user::instance($userid);
         self::validate_context($context);
 
-        // NB. this returns a moodle_url (not a string)
+        // NB. this returns a moodle_url (not a string).
         $url = \local_gugrades\api::get_user_picture_url($userid);
         $profileurl = new \moodle_url('/user/view.php', ['id' => $userid, 'courseid' => $courseid]);
-
 
         return [
             'url' => $url->out(false),
@@ -66,7 +65,7 @@ class get_user_picture_url extends \external_api {
     public static function execute_returns() {
         return new external_single_structure([
             'url' => new external_value(PARAM_URL, 'Picture URL'),
-            'profileurl' => new external_value(PARAM_URL, 'User profile URL')
+            'profileurl' => new external_value(PARAM_URL, 'User profile URL'),
         ]);
     }
 }

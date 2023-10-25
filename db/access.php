@@ -25,47 +25,47 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = array(
-    'local/gugrades:view' => array(
+$capabilities = [
+    'local/gugrades:view' => [
         'riskbitmask' => RISK_PERSONAL,
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
+        'archetypes' => [
             'manager' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-        )
-    ),
-    'local/gugrades:readotheraudit' => array(
+        ],
+    ],
+    'local/gugrades:readotheraudit' => [
         'riskbitmask' => RISK_PERSONAL,
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
+        'archetypes' => [
             'manager' => CAP_ALLOW,
-        )
-    ),
-    'local/gugrades:exportworksheet' => array(
+        ],
+    ],
+    'local/gugrades:exportworksheet' => [
         'riskbitmask' => RISK_PERSONAL,
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
-        )
-    ),
-    'local/gugrades:readdashboard' => array(
+        'archetypes' => [
+        ],
+    ],
+    'local/gugrades:readdashboard' => [
         'riskbitmask' => RISK_PERSONAL,
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
+        'archetypes' => [
             'student' => CAP_ALLOW,
-        )
-    ),
-    'local/gugrades:readotherdashboard' => array(
+        ],
+    ],
+    'local/gugrades:readotherdashboard' => [
         'riskbitmask' => RISK_PERSONAL,
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
+        'archetypes' => [
             'manager' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
             'teacher' => CAP_ALLOW,
-        )
-    ),
-);
+        ],
+    ],
+];

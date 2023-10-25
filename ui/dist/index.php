@@ -30,29 +30,29 @@ $courseid = required_param('id', PARAM_INT);
 $url = new moodle_url('/local/gugrades/ui/dist/index.php', ['id' => $courseid]);
 $PAGE->set_url($url);
 
-// Stuff to include
+// Stuff to include.
 $PAGE->requires->css('/local/gugrades/ui/dist/css/app.css');
 $PAGE->requires->js_call_amd('local_gugrades/interface', 'init', [[
-    'courseid' => $courseid,
+    'courseid' => $courseid
 ]]);
 $PAGE->requires->js('/local/gugrades/ui/dist/js/chunk-vendors.js');
 $PAGE->requires->js('/local/gugrades/ui/dist/js/app.js');
 
 
-// Security
+// Security.
 $course = $DB->get_record('course', ['id' => $courseid], '*', MUST_EXIST);
 require_login($course);
 $context = context_course::instance($courseid);
 require_capability('local/gugcat:view', $context);
 
-// Log
+// Log.
 $event = \local_gugrades\event\view_gugrades::create([
     'objectid' => $courseid,
     'context' => context_course::instance($courseid),
 ]);
 $event->trigger();
 
-// VueJS stuff gets injected here
+// VueJS stuff gets injected here.
 echo $OUTPUT->header();
 echo "<div id=\"app\"></div>";
 echo $OUTPUT->footer();

@@ -72,7 +72,7 @@ class gradetype {
      */
     public static function get_menu() {
         $gradetypes = self::define();
-        
+
         // The menu doesn't include FIRST grades
         unset($gradetypes['FIRST']);
 

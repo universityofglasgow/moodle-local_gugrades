@@ -80,3 +80,4 @@ class get_user_grades extends \external_api {
 
     }
 }
+

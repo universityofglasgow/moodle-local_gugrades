@@ -55,9 +55,9 @@ class get_levelonecategories extends \external_api {
         return new external_multiple_structure(
             new external_single_structure([
                 'id' => new external_value(PARAM_INT, 'Grade category id'),
-                'fullname' => new external_value(PARAM_TEXT, 'Grade category name')
+                'fullname' => new external_value(PARAM_TEXT, 'Grade category name'),
             ])
-        );       
+        );
     }
-    
+
 }

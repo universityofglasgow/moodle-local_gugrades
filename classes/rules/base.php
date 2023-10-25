@@ -25,8 +25,6 @@
 
 namespace local_gugrades\rules;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Base class for acquisition and aggregation rules
  */
@@ -68,7 +66,7 @@ class base {
      */
     public function get_provisional(array $grades) {
 
-        // We're just going to assume that the grades are in ascending date order
+        // We're just going to assume that the grades are in ascending date order.
         if ($grades) {
             $provisional = clone end($grades);
             $provisional->gradetype = 'PROVISIONAL';
@@ -112,16 +110,16 @@ class base {
         $second = array_key_exists('SECOND', $gradesbygt) ? $gradesbygt['SECOND'] : -1;
         $third = array_key_exists('THIRD', $gradesbygt) ? $gradesbygt['THIRD'] : -1;
 
-        // Only 1st grade is acceptable
+        // Only 1st grade is acceptable.
         if (($second == -1) && ($third == -1)) {
             return false;
         }
 
         // Failing all of above, must agree.
         if (($first == $second) && ($second == $third)) {
-            return false; // All equal 
+            return false; // All equal.
         } else {
-            return true; // Not all equal
+            return true; // Not all equal.
         }
     }
 

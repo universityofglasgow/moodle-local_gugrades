@@ -50,10 +50,10 @@ class get_grade_item extends \external_api {
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), ['itemid' => $itemid]);
 
-        // Get item (if it exists)
+        // Get item (if it exists).
         $item = $DB->get_record('grade_items', ['id' => $itemid], '*', MUST_EXIST);
 
-        // More security
+        // More security.
         $courseid = $item->courseid;
         $context = \context_course::instance($courseid);
         self::validate_context($context);

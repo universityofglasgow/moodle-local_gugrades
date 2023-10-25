@@ -54,7 +54,7 @@ class import_grades_users extends \external_api {
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        // Get conversion object for whatever grade type this is
+        // Get conversion object for whatever grade type this is.
         $conversion = \local_gugrades\grades::conversion_factory($courseid, $gradeitemid);
 
         $userids = explode(',', $userlist);
@@ -62,7 +62,7 @@ class import_grades_users extends \external_api {
             \local_gugrades\api::import_grade($courseid, $gradeitemid, $conversion, intval($userid));
         }
 
-        // Log
+        // Log.
         $event = \local_gugrades\event\import_grades_users::create([
             'objectid' => $gradeitemid,
             'context' => \context_course::instance($courseid),

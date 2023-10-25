@@ -33,7 +33,7 @@ class users {
     /**
      * Get course module from grade item
      * @param int $itemid Grade item ID
-     * @param int $courseid 
+     * @param int $courseid
      * @return object
      */
     public static function get_cm_from_grade_item(int $itemid, int $courseid) {
@@ -48,8 +48,8 @@ class users {
     }
 
     /**
-     * Factory to get correct class for assignment type 
-     * These are found in local_gugrades/classes/activities 
+     * Factory to get correct class for assignment type
+     * These are found in local_gugrades/classes/activities
      * Pick manual for manual grades, xxx_activity for activity xxx (if exists) or default_activity
      * for everything else
      * @param int $gradeitemid
@@ -70,7 +70,7 @@ class users {
             } else {
                 return new \local_gugrades\activities\default_activity($gradeitemid, $courseid, $item->itemtype);
             }
-        } 
+        }
     }
 
     /**
@@ -81,10 +81,11 @@ class users {
      * @return array
      */
     public static function get_gradeable_users(\context $context, $firstname = '', $lastname = '') {
-        $fields = 'u.id, u.username, u.idnumber, u.firstname, u.lastname, u.email, u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename, u.picture, u.imagealt';
+        $fields = 'u.id, u.username, u.idnumber, u.firstname, u.lastname, u.email,
+            u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename, u.picture, u.imagealt';
         $users = get_enrolled_users($context, 'moodle/grade:view', 0, $fields);
 
-        // filter
+        // Filter.
         if ($firstname || $lastname) {
             $users = array_filter($users, function($user) use ($firstname, $lastname) {
                 if ($firstname && (strcasecmp(substr($user->firstname, 0, 1), $firstname))) {
@@ -109,11 +110,11 @@ class users {
      * @return array
      */
     public static function get_available_users_from_cm($cmi, $context, $firstname, $lastname) {
-        
-        //See https://moodledev.io/docs/apis/subsystems/availability
+
+        // See https://moodledev.io/docs/apis/subsystems/availability.
         $info = new \core_availability\info_module($cmi);
 
-        // Get all the possible users in this course
+        // Get all the possible users in this course.
         $users = self::get_gradeable_users($context, $firstname, $lastname);
 
         // Filter using availability API.
@@ -131,8 +132,8 @@ class users {
         global $PAGE;
 
         foreach ($users as $user) {
-            $user_picture = new \user_picture($user);
-            $user->pictureurl = $user_picture->get_url($PAGE)->out(false);
+            $userpicture = new \user_picture($user);
+            $user->pictureurl = $userpicture->get_url($PAGE)->out(false);
         }
 
         return $users;

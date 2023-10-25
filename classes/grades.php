@@ -42,8 +42,8 @@ class grades {
     public static function get_item_name_from_itemid(int $gradeitemid) {
         global $DB;
 
-        if ($grade_item = $DB->get_record('grade_items', ['id' => $gradeitemid])) {
-            return $grade_item->itemname;
+        if ($gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid])) {
+            return $gradeitem->itemname;
         }
 
         return '';
@@ -80,7 +80,7 @@ class grades {
      * @return object
      */
     public static function get_activitytree(int $courseid, int $categoryid) {
-        global $DB; 
+        global $DB;
 
         $category = $DB->get_record('grade_categories', ['id' => $categoryid], '*', MUST_EXIST);
         $gradeitems = $DB->get_records('grade_items', [
@@ -92,7 +92,7 @@ class grades {
             'hidden' => 0,
         ]);
         $categorytree = self::recurse_activitytree($category, $gradeitems, $gradecategories);
-        
+
         return $categorytree;
     }
 
@@ -107,12 +107,12 @@ class grades {
      * @param object $category
      * @param array $gradeitems
      * @param array $gradecategories
-     * @return object 
+     * @return object
      */
     private static function recurse_activitytree($category, $gradeitems, $gradecategories) {
         $tree = [];
 
-        // first find any grade items attached to the current category
+        // First find any grade items attached to the current category.
         $items = [];
         foreach ($gradeitems as $item) {
             if ($item->categoryid == $category->id) {
@@ -120,7 +120,7 @@ class grades {
             }
         }
 
-        // next find any sub-categories of this category
+        // Next find any sub-categories of this category.
         $categories = [];
         foreach ($gradecategories as $gradecategory) {
             if ($gradecategory->parent == $category->id) {
@@ -128,8 +128,8 @@ class grades {
             }
         }
 
-        // add this all up
-        // array_values() to prevent arrays beening encoded as objects in JSON
+        // Add this all up
+        // (array_values() to prevent arrays beening encoded as objects in JSON).
         $record = new \stdClass();
         $record->category = $category;
         $record->items = array_values($items);
@@ -150,8 +150,8 @@ class grades {
     public static function get_column(int $courseid, int $gradeitemid, string $gradetype, string $other = '') {
         global $DB;
 
-        // Check 'other' text is valid
-        $other = trim($other); 
+        // Check 'other' text is valid.
+        $other = trim($other);
         if (($gradetype != 'OTHER') && !empty($other)) {
             throw new \moodle_exception('Other text provided for non-other gradetype');
         }
@@ -166,18 +166,19 @@ class grades {
             }
         } else {
 
-            // If other text, due to sql_compare_text it all gets a bit more complicated
+            // If other text, due to sql_compare_text it all gets a bit more complicated.
             $compareother = $DB->sql_compare_text('other');
-            $sql ="SELECT * FROM {local_gugrades_column}
+            $sql = "SELECT * FROM {local_gugrades_column}
                 WHERE gradeitemid = :gradeitemid
                 AND gradetype = :gradetype
                 AND $compareother = :other";
-            if ($column = $DB->get_record_sql($sql, ['gradeitemid' => $gradeitemid, 'gradetype' => $gradetype, 'other' => $other])) {
+            if ($column = $DB->get_record_sql($sql,
+                ['gradeitemid' => $gradeitemid, 'gradetype' => $gradetype, 'other' => $other])) {
                 return $column;
             }
         }
 
-        // Failing the above, we need a new column record
+        // Failing the above, we need a new column record.
         $column = new \stdClass;
         $column->courseid = $courseid;
         $column->gradeitemid = $gradeitemid;
@@ -190,7 +191,7 @@ class grades {
 
     /**
      * Write grade to local_gugrades_grade table
-     *  
+     *
      * @param int $courseid
      * @param int $gradeitemid
      * @param int $userid
@@ -220,12 +221,12 @@ class grades {
     ) {
         global $DB, $USER;
 
-        // Get/create the column entry
+        // Get/create the column entry.
         $column = self::get_column($courseid, $gradeitemid, $gradetype, $other);
 
-        // Does this already exist
+        // Does this already exist.
         $gradetypecompare = $DB->sql_compare_text('gradetype');
-        $sql = 'SELECT * FROM {local_gugrades_grade} 
+        $sql = 'SELECT * FROM {local_gugrades_grade}
             WHERE courseid = :courseid
             AND gradeitemid = :gradeitemid
             AND userid = :userid
@@ -242,7 +243,7 @@ class grades {
         ])) {
             foreach ($oldgrades as $oldgrade) {
 
-                // It's not current any more
+                // It's not current any more.
                 $oldgrade->iscurrent = false;
                 $DB->update_record('local_gugrades_grade', $oldgrade);
             }
@@ -287,7 +288,7 @@ class grades {
      */
     private static function get_provisional_grade($grades) {
 
-        // ATM provision grade is the same as FIRST grade
+        // ATM provision grade is the same as FIRST grade.
         if ($grade = self::get_grade_by_reason($grades, 'FIRST')) {
             return $grade->grade;
         }
@@ -321,13 +322,14 @@ class grades {
         global $DB;
 
         $gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
-        $gradetype = $gradeitem->gradetype;        
+        $gradetype = $gradeitem->gradetype;
         if (($gradetype == GRADE_TYPE_NONE) || ($gradetype == GRADE_TYPE_TEXT)) {
             return false;
         }
         if ($gradetype == GRADE_TYPE_SCALE) {
             $scaleid = $gradeitem->scaleid;
-            if (!$DB->record_exists_sql('select * from {local_gugrades_scalevalue} where scaleid=:scaleid', ['scaleid' => $scaleid])) {
+            if (!$DB->record_exists_sql('select * from {local_gugrades_scalevalue} where scaleid=:scaleid',
+                ['scaleid' => $scaleid])) {
                 return false;
             }
         }
@@ -343,7 +345,7 @@ class grades {
      * - scale
      * - if so, is it the 22 point scale
      * TODO: Need to look at Schedule B
-     * 
+     *
      * Returns ['scale' | 'scale22' | 'value' | false, $gradeitem] or [false, false]
      * @param int $gradeitemid
      * @return array
@@ -351,7 +353,7 @@ class grades {
     public static function analyse_gradeitem(int $gradeitemid) {
         global $DB;
 
-        // Is it valid at all
+        // Is it valid at all?
         if (!self::is_grade_supported($gradeitemid)) {
             return [false, false];
         }
@@ -361,7 +363,7 @@ class grades {
         if ($gradetype == GRADE_TYPE_VALUE) {
             if ($gradeitem->grademax == 22) {
 
-                // TODO: May change but to get it working
+                // TODO: May change but to get it working.
                 return ['value', $gradeitem];
             } else {
                 return ['value', $gradeitem];
@@ -386,7 +388,8 @@ class grades {
     public static function is_grades_imported(int $courseid, int $gradeitemid) {
         global $DB;
 
-        return $DB->record_exists_sql('select * from {local_gugrades_grade} where gradeitemid=:gradeitemid', ['gradeitemid' => $gradeitemid]);
+        return $DB->record_exists_sql('select * from {local_gugrades_grade} where gradeitemid=:gradeitemid',
+            ['gradeitemid' => $gradeitemid]);
     }
 
     /**
@@ -399,11 +402,11 @@ class grades {
      */
     public static function get_grade_capture_columns(int $courseid, int $gradeitemid) {
         global $DB;
-        
+
         if ($columns = $DB->get_records('local_gugrades_column', ['gradeitemid' => $gradeitemid])) {
 
             // As there is at least one column then there must be a provisional
-            // But it has to go at the end
+            // But it has to go at the end.
             $provisionalcolumn = self::get_column($courseid, $gradeitemid, 'PROVISIONAL');
             if (isset($columns[$provisionalcolumn->id])) {
                 unset($columns[$provisionalcolumn->id]);
@@ -411,7 +414,7 @@ class grades {
             $columns = array_values($columns);
             $columns[] = $provisionalcolumn;
 
-            // Add descriptions
+            // Add descriptions.
             foreach ($columns as $column) {
                 if ($column->gradetype == 'OTHER') {
                     $column->description = $column->other;
@@ -424,7 +427,7 @@ class grades {
             $columns = [];
         }
 
-        // There has to be a first column
+        // There has to be a first column.
         if (!in_array('FIRST', array_column($columns, 'gradetype'))) {
             $firstcolumn = (object)[
                 'id' => 0,
@@ -450,12 +453,12 @@ class grades {
         $gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
         $gradetype = $gradeitem->gradetype;
 
-        // Is it a scale of some sort
+        // Is it a scale of some sort?
         if ($gradetype == GRADE_TYPE_SCALE) {
 
             // If it "looks like" a 22-point scale then we'll assume it is.
             // TODO: Consider an explicit option for this in the setup
-            // 22-point scale has **23** items (0 to 22)
+            // 22-point scale has **23** items (0 to 22).
             if ($DB->count_records('local_gugrades_scalevalue', ['scaleid' => $gradeitem->scaleid]) == 23) {
                 return new \local_gugrades\conversion\schedulea($courseid, $gradeitemid);
             } else {
@@ -464,7 +467,7 @@ class grades {
 
         } else {
 
-            // We're assuming it's a points scale (already checked for weird types)
+            // We're assuming it's a points scale (already checked for weird types).
             return new \local_gugrades\conversion\points($courseid, $gradeitemid);
         }
     }

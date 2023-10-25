@@ -25,8 +25,6 @@
 
 namespace local_gugrades\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 class settings_updated extends \core\event\base {
 
     protected function init() {

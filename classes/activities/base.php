@@ -28,7 +28,7 @@ namespace local_gugrades\activities;
 
 /**
  * Access data in course activities
- * 
+ *
  */
 abstract class base {
 
@@ -53,11 +53,11 @@ abstract class base {
         $this->gradeitemid = $gradeitemid;
         $this->courseid = $courseid;
 
-        // Default filter
+        // Default filter.
         $this->firstnamefilter = '';
         $this->lastnamefilter = '';
 
-        // Get grade item
+        // Get grade item.
         $this->gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
         $this->itemtype = $this->gradeitem->itemtype;
     }
@@ -77,7 +77,7 @@ abstract class base {
         $context = \context_course::instance($this->courseid);
         $users = \local_gugrades\users::get_gradeable_users($context, $this->firstnamefilter, $this->lastnamefilter);
 
-        // Displayname
+        // Displayname.
         foreach ($users as $user) {
             $user->displayname = fullname($user);
         }
@@ -101,7 +101,7 @@ abstract class base {
      */
     public function get_first_grade(int $userid) {
         global $DB;
-        
+
         if ($grade = $DB->get_record('grade_grades', ['itemid' => $this->gradeitemid, 'userid' => $userid])) {
             if ($grade->finalgrade) {
                 return $grade->finalgrade;
@@ -115,7 +115,9 @@ abstract class base {
      * Get item type
      * @return string
      */
-    public function get_itemtype() {}
+    public function get_itemtype() {
+
+    }
 
     /**
      * Get item name

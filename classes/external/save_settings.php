@@ -47,7 +47,7 @@ class save_settings extends \external_api {
                     'name' => new external_value(PARAM_ALPHA, 'Config item name/key'),
                     'value' => new external_value(PARAM_TEXT, 'Config item value'),
                 ])
-            )
+            ),
         ]);
     }
 
@@ -61,13 +61,13 @@ class save_settings extends \external_api {
             'settings' => $settings,
         ]);
 
-        // More security
+        // More security.
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
         \local_gugrades\api::save_settings($courseid, $gradeitemid, $settings);
 
-        // Log
+        // Log.
         $event = \local_gugrades\event\settings_updated::create([
             'objectid' => $gradeitemid,
             'context' => \context_course::instance($courseid),

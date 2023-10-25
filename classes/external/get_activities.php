@@ -49,7 +49,7 @@ class get_activities extends \external_api {
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        // Get data
+        // Get data.
         $tree = \local_gugrades\api::get_activities($courseid, $categoryid);
 
         return ['activities' => json_encode($tree)];

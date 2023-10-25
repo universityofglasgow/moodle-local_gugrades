@@ -48,7 +48,8 @@ class dashboard_get_grades extends \external_api {
     public static function execute($userid, $gradecategoryid) {
 
         // Security.
-        $params = self::validate_parameters(self::execute_parameters(), ['userid' => $userid, 'gradecategoryid' => $gradecategoryid]);
+        $params = self::validate_parameters(self::execute_parameters(),
+            ['userid' => $userid, 'gradecategoryid' => $gradecategoryid]);
 
         $context = \context_system::instance();
         self::validate_context($context);
@@ -62,7 +63,7 @@ class dashboard_get_grades extends \external_api {
                 new external_single_structure([
 
                 ])
-            ),   
+            ),
             'childcategories' => new external_multiple_structure(
                 new external_single_structure([
                     'id' => new external_value(PARAM_INT, 'Category ID'),

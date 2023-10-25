@@ -35,7 +35,7 @@ require_once($CFG->dirroot . '/grade/lib.php');
 class usercapture {
 
     protected int $courseid;
-    
+
     protected int $gradeitemid;
 
     protected int $userid;
@@ -96,20 +96,20 @@ class usercapture {
             'iscurrent' => 1,
         ], 'audittimecreated ASC');
 
-        // Work out / add provisional grade
+        // Work out / add provisional grade.
         if ($grades) {
             $provisionalcolumn = \local_gugrades\grades::get_column($this->courseid, $this->gradeitemid, 'PROVISIONAL');
             $provisional = $this->rules->get_provisional($grades);
-            
+
             $provisional->columnid = $provisionalcolumn->id;
             $this->provisional = $provisional;
             $grades[] = $provisional;
         }
 
-        // organise by gradetype
+        // Organise by gradetype.
         $this->find_gradesbygradetype($grades);
 
-        // Check if there should be an alert
+        // Check if there should be an alert.
         $this->alert = $this->rules->is_alert();
 
         $this->grades = $grades;
@@ -117,7 +117,7 @@ class usercapture {
 
     /**
      * Get released grade
-     * 
+     *
      */
     public function get_released() {
 
@@ -155,7 +155,7 @@ class usercapture {
     /**
      * Get alert status
      * @return boolean
-     * 
+     *
      */
     public function alert() {
         return $this->alert;

@@ -47,7 +47,7 @@ class gradeitem {
      * @param int $courseid
      * @param int $gradeitemid
      */
-    public  function __construct(int $courseid, int $gradeitemid) {
+    public function __construct(int $courseid, int $gradeitemid) {
         global $DB;
 
         $this->courseid = $courseid;

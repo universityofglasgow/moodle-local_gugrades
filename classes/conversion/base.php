@@ -25,8 +25,6 @@
 
 namespace local_gugrades\conversion;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Base class for scale mappings / conversions
  */

@@ -22,8 +22,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- $services = array(
-    'local_gugrades' => array(
+defined('MOODLE_INTERNAL') || die();
+
+$services = [
+    'local_gugrades' => [
         'functions' => [
             'local_gugrades_get_levelonecategories',
             'local_gugrades_get_activities',
@@ -50,8 +52,8 @@
         'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,
         'enabled' => 1,
-    ),
-);
+    ],
+];
 
 $functions = [
     'local_gugrades_get_levelonecategories' => [
@@ -71,7 +73,7 @@ $functions = [
         'description' => 'Get grade capture table given activity, ',
         'type' => 'read',
         'ajax' => true,
-    ],    
+    ],
     'local_gugrades_get_grade_item' => [
         'classname' => 'local_gugrades\external\get_grade_item',
         'description' => 'Gets the activity information for a given grade item id',
@@ -174,4 +176,4 @@ $functions = [
         'type' => 'write',
         'ajax' => true,
     ],
-];    
+];

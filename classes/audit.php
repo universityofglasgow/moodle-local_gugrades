@@ -25,8 +25,6 @@
 
 namespace local_gugrades;
 
-defined('MOODLE_INTERNAL') || die();
-
 class audit {
 
     /**
@@ -39,7 +37,7 @@ class audit {
      */
     public static function write(int $courseid, int $relateduserid, int $gradeitemid, string $message) {
         global $USER, $DB;
-        
+
         $a = new \stdClass;
         $a->courseid = $courseid;
         $a->userid = $USER->id;
@@ -75,7 +73,7 @@ class audit {
             ORDER BY timecreated DESC";
         $items = $DB->get_records_sql($sql, $params);
 
-        // Additional info
+        // Additional info.
         $newitems = [];
         $gradeitemcache = [];
         foreach ($items as $item) {
@@ -98,7 +96,7 @@ class audit {
                 $item->gradeitem = '';
             }
 
-            // Get user
+            // Get user.
             $item->username = '-';
             if ($item->userid) {
                 if ($user = $DB->get_record('user', ['id' => $item->userid])) {
@@ -106,7 +104,7 @@ class audit {
                 }
             }
 
-            // Get related user
+            // Get related user.
             $item->relatedusername = '-';
             if ($item->relateduserid) {
                 if ($relateduser = $DB->get_record('user', ['id' => $item->relateduserid])) {

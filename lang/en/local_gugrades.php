@@ -114,14 +114,14 @@ $string['username'] = 'User name';
 $string['userpicture'] = 'Pic';
 $string['yesrelease'] = 'Yes, release grades';
 
-// Capabilities
+// Capabilities.
 $string['gugrades:exportworksheet'] = 'Export empty worksheet for selected assignment';
 $string['gugrades:readdashboard'] = 'Read own Dashboard data';
 $string['gugrades:readotheraudit'] = 'Read another user\'s audit trail';
 $string['gugrades:readotherdashboard'] = 'Read another user\'s Dashboard data';
 $string['gugrades:view'] = 'View gugrades tool';
 
-// Admin grades
+// Admin grades.
 $string['admin7'] = 'Deferred result';
 $string['adminau'] = 'Audit only';
 $string['adminca'] = 'Credit awarded';

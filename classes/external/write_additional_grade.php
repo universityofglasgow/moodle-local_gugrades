@@ -68,16 +68,26 @@ class write_additional_grade extends \external_api {
             'notes' => $notes,
         ]);
 
-        // Get item (if it exists)
+        // Get item (if it exists).
         $item = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
 
-        // More security
+        // More security.
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        \local_gugrades\api::write_additional_grade($courseid, $gradeitemid, $userid, $reason, $other, $admingrade, $scale, $grade, $notes);
+        \local_gugrades\api::write_additional_grade(
+            $courseid,
+            $gradeitemid,
+            $userid,
+            $reason,
+            $other,
+            $admingrade,
+            $scale,
+            $grade,
+            $notes
+        );
 
-        // Log
+        // Log.
         $event = \local_gugrades\event\additional_grade::create([
             'objectid' => $gradeitemid,
             'context' => \context_course::instance($courseid),

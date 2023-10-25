@@ -45,7 +45,7 @@ class get_capture_page extends \external_api {
     }
 
     public static function execute($courseid, $gradeitemid, $firstname, $lastname) {
-        
+
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
             'courseid' => $courseid,
@@ -54,7 +54,7 @@ class get_capture_page extends \external_api {
             'lastname' => $lastname,
         ]);
 
-        // Security
+        // Security.
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
@@ -63,7 +63,6 @@ class get_capture_page extends \external_api {
 
     public static function execute_returns() {
         return new external_single_structure([
-            //'users' => new external_value(PARAM_RAW, 'List of users (plus extras) for activity in JSON format'),
             'users' => new external_multiple_structure(
                 new external_single_structure([
                     'id' => new external_value(PARAM_INT, 'User ID'),
@@ -76,7 +75,6 @@ class get_capture_page extends \external_api {
                             'displaygrade' => new external_value(PARAM_TEXT, 'Grade for display'),
                             'gradetype' => new external_value(PARAM_TEXT, 'FIRST, SECOND and so on'),
                             'columnid' => new external_value(PARAM_INT, 'ID in column table'),
-                            //'other' => new external_value(PARAM_TEXT, 'If gradetype == other, what is the column header'),
                         ])
                     ),
                 ])
@@ -91,7 +89,8 @@ class get_capture_page extends \external_api {
             'hidden' => new external_value(PARAM_BOOL, 'True if student names are hidden'),
             'itemtype' => new external_value(PARAM_TEXT, 'Name of item type (quiz, assign, manual etc)'),
             'itemname' => new external_value(PARAM_TEXT, 'Name of item'),
-            'gradesupported' => new external_value(PARAM_BOOL, 'Is the selected grade type one we can handle / have configured (for scales)'),
+            'gradesupported' => new external_value(PARAM_BOOL,
+                'Is the selected grade type one we can handle / have configured (for scales)'),
         ]);
     }
 
