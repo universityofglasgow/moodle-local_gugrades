@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- *
+ * Define function get_capture_page
  * @package    local_gugrades
  * @copyright  2023
  * @author     Howard Miller
@@ -56,7 +56,7 @@ class get_capture_page extends \external_api {
      * @param int $courseid
      * @param int $gradeitemid
      * @param string $firstname
-     * @param string $lastnemt
+     * @param string $lastname
      * @return array
      */
     public static function execute($courseid, $gradeitemid, $firstname, $lastname) {

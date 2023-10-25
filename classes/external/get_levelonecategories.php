@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- *
+ * Define function get_levelonecategories
  * @package    local_gugrades
  * @copyright  2023
  * @author     Howard Miller

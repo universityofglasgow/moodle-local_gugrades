@@ -50,7 +50,7 @@ class usercapture {
     protected int $userid;
 
     /**
-     * $var array $grades
+     * @var array $grades
      */
     protected $grades;
 

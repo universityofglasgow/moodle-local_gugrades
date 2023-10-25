@@ -339,7 +339,7 @@ class grades {
 
     /**
      * Analyse grade item. Is it...
-     * - is it valid at all {@link is_grade_supported}
+     * - is it valid at all
      * - points value
      * - if so, is the max points 22 (proxy for 22 point scale)
      * - scale
@@ -444,7 +444,7 @@ class grades {
      * Factory for conversion class
      * TODO: May need some improvement in detecting correct/supported grade (type)
      * @param int $courseid
-     * @param int $graditemid
+     * @param int $gradeitemid
      * @return object
      */
     public static function conversion_factory(int $courseid, int $gradeitemid) {

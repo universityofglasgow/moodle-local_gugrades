@@ -41,7 +41,7 @@ abstract class base {
     protected int $gradeitemid;
 
     /**
-     * $var object $gradeitem
+     * @var object $gradeitem
      */
     protected $gradeitem;
 

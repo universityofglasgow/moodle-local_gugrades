@@ -39,7 +39,7 @@ class assign_activity extends base {
     private $cm;
 
     /**
-     * $var object $assign
+     * @var object $assign
      */
     private $assign;
 

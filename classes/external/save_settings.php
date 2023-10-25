@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- *
+ * Define function save_settings
  * @package    local_gugrades
  * @copyright  2023
  * @author     Howard Miller
