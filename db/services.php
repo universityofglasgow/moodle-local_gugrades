@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Define web services
  *
  * @package    local_gugrades
  * @copyright  2023

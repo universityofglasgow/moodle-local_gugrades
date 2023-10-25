@@ -27,7 +27,7 @@
  * Update scale settings in DB
  * This is called whenever the plugin settings are updated
  * It syncs the settings to the database.
- * @param string setting name
+ * @param string $name
  */
 function scale_setting_updated($name) {
     global $DB;

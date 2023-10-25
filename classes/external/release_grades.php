@@ -33,8 +33,15 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/externallib.php');
 
+/**
+ * Define function release_grades
+ */
 class release_grades extends \external_api {
 
+    /**
+     * Define function parameters
+     * @return external_function_parameters
+     */
     public static function execute_parameters() {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course id'),
@@ -42,6 +49,11 @@ class release_grades extends \external_api {
         ]);
     }
 
+    /**
+     * Execute function
+     * @param int $courseid
+     * @param int $gradeitemid
+     */
     public static function execute($courseid, $gradeitemid) {
 
         // Security.
@@ -57,6 +69,10 @@ class release_grades extends \external_api {
         return [];
     }
 
+    /**
+     * Define result
+     * @return external_single_structure
+     */
     public static function execute_returns() {
         return new external_single_structure([
         ]);

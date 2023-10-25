@@ -42,7 +42,7 @@ if ($hassiteconfig) {
             $items = explode(',', $scale->scale);
             $default = '';
 
-            // if id = 1 or 2 then leave them blank (built in scales).
+            // If id = 1 or 2 then leave them blank (built in scales).
             if ($scale->id > 2) {
                 $count = 0;
                 foreach ($items as $item) {

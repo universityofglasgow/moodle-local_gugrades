@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Language EN
+ * Define settings updated event
  *
  * @package    local_gugrades
  * @copyright  2023
@@ -25,18 +25,32 @@
 
 namespace local_gugrades\event;
 
+/**
+ * settings_updated event
+ */
 class settings_updated extends \core\event\base {
 
+    /**
+     * Initialise event
+     */
     protected function init() {
         $this->data['crud'] = 'c';
         $this->data['edulevel'] = self::LEVEL_TEACHING;
         $this->data['objecttable'] = 'local_gugrade_config';
     }
 
+    /**
+     * Get event name
+     * @return string
+     */
     public static function get_name() {
         return get_string('eventsettingsupdated', 'local_gugrades');
     }
 
+    /**
+     * Get event description
+     * @return string
+     */
     public function get_description() {
         return "The user with id '$this->userid' updated the settings";
     }

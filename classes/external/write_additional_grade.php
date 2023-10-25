@@ -38,6 +38,10 @@ require_once($CFG->libdir . '/externallib.php');
  */
 class write_additional_grade extends \external_api {
 
+    /**
+     * Define function parameters
+     * @return external_function_parameters
+     */
     public static function execute_parameters() {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
@@ -52,6 +56,19 @@ class write_additional_grade extends \external_api {
         ]);
     }
 
+    /**
+     * Execute function
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param int $userid
+     * @param string $reason
+     * @param string $other
+     * @param string $admingrade
+     * @param int $scale
+     * @param float $grade
+     * @param string $notes
+     * @return array
+     */
     public static function execute($courseid, $gradeitemid, $userid, $reason, $other, $admingrade, $scale, $grade, $notes) {
         global $DB;
 
@@ -109,6 +126,10 @@ class write_additional_grade extends \external_api {
         return [];
     }
 
+    /**
+     * Define function result
+     * @return external_single_structure
+     */
     public static function execute_returns() {
         return new external_single_structure([
 

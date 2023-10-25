@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Language EN
+ * Define import grade users event
  *
  * @package    local_gugrades
  * @copyright  2023
@@ -25,18 +25,32 @@
 
 namespace local_gugrades\event;
 
+/**
+ * import_grades_users event
+ */
 class import_grades_users extends \core\event\base {
 
+    /**
+     * Initialise event
+     */
     protected function init() {
         $this->data['crud'] = 'c';
         $this->data['edulevel'] = self::LEVEL_TEACHING;
         $this->data['objecttable'] = 'grade_items';
     }
 
+    /**
+     * Get event name
+     * @return string
+     */
     public static function get_name() {
         return get_string('eventimportgradesusers', 'local_gugrades');
     }
 
+    /**
+     * Get event description
+     * @return string
+     */
     public function get_description() {
         return "The user with id '$this->userid' imported grades for grade item '$this->objectid'.";
     }

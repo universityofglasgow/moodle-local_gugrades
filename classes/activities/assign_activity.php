@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- *
+ * Concrete implementation for mod_assign
  * @package    local_gugrades
  * @copyright  2023
  * @author     Howard Miller
@@ -29,13 +29,18 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/mod/assign/locallib.php');
 
 /**
- * Access data in course activities
  * Specific implementation for assignment
  */
 class assign_activity extends base {
 
+    /**
+     * @var object $cm
+     */
     private $cm;
 
+    /**
+     * $var object $assign
+     */
     private $assign;
 
     /**
@@ -109,6 +114,7 @@ class assign_activity extends base {
 
     /**
      * Implement get_first_grade
+     * @param int $userid
      */
     public function get_first_grade(int $userid) {
 

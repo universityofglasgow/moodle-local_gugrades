@@ -33,8 +33,15 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/externallib.php');
 
+/**
+ * Define function get_user_picture_url
+ */
 class get_user_picture_url extends \external_api {
 
+    /**
+     * Define function parameters
+     * @return external_function_parameters
+     */
     public static function execute_parameters() {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
@@ -42,6 +49,12 @@ class get_user_picture_url extends \external_api {
         ]);
     }
 
+    /**
+     * Execute function
+     * @param int $courseid
+     * @param int $userid
+     * @return array
+     */
     public static function execute(int $courseid, int $userid) {
 
         // Security.
@@ -62,6 +75,10 @@ class get_user_picture_url extends \external_api {
         ];
     }
 
+    /**
+     * Define function result
+     * @return external_single_structure
+     */
     public static function execute_returns() {
         return new external_single_structure([
             'url' => new external_value(PARAM_URL, 'Picture URL'),

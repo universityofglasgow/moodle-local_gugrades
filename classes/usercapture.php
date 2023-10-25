@@ -34,20 +34,44 @@ require_once($CFG->dirroot . '/grade/lib.php');
  */
 class usercapture {
 
+    /**
+     * @var int $courseid
+     */
     protected int $courseid;
 
+    /**
+     * @var int $gradeitemid
+     */
     protected int $gradeitemid;
 
+    /**
+     * @var int $userid
+     */
     protected int $userid;
 
+    /**
+     * $var array $grades
+     */
     protected $grades;
 
+    /**
+     * @var object $provisional
+     */
     protected $provisional;
 
+    /**
+     * @var array $gradebygradetye
+     */
     protected $gradesbygradetype;
 
+    /**
+     * @var \local_gugrades\rules\base $rules
+     */
     protected $rules;
 
+    /**
+     * @var bool $alert
+     */
     protected bool $alert;
 
     /**
@@ -71,6 +95,7 @@ class usercapture {
      * Organise grades by gradetype.
      * For this we ignore OTHER types as they are not needed
      * (e.g. for applying grade rules)
+     * @param array $grades
      */
     protected function find_gradesbygradetype($grades) {
         $this->gradesbygradetype = [];

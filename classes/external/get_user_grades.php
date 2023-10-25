@@ -33,14 +33,26 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/externallib.php');
 
+/**
+ * Define function get_user_grades
+ */
 class get_user_grades extends \external_api {
 
+    /**
+     * Define function parameters
+     * @return external_function_parameters
+     */
     public static function execute_parameters() {
         return new external_function_parameters([
             'userid' => new external_value(PARAM_INT, 'User ID'),
         ]);
     }
 
+    /**
+     * Execute function
+     * @param int $userid
+     * @return array
+     */
     public static function execute(int $userid) {
 
         // Security.
@@ -50,12 +62,16 @@ class get_user_grades extends \external_api {
         $context = \context_user::instance($userid);
         self::validate_context($context);
 
-        // NB. this returns a moodle_url (not a string)
+        // NB. this returns a moodle_url (not a string).
         $grades = \local_gugrades\api::get_user_grades($userid);
 
         return $grades;
     }
 
+    /**
+     * Define function result
+     * @return external_multiple_structure
+     */
     public static function execute_returns() {
         return new external_multiple_structure(
             new external_single_structure([

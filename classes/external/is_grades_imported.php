@@ -33,8 +33,15 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/externallib.php');
 
+/**
+ * Define function is_grades_imported
+ */
 class is_grades_imported extends \external_api {
 
+    /**
+     * Define function parameters
+     * @return external_function_parameters
+     */
     public static function execute_parameters() {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course id'),
@@ -42,6 +49,12 @@ class is_grades_imported extends \external_api {
         ]);
     }
 
+    /**
+     * Execute function
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @return array
+     */
     public static function execute($courseid, $gradeitemid) {
 
         // Security.
@@ -55,6 +68,10 @@ class is_grades_imported extends \external_api {
         return ['imported' => \local_gugrades\api::is_grades_imported($courseid, $gradeitemid)];
     }
 
+    /**
+     * Define function result
+     * @return external_single_structure
+     */
     public static function execute_returns() {
         return new external_single_structure([
             'imported' => new external_value(PARAM_BOOL, 'Has anything been imported for this grade item'),

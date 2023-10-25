@@ -38,12 +38,20 @@ require_once($CFG->libdir . '/externallib.php');
  */
 class get_grade_item extends \external_api {
 
+    /**
+     * Define function parameters
+     * @return external_function_parameters
+     */
     public static function execute_parameters() {
         return new external_function_parameters([
             'itemid' => new external_value(PARAM_INT, 'Grade item id'),
         ]);
     }
 
+    /**
+     * Execute function
+     * @param int $itemid
+     */
     public static function execute($itemid) {
         global $DB;
 
@@ -61,6 +69,10 @@ class get_grade_item extends \external_api {
         return \local_gugrades\api::get_grade_item($itemid);
     }
 
+    /**
+     * Define function result
+     * @return external_single_structure
+     */
     public static function execute_returns() {
         return new external_single_structure([
             'id' => new external_value(PARAM_INT, 'Grade item ID'),

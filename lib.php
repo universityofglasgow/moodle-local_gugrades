@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Extend navigation
  *
  * @package    local_gugrades
  * @copyright  2022
@@ -22,6 +23,12 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+ /**
+  * Adds link to course navigation
+  * @param object $parentnode
+  * @param object $course
+  * @param object $context
+  */
 function local_gugrades_extend_navigation_course($parentnode, $course, $context) {
     if (!has_capability('local/gugrades:view', $context)) {
         return;

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- *
+ * Concrete implementation for all 'other' grade and activity types
  * @package    local_gugrades
  * @copyright  2023
  * @author     Howard Miller
@@ -25,8 +25,7 @@
 namespace local_gugrades\activities;
 
 /**
- * Access data in course activities
- * This is the default. Override for anything that differs (e.g. Assignment)
+ * Implement other grade types
  */
 class default_activity extends base {
 

@@ -33,8 +33,15 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/externallib.php');
 
+/**
+ * Define function import_grades_users
+ */
 class import_grades_users extends \external_api {
 
+    /**
+     * Define function parameters
+     * @return external_function_parameters
+     */
     public static function execute_parameters() {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
@@ -43,6 +50,13 @@ class import_grades_users extends \external_api {
         ]);
     }
 
+    /**
+     * Execute function
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param string $userlist
+     * @return array
+     */
     public static function execute(int $courseid, int $gradeitemid, string $userlist) {
 
         // Security.
@@ -78,6 +92,10 @@ class import_grades_users extends \external_api {
         return ['success' => true];
     }
 
+    /**
+     * Define function return
+     * @return external_single_structure
+     */
     public static function execute_returns() {
         return new external_single_structure([
             'success' => new external_value(PARAM_BOOL, 'If true, import was successful'),

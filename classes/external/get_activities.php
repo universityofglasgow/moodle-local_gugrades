@@ -33,8 +33,15 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/externallib.php');
 
+/**
+ * Define function get_activities
+ */
 class get_activities extends \external_api {
 
+    /**
+     * Define function parameters
+     * @return external_function_parameters
+     */
     public static function execute_parameters() {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course id'),
@@ -42,6 +49,11 @@ class get_activities extends \external_api {
         ]);
     }
 
+    /**
+     * Execute function
+     * @param int $courseid
+     * @param int $categoryid
+     */
     public static function execute($courseid, $categoryid) {
 
         // Security.
@@ -55,6 +67,10 @@ class get_activities extends \external_api {
         return ['activities' => json_encode($tree)];
     }
 
+    /**
+     * Define function result
+     * @return external_single_structure
+     */
     public static function execute_returns() {
         return new external_single_structure([
             'activities' => new external_value(PARAM_TEXT, 'List of activities/subcategories in JSON format'),

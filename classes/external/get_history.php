@@ -33,8 +33,15 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/externallib.php');
 
+/**
+ * Define function get_history
+ */
 class get_history extends \external_api {
 
+    /**
+     * Define function parameters
+     * @return external_function_parameters
+     */
     public static function execute_parameters() {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
@@ -43,6 +50,13 @@ class get_history extends \external_api {
         ]);
     }
 
+    /**
+     * Execute function
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param int $userid
+     * @return array
+     */
     public static function execute($courseid, $gradeitemid, $userid) {
 
         // Security.
@@ -59,6 +73,10 @@ class get_history extends \external_api {
         return $grades;
     }
 
+    /**
+     * Define function result
+     * @return external_multiple_structure
+     */
     public static function execute_returns() {
         return new external_multiple_structure(
             new external_single_structure([

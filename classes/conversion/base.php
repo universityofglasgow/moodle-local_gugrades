@@ -30,10 +30,19 @@ namespace local_gugrades\conversion;
  */
 abstract class base {
 
+    /**
+     * @var int $courseid
+     */
     protected int $courseid;
 
+    /**
+     * @var int $gradeitemid
+     */
     protected int $gradeitemid;
 
+    /**
+     * $var object $gradeitem
+     */
     protected $gradeitem;
 
     /**

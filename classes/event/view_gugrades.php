@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Language EN
+ * Define view gugrades event
  *
  * @package    local_gugrades
  * @copyright  2023
@@ -25,22 +25,40 @@
 
 namespace local_gugrades\event;
 
+/**
+ * view_gugrades event
+ */
 class view_gugrades extends \core\event\base {
 
+    /**
+     * Initialise event
+     */
     protected function init() {
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_TEACHING;
         $this->data['objecttable'] = 'course';
     }
 
+    /**
+     * Get event name
+     * @return string
+     */
     public static function get_name() {
         return get_string('eventviewgugrades', 'local_gugrades');
     }
 
+    /**
+     * Get event description
+     * @return string
+     */
     public function get_description() {
         return "The user with id '$this->userid' viewed the grading tool for course with id '$this->objectid'.";
     }
 
+    /**
+     * Get event URL
+     * @return string
+     */
     public function get_url() {
         return new \moodle_url('/local/gugrades/ui/dist/index.php', ['id' => $this->objectid]);
     }

@@ -25,6 +25,9 @@
 
 namespace local_gugrades;
 
+/**
+ * Static class implementation to deal with audit trail
+ */
 class audit {
 
     /**
@@ -33,7 +36,7 @@ class audit {
      * @param int $courseid
      * @param int $relateduserid // 0 if not required.
      * @param int $gradeitemid
-     * @param string message
+     * @param string $message
      */
     public static function write(int $courseid, int $relateduserid, int $gradeitemid, string $message) {
         global $USER, $DB;

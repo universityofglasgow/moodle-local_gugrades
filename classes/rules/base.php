@@ -30,12 +30,25 @@ namespace local_gugrades\rules;
  */
 class base {
 
+    /**
+     * @var int $courseid
+     */
     protected int $courseid;
 
+
+    /**
+     * @var int $gradeitemid
+     */
     protected int $gradeitemid;
 
+    /**
+     * @var object $gradeitem
+     */
     protected $gradeitem;
 
+    /**
+     * @var \local_gugrades\usercapture $usercapture
+     */
     protected $usercapture;
 
     /**
@@ -105,7 +118,7 @@ class base {
             return false;
         }
 
-        // -1 if they don't exist (not existing is proxy for equal).
+        // The -1 if they don't exist (not existing is proxy for equal).
         $first = array_key_exists('FIRST', $gradesbygt) ? $gradesbygt['FIRST'] : -1;
         $second = array_key_exists('SECOND', $gradesbygt) ? $gradesbygt['SECOND'] : -1;
         $third = array_key_exists('THIRD', $gradesbygt) ? $gradesbygt['THIRD'] : -1;

@@ -33,8 +33,15 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/externallib.php');
 
+/**
+ * Define function has_capability
+ */
 class has_capability extends \external_api {
 
+    /**
+     * Define function parameters
+     * @return external_function_parameters
+     */
     public static function execute_parameters() {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course id'),
@@ -42,6 +49,12 @@ class has_capability extends \external_api {
         ]);
     }
 
+    /**
+     * Execute function
+     * @param int $courseid
+     * @param string $capability
+     * @return array
+     */
     public static function execute($courseid, $capability) {
 
         // Security.
@@ -55,6 +68,10 @@ class has_capability extends \external_api {
         return ['hascapability' => has_capability($capability, $context)];
     }
 
+    /**
+     * Define function result
+     * @return external_single_structure
+     */
     public static function execute_returns() {
         return new external_single_structure([
             'hascapability' => new external_value(PARAM_BOOL, 'Does the user have the capability in the course'),

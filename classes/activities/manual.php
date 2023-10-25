@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- *
+ * Concrete implementation for manual grades
  * @package    local_gugrades
  * @copyright  2023
  * @author     Howard Miller
@@ -25,8 +25,7 @@
 namespace local_gugrades\activities;
 
 /**
- * Access data in course activities
- * This is the default. Override for anything that differs (e.g. Assignment)
+ * Manual grade items
  */
 class manual extends base {
 

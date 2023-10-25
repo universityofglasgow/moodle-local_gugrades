@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- *
+ * Default class for grade/activity access classes
  * @package    local_gugrades
  * @copyright  2023
  * @author     Howard Miller
@@ -32,14 +32,29 @@ namespace local_gugrades\activities;
  */
 abstract class base {
 
+    /**
+     * @var string $firstnamefilter
+     */
     protected string $firstnamefilter;
 
+    /**
+     * @var string $lastnamefilter
+     */
     protected string $lastnamefilter;
 
+    /**
+     * @var int $gradeitemid
+     */
     protected int $gradeitemid;
 
+    /**
+     * @var int $courseid
+     */
     protected int $courseid;
 
+    /**
+     * @var string $itemtype
+     */
     protected string $itemtype;
 
     /**
@@ -64,6 +79,8 @@ abstract class base {
 
     /**
      * Implement set_name_filter()
+     * @param string $firstnamefilter
+     * @param string $lastnamefilter
      */
     public function set_name_filter(string $firstnamefilter, string $lastnamefilter) {
         $this->firstnamefilter = $firstnamefilter;
@@ -98,6 +115,7 @@ abstract class base {
      * Implement get_first_grade
      * This is currently just the same as a manual grade
      * (this is pulling 'finalgrade' instead of 'rawgrade'. Not sure if this is correct/complete)
+     * @param int $userid
      */
     public function get_first_grade(int $userid) {
         global $DB;

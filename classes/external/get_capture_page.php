@@ -33,8 +33,15 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/externallib.php');
 
+/**
+ * Define function get_capture_page
+ */
 class get_capture_page extends \external_api {
 
+    /**
+     * Define function parameters
+     * @return external_function_parameters
+     */
     public static function execute_parameters() {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
@@ -44,6 +51,14 @@ class get_capture_page extends \external_api {
         ]);
     }
 
+    /**
+     * Execute function
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param string $firstname
+     * @param string $lastnemt
+     * @return array
+     */
     public static function execute($courseid, $gradeitemid, $firstname, $lastname) {
 
         // Security.
@@ -61,6 +76,10 @@ class get_capture_page extends \external_api {
         return \local_gugrades\api::get_capture_page($courseid, $gradeitemid, $firstname, $lastname);
     }
 
+    /**
+     * Define result
+     * @return external_single_structure
+     */
     public static function execute_returns() {
         return new external_single_structure([
             'users' => new external_multiple_structure(

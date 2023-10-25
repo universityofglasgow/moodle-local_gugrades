@@ -34,12 +34,24 @@ require_once($CFG->dirroot . '/grade/lib.php');
  */
 class gradeitem {
 
+    /**
+     * @var int $courseid
+     */
     protected int $courseid;
 
+    /**
+     * @var int $gradeitemid
+     */
     protected int $gradeitemid;
 
+    /**
+     * @var object $gradeitem
+     */
     protected $gradeitem;
 
+    /**
+     * @var object $course
+     */
     protected $course;
 
     /**
@@ -58,7 +70,7 @@ class gradeitem {
 
     /**
      * Get name
-     * @retrun string
+     * @return string
      */
     public function get_name() {
         return $this->gradeitem->itemname;

@@ -38,6 +38,10 @@ require_once($CFG->libdir . '/externallib.php');
  */
 class save_settings extends \external_api {
 
+    /**
+     * Define function parameters
+     * @return external_function_parameters
+     */
     public static function execute_parameters() {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
@@ -51,6 +55,13 @@ class save_settings extends \external_api {
         ]);
     }
 
+    /**
+     * Execute function
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param array $settings
+     * @return array
+     */
     public static function execute($courseid, $gradeitemid, $settings) {
         global $DB;
 
@@ -77,6 +88,10 @@ class save_settings extends \external_api {
         return [];
     }
 
+    /**
+     * Define function result
+     * @return external_single_structure
+     */
     public static function execute_returns() {
         return new external_single_structure([
 

@@ -30,8 +30,14 @@ namespace local_gugrades\conversion;
  */
 class schedulea extends base {
 
+    /**
+     * @var array $scaleitems
+     */
     protected array $scaleitems = [];
 
+    /**
+     * @var array $items
+     */
     protected array $items = [];
 
     /**

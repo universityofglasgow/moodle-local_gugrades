@@ -33,7 +33,7 @@ $PAGE->set_url($url);
 // Stuff to include.
 $PAGE->requires->css('/local/gugrades/ui/dist/css/app.css');
 $PAGE->requires->js_call_amd('local_gugrades/interface', 'init', [[
-    'courseid' => $courseid
+    'courseid' => $courseid,
 ]]);
 $PAGE->requires->js('/local/gugrades/ui/dist/js/chunk-vendors.js');
 $PAGE->requires->js('/local/gugrades/ui/dist/js/app.js');

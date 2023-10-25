@@ -25,6 +25,9 @@
 
 namespace local_gugrades;
 
+/**
+ * Actual implementation of all the external functions
+ */
 class api {
 
     /**
@@ -186,7 +189,7 @@ class api {
             return [];
         }
 
-        // "cache" course objects so we don't keep looking them up.
+        // We "cache" course objects so we don't keep looking them up.
         $courses = [];
 
         // Iterate over grades adding additional information.
@@ -508,7 +511,7 @@ class api {
         foreach ($configs as $config) {
             $settings[] = [
                 'name' => $config->name,
-                'value' => $config->value
+                'value' => $config->value,
             ];
         }
 
@@ -529,7 +532,7 @@ class api {
 
         // Get basic list of enrolments for this user.
         $additionalfields = [
-            'enddate'
+            'enddate',
         ];
         $courses = enrol_get_users_courses($userid, true, $additionalfields);
 
@@ -610,7 +613,7 @@ class api {
 
         return [
             'grades' => $grades,
-            'childcategories' => $childcategories
+            'childcategories' => $childcategories,
         ];
     }
 

@@ -38,6 +38,10 @@ require_once($CFG->libdir . '/externallib.php');
  */
 class dashboard_get_grades extends \external_api {
 
+    /**
+     * Define function parameters
+     * @return external_function_parameters
+     */
     public static function execute_parameters() {
         return new external_function_parameters([
             'userid' => new external_value(PARAM_INT, 'User to fetch courses for'),
@@ -45,6 +49,11 @@ class dashboard_get_grades extends \external_api {
         ]);
     }
 
+    /**
+     * Execute function
+     * @param int $userid
+     * @param int $gradecategoryid
+     */
     public static function execute($userid, $gradecategoryid) {
 
         // Security.
@@ -57,6 +66,10 @@ class dashboard_get_grades extends \external_api {
         return \local_gugrades\api::dashboard_get_grades($userid, $gradecategoryid);
     }
 
+    /**
+     * Define function result
+     * @return external_single_structure
+     */
     public static function execute_returns() {
         return new external_single_structure([
             'grades' => new external_multiple_structure(

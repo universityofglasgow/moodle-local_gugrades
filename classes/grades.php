@@ -271,7 +271,7 @@ class grades {
     /**
      * Get grade from array by reason
      * @param array $grades
-     * @param string reason
+     * @param string $reason
      * @return object
      */
     private static function get_grade_by_reason(array $grades, string $reason) {
@@ -339,7 +339,7 @@ class grades {
 
     /**
      * Analyse grade item. Is it...
-     * - is it valid at all (@link is_grade_supported)
+     * - is it valid at all {@link is_grade_supported}
      * - points value
      * - if so, is the max points 22 (proxy for 22 point scale)
      * - scale

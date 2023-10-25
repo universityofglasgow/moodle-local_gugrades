@@ -38,6 +38,10 @@ require_once($CFG->libdir . '/externallib.php');
  */
 class get_add_grade_form extends \external_api {
 
+    /**
+     * Define function parameters
+     * @return external_function_parameters
+     */
     public static function execute_parameters() {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
@@ -46,6 +50,13 @@ class get_add_grade_form extends \external_api {
         ]);
     }
 
+    /**
+     * Execute function
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param int $userid
+     * @return array
+     */
     public static function execute($courseid, $gradeitemid, $userid) {
         global $DB;
 
@@ -66,6 +77,10 @@ class get_add_grade_form extends \external_api {
         return \local_gugrades\api::get_add_grade_form($courseid, $gradeitemid, $userid);
     }
 
+    /**
+     * Define function result
+     * @return external_single_structure
+     */
     public static function execute_returns() {
         return new external_single_structure([
             'gradetypes' => new external_multiple_structure(
