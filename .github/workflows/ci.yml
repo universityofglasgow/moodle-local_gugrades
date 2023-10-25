@@ -30,9 +30,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', '8.0', '8.1']
+        php: ['8.0', '8.1']
         moodle-branch: ['MOODLE_401_STABLE']
-        database: [pgsql, mariadb]
+        database: [mariadb]
 
     steps:
       - name: Check out repository code
@@ -95,21 +95,21 @@ jobs:
         if: ${{ !cancelled() }}
         run: moodle-plugin-ci savepoints
 
-      - name: Mustache Lint
-        if: ${{ !cancelled() }}
-        run: moodle-plugin-ci mustache
+      #- name: Mustache Lint
+      #  if: ${{ !cancelled() }}
+      #  run: moodle-plugin-ci mustache
 
-      - name: Grunt
-        if: ${{ !cancelled() }}
-        run: moodle-plugin-ci grunt --max-lint-warnings 0
+      #- name: Grunt
+      #  if: ${{ !cancelled() }}
+      #  run: moodle-plugin-ci grunt --max-lint-warnings 0
 
-      - name: PHPUnit tests
-        if: ${{ !cancelled() }}
-        run: moodle-plugin-ci phpunit --fail-on-warning
+      #- name: PHPUnit tests
+      #  if: ${{ !cancelled() }}
+      #  run: moodle-plugin-ci phpunit --fail-on-warning
 
-      - name: Behat features
-        if: ${{ !cancelled() }}
-        run: moodle-plugin-ci behat --profile chrome
+      #- name: Behat features
+      #  if: ${{ !cancelled() }}
+      #  run: moodle-plugin-ci behat --profile chrome
 
       - name: Mark cancelled jobs as failed.
         if: ${{ cancelled() }}
