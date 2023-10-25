@@ -128,8 +128,10 @@
                 });
                 if (grade) {
                     user['GRADE' + column.id] = grade.displaygrade;
-                } else {
+                } else if (column.gradetype == 'FIRST') {
                     user['GRADE' + column.id] = mstrings.awaitingcapture;
+                } else {
+                    user['GRADE' + column.id] = ' ';
                 }
             });
         });
