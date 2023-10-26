@@ -26,12 +26,14 @@
 </template>
 
 <script setup>
-    import {ref, inject, defineProps} from '@vue/runtime-core';
+    import {ref, inject, defineProps, defineEmits} from '@vue/runtime-core';
     import ModalForm from '@/components/ModalForm.vue';
     import { useToast } from "vue-toastification";
 
     const showreleasemodal = ref(false);
     const mstrings = inject('mstrings');
+
+    const emit = defineEmits(['released']);
 
     const toast = useToast();
 
@@ -56,7 +58,7 @@
             }
         }])[0]
         .then(() => {
-            //emit('released');
+            emit('released');
             showreleasemodal.value = false;
         })
         .catch((error) => {

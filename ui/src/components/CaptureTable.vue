@@ -8,8 +8,8 @@
 
         <div v-else>
             <div class="border rounded p-2 py-4 mt-2">
-                <ImportButton :itemid="parseInt(itemid)" :userids="userids" @imported="gradesimported"></ImportButton>
-                <ReleaseButton :gradeitemid="parseInt(itemid)"></ReleaseButton>
+                <ImportButton :itemid="parseInt(itemid)" :userids="userids" @imported="gradesimported()"></ImportButton>
+                <ReleaseButton :gradeitemid="parseInt(itemid)" @released="gradesreleased()"></ReleaseButton>
                 <ExportWorksheetButton :users="users" :itemtype="itemtype" :itemname="itemname"></ExportWorksheetButton>
             </div>
 
@@ -211,6 +211,19 @@
 
         // Done it
         toast.success("Import complete", {
+        });
+    }
+
+    /**
+     * Import grades function is complete
+     */
+     function gradesreleased() {
+
+        // Get the data for the table
+        get_page_data(props.itemid, firstname, lastname);
+
+        // Done it
+        toast.success("Release complete", {
         });
     }
 

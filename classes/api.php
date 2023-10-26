@@ -55,7 +55,8 @@ class api {
         // Sanity checks for selected grade item.
         if (!\local_gugrades\grades::is_grade_supported($gradeitemid)) {
             return [
-                'users' => json_encode([]),
+                'users' => [],
+                'columns' => [],
                 'hidden' => false,
                 'itemtype' => '',
                 'itemname' => '',
