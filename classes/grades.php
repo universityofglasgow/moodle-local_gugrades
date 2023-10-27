@@ -437,6 +437,9 @@ class grades {
             array_unshift($columns, $firstcolumn);
         }
 
+        // sort columns
+        $columns = \local_gugrades\gradetype::sort($columns);
+
         return $columns;
     }
 
