@@ -42,6 +42,7 @@ $string['discrepancy'] = 'Discrepancy';
 $string['enabledashboard'] = 'Enable student dashboard for this course';
 $string['eventadditionalgrade'] = 'Add additional grade';
 $string['eventimportgradesusers'] = 'Import grades for user list';
+$string['eventreleasegrades'] = 'Release grades';
 $string['eventsettingsupdate'] = 'Settings updated';
 $string['eventviewgugrades'] = 'View grading tool';
 $string['exportworksheet'] = 'Export worksheet';

@@ -547,7 +547,7 @@ class api {
             $course->gcatenabled = false;
             $course->firstlevel = [];
 
-            // Check if gugrades is enabled for this course?
+            // Check if MyGrades is enabled for this course?
             $sqlname = $DB->sql_compare_text('name');
             $sql = "SELECT * FROM {local_gugrades_config}
                 WHERE courseid = :courseid
@@ -555,7 +555,7 @@ class api {
                 AND value = :value";
             if ($DB->record_exists_sql($sql, ['courseid' => $id, 'name' => 'enabledashboard', 'value' => 1])) {
 
-                // If we're here, gugrades is enabled so do we have caps to view this data?
+                // If we're here, MyGrades is enabled so do we have caps to view this data?
                 if ($USER->id != $userid) {
                     $hascap = has_capability('local/gugrades:readotherdashboard', $context);
                 } else {
@@ -607,7 +607,7 @@ class api {
         }
 
         // TODO: Get grades.
-        $grades = [];
+        $grades = \local_gugrades\grades::get_dashboard_grades($userid, $gradecategoryid);
 
         // Get child categories.
         $childcategories = $DB->get_records('grade_categories', ['parent' => $gradecategoryid]);

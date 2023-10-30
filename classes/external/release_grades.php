@@ -66,6 +66,19 @@ class release_grades extends \external_api {
 
         \local_gugrades\api::release_grades($courseid, $gradeitemid);
 
+        // Log.
+        $event = \local_gugrades\event\release_grades::create([
+            'objectid' => $gradeitemid,
+            'context' => $context,
+            'other' => [
+                'gradeitemid' => $gradeitemid,
+            ],
+        ]);
+        $event->trigger();
+
+        // Audit.
+        \local_gugrades\audit::write($courseid, 0, $gradeitemid, 'Grades released.');
+
         return [];
     }
 

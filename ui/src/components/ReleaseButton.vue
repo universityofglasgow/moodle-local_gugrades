@@ -45,7 +45,6 @@
      * Release grades on button click
      */
     function release_grades() {
-        window.console.log('RELEASE PRESSED');
         const GU = window.GU;
         const courseid = GU.courseid;
         const fetchMany = GU.fetchMany;

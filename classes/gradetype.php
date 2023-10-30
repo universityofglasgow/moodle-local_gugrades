@@ -84,19 +84,19 @@ class gradetype {
      * Order is as defined in the array in this class
      * Columns is an array of objects with the field 'gradetype'
      * NOTE: This means that anything not in the 'approved' array is filtered out.
-     * @param array $gradetype
+     * @param array $columns
      * @return array
      */
     public static function sort(array $columns) {
         $gradetypes = self::define();
 
-        // Re-index columns by gradetype
+        // Re-index columns by gradetype.
         $gtcolumns = [];
         foreach ($columns as $column) {
             $gtcolumns[$column->gradetype] = $column;
         }
 
-        // Sort into order of gradetypes
+        // Sort into order of gradetypes.
         $sortedcolumns = [];
         foreach ($gradetypes as $gradetype => $description) {
             if (array_key_exists($gradetype, $gtcolumns)) {

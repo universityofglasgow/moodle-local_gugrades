@@ -74,7 +74,17 @@ class dashboard_get_grades extends \external_api {
         return new external_single_structure([
             'grades' => new external_multiple_structure(
                 new external_single_structure([
-
+                    'id' => new external_value(PARAM_INT, 'id from gugrades_grade table'),
+                    'courseid' => new external_value(PARAM_INT, 'Course ID'),
+                    'itemtype' => new external_value(PARAM_TEXT, 'Item type'),
+                    'itemmodule' => new external_value(PARAM_TEXT, 'Module name'),
+                    'iteminstance' => new external_value(PARAM_INT, 'ID of grade item / activity'),
+                    'gradetype' => new external_value(PARAM_INT, 'Grade type'),
+                    'grademax' => new external_value(PARAM_FLOAT, 'Maximum grade'),
+                    'grademin' => new external_value(PARAM_FLOAT, 'Minimum grade'),
+                    'displaygrade' => new external_value(PARAM_TEXT, 'Grade formatted for display'),
+                    'convertedgrade' => new external_value(PARAM_FLOAT, 'Underlying converted grade value'),
+                    'admingrade' => new external_value(PARAM_TEXT, 'Admin grade'),
                 ])
             ),
             'childcategories' => new external_multiple_structure(

@@ -437,7 +437,7 @@ class grades {
             array_unshift($columns, $firstcolumn);
         }
 
-        // sort columns
+        // Sort columns.
         $columns = \local_gugrades\gradetype::sort($columns);
 
         return $columns;
@@ -495,5 +495,23 @@ class grades {
         } else {
             throw new \moodle_exception('Invalid scaleid in grades::get_scale');
         }
+    }
+
+    /**
+     * Get grades for display on Dashboard for a give gradecategoryid
+     * Basically just returns realeased grades (TODO: is that correct?)
+     */
+    public static function get_dashboard_grades(int $userid, int $gradecategoryid) {
+        global $DB;
+
+        // Get grades
+        $sql = "SELECT  * FROM {local_gugrades_grade} gg
+            JOIN {grade_items} gi ON gi.id = gg.gradeitemid
+            WHERE gi.categoryid = :gradecategoryid
+            AND gg.userid = :userid
+            AND gg.iscurrent = 1";
+        $grades = $DB->get_records_sql($sql, ['gradecategoryid' => $gradecategoryid, 'userid' => $userid]);
+
+        return $grades;
     }
 }
