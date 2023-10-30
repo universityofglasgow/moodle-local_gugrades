@@ -500,11 +500,14 @@ class grades {
     /**
      * Get grades for display on Dashboard for a give gradecategoryid
      * Basically just returns realeased grades (TODO: is that correct?)
+     * @param int $userid
+     * @param int $gradecategoryid
+     * @return array
      */
     public static function get_dashboard_grades(int $userid, int $gradecategoryid) {
         global $DB;
 
-        // Get grades
+        // Get grades.
         $sql = "SELECT  * FROM {local_gugrades_grade} gg
             JOIN {grade_items} gi ON gi.id = gg.gradeitemid
             WHERE gi.categoryid = :gradecategoryid
