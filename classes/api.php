@@ -48,9 +48,10 @@ class api {
      * @param int $gradeitemid
      * @param string $firstname (first letter of)
      * @param string $lastname (last letter of)
+     * @param bool $viewfullnames
      * @return array
      */
-    public static function get_capture_page(int $courseid, int $gradeitemid, string $firstname, string $lastname) {
+    public static function get_capture_page(int $courseid, int $gradeitemid, string $firstname, string $lastname, bool $viewfullnames) {
 
         // Sanity checks for selected grade item.
         if (!\local_gugrades\grades::is_grade_supported($gradeitemid)) {
@@ -67,6 +68,7 @@ class api {
         // Instantiate object for this activity type.
         $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid);
         $activity->set_name_filter($firstname, $lastname);
+        $activity->set_viewfullnames($viewfullnames);
 
         // Get list of users.
         // Will be everybody for 'manual' grades or filtered list for modules.

@@ -58,6 +58,11 @@ abstract class base {
     protected string $itemtype;
 
     /**
+     * @var bool viewfullnames
+     */
+    protected bool $viewfullnames;
+
+    /**
      * Constructor, set grade itemid
      * @param int $gradeitemid Grade item id
      * @param int $courseid
@@ -75,6 +80,8 @@ abstract class base {
         // Get grade item.
         $this->gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
         $this->itemtype = $this->gradeitem->itemtype;
+
+        $this->viewfullnames = false;
     }
 
     /**
@@ -109,6 +116,15 @@ abstract class base {
      */
     public function is_names_hidden() {
         return false;
+    }
+
+    /**
+     * Set viewfullnames
+     * Show fullnames if activity supports hidden names
+     * @param bool $viewfullnames
+     */
+    public function set_viewfullnames(bool $viewfullnames) {
+        $this->viewfullnames = $viewfullnames;
     }
 
     /**

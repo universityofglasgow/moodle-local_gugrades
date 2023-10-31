@@ -67,6 +67,7 @@ $string['gradetypecapped'] = 'Capped grade';
 $string['gradetypeconduct'] = 'Conduct penalty';
 $string['gradetypeother'] = 'Other grade';
 $string['hiddenuser'] = 'Participant';
+$string['hidefullnames'] = 'Hide full names';
 $string['history'] = 'History';
 $string['idnumber'] = 'ID number';
 $string['import'] = 'Import';
@@ -113,6 +114,7 @@ $string['time'] = 'Time';
 $string['type'] = 'Type';
 $string['username'] = 'User name';
 $string['userpicture'] = 'Pic';
+$string['viewfullnames'] = 'View full names';
 $string['yesrelease'] = 'Yes, release grades';
 
 // Capabilities.
@@ -121,6 +123,7 @@ $string['gugrades:readdashboard'] = 'Read own Dashboard data';
 $string['gugrades:readotheraudit'] = 'Read another user\'s audit trail';
 $string['gugrades:readotherdashboard'] = 'Read another user\'s Dashboard data';
 $string['gugrades:view'] = 'View gugrades tool';
+$string['gugrades:viewhiddennames'] = 'Reveal hidden names';
 
 // Admin grades.
 $string['admin7'] = 'Deferred result';

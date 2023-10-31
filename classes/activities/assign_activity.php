@@ -89,6 +89,9 @@ class assign_activity extends base {
             $user->fullname = fullname($user);
             if ($hidden) {
                 $user->displayname = get_string('participantnumber', 'local_gugrades', $uniqueid);
+                if ($this->viewfullnames) {
+                    $user->displayname .= ' (' . fullname($user) . ')';
+                }
             } else {
                 $user->displayname = fullname($user);
             }
@@ -110,6 +113,20 @@ class assign_activity extends base {
     public function is_names_hidden() {
         $assigninstance = $this->assign->get_instance();
         return $assigninstance->blindmarking && !$assigninstance->revealidentities;
+    }
+
+    /**
+     * Set viewfullnames
+     * Show fullnames if has capability
+     * @param bool $viewfullnames
+     */
+    public function set_viewfullnames(bool $viewfullnames) {
+        $context = \context_course::instance($this->courseid);
+        if (has_capability('local/gugrades:viewhiddennames', $context)) {
+            $this->viewfullnames = $viewfullnames;
+        } else {
+            $this->viewfullnames = false;
+        }
     }
 
     /**

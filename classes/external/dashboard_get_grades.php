@@ -79,6 +79,7 @@ class dashboard_get_grades extends \external_api {
                     'itemtype' => new external_value(PARAM_TEXT, 'Item type'),
                     'itemmodule' => new external_value(PARAM_TEXT, 'Module name'),
                     'iteminstance' => new external_value(PARAM_INT, 'ID of grade item / activity'),
+                    'itemname' => new external_value(PARAM_TEXT, 'Full name of item'),
                     'gradetype' => new external_value(PARAM_INT, 'Grade type'),
                     'grademax' => new external_value(PARAM_FLOAT, 'Maximum grade'),
                     'grademin' => new external_value(PARAM_FLOAT, 'Minimum grade'),

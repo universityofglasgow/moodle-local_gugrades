@@ -11,6 +11,7 @@
                 <ImportButton :itemid="parseInt(itemid)" :userids="userids" @imported="gradesimported()"></ImportButton>
                 <ReleaseButton :gradeitemid="parseInt(itemid)" @released="gradesreleased()"></ReleaseButton>
                 <ExportWorksheetButton :users="users" :itemtype="itemtype" :itemname="itemname"></ExportWorksheetButton>
+                <ViewFullNamesButton v-if="usershidden" @viewfullnames="viewfullnames"></ViewFullNamesButton>
             </div>
 
             <NameFilter v-if="!usershidden" @selected="filter_selected" ref="namefilterref"></NameFilter>
@@ -41,7 +42,7 @@
 
             <h2 v-if="!showtable">{{ mstrings.nothingtodisplay }}</h2>
         </div>
-    </div>   
+    </div>
 </template>
 
 <script setup>
@@ -54,6 +55,7 @@
     import ExportWorksheetButton from '@/components/ExportWorksheetButton.vue';
     import PreLoader from '@/components/PreLoader.vue';
     import { useToast } from "vue-toastification";
+    import ViewFullNamesButton from './ViewFullNamesButton.vue';
 
     const props = defineProps({
         itemid: Number,
@@ -72,6 +74,7 @@
     const columns = ref([]);
     const loaded = ref(false);
     const showalert = ref(false);
+    const revealnames = ref(false);
 
     const toast = useToast();
 
@@ -105,6 +108,15 @@
 
         return heads;
     });
+
+    /**
+     * Handle viewfullnames
+     * @param bool toggleview
+     */
+    function viewfullnames(toggleview) {
+        revealnames.value = toggleview;
+        get_page_data(props.itemid, firstname, lastname);
+    }
 
     /**
      * Add grade columns into 'users' data so the table component can display them
@@ -148,10 +160,10 @@
      function get_page_data(itemid, first, last) {
         const GU = window.GU;
         const courseid = GU.courseid;
-        const fetchMany = GU.fetchMany;    
-        
+        const fetchMany = GU.fetchMany;
+
         loaded.value = false;
-        
+
         fetchMany([{
             methodname: 'local_gugrades_get_capture_page',
             args: {
@@ -159,6 +171,7 @@
                 gradeitemid: itemid,
                 firstname: first,
                 lastname: last,
+                viewfullnames: revealnames.value,
             }
         }])[0]
         .then((result) => {
@@ -178,13 +191,13 @@
         .catch((error) => {
             window.console.error(error);
             toast.error('Error communicating with server (see console)');
-        });        
+        });
     }
 
     /**
      * Firstname/lastname filter selected
-     * @param {*} first 
-     * @param {*} last 
+     * @param {*} first
+     * @param {*} last
      */
     function filter_selected(first, last) {
         if (first == 'all') {

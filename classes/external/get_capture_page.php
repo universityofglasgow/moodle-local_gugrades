@@ -48,6 +48,7 @@ class get_capture_page extends \external_api {
             'gradeitemid' => new external_value(PARAM_INT, 'Grade item id number'),
             'firstname' => new external_value(PARAM_ALPHA, 'Firstname filter - first letter or empty for all'),
             'lastname' => new external_value(PARAM_ALPHA, 'Lastname filter - first letter or empty for all'),
+            'viewfullnames' => new external_value(PARAM_BOOL, 'Show full names of students (with capability)'),
         ]);
     }
 
@@ -57,9 +58,10 @@ class get_capture_page extends \external_api {
      * @param int $gradeitemid
      * @param string $firstname
      * @param string $lastname
+     * @param bool $viewfullnames
      * @return array
      */
-    public static function execute($courseid, $gradeitemid, $firstname, $lastname) {
+    public static function execute($courseid, $gradeitemid, $firstname, $lastname, $viewfullnames) {
 
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
@@ -67,13 +69,14 @@ class get_capture_page extends \external_api {
             'gradeitemid' => $gradeitemid,
             'firstname' => $firstname,
             'lastname' => $lastname,
+            'viewfullnames' => $viewfullnames,
         ]);
 
         // Security.
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        return \local_gugrades\api::get_capture_page($courseid, $gradeitemid, $firstname, $lastname);
+        return \local_gugrades\api::get_capture_page($courseid, $gradeitemid, $firstname, $lastname, $viewfullnames);
     }
 
     /**
