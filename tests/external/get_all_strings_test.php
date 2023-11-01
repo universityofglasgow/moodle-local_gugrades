@@ -47,6 +47,8 @@ class get_all_strings_test extends externallib_advanced_testcase {
 
     /**
      * Just check that strings are returned
+     *
+     * @covers \local_gugrades\external\get_all_strings::execute
      */
     public function test_get_all_strings_returns_data() {
         $mstrings = get_all_strings::execute();
@@ -60,7 +62,7 @@ class get_all_strings_test extends externallib_advanced_testcase {
         // Was something returned?
         $this->assertNotEmpty($mstrings);
 
-        // Check that a few required strings exist
+        // Check that a few required strings exist.
         $this->assertContains('pluginname', array_column($mstrings, 'tag'));
         $this->assertContains('captureaggregation', array_column($mstrings, 'tag'));
     }
