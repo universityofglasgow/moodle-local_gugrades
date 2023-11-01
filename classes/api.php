@@ -51,7 +51,8 @@ class api {
      * @param bool $viewfullnames
      * @return array
      */
-    public static function get_capture_page(int $courseid, int $gradeitemid, string $firstname, string $lastname, bool $viewfullnames) {
+    public static function get_capture_page(int $courseid, int $gradeitemid,
+        string $firstname, string $lastname, bool $viewfullnames) {
 
         // Sanity checks for selected grade item.
         if (!\local_gugrades\grades::is_grade_supported($gradeitemid)) {
