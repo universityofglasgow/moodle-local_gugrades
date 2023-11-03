@@ -18,29 +18,55 @@
                 {{ mstrings.auditlog }}
             </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="settingscapability">
             <a class="nav-link btn btn-secondary" :class="{active: activetab == 'settings'}" @click="clickTab('settings')">
                 <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;
                 {{ mstrings.settings }}
             </a>
-        </li>        
-    </ul> 
+        </li>
+    </ul>
 </template>
 
 <script setup>
-    import {ref, defineEmits, inject} from '@vue/runtime-core';
+    import {ref, defineEmits, inject, onMounted} from '@vue/runtime-core';
 
     const activetab = ref('capture');
+    const settingscapability = ref(false);
     const mstrings = inject('mstrings');
 
     const emit = defineEmits(['tabchange']);
 
     /**
      * Detect change of tab and emit result to parent
-     * @param {} item 
+     * @param {} item
      */
     function clickTab(item) {
         activetab.value = item;
         emit('tabchange', item);
     }
+
+    /**
+     * Check capability
+     */
+     onMounted(() => {
+        const GU = window.GU;
+        const courseid = GU.courseid;
+        const fetchMany = GU.fetchMany;
+
+        fetchMany([{
+            methodname: 'local_gugrades_has_capability',
+            args: {
+                courseid: courseid,
+                capability: 'local/gugrades:changesettings'
+            }
+        }])[0]
+        .then((result) => {
+            settingscapability.value = result['hascapability'];
+        })
+        .catch((error) => {
+            window.console.log(error);
+            toast.error('Error communicating with server (see console)');
+        });
+
+    });
 </script>

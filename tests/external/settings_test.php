@@ -57,7 +57,7 @@ class settings_test extends externallib_advanced_testcase {
         // Create a course to apply settings to.
         $course = $this->getDataGenerator()->create_course();
 
-        // Add a teacher to the course
+        // Add a teacher to the course.
         $user = $this->getDataGenerator()->create_user();
         $this->getDataGenerator()->enrol_user($user->id, $course->id, 'editingteacher');
         $this->setUser($user);
@@ -108,7 +108,7 @@ class settings_test extends externallib_advanced_testcase {
         // Create a course to apply settings to.
         $course = $this->getDataGenerator()->create_course();
 
-        // Add a teacher to the course
+        // Add a teacher to the course.
         $user = $this->getDataGenerator()->create_user();
         $this->getDataGenerator()->enrol_user($user->id, $course->id, 'student');
         $this->setUser($user);
