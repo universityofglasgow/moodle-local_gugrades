@@ -59,7 +59,7 @@ class get_settings extends \external_api {
         global $DB;
 
         // Security.
-        $params = self::validate_parameters(self::execute_parameters(), [
+        self::validate_parameters(self::execute_parameters(), [
             'courseid' => $courseid,
             'gradeitemid' => $gradeitemid,
         ]);
@@ -67,6 +67,7 @@ class get_settings extends \external_api {
         // More security.
         $context = \context_course::instance($courseid);
         self::validate_context($context);
+        require_capability('local/gugrades:changesettings', $context);
 
         $settings = \local_gugrades\api::get_settings($courseid, $gradeitemid);
 

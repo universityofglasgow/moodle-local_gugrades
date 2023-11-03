@@ -122,6 +122,7 @@ $string['gugrades:exportworksheet'] = 'Export empty worksheet for selected assig
 $string['gugrades:readdashboard'] = 'Read own Dashboard data';
 $string['gugrades:readotheraudit'] = 'Read another user\'s audit trail';
 $string['gugrades:readotherdashboard'] = 'Read another user\'s Dashboard data';
+$string['gugrades:changesettings'] = 'Allowed to see/read/write settings page';
 $string['gugrades:view'] = 'View gugrades tool';
 $string['gugrades:viewhiddennames'] = 'Reveal hidden names';
 

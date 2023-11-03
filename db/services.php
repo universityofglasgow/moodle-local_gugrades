@@ -152,12 +152,14 @@ $functions = [
         'description' => 'Save the settings page.',
         'type' => 'write',
         'ajax' => true,
+        'capabilities' => 'local/gugrades:changesettings',
     ],
     'local_gugrades_get_settings' => [
         'classname' => 'local_gugrades\external\get_settings',
         'description' => 'Get/read the settings page.',
         'type' => 'read',
         'ajax' => true,
+        'capabilities' => 'local/gugrades:changesettings',
     ],
     'local_gugrades_dashboard_get_courses' => [
         'classname' => 'local_gugrades\external\dashboard_get_courses',

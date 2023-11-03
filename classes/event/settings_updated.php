@@ -36,7 +36,7 @@ class settings_updated extends \core\event\base {
     protected function init() {
         $this->data['crud'] = 'c';
         $this->data['edulevel'] = self::LEVEL_TEACHING;
-        $this->data['objecttable'] = 'local_gugrade_config';
+        $this->data['objecttable'] = 'local_gugrades_config';
     }
 
     /**

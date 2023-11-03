@@ -75,6 +75,7 @@ class save_settings extends \external_api {
         // More security.
         $context = \context_course::instance($courseid);
         self::validate_context($context);
+        require_capability('local/gugrades:changesettings', $context);
 
         \local_gugrades\api::save_settings($courseid, $gradeitemid, $settings);
 
