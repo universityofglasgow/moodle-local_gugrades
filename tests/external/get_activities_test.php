@@ -51,7 +51,7 @@ class get_activities_test extends \local_gugrades\external\gugrades_advanced_tes
             $tree
         );
 
-        // $tree['activities'] should be valid JSON.
+        // Array item $tree['activities'] should be valid JSON.
         $this->assertArrayHasKey('activities', $tree);
         $this->assertJson($tree['activities']);
 

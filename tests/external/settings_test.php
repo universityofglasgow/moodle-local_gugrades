@@ -36,7 +36,7 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test(s) for (both) save_settings and get_settings webservices
  */
-class settings_test extends \local_gugrades\external\gugrades_advanced_testcase{
+class settings_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Just check that strings are returned

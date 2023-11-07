@@ -88,11 +88,11 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
         $gradecatsumm = $this->getDataGenerator()->create_grade_category(['courseid' => $course->id, 'fullname' => 'Summative']);
         $gradecatform = $this->getDataGenerator()->create_grade_category(['courseid' => $course->id, 'fullname' => 'Formative']);
 
-        // Add some assignments
+        // Add some assignments.
         $assign1 = $this->getDataGenerator()->create_module('assign', ['course' => $course->id]);
         $assign2 = $this->getDataGenerator()->create_module('assign', ['course' => $course->id]);
 
-        // "Move" the assignments to summative grade category (we only have one course).
+        // Move the assignments to summative grade category (we only have one course).
         $items = $DB->get_records('grade_items', ['courseid' => $course->id, 'itemmodule' => 'assign']);
         foreach ($items as $item) {
             $item->categoryid = $gradecatsumm->id;
