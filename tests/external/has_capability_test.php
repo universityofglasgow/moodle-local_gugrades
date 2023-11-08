@@ -63,7 +63,7 @@ class has_capability_test extends \local_gugrades\external\gugrades_advanced_tes
      */
     public function test_student_has_not_capability() {
 
-        // Log in as student
+        // Log in as student.
         $this->setUser($this->student);
 
         // Check that they do not have local/gugrades:view capability.
