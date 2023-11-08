@@ -126,12 +126,13 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
         // Create a course to apply settings to.
         $course = $this->getDataGenerator()->create_course();
 
-        // Add a scale
-        $scaleitems = 'H:0, G2:1, G1:2, F3:3, F2:4, F1:5, E3:6, E2:7, E1:8, D3:9, D2:10, D1:11, C3:12, C2:13, C1:14, B3:15, B2:16, B1:17, A5:18, A4:19, A3:20, A2:21, A1:22';
+        // Add a scale.
+        $scaleitems = 'H:0, G2:1, G1:2, F3:3, F2:4, F1:5, E3:6, E2:7, E1:8, D3:9, D2:10, D1:11,
+            C3:12, C2:13, C1:14, B3:15, B2:16, B1:17, A5:18, A4:19, A3:20, A2:21, A1:22';
         $scale = $this->getDataGenerator()->create_scale([
             'name' => 'UofG 22 point scale',
             'scale' => $scaleitems,
-            'courseid' => $course->id
+            'courseid' => $course->id,
         ]);
         $this->fill_scalevalue($scaleitems, $scale->id);
 
@@ -153,11 +154,11 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
         $assign1 = $this->getDataGenerator()->create_module('assign', ['course' => $course->id]);
         $assign2 = $this->getDataGenerator()->create_module('assign', ['course' => $course->id]);
 
-        // Get gradeitemids
+        // Get gradeitemids.
         $this->gradeitemidassign1 = $this->get_grade_item('', 'assign', $assign1->id);
         $this->gradeitemidassign2 = $this->get_grade_item('', 'assign', $assign2->id);
 
-        // Modify assignment 2 to use scale
+        // Modify assignment 2 to use scale.
         $gradeitem2 = $DB->get_record('grade_items', ['id' => $this->gradeitemidassign2], '*', MUST_EXIST);
         $gradeitem2->gradetype = GRADE_TYPE_SCALE;
         $gradeitem2->grademax = 23.0;

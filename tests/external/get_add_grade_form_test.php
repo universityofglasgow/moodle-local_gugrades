@@ -45,7 +45,7 @@ class get_add_grade_form_test extends \local_gugrades\external\gugrades_advanced
         global $DB;
 
         // Test ws function.
-        // Check for Assignment2 which uses a scale
+        // Check for Assignment2 which uses a scale.
         $form = get_add_grade_form::execute($this->course->id, $this->gradeitemidassign2, $this->student->id);
         $form = \external_api::clean_returnvalue(
             get_add_grade_form::execute_returns(),
@@ -112,7 +112,7 @@ class get_add_grade_form_test extends \local_gugrades\external\gugrades_advanced
         global $DB;
 
         // Test ws function.
-        // Check for Assignment1 which uses a 100% points
+        // Check for Assignment1 which uses a 100% points.
         $form = get_add_grade_form::execute($this->course->id, $this->gradeitemidassign1, $this->student->id);
         $form = \external_api::clean_returnvalue(
             get_add_grade_form::execute_returns(),
