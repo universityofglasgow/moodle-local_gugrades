@@ -29,10 +29,13 @@
 
 <script setup>
     import {ref, defineEmits, inject, onMounted} from '@vue/runtime-core';
+    import { useToast } from "vue-toastification";
 
     const activetab = ref('capture');
     const settingscapability = ref(false);
     const mstrings = inject('mstrings');
+
+    const toast = useToast();
 
     const emit = defineEmits(['tabchange']);
 

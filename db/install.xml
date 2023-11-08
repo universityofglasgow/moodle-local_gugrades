@@ -45,7 +45,7 @@
         <FIELD NAME="gradeitemid" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false" COMMENT="Link to grade_items.id"/>
         <FIELD NAME="userid" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false" COMMENT="Link to user.id"/>
         <FIELD NAME="rawgrade" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5" COMMENT="Point value or scale index as read from core Moodle"/>
-        <FIELD NAME="convertedgrade" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="(Typically) 22 point scale, 0 - 22. Once the grade is converted."/>
+        <FIELD NAME="convertedgrade" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5" COMMENT="(Typically) 22 point scale, 0 - 22. Once the grade is converted."/>
         <FIELD NAME="admingrade" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="displaygrade" TYPE="char" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Grade to display (numeric or scale)"/>
         <FIELD NAME="weightedgrade" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5" COMMENT="Grade after any weighting applied"/>

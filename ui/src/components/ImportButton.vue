@@ -41,14 +41,14 @@
      function importgrades() {
         const GU = window.GU;
         const courseid = GU.courseid;
-        const fetchMany = GU.fetchMany; 
-        
+        const fetchMany = GU.fetchMany;
+
         fetchMany([{
             methodname: 'local_gugrades_import_grades_users',
             args: {
                 courseid: courseid,
                 gradeitemid: props.itemid,
-                userlist: props.userids.toString(),
+                userlist: props.userids,
             }
         }])[0]
         .then(() => {
@@ -62,7 +62,7 @@
         showimportmodal.value = false;
     }
 
-    /** 
+    /**
      * Check for existing grades
      */
     onMounted(() => {

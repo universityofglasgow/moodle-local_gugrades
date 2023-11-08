@@ -1,0 +1,83 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Test import_grades_users web service
+ * @package    local_gugrades
+ * @copyright  2023
+ * @author     Howard Miller
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+namespace local_gugrades\external;
+
+defined('MOODLE_INTERNAL') || die();
+
+global $CFG;
+
+require_once($CFG->dirroot . '/webservice/tests/helpers.php');
+require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_testcase.php');
+
+/**
+ * Test import_grades_users web service.
+ */
+class import_grades_users_test extends \local_gugrades\external\gugrades_advanced_testcase {
+
+    /**
+     * Import first grades.
+     *
+     * @covers \local_gugrades\external\import_grades_users::execute
+     */
+    public function test_categories_returned() {
+        global $DB;
+
+        $userlist = [
+            $this->student->id,
+            $this->student2->id,
+        ];
+
+        // Assign2 (which is useing scale).
+        $status = import_grades_users::execute($this->course->id, $this->gradeitemidassign2, $userlist);
+        $status = \external_api::clean_returnvalue(
+            import_grades_users::execute_returns(),
+            $status
+        );
+
+        $grades = array_values($DB->get_records('local_gugrades_grade'));
+        $this->assertCount(2, $grades);
+        $this->assertEquals('A3:20', $grades[0]->displaygrade);
+        $this->assertEquals('D1:11', $grades[1]->displaygrade);
+        $this->assertEquals(20, $grades[0]->convertedgrade);
+        $this->assertEquals(11, $grades[1]->convertedgrade);
+
+        // Assign1 (which is useing points).
+        $status = import_grades_users::execute($this->course->id, $this->gradeitemidassign1, $userlist);
+        $status = \external_api::clean_returnvalue(
+            import_grades_users::execute_returns(),
+            $status
+        );
+
+        $grades = array_values($DB->get_records('local_gugrades_grade'));
+        var_dump($grades);
+        /*
+        $this->assertCount(2, $grades);
+        $this->assertEquals('A3:20', $grades[0]->displaygrade);
+        $this->assertEquals('D1:11', $grades[1]->displaygrade);
+        $this->assertEquals(20, $grades[0]->convertedgrade);
+        $this->assertEquals(11, $grades[1]->convertedgrade);
+        */
+    }
+}
