@@ -357,6 +357,9 @@ class api {
 
         // Gradeitem.
         list($itemtype, $gradeitem) = \local_gugrades\grades::analyse_gradeitem($gradeitemid);
+        if ($gradeitem == false) {
+            throw new \moodle_exception('Unsupported grade item encountered in get_add_grade_form. Gradeitemid = ' . $gradeitemid);
+        }
         $grademax = ($gradeitem->gradetype == GRADE_TYPE_VALUE) ? $gradeitem->grademax : 0;
 
         // Scale.

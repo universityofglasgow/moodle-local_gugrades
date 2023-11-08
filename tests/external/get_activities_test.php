@@ -32,7 +32,7 @@ require_once($CFG->dirroot . '/webservice/tests/helpers.php');
 require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_testcase.php');
 
 /**
- * Test(s) for (both) save_settings and get_settings webservices
+ * Test get_activities web service.
  */
 class get_activities_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
