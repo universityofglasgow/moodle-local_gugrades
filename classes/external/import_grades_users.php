@@ -24,6 +24,7 @@
 
 namespace local_gugrades\external;
 
+use block_gu_spdetails\external;
 use external_function_parameters;
 use external_multiple_structure;
 use external_single_structure;
@@ -46,7 +47,10 @@ class import_grades_users extends \external_api {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
             'gradeitemid' => new external_value(PARAM_INT, 'Grade item id number'),
-            'userlist' => new external_value(PARAM_TEXT, 'Comma separated list of userids'),
+            //'userlist' => new external_value(PARAM_TEXT, 'Comma separated list of userids'),
+            'userlist' => new external_multiple_structure(
+                new external_value(PARAM_INT)
+            ),
         ]);
     }
 
@@ -54,10 +58,10 @@ class import_grades_users extends \external_api {
      * Execute function
      * @param int $courseid
      * @param int $gradeitemid
-     * @param string $userlist
+     * @param array $userlist
      * @return array
      */
-    public static function execute(int $courseid, int $gradeitemid, string $userlist) {
+    public static function execute(int $courseid, int $gradeitemid, array $userlist) {
 
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
@@ -71,7 +75,7 @@ class import_grades_users extends \external_api {
         // Get conversion object for whatever grade type this is.
         $conversion = \local_gugrades\grades::conversion_factory($courseid, $gradeitemid);
 
-        $userids = explode(',', $userlist);
+        $userids = $userlist;
         foreach ($userids as $userid) {
             \local_gugrades\api::import_grade($courseid, $gradeitemid, $conversion, intval($userid));
         }

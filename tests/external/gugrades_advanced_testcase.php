@@ -63,6 +63,11 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
     protected $student;
 
     /**
+     * @var object $student
+     */
+    protected $student2;
+
+    /**
      * @var int $gradeitemidassign1
      */
     protected int $gradeitemidassign1;
@@ -115,6 +120,37 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
     }
 
     /**
+     * Add assignment grade
+     * @param int $assignid
+     * @param int $studentid
+     * @param float $gradeval
+     */
+    protected function add_assignment_grade(int $assignid, int $studentid, float $gradeval) {
+        global $USER, $DB;
+
+        $submission = new \stdClass();
+        $submission->assignment = $assignid;
+        $submission->userid = $studentid;
+        $submission->status = ASSIGN_SUBMISSION_STATUS_SUBMITTED;
+        $submission->latest = 0;
+        $submission->attemptnumber = 0;
+        $submission->groupid = 0;
+        $submission->timecreated = time();
+        $submission->timemodified = time();
+        $DB->insert_record('assign_submission', $submission);
+
+        $grade = new \stdClass();
+        $grade->assignment = $assignid;
+        $grade->userid = $studentid;
+        $grade->timecreated = time();
+        $grade->timemodified = time();
+        $grade->grader = $USER->id;
+        $grade->grade = $gradeval;
+        $grade->attemptnumber = 0;
+        $DB->insert_record('assign_grades', $grade);
+    }
+
+    /**
      * Called before every test
      */
     protected function setUp(): void {
@@ -142,9 +178,11 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
         $this->getDataGenerator()->enrol_user($teacher->id, $course->id, 'editingteacher');
         $this->setUser($teacher);
 
-        // Add a student to the course.
+        // Add some students to the course.
         $student = $this->getDataGenerator()->create_user();
         $this->getDataGenerator()->enrol_user($student->id, $course->id, 'student');
+        $student2 = $this->getDataGenerator()->create_user();
+        $this->getDataGenerator()->enrol_user($student2->id, $course->id, 'student');
 
         // Add grade categories.
         $gradecatsumm = $this->getDataGenerator()->create_grade_category(['courseid' => $course->id, 'fullname' => 'Summative']);
@@ -166,6 +204,12 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
         $gradeitem2->scaleid = $scale->id;
         $DB->update_record('grade_items', $gradeitem2);
 
+        // Add assignment grades
+        $this->add_assignment_grade($assign1->id, $student->id, 95.5);
+        $this->add_assignment_grade($assign1->id, $student2->id, 33);
+        $this->add_assignment_grade($assign2->id, $student->id, 21);
+        $this->add_assignment_grade($assign2->id, $student2->id, 11);
+
         // Move the assignments to summative grade category (we only have one course).
         $items = $DB->get_records('grade_items', ['courseid' => $course->id, 'itemmodule' => 'assign']);
         foreach ($items as $item) {
@@ -176,6 +220,7 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
         $this->course = $course;
         $this->teacher = $teacher;
         $this->student = $student;
+        $this->student2 = $student2;
         $this->gradecatsumm = $gradecatsumm;
         $this->gradecatform = $gradecatform;
     }

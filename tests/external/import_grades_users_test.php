@@ -56,12 +56,14 @@ class import_grades_users_test extends \local_gugrades\external\gugrades_advance
             $status
         );
 
-        $grades = array_values($DB->get_records('local_gugrades_grade'));
+        $grades = array_values($DB->get_records('local_gugrades_grade', [
+            'gradeitemid' => $this->gradeitemidassign2,
+        ]));
         $this->assertCount(2, $grades);
         $this->assertEquals('A3:20', $grades[0]->displaygrade);
-        $this->assertEquals('D1:11', $grades[1]->displaygrade);
+        $this->assertEquals('D2:10', $grades[1]->displaygrade);
         $this->assertEquals(20, $grades[0]->convertedgrade);
-        $this->assertEquals(11, $grades[1]->convertedgrade);
+        $this->assertEquals(10, $grades[1]->convertedgrade);
 
         // Assign1 (which is useing points).
         $status = import_grades_users::execute($this->course->id, $this->gradeitemidassign1, $userlist);
@@ -70,14 +72,14 @@ class import_grades_users_test extends \local_gugrades\external\gugrades_advance
             $status
         );
 
-        $grades = array_values($DB->get_records('local_gugrades_grade'));
-        var_dump($grades);
-        /*
+        $grades = array_values($DB->get_records('local_gugrades_grade', [
+            'gradeitemid' => $this->gradeitemidassign1,
+        ]));
+        //var_dump($grades);
         $this->assertCount(2, $grades);
-        $this->assertEquals('A3:20', $grades[0]->displaygrade);
-        $this->assertEquals('D1:11', $grades[1]->displaygrade);
-        $this->assertEquals(20, $grades[0]->convertedgrade);
-        $this->assertEquals(11, $grades[1]->convertedgrade);
-        */
+        $this->assertEquals(95.5, $grades[0]->displaygrade);
+        $this->assertEquals(33, $grades[1]->displaygrade);
+        $this->assertEquals(95.5, $grades[0]->convertedgrade);
+        $this->assertEquals(33, $grades[1]->convertedgrade);
     }
 }
