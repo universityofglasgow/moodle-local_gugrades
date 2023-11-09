@@ -204,7 +204,7 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
         $gradeitem2->scaleid = $scale->id;
         $DB->update_record('grade_items', $gradeitem2);
 
-        // Add assignment grades
+        // Add assignment grades.
         $this->add_assignment_grade($assign1->id, $student->id, 95.5);
         $this->add_assignment_grade($assign1->id, $student2->id, 33);
         $this->add_assignment_grade($assign2->id, $student->id, 21);

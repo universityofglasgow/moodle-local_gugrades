@@ -47,7 +47,6 @@ class import_grades_users extends \external_api {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
             'gradeitemid' => new external_value(PARAM_INT, 'Grade item id number'),
-            //'userlist' => new external_value(PARAM_TEXT, 'Comma separated list of userids'),
             'userlist' => new external_multiple_structure(
                 new external_value(PARAM_INT)
             ),

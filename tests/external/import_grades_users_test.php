@@ -75,7 +75,6 @@ class import_grades_users_test extends \local_gugrades\external\gugrades_advance
         $grades = array_values($DB->get_records('local_gugrades_grade', [
             'gradeitemid' => $this->gradeitemidassign1,
         ]));
-        //var_dump($grades);
         $this->assertCount(2, $grades);
         $this->assertEquals(95.5, $grades[0]->displaygrade);
         $this->assertEquals(33, $grades[1]->displaygrade);
