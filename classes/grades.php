@@ -197,7 +197,7 @@ class grades {
      * @param int $userid
      * @param string $admingrade
      * @param float $rawgrade
-     * @param int $convertedgrade
+     * @param float $convertedgrade
      * @param string $displaygrade
      * @param float $weightedgrade
      * @param string $gradetype
@@ -211,7 +211,7 @@ class grades {
         int $userid,
         string $admingrade,
         float $rawgrade,
-        int $convertedgrade,
+        float $convertedgrade,
         string $displaygrade,
         float $weightedgrade,
         string $gradetype,
