@@ -41,7 +41,7 @@ $PAGE->requires->js('/local/gugrades/ui/dist/js/app.js');
 $course = $DB->get_record('course', ['id' => $courseid], '*', MUST_EXIST);
 require_login($course);
 $context = context_course::instance($courseid);
-require_capability('local/gugcat:view', $context);
+require_capability('local/gugrades:view', $context);
 
 // Log.
 $event = \local_gugrades\event\view_gugrades::create([
