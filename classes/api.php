@@ -349,7 +349,7 @@ class api {
         global $DB;
 
         // Get gradetype.
-        $gradetypes = \local_gugrades\gradetype::get_menu();
+        $gradetypes = \local_gugrades\gradetype::get_menu($gradeitemid);
         $wsgradetypes = self::formkit_menu($gradetypes);
 
         // Username.
@@ -579,7 +579,7 @@ class api {
                 JOIN {customfield_field} cf ON cf.id = cd.fieldid
                 WHERE cd.instanceid = :courseid
                 AND cd.intvalue = 1
-                AND $sqlshortname = 'showonstudentdashboard'";
+                AND $sqlshortname = 'show_on_studentdashboard'";
             if ($DB->record_exists_sql($sql, ['courseid' => $id])) {
 
                 // TODO: does this need any capability checks?
