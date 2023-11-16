@@ -137,7 +137,6 @@
                 value: 'GRADE',
                 label: mstrings.selectnormalgrade,
             });
-            window.console.log(adminmenu.value);
 
             gradevalidation.value = [
                 ['required'],
