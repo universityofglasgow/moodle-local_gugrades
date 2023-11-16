@@ -68,13 +68,22 @@ class gradetype {
 
     /**
      * Get gradetypes for menu
+     * @param int $gradeitemid
      * @return array
      */
-    public static function get_menu() {
+    public static function get_menu(int $gradeitemid) {
+        global $DB;
+
         $gradetypes = self::define();
 
         // The menu doesn't include FIRST grades.
         unset($gradetypes['FIRST']);
+
+        // Add 'other' gradetypes by name.
+        $others = $DB->get_records('local_gugrades_column', ['gradeitemid' => $gradeitemid, 'gradetype' => 'OTHER']);
+        foreach ($others as $other) {
+            $gradetypes['OTHER_' . $other->id] = $other->other;
+        }
 
         return $gradetypes;
     }

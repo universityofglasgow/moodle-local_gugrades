@@ -411,6 +411,8 @@ class api {
         string $notes
         ) {
 
+        global $DB;
+
         // Conversion class.
         $conversion = \local_gugrades\grades::conversion_factory($courseid, $gradeitemid);
 
@@ -421,6 +423,16 @@ class api {
         $gradetypes = $form['rawgradetypes'];
         if (!array_key_exists($reason, $gradetypes)) {
             throw new \moodle_exception('Attempting to write invalid reason - "' . $reason . '"');
+        }
+
+        // If reason looks like OTHER_XX then it's an extant other type. XX is the ID
+        // in local_gugrades_column. So...
+        if (str_contains($reason, 'OTHER_')) {
+            $parts = explode('_', $reason);
+            $reason = 'OTHER';
+            $columnid = $parts[1];
+            $column = $DB->get_record('local_gugrades_column', ['id' => $columnid], '*', MUST_EXIST);
+            $other = $column->other;
         }
 
         // Check 'other' is valid.
