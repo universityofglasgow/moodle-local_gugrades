@@ -7,10 +7,12 @@
                 <h4>{{ mstrings.importgrades }}</h4>
             </template>
             <template #body>
+                <div class="alert alert-info">
+                    {{  mstrings.importinfo }}
+                </div>
                 <div v-if="is_importgrades" class="alert alert-danger">
                     {{ mstrings.gradesimported }}
                 </div>
-                <FormKit type="text"></FormKit>
                 <p><button class="btn btn-primary" @click="importgrades">Import</button></p>
             </template>
         </ModalForm>

@@ -73,6 +73,7 @@ $string['idnumber'] = 'ID number';
 $string['import'] = 'Import';
 $string['importgrades'] = 'Import grades';
 $string['importgradesusers'] = 'Importing grades for userlist for grade item \'{$a}\'';
+$string['importinfo'] = 'Grades will be imported from selected actvity';
 $string['itemname'] = 'Item name';
 $string['lastmodifiedgrade'] = 'Last modified (grade)';
 $string['lastname'] = 'Last name';
