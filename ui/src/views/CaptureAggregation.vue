@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1><MString name="captureaggregation"></MString></h1>
+        <img class="mb-1" alt="MyGrade logo" src="@/assets/MyGrade.png">
 
         <TabsNav @tabchange="tabChange"></TabsNav>
 
@@ -30,7 +30,6 @@
 
 <script setup>
     import {ref} from '@vue/runtime-core';
-    import MString from '@/components/MString.vue';
     import LevelOneSelect from '@/components/LevelOneSelect.vue';
     import TabsNav from '@/components/TabsNav.vue';
     import ActivitySelect from '@/components/ActivitySelect.vue';
@@ -45,7 +44,7 @@
 
     /**
      * Capture change to top level category dropdown
-     * @param {*} level 
+     * @param {*} level
      */
     function levelOneChange(level) {
         itemid.value = 0;
@@ -66,7 +65,7 @@
 
     /**
      * Capture change to capture/aggregate tab
-     * @param {*} tab 
+     * @param {*} tab
      */
     function tabChange(tab) {
         currenttab.value = tab;
