@@ -349,7 +349,7 @@ class api {
         global $DB;
 
         // Get gradetype.
-        $gradetypes = \local_gugrades\gradetype::get_menu($gradeitemid);
+        $gradetypes = \local_gugrades\gradetype::get_menu($gradeitemid, LOCAL_GUGRADES_FORMENU);
         $wsgradetypes = self::formkit_menu($gradetypes);
 
         // Username.

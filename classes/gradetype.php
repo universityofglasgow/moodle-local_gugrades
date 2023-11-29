@@ -29,6 +29,9 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/grade/lib.php');
 
+define('LOCAL_GUGRADES_FORMENU', true);
+define('LOCAL_GUGRADES_NOTFORMENU', false);
+
 /**
  * Handles custom gradetypes all in one place
  */
@@ -36,8 +39,11 @@ class gradetype {
 
     /**
      * Define the different types of grade
+     * @param bool $menu - return truncated list for menu
      */
-    private static function define() {
+    private static function define(bool $menu = LOCAL_GUGRADES_NOTFORMENU) {
+
+        // Complete list of types.
         $gradetypes = [
             'FIRST' => get_string('gradetypefirst', 'local_gugrades'),
             'SECOND' => get_string('gradetypesecond', 'local_gugrades'),
@@ -52,6 +58,20 @@ class gradetype {
             'PROVISIONAL' => get_string('provisional', 'local_gugrades'),
             'RELEASED' => get_string('released', 'local_gugrades'),
         ];
+
+        // Types that should not be shown in a selection menu
+        $excludefrommenu = [
+            'PROVISIONAL',
+            'RELEASED',
+        ];
+
+        if ($menu) {
+            foreach ($excludefrommenu as $exclude) {
+                if (array_key_exists($exclude, $gradetypes)) {
+                    unset($gradetypes[$exclude]);
+                }
+            }
+        }
 
         return $gradetypes;
     }
@@ -69,12 +89,13 @@ class gradetype {
     /**
      * Get gradetypes for menu
      * @param int $gradeitemid
+     * @param bool $menu - return truncated list for menu
      * @return array
      */
-    public static function get_menu(int $gradeitemid) {
+    public static function get_menu(int $gradeitemid, bool $menu = LOCAL_GUGRADES_NOTFORMENU) {
         global $DB;
 
-        $gradetypes = self::define();
+        $gradetypes = self::define($menu);
 
         // The menu doesn't include FIRST grades.
         unset($gradetypes['FIRST']);
