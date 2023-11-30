@@ -114,6 +114,7 @@ class gradetype {
      * Order is as defined in the array in this class
      * Columns is an array of objects with the field 'gradetype'
      * NOTE: This means that anything not in the 'approved' array is filtered out.
+     * ALSO NOTE: There can be multiple 'other' columns, which makes it interesting.
      * @param array $columns
      * @return array
      */
@@ -121,15 +122,27 @@ class gradetype {
         $gradetypes = self::define();
 
         // Re-index columns by gradetype.
+        // Other columns handled separately
         $gtcolumns = [];
+        $othercolumns = [];
         foreach ($columns as $column) {
-            $gtcolumns[$column->gradetype] = $column;
+            if ($column->gradetype == 'OTHER') {
+                $othercolumns[] = $column;
+            } else {
+                $gtcolumns[$column->gradetype] = $column;
+            }
         }
 
         // Sort into order of gradetypes.
         $sortedcolumns = [];
         foreach ($gradetypes as $gradetype => $description) {
-            if (array_key_exists($gradetype, $gtcolumns)) {
+
+            // There can be multiple 'other' columns.
+            if ($gradetype == 'OTHER') {
+                foreach ($othercolumns as $column) {
+                    $sortedcolumns[] = $column;
+                }
+            } else if (array_key_exists($gradetype, $gtcolumns)) {
                 $sortedcolumns[] = $gtcolumns[$gradetype];
             }
         }
