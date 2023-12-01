@@ -30,5 +30,7 @@ tests to use. Including...
 
 ## Test descriptions
 
-[get_activities_test](../tests/external/get_activities_test.php)
-: Tests the get_activities web service.
+<dl>
+    <dt>[get_activities_test](../tests/external/get_activities_test.php)</dt>
+    <dd>Tests the get_activities web service.</dd>
+</dl>
