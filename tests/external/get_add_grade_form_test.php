@@ -58,7 +58,7 @@ class get_add_grade_form_test extends \local_gugrades\external\gugrades_advanced
         // Check gradetypes.
         $this->assertArrayHasKey('gradetypes', $form);
         $gradetypes = $form['gradetypes'];
-        $this->assertCount(11, $gradetypes);
+        $this->assertCount(9, $gradetypes);
         $this->assertEquals('SECOND', $gradetypes[0]['value']);
         $this->assertEquals('2nd grade', $gradetypes[0]['label']);
         $this->assertEquals('LATE', $gradetypes[4]['value']);
@@ -125,7 +125,7 @@ class get_add_grade_form_test extends \local_gugrades\external\gugrades_advanced
         // Check gradetypes.
         $this->assertArrayHasKey('gradetypes', $form);
         $gradetypes = $form['gradetypes'];
-        $this->assertCount(11, $gradetypes);
+        $this->assertCount(9, $gradetypes);
         $this->assertEquals('SECOND', $gradetypes[0]['value']);
         $this->assertEquals('2nd grade', $gradetypes[0]['label']);
         $this->assertEquals('LATE', $gradetypes[4]['value']);
@@ -164,5 +164,51 @@ class get_add_grade_form_test extends \local_gugrades\external\gugrades_advanced
         $this->assertEquals('UNS - Unsatisfactory', $adminmenu[0]['label']);
         $this->assertEquals('CR', $adminmenu[10]['value']);
         $this->assertEquals('CR - Credit refused', $adminmenu[10]['label']);
+    }
+
+    /**
+     * Specific check that multiple 'other' grades are returned
+     * properly in the 'gradetypes' field
+     * @covers \local_gugrades\external\get_add_grade_form::execute
+     */
+    public function test_gradetypes_multiple_others() {
+        global $DB;
+
+        // Insert 'other' gradetype data
+        $courseid = $this->course->id;
+        $gradeitemid = $this->gradeitemidassign1;
+
+        $other1 = (object)[
+            'courseid' => $courseid,
+            'gradeitemid' => $gradeitemid,
+            'gradetype' => 'OTHER',
+            'other' => 'Other Variation One',
+        ];
+        $id1 = $DB->insert_record('local_gugrades_column', $other1);
+
+        $other2 = (object)[
+            'courseid' => $courseid,
+            'gradeitemid' => $gradeitemid,
+            'gradetype' => 'OTHER',
+            'other' => 'Other Variation Two',
+        ];
+        $id2 = $DB->insert_record('local_gugrades_column', $other2);
+
+        // Test ws function.
+        $form = get_add_grade_form::execute($courseid, $gradeitemid, $this->student->id);
+        $form = \external_api::clean_returnvalue(
+            get_add_grade_form::execute_returns(),
+            $form
+        );
+
+        // Check gradetypes.
+        $this->assertArrayHasKey('gradetypes', $form);
+        $gradetypes = $form['gradetypes'];
+        $this->assertCount(11, $gradetypes);
+
+        $this->assertEquals('OTHER_' . $id1, $gradetypes[9]['value']);
+        $this->assertEquals('Other Variation One', $gradetypes[9]['label']);
+        $this->assertEquals('OTHER_' . $id2, $gradetypes[10]['value']);
+        $this->assertEquals('Other Variation Two', $gradetypes[10]['label']);
     }
 }
