@@ -151,6 +151,28 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
     }
 
     /**
+     * Enable/disable dashboard for MyGrades
+     * @param int $courseid
+     * @param bool $enable
+     */
+    protected function enable_dashboard(int $courseid, bool $enable) {
+        global $DB;
+
+        $value = $enable ? 1 : 0;
+        if ($config = $DB->get_record('local_gugrades_config', ['courseid' => $courseid, 'name' => 'enabledashboard'])) {
+            $config->value = $value;
+            $DB->update_record('local_gugrades_config', $config);
+        } else {
+            $config = new \stdClass();
+            $config->courseid = $courseid;
+            $config->gradeitemid = 0;
+            $config->name = 'enabledashboard';
+            $config->value = $value;
+            $DB->insert_record('local_gugrades_config', $config);
+        }
+    }
+
+    /**
      * Called before every test
      */
     protected function setUp(): void {

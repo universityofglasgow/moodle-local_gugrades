@@ -45,23 +45,31 @@ class dashboard_get_courses extends \external_api {
     public static function execute_parameters() {
         return new external_function_parameters([
             'userid' => new external_value(PARAM_INT, 'User to fetch courses for'),
+            'current' => new external_value(PARAM_BOOL, 'Return only current courses'),
+            'past' => new external_value(PARAM_BOOL, 'Return only past courses'),
         ]);
     }
 
     /**
      * Execute function
      * @param int $userid
+     * @param bool $current
+     * @param bool $past
      * @return array
      */
-    public static function execute($userid) {
+    public static function execute($userid, $current, $past) {
 
         // Security.
-        $params = self::validate_parameters(self::execute_parameters(), ['userid' => $userid]);
+        $params = self::validate_parameters(self::execute_parameters(), [
+            'userid' => $userid,
+            'current' => $current,
+            'past' => $past,
+        ]);
 
         $context = \context_system::instance();
         self::validate_context($context);
 
-        return \local_gugrades\api::dashboard_get_courses($userid);
+        return \local_gugrades\api::dashboard_get_courses($userid, $current, $past);
     }
 
     /**

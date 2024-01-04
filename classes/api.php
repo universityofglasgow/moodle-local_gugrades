@@ -540,10 +540,12 @@ class api {
     /**
      * Get list of user's courses
      * (and first level categories)
-     * @param int $userid
+     * @param int $userid UserID of student
+     * @param bool $current Return only current courses
+     * @param bool $past Return only past courses
      * @return array
      */
-    public static function dashboard_get_courses(int $userid) {
+    public static function dashboard_get_courses(int $userid, bool $current, bool $past) {
         global $DB, $USER;
 
         // If this isn't current user, do they have the rights to look at other users.
@@ -559,6 +561,27 @@ class api {
         // and also add TL grade category data.
         foreach ($courses as $id => $course) {
             $context = \context_course::instance($id);
+
+            // Current/past cutoff is enddate + 30 days
+            $cutoffdate = $course->enddate + (86400 * 30);
+
+            // If current selected only return 'current' courses
+            // enddate == 0 is taken to be current, regardless.
+            if ($current) {
+                if ($course->enddate && ($cutoffdate <= time())) {
+                    unset($courses[$id]);
+                    continue;
+                }
+            }
+            
+            // If past is selected only return past courses
+            // enddate == 0 is taken to be NOT past, regardless.
+            if ($past) {
+                if (!$course->enddate || (time() < $cutoffdate)) {
+                    unset($courses[$id]);
+                    continue;
+                }
+            }
 
             // These always need to exist for the webservice checks.
             $course->gugradesenabled = false;

@@ -56,11 +56,12 @@ The current web service functions are as follows:
 
 | API Function         | Description
 |----------------------|---------------------------------------------------------------------------- |
+| [dashboard_get_courses](../classes/external/dashboard_get_courses.php) | Given a userid, the active courses for that user are returned. The data can be filtered by 'current' or 'past' courses. An array of basic course data is returned. This includes whether GCAT, MyGrades or neither are enabled for each course. |
 | [get_activities](../classes/external/get_activities.php) | Given the course id a tree-structured list of activities (organised by grade category structure) is returned. This is primarily used to structure selection UI to select current, active grade item. |
 | [get_audit](../classes/external/get_audit.php) | Returns audit trail for given userid |
 | [get_capture_page](../classes/external/get_capture_page.php)| Given the ID of the selected activity this returns all the data needed to display the current table of the grade capture page. This includes all the students who can access the selected activity. |
 | [get_grade_item](../classes/external/get_grade_item.php)| Returns full details of the selected grad item. |
-| [get_history] | (../classes/external/get_history.php) | Given a gradeitem and userid, the list of updates to that grade (for display as grade history) |
+| [get_history](../classes/external/get_history.php) | Given a gradeitem and userid, the list of updates to that grade (for display as grade history) |
 | [get_levelonecategories](../classes/external/get_levelonecategories.php) | Lists the top level grade categories for the initial selection (e.g. Summative / Formative) |
 | [get_user_grades](../classes/external/get_user_grades.php) | Returns all the grades for a given user id - site wide |
 | [get_user_picture_url](../classes/external/get_user_picture_url.php) | Return URL of user avatar/image |
