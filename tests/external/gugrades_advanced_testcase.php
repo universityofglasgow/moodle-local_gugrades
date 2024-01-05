@@ -182,15 +182,15 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
 
         // Custom field category
         if (!$customfieldcategory = $DB->get_record('customfield_category', ['name' => 'GCAT Options'])) {
-           $customfieldcategory = new \stdClass();
-           $customfieldcategory->name = 'GCAT Options';
-           $customfieldcategory->component = 'core_course';
-           $customfieldcategory->area = 'course';
-           $customfieldcategory->timecreated = time();
-           $customfieldcategory->timemodified = time();
-           $customfieldcategoryid = $DB->insert_record('customfield_category', $customfieldcategory);
+            $customfieldcategory = new \stdClass();
+            $customfieldcategory->name = 'GCAT Options';
+            $customfieldcategory->component = 'core_course';
+            $customfieldcategory->area = 'course';
+            $customfieldcategory->timecreated = time();
+            $customfieldcategory->timemodified = time();
+            $customfieldcategoryid = $DB->insert_record('customfield_category', $customfieldcategory);
         } else {
-           $customfieldcategoryid = $customfieldcategory->id;
+            $customfieldcategoryid = $customfieldcategory->id;
         }
 
         // Create/Get custom field field id.
@@ -199,13 +199,13 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
             $category = \core_customfield\category_controller::create($customfieldcategoryid);
             $field = \core_customfield\field_controller::create(0, (object)[
                 'type' => 'checkbox',
-                'configdata' => $configdata
+                'configdata' => $configdata,
             ], $category);
 
             $handler = $field->get_handler();
             $handler->save_field_configuration($field, (object)[
-                'name' => get_string('showassessment', 'local_gugcat'),
-                'shortname' => get_string('showonstudentdashboard', 'local_gugcat')
+                'name' => 'Show assessments on Student Dashboard',
+                'shortname' => 'show_on_studentdashboard',
             ]);
             $fieldid = $field->get('id');
         } else {

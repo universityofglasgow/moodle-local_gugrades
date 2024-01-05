@@ -45,7 +45,7 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
     public function test_filter_courses_by_date() {
         global $DB;
 
-        // We're the test student
+        // We're the test student.
         $this->setUser($this->student->id);
 
         // Create some courses with suitable end dates.
@@ -63,7 +63,7 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
             'enddate' => time() + 86400,
         ]);
 
-        // Create courses with end date in the 'past'
+        // Create courses with end date in the 'past'.
         $pastcourse1 = $this->getDataGenerator()->create_course([
             'fullname' => 'Past Course One',
             'startdate' => time() - (2 * $oneyear),
@@ -75,11 +75,11 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
             'enddate' => time() - (30 * 86400), // Last possible day!
         ]);
 
-        // Enable gugrades in some of the courses
+        // Enable gugrades in some of the courses.
         $this->enable_dashboard($currentcourse1->id, true);
         $this->enable_dashboard($pastcourse2->id, true);
 
-        // Enable GUGCAT in some of the courses
+        // Enable GUGCAT in some of the courses.
         $this->enable_gugcat_dashboard($currentcourse1->id, true);
         $this->enable_gugcat_dashboard($pastcourse1->id, true);
 
@@ -91,7 +91,7 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
         $this->getDataGenerator()->enrol_user($studentid, $pastcourse1->id);
         $this->getDataGenerator()->enrol_user($studentid, $pastcourse2->id);
 
-        // Check that all courses are returned if no past/current
+        // Check that all courses are returned if no past/current.
         $courses = dashboard_get_courses::execute($studentid, false, false);
         $courses = \external_api::clean_returnvalue(
             dashboard_get_courses::execute_returns(),
@@ -100,7 +100,7 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
         $this->assertIsArray($courses);
         $this->assertCount(5, $courses);
 
-        // Check GUGCAT enabled
+        // Check GUGCAT enabled.
         $this->assertTrue($courses[1]['gcatenabled']);
         $this->assertTrue($courses[3]['gcatenabled']);
 
@@ -115,7 +115,7 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
         $this->assertCount(3, $courses);
         $this->assertEquals('Current Course Two', $courses[0]['fullname']);
 
-        // Get only 'past' courses
+        // Get only 'past' courses.
         $courses = dashboard_get_courses::execute($studentid, false, true);
         $courses = \external_api::clean_returnvalue(
             dashboard_get_courses::execute_returns(),

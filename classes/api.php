@@ -562,7 +562,7 @@ class api {
         foreach ($courses as $id => $course) {
             $context = \context_course::instance($id);
 
-            // Current/past cutoff is enddate + 30 days
+            // Current/past cutoff is enddate + 30 days.
             $cutoffdate = $course->enddate + (86400 * 30);
 
             // If current selected only return 'current' courses
@@ -573,7 +573,7 @@ class api {
                     continue;
                 }
             }
-            
+
             // If past is selected only return past courses
             // enddate == 0 is taken to be NOT past, regardless.
             if ($past) {

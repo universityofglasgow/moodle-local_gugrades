@@ -59,7 +59,7 @@ class gradetype {
             'RELEASED' => get_string('released', 'local_gugrades'),
         ];
 
-        // Types that should not be shown in a selection menu
+        // Types that should not be shown in a selection menu.
         $excludefrommenu = [
             'PROVISIONAL',
             'RELEASED',
@@ -122,7 +122,7 @@ class gradetype {
         $gradetypes = self::define();
 
         // Re-index columns by gradetype.
-        // Other columns handled separately
+        // Other columns handled separately.
         $gtcolumns = [];
         $othercolumns = [];
         foreach ($columns as $column) {

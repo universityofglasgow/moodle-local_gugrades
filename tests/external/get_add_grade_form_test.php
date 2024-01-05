@@ -174,7 +174,7 @@ class get_add_grade_form_test extends \local_gugrades\external\gugrades_advanced
     public function test_gradetypes_multiple_others() {
         global $DB;
 
-        // Insert 'other' gradetype data
+        // Insert 'other' gradetype data.
         $courseid = $this->course->id;
         $gradeitemid = $this->gradeitemidassign1;
 
