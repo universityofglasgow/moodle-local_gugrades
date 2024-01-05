@@ -543,9 +543,10 @@ class api {
      * @param int $userid UserID of student
      * @param bool $current Return only current courses
      * @param bool $past Return only past courses
+     * @param string $sort Comma separated list of fields to sort by
      * @return array
      */
-    public static function dashboard_get_courses(int $userid, bool $current, bool $past) {
+    public static function dashboard_get_courses(int $userid, bool $current, bool $past, string $sort) {
         global $DB, $USER;
 
         // If this isn't current user, do they have the rights to look at other users.
@@ -555,7 +556,10 @@ class api {
         $additionalfields = [
             'enddate',
         ];
-        $courses = enrol_get_users_courses($userid, true, $additionalfields);
+        if (!$sort) {
+            $sort = null;
+        }
+        $courses = enrol_get_users_courses($userid, true, $additionalfields, $sort);
 
         // Run through courses to establish which have gugrades/GCAT enabled
         // and also add TL grade category data.

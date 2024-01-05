@@ -47,6 +47,7 @@ class dashboard_get_courses extends \external_api {
             'userid' => new external_value(PARAM_INT, 'User to fetch courses for'),
             'current' => new external_value(PARAM_BOOL, 'Return only current courses'),
             'past' => new external_value(PARAM_BOOL, 'Return only past courses'),
+            'sort' => new external_value(PARAM_TEXT, 'Comma separated list of fields to sort courses by'),
         ]);
     }
 
@@ -57,19 +58,20 @@ class dashboard_get_courses extends \external_api {
      * @param bool $past
      * @return array
      */
-    public static function execute($userid, $current, $past) {
+    public static function execute($userid, $current, $past, $sort) {
 
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
             'userid' => $userid,
             'current' => $current,
             'past' => $past,
+            'sort' => $sort,
         ]);
 
         $context = \context_system::instance();
         self::validate_context($context);
 
-        return \local_gugrades\api::dashboard_get_courses($userid, $current, $past);
+        return \local_gugrades\api::dashboard_get_courses($userid, $current, $past, $sort);
     }
 
     /**

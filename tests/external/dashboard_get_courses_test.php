@@ -92,7 +92,7 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
         $this->getDataGenerator()->enrol_user($studentid, $pastcourse2->id);
 
         // Check that all courses are returned if no past/current.
-        $courses = dashboard_get_courses::execute($studentid, false, false);
+        $courses = dashboard_get_courses::execute($studentid, false, false, '');
         $courses = \external_api::clean_returnvalue(
             dashboard_get_courses::execute_returns(),
             $courses
@@ -106,7 +106,7 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
 
         // Get only 'current' courses
         // Default course should be included as enddate is disabled (= 0).
-        $courses = dashboard_get_courses::execute($studentid, true, false);
+        $courses = dashboard_get_courses::execute($studentid, true, false, '');
         $courses = \external_api::clean_returnvalue(
             dashboard_get_courses::execute_returns(),
             $courses
@@ -116,7 +116,7 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
         $this->assertEquals('Current Course Two', $courses[0]['fullname']);
 
         // Get only 'past' courses.
-        $courses = dashboard_get_courses::execute($studentid, false, true);
+        $courses = dashboard_get_courses::execute($studentid, false, true, '');
         $courses = \external_api::clean_returnvalue(
             dashboard_get_courses::execute_returns(),
             $courses
@@ -128,6 +128,15 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
         $this->assertTrue($courses[0]['gugradesenabled']);
         $this->assertNotTrue($courses[1]['gugradesenabled']);
 
+        // Check sorting.
+        $courses = dashboard_get_courses::execute($studentid, true, false, 'enddate');
+        $courses = \external_api::clean_returnvalue(
+            dashboard_get_courses::execute_returns(),
+            $courses
+        );
+        $this->assertIsArray($courses);
+        $this->assertCount(3, $courses);
+        $this->assertEquals('Current Course Two', $courses[1]['fullname']);
     }
 
 }
