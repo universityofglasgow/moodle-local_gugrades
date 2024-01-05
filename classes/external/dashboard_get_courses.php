@@ -56,6 +56,7 @@ class dashboard_get_courses extends \external_api {
      * @param int $userid
      * @param bool $current
      * @param bool $past
+     * @param string $sort
      * @return array
      */
     public static function execute($userid, $current, $past, $sort) {
