@@ -39,7 +39,7 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
     /**
      * Check that weird current/past filter works properly
      * Note that past/future 'cutoff' date is 30 days in the future
-     * 
+     *
      * @covers \local_gugrades\external\dashboard_get_courses::execute
      */
     public function test_filter_courses_by_date() {
@@ -79,6 +79,10 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
         $this->enable_dashboard($currentcourse1->id, true);
         $this->enable_dashboard($pastcourse2->id, true);
 
+        // Enable GUGCAT in some of the courses
+        $this->enable_gugcat_dashboard($currentcourse1->id, true);
+        $this->enable_gugcat_dashboard($pastcourse1->id, true);
+
         // Enrol student on all of the above
         // Note - the student is enrolled on a 5th course in setUp().
         $studentid = $this->student->id;
@@ -95,6 +99,10 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
         );
         $this->assertIsArray($courses);
         $this->assertCount(5, $courses);
+
+        // Check GUGCAT enabled
+        $this->assertTrue($courses[1]['gcatenabled']);
+        $this->assertTrue($courses[3]['gcatenabled']);
 
         // Get only 'current' courses
         // Default course should be included as enddate is disabled (= 0).
@@ -115,10 +123,11 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
         );
         $this->assertIsArray($courses);
         $this->assertEquals('Past Course Two', $courses[0]['fullname']);
+
+        // Check the courses that should be enabled for MyGrades.
         $this->assertTrue($courses[0]['gugradesenabled']);
         $this->assertNotTrue($courses[1]['gugradesenabled']);
 
-        var_dump($courses);
     }
 
 }
