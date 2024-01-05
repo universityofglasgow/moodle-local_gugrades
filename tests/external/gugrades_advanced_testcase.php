@@ -180,7 +180,7 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
     protected function enable_gugcat_dashboard(int $courseid, bool $enable) {
         global $DB;
 
-        // Custom field category
+        // Custom field category.
         if (!$customfieldcategory = $DB->get_record('customfield_category', ['name' => 'GCAT Options'])) {
             $customfieldcategory = new \stdClass();
             $customfieldcategory->name = 'GCAT Options';
