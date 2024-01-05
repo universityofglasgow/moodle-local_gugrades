@@ -624,6 +624,15 @@ class api {
                 // TODO: does this need any capability checks?
                 $course->gcatenabled = true;
             }
+
+            // Get first-level grade categories
+            $categories = \local_gugrades\grades::get_firstlevel($id);
+            foreach ($categories as $category) {
+                $course->firstlevel[] = [
+                    'id' => $category->id,
+                    'fullname' => $category->fullname,
+                ];
+            }
         }
 
         return $courses;
