@@ -512,7 +512,8 @@ class grades {
             JOIN {grade_items} gi ON gi.id = gg.gradeitemid
             WHERE gi.categoryid = :gradecategoryid
             AND gg.userid = :userid
-            AND gg.iscurrent = 1";
+            AND gg.iscurrent = 1
+            AND gg.gradetype = 'RELEASED'";
         $grades = $DB->get_records_sql($sql, ['gradecategoryid' => $gradecategoryid, 'userid' => $userid]);
 
         return $grades;
