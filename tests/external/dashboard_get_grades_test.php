@@ -44,11 +44,11 @@ class dashboard_get_grades_test extends \local_gugrades\external\gugrades_advanc
     public function test_get_grades() {
         global $DB;
 
-        // Use the test student
+        // Use the test student.
         $studentid = $this->student->id;
         $this->setUser($studentid);
 
-        // Summative grade category
+        // Summative grade category.
         $gradecategoryid = $this->gradecatsumm->id;
 
         // Need to release grades for this grade item -assignment1.
@@ -68,10 +68,10 @@ class dashboard_get_grades_test extends \local_gugrades\external\gugrades_advanc
             $grades
         );
 
-        // Should be two grades returned
+        // Should be two grades returned.
         $this->assertCount(2, $grades['grades']);
 
-        // Check grades look correct
+        // Check grades look correct.
         $assign1 = $grades['grades'][0];
         $assign2 = $grades['grades'][1];
         $this->assertEquals('Assignment 1', $assign1['itemname']);
