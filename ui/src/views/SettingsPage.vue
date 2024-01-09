@@ -1,9 +1,9 @@
 <template>
     <div>
-        <h1>Settings</h1>
+        <h1>{{ mstrings.settings }}</h1>
 
         <FormKit type="form" @submit="submit_form">
-            <FormKit 
+            <FormKit
                 type="checkbox"
                 :label="mstrings.enabledashboard"
                 v-model="enabledashboard"
@@ -11,12 +11,17 @@
             </FormKit>
 
         </FormKit>
+
+        <div class="mt-5">
+            <ResetButton></ResetButton>
+        </div>
     </div>
 </template>
 
 <script setup>
     import {ref, inject, onMounted} from '@vue/runtime-core';
     import { useToast } from "vue-toastification";
+    import ResetButton from '@/components/ResetButton.vue';
 
     const mstrings = inject('mstrings');
     const enabledashboard = ref(false);

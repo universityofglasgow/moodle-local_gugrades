@@ -13,7 +13,7 @@
                 <div v-if="is_importgrades" class="alert alert-danger">
                     {{ mstrings.gradesimported }}
                 </div>
-                <p><button class="btn btn-primary" @click="importgrades">Import</button></p>
+                <p><button class="btn btn-primary" @click="importgrades">{{ mstrings.import }}</button></p>
             </template>
         </ModalForm>
     </Teleport>

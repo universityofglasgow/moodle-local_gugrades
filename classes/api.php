@@ -707,4 +707,20 @@ class api {
             }
         }
     }
+
+    /**
+     * Reset MyGrades for course
+     * @param int $courseid
+     */
+    public static function reset(int $courseid) {
+        global $DB;
+
+        // Delete grades.
+        $DB->delete_records('local_gugrades_grade', ['courseid' => $courseid]);
+
+        // Delete columns.
+        $DB->delete_records('local_gugrades_column', ['courseid' => $courseid]);
+
+        // TODO: Likely to be other stuff.
+    }
 }

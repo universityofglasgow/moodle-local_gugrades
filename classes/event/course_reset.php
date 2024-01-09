@@ -15,19 +15,43 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Define reset event
  *
  * @package    local_gugrades
- * @copyright  2022
+ * @copyright  2024
  * @author     Howard Miller
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace local_gugrades\event;
 
-$plugin->version      = 2024010900;
-$plugin->requires     = 2022041900; // Moodle 4.0.
-$plugin->component    = 'local_gugrades';
+/**
+ * release_grades event
+ */
+class course_reset extends \core\event\base {
 
-$plugin->maturity     = MATURITY_STABLE;
+    /**
+     * Initialise event
+     */
+    protected function init() {
+        $this->data['crud'] = 'c';
+        $this->data['edulevel'] = self::LEVEL_TEACHING;
+        $this->data['objecttable'] = 'course';
+    }
 
+    /**
+     * Get event name
+     * @return string
+     */
+    public static function get_name() {
+        return get_string('eventreset', 'local_gugrades');
+    }
+
+    /**
+     * Get event description
+     * @return string
+     */
+    public function get_description() {
+        return "The user with id '$this->userid' reset MyGrades data for course '$this->objectid'.";
+    }
+}
