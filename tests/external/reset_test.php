@@ -75,7 +75,7 @@ class reset_test extends \local_gugrades\external\gugrades_advanced_testcase {
             $nullreturn
         );
 
-        // Check grades and columns tables again to make sure they have been deleted
+        // Check grades and columns tables again to make sure they have been deleted.
         $grades = $DB->get_records('local_gugrades_grade', ['courseid' => $courseid]);
         $this->assertCount(0, $grades);
         $columns = $DB->get_records('local_gugrades_column', ['courseid' => $courseid]);
