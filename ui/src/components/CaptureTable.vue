@@ -3,7 +3,7 @@
         <div class="border rounded p-2 py-4 mt-2">
             <button type="button" class="btn btn-sm btn-primary mb-1" @click="selectcollapse">Hide/Show</button>
 
-                <div id="captureselect" class="collapse show">
+            <div id="captureselect" class="collapse show">
                 <CaptureSelect @selecteditemid="selecteditemid"></CaptureSelect>
 
                 <div v-if="!gradesupported">
