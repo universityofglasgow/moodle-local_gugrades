@@ -63,6 +63,9 @@
         });
 
         showimportmodal.value = false;
+
+        const $ = window.jQuery;
+        $('#captureselect').collapse();
     }
 
     /**

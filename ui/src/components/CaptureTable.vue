@@ -1,28 +1,32 @@
 <template>
     <div>
-        <div id="captureselect" class="border rounded p-2 py-4 mt-2">
-            <CaptureSelect @selecteditemid="selecteditemid"></CaptureSelect>
+        <div class="border rounded p-2 py-4 mt-2">
+            <button type="button" class="btn btn-sm btn-primary mb-1" @click="selectcollapse">Hide/Show</button>
 
-            <div v-if="!gradesupported">
-                <div class="alert alert-danger mt-2">
-                    <span v-html="mstrings.gradenotsupported"></span>
+                <div id="captureselect" class="collapse show">
+                <CaptureSelect @selecteditemid="selecteditemid"></CaptureSelect>
+
+                <div v-if="!gradesupported">
+                    <div class="alert alert-danger mt-2">
+                        <span v-html="mstrings.gradenotsupported"></span>
+                    </div>
                 </div>
-            </div>
 
-            <div v-else>
-                <div v-if="itemid">
+                <div v-else>
+                    <div v-if="itemid">
 
-                    <CaptureButtons
-                        :itemid="itemid"
-                        :userids="userids"
-                        :users="users"
-                        :itemtype="itemtype"
-                        :itemname="itemname"
-                        :usershidden="usershidden"
-                        @refreshtable="refresh"
-                        @viewfullnames="viewfullnames"
-                        >
-                    </CaptureButtons>
+                        <CaptureButtons
+                            :itemid="itemid"
+                            :userids="userids"
+                            :users="users"
+                            :itemtype="itemtype"
+                            :itemname="itemname"
+                            :usershidden="usershidden"
+                            @refreshtable="refresh"
+                            @viewfullnames="viewfullnames"
+                            >
+                        </CaptureButtons>
+                    </div>
                 </div>
             </div>
         </div>
@@ -60,7 +64,7 @@
 </template>
 
 <script setup>
-    import {ref, computed, onMounted, inject} from '@vue/runtime-core';
+    import {ref, computed, inject} from '@vue/runtime-core';
     import NameFilter from '@/components/NameFilter.vue';
     import CaptureSelect from '@/components/CaptureSelect.vue';
     import CaptureGrades from '@/components/CaptureGrades.vue';
@@ -84,11 +88,28 @@
     const loaded = ref(false);
     const showalert = ref(false);
     const revealnames = ref(false);
+    const collapsed = ref(false);
 
     const toast = useToast();
 
     let firstname = '';
     let lastname = '';
+
+    /**
+     * Collapse selection area
+     */
+    function selectcollapse() {
+
+        // Bodge to get jQuery needed for Bootstrap JS.
+        const $ = window.jQuery;
+
+        if (collapsed.value) {
+            $('#captureselect').collapse('show');
+        } else {
+            $('#captureselect').collapse('hide');
+        }
+        collapsed.value = !collapsed.value;
+    }
 
     /**
      * New itemid has been selected
@@ -245,15 +266,4 @@
         return users.value.length != 0;
     });
 
-    /**
-     * Get initial data for table.
-     */
-    onMounted(() => {
-
-        // Get the data for the table
-        // get_page_data(itemid.value, firstname, lastname);
-
-        const $ = window.jQuery;
-        window.console.log($);
-    })
 </script>
