@@ -58,6 +58,8 @@ $string['gradesimported'] = 'Grades have already been imported';
 $string['gradeitem'] = 'Grade item';
 $string['gradenotsupported'] = '<b><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Grade type is not supported</b><br/>Make sure grade is either points or a scale. If a scale, check that it is a supported one.';
 $string['gradenoun'] = 'Grade';
+$string['gradesimported'] = 'Grades successfully imported';
+$string['gradesreleased'] = 'Grades successfully released';
 $string['gradetype'] = 'Grade type';
 $string['gradetypefirst'] = '1st grade';
 $string['gradetypesecond'] = '2nd grade';

@@ -59,6 +59,7 @@
         .then(() => {
             emit('released');
             showreleasemodal.value = false;
+            toast.success(mstrings.gradesreleased);
         })
         .catch((error) => {
             window.console.error(error);

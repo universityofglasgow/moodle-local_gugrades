@@ -4,4 +4,10 @@ module.exports = defineConfig({
   publicPath: "/local/gugrades/ui/dist/",
   //indexPath: "index.php",
   filenameHashing: false,
+
+  configureWebpack: {
+    externals: {
+      jquery: 'window.jQuery'
+    }
+  },
 })

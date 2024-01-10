@@ -1,19 +1,33 @@
 <template>
     <div>
-        <div v-if="!gradesupported">
-            <div class="alert alert-danger mt-2">
-                <span v-html="mstrings.gradenotsupported"></span>
+        <div id="captureselect" class="border rounded p-2 py-4 mt-2">
+            <CaptureSelect @selecteditemid="selecteditemid"></CaptureSelect>
+
+            <div v-if="!gradesupported">
+                <div class="alert alert-danger mt-2">
+                    <span v-html="mstrings.gradenotsupported"></span>
+                </div>
+            </div>
+
+            <div v-else>
+                <div v-if="itemid">
+
+                    <CaptureButtons
+                        :itemid="itemid"
+                        :userids="userids"
+                        :users="users"
+                        :itemtype="itemtype"
+                        :itemname="itemname"
+                        :usershidden="usershidden"
+                        @refreshtable="refresh"
+                        @viewfullnames="viewfullnames"
+                        >
+                    </CaptureButtons>
+                </div>
             </div>
         </div>
 
-        <div v-else>
-            <div class="border rounded p-2 py-4 mt-2">
-                <ImportButton :itemid="parseInt(itemid)" :userids="userids" @imported="gradesimported()"></ImportButton>
-                <ReleaseButton :gradeitemid="parseInt(itemid)" @released="gradesreleased()"></ReleaseButton>
-                <ExportWorksheetButton :users="users" :itemtype="itemtype" :itemname="itemname"></ExportWorksheetButton>
-                <ViewFullNamesButton v-if="usershidden" @viewfullnames="viewfullnames"></ViewFullNamesButton>
-            </div>
-
+        <div v-if="itemid && gradesupported" class="mt-2">
             <NameFilter v-if="!usershidden" @selected="filter_selected" ref="namefilterref"></NameFilter>
 
             <PreLoader v-if="!loaded"></PreLoader>
@@ -46,23 +60,18 @@
 </template>
 
 <script setup>
-    import {ref, defineProps, computed, watch, onMounted, inject} from '@vue/runtime-core';
+    import {ref, computed, onMounted, inject} from '@vue/runtime-core';
     import NameFilter from '@/components/NameFilter.vue';
+    import CaptureSelect from '@/components/CaptureSelect.vue';
     import CaptureGrades from '@/components/CaptureGrades.vue';
     import CaptureMenu from '@/components/CaptureMenu.vue';
-    import ImportButton from '@/components/ImportButton.vue';
-    import ReleaseButton from '@/components/ReleaseButton.vue';
-    import ExportWorksheetButton from '@/components/ExportWorksheetButton.vue';
     import PreLoader from '@/components/PreLoader.vue';
     import { useToast } from "vue-toastification";
-    import ViewFullNamesButton from './ViewFullNamesButton.vue';
-
-    const props = defineProps({
-        itemid: Number,
-    });
+    import CaptureButtons from '@/components/CaptureButtons.vue';
 
     const users = ref([]);
     const userids = ref([]);
+    const itemid = ref(0);
     const mstrings = inject('mstrings');
     const totalrows = ref(0);
     const currentpage = ref(1);
@@ -80,6 +89,14 @@
 
     let firstname = '';
     let lastname = '';
+
+    /**
+     * New itemid has been selected
+     */
+    function selecteditemid(id) {
+        itemid.value = id;
+        get_page_data(id, firstname, lastname);
+    }
 
     /**
      * Get headers
@@ -115,7 +132,7 @@
      */
     function viewfullnames(toggleview) {
         revealnames.value = toggleview;
-        get_page_data(props.itemid, firstname, lastname);
+        get_page_data(itemid.value, firstname, lastname);
     }
 
     /**
@@ -187,7 +204,6 @@
             users.value = add_grades(users.value, columns.value);
 
             loaded.value = true;
-            window.console.log(columns.value);
         })
         .catch((error) => {
             window.console.error(error);
@@ -212,33 +228,14 @@
 
         // Reset page
         currentpage.value = 1;
-        get_page_data(props.itemid, first, last);
+        get_page_data(itemid.value, first, last);
     }
 
     /**
-     * Import grades function is complete
+     * Refresh the data table
      */
-    function gradesimported() {
-
-        // Get the data for the table
-        get_page_data(props.itemid, firstname, lastname);
-
-        // Done it
-        toast.success("Import complete", {
-        });
-    }
-
-    /**
-     * Import grades function is complete
-     */
-     function gradesreleased() {
-
-        // Get the data for the table
-        get_page_data(props.itemid, firstname, lastname);
-
-        // Done it
-        toast.success("Release complete", {
-        });
+    function refresh() {
+        get_page_data(itemid.value, firstname, lastname);
     }
 
     /**
@@ -249,18 +246,14 @@
     });
 
     /**
-     * Watch for displayed grade-item changing
-     */
-    watch(() => props.itemid, (itemid) => {
-        get_page_data(itemid, firstname, lastname);
-    })
-
-    /**
      * Get initial data for table.
      */
     onMounted(() => {
 
         // Get the data for the table
-        get_page_data(props.itemid, firstname, lastname);
+        // get_page_data(itemid.value, firstname, lastname);
+
+        const $ = window.jQuery;
+        window.console.log($);
     })
 </script>

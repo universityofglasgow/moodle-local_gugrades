@@ -55,6 +55,7 @@
         }])[0]
         .then(() => {
             emit('imported');
+            toast.success(mstrings.gradesimported);
         })
         .catch((error) => {
             window.console.error(error);
