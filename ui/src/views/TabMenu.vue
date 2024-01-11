@@ -1,6 +1,8 @@
 <template>
     <div>
-        <img class="mb-1" alt="MyGrade logo" src="@/assets/MyGrade.png">
+        <div class="text-center pb-1">
+            <img alt="MyGrade logo" src="@/assets/MyGradesLogo.png">
+        </div>
 
         <TabsNav @tabchange="tabChange"></TabsNav>
 
