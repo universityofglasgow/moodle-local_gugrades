@@ -337,7 +337,7 @@ class grades {
         return true;
     }
 
-    /** 
+    /**
      * Check if grade item is hidden or locked
      * @param int $gradeitemid
      * @return array [$hidden, $locked]
@@ -346,7 +346,7 @@ class grades {
         global $DB;
 
         $gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
-        
+
         return [
             $gradeitem->hidden,
             $gradeitem->locked,
