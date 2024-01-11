@@ -54,7 +54,7 @@
                         <CaptureGrades :grades="item.grades"></CaptureGrades>
                     </template>
                     <template #item-actions="item">
-                        <CaptureMenu :itemid="itemid" :userid="parseInt(item.id)" :name="item.displayname" :itemname="itemname" @gradeadded = "get_page_data(props.itemid, firstname, lastname)"></CaptureMenu>
+                        <CaptureMenu :itemid="itemid" :userid="parseInt(item.id)" :name="item.displayname" :itemname="itemname" @gradeadded = "get_page_data(itemid, firstname, lastname)"></CaptureMenu>
                     </template>
                     <template #item-alert="item">
                         <span v-if="item.alert" class="badge badge-danger">{{ mstrings.discrepancy }}</span>
