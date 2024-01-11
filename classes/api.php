@@ -63,8 +63,13 @@ class api {
                 'itemtype' => '',
                 'itemname' => '',
                 'gradesupported' => false,
+                'gradehidden' => false,
+                'gradelocked' => false,
             ];
         }
+
+        // Hidden or locked in gradebook?
+        list($gradehidden, $gradelocked) = \local_gugrades\grades::is_grade_hidden_locked($gradeitemid);
 
         // Instantiate object for this activity type.
         $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid);
@@ -85,6 +90,8 @@ class api {
             'itemtype' => $activity->get_itemtype(),
             'itemname' => $activity->get_itemname(),
             'gradesupported' => true,
+            'gradehidden' => $gradehidden ? true : false,
+            'gradelocked' => $gradelocked ? true : false,
         ];
     }
 

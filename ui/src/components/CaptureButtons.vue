@@ -1,5 +1,5 @@
 <template>
-    <div class="col-12 mt-3">
+    <div class="col-12 mt-2">
         <ImportButton :itemid="props.itemid" :userids="props.userids" @imported="emit('refreshtable')"></ImportButton>
         <ReleaseButton :gradeitemid="props.itemid" @released="emit('refreshtable')"></ReleaseButton>
         <ExportWorksheetButton :users="props.users" :itemtype="props.itemtype" :itemname="props.itemname"></ExportWorksheetButton>

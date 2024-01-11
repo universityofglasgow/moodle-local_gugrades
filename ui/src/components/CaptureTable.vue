@@ -1,32 +1,36 @@
 <template>
     <div>
-        <div class="border rounded p-2 py-4 mt-2">
-            <button type="button" class="btn btn-sm btn-primary mb-1" @click="selectcollapse">Hide/Show</button>
+        <div class="border rounded p-2 mt-2">
+            <div class="col-12 mb-2">
+                <button class="badge badge-primary" @click="selectcollapse">
+                    <span v-if="collapsed"><i class="fa fa-arrow-right"></i> {{ mstrings.show }}</span>
+                    <span v-else><i class="fa fa-arrow-down"></i> {{ mstrings.hide }}</span>
+                </button>
+            </div>
 
             <div id="captureselect" class="collapse show">
                 <CaptureSelect @selecteditemid="selecteditemid"></CaptureSelect>
 
-                <div v-if="!gradesupported">
-                    <div class="alert alert-danger mt-2">
-                        <span v-html="mstrings.gradenotsupported"></span>
-                    </div>
-                </div>
+                <div v-if="itemid">
+                    <CaptureAlerts
+                        :gradesupported="gradesupported"
+                        :gradehidden="gradehidden"
+                        :gradelocked="gradelocked"
+                        >
+                    </CaptureAlerts>
 
-                <div v-else>
-                    <div v-if="itemid">
-
-                        <CaptureButtons
-                            :itemid="itemid"
-                            :userids="userids"
-                            :users="users"
-                            :itemtype="itemtype"
-                            :itemname="itemname"
-                            :usershidden="usershidden"
-                            @refreshtable="refresh"
-                            @viewfullnames="viewfullnames"
-                            >
-                        </CaptureButtons>
-                    </div>
+                    <CaptureButtons
+                        v-if="gradesupported"
+                        :itemid="itemid"
+                        :userids="userids"
+                        :users="users"
+                        :itemtype="itemtype"
+                        :itemname="itemname"
+                        :usershidden="usershidden"
+                        @refreshtable="refresh"
+                        @viewfullnames="viewfullnames"
+                        >
+                    </CaptureButtons>
                 </div>
             </div>
         </div>
@@ -72,6 +76,7 @@
     import PreLoader from '@/components/PreLoader.vue';
     import { useToast } from "vue-toastification";
     import CaptureButtons from '@/components/CaptureButtons.vue';
+    import CaptureAlerts from '@/components/CaptureAlerts.vue';
 
     const users = ref([]);
     const userids = ref([]);
@@ -84,6 +89,8 @@
     const itemtype = ref('');
     const itemname = ref('');
     const gradesupported = ref(true);
+    const gradehidden = ref(false);
+    const gradelocked = ref(false);
     const columns = ref([]);
     const loaded = ref(false);
     const showalert = ref(false);
@@ -218,6 +225,8 @@
             itemtype.value = result['itemtype'];
             itemname.value = result['itemname'];
             gradesupported.value = result['gradesupported'];
+            gradehidden.value = result['gradehidden'];
+            gradelocked.value = result['gradelocked'];
             columns.value = result['columns'];
             userids.value = users.value.map(u => u.id);
             totalrows.value = users.value.length;

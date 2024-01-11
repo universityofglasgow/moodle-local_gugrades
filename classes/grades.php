@@ -337,6 +337,22 @@ class grades {
         return true;
     }
 
+    /** 
+     * Check if grade item is hidden or locked
+     * @param int $gradeitemid
+     * @return array [$hidden, $locked]
+     */
+    public static function is_grade_hidden_locked(int $gradeitemid) {
+        global $DB;
+
+        $gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
+        
+        return [
+            $gradeitem->hidden,
+            $gradeitem->locked,
+        ];
+    }
+
     /**
      * Analyse grade item. Is it...
      * - is it valid at all
