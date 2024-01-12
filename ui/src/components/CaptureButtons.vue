@@ -1,8 +1,8 @@
 <template>
     <div class="col-12 mt-2">
         <ImportButton :itemid="props.itemid" :userids="props.userids" @imported="emit('refreshtable')"></ImportButton>
-        <ReleaseButton :gradeitemid="props.itemid" @released="emit('refreshtable')"></ReleaseButton>
-        <ExportWorksheetButton :users="props.users" :itemtype="props.itemtype" :itemname="props.itemname"></ExportWorksheetButton>
+        <ReleaseButton v-if="props.gradesimported" :gradeitemid="props.itemid" @released="emit('refreshtable')"></ReleaseButton>
+        <ExportWorksheetButton v-if="itemtype=='assign'" :users="props.users" :itemtype="props.itemtype" :itemname="props.itemname"></ExportWorksheetButton>
         <ViewFullNamesButton v-if="props.usershidden" @viewfullnames="viewfullnames"></ViewFullNamesButton>
     </div>
 </template>
@@ -21,6 +21,7 @@
         itemtype: String,
         itemname: String,
         usershidden: Boolean,
+        gradesimported: Boolean,
     });
 
     const emit = defineEmits(['viewfullnames', 'refreshtable']);

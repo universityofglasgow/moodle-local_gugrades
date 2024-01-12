@@ -27,6 +27,7 @@
                         :itemtype="itemtype"
                         :itemname="itemname"
                         :usershidden="usershidden"
+                        :gradesimported="gradesimported"
                         @refreshtable="refresh"
                         @viewfullnames="viewfullnames"
                         >
@@ -89,6 +90,7 @@
     const itemtype = ref('');
     const itemname = ref('');
     const gradesupported = ref(true);
+    const gradesimported = ref(false);
     const gradehidden = ref(false);
     const gradelocked = ref(false);
     const columns = ref([]);
@@ -225,6 +227,7 @@
             itemtype.value = result['itemtype'];
             itemname.value = result['itemname'];
             gradesupported.value = result['gradesupported'];
+            gradesimported.value = result['gradesimported'];
             gradehidden.value = result['gradehidden'];
             gradelocked.value = result['gradelocked'];
             columns.value = result['columns'];

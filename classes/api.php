@@ -90,6 +90,7 @@ class api {
             'itemtype' => $activity->get_itemtype(),
             'itemname' => $activity->get_itemname(),
             'gradesupported' => true,
+            'gradesimported' => \local_gugrades\grades::is_grades_imported($courseid, $gradeitemid),
             'gradehidden' => $gradehidden ? true : false,
             'gradelocked' => $gradelocked ? true : false,
         ];
@@ -141,6 +142,7 @@ class api {
      * @param int $gradeitemid
      * @param \local_gugrades\conversion\base $conversion
      * @param int $userid
+     * @return bool - was a grade imported
      */
     public static function import_grade(int $courseid, int $gradeitemid, \local_gugrades\conversion\base $conversion, int $userid) {
 
@@ -169,7 +171,11 @@ class api {
                 1,
                 get_string('import', 'local_gugrades')
             );
+
+            return true;
         }
+
+        return false;
     }
 
     /**

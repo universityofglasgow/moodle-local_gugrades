@@ -1,5 +1,5 @@
 <template>
-    <button type="button" class="btn btn-outline-dark  mr-1" @click="showimportmodal = true">{{ mstrings.importgrades }}</button>
+    <button type="button" class="btn btn-outline-dark  mr-1" @click="import_button_click()">{{ mstrings.importgrades }}</button>
 
     <Teleport to="body">
         <ModalForm :show="showimportmodal" @close="showimportmodal = false">
@@ -10,7 +10,7 @@
                 <div class="alert alert-info">
                     {{  mstrings.importinfo }}
                 </div>
-                <div v-if="is_importgrades" class="alert alert-danger">
+                <div v-if="is_importgrades" class="alert alert-warning">
                     {{ mstrings.gradesimported }}
                 </div>
                 <p><button class="btn btn-primary" @click="importgrades">{{ mstrings.import }}</button></p>
@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-    import {ref, defineProps, defineEmits, onMounted, inject} from '@vue/runtime-core';
+    import {ref, defineProps, defineEmits, inject} from '@vue/runtime-core';
     import ModalForm from '@/components/ModalForm.vue';
     import { useToast } from "vue-toastification";
 
@@ -53,9 +53,14 @@
                 userlist: props.userids,
             }
         }])[0]
-        .then(() => {
+        .then((result) => {
+            const importcount = result['importcount'];
             emit('imported');
-            toast.success(mstrings.gradesimported);
+            if (importcount) {
+                toast.success(mstrings.gradesimportedsuccess + ' (' + importcount + ')');
+            } else {
+                toast.warning(mstrings.nogradestoimport);
+            }
         })
         .catch((error) => {
             window.console.error(error);
@@ -66,9 +71,12 @@
     }
 
     /**
+     * When button clicked
      * Check for existing grades
      */
-    onMounted(() => {
+    function import_button_click() {
+        showimportmodal.value = true;
+
         const GU = window.GU;
         const courseid = GU.courseid;
         const fetchMany = GU.fetchMany;
@@ -87,5 +95,5 @@
             window.console.log(error);
             toast.error('Error communicating with server (see console)');
         });
-    });
+    }
 </script>

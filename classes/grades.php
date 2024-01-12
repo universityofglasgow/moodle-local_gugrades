@@ -85,11 +85,9 @@ class grades {
         $category = $DB->get_record('grade_categories', ['id' => $categoryid], '*', MUST_EXIST);
         $gradeitems = $DB->get_records('grade_items', [
             'courseid' => $courseid,
-            'hidden' => 0,
         ]);
         $gradecategories = $DB->get_records('grade_categories', [
             'courseid' => $courseid,
-            'hidden' => 0,
         ]);
         $categorytree = self::recurse_activitytree($category, $gradeitems, $gradecategories);
 

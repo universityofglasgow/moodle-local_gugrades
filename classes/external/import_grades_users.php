@@ -75,8 +75,11 @@ class import_grades_users extends \external_api {
         $conversion = \local_gugrades\grades::conversion_factory($courseid, $gradeitemid);
 
         $userids = $userlist;
+        $importcount = 0;
         foreach ($userids as $userid) {
-            \local_gugrades\api::import_grade($courseid, $gradeitemid, $conversion, intval($userid));
+            if (\local_gugrades\api::import_grade($courseid, $gradeitemid, $conversion, intval($userid))) {
+                $importcount++;
+            }
         }
 
         // Log.
@@ -92,7 +95,7 @@ class import_grades_users extends \external_api {
         // Audit.
         \local_gugrades\audit::write($courseid, 0, $gradeitemid, 'Grades imported.');
 
-        return ['success' => true];
+        return ['importcount' => $importcount];
     }
 
     /**
@@ -101,7 +104,7 @@ class import_grades_users extends \external_api {
      */
     public static function execute_returns() {
         return new external_single_structure([
-            'success' => new external_value(PARAM_BOOL, 'If true, import was successful'),
+            'importcount' => new external_value(PARAM_INT, 'Number of grades imported'),
         ]);
     }
 
