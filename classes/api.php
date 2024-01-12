@@ -614,9 +614,6 @@ class api {
                     $hascap = has_capability('local/gugrades:readdashboard', $context);
                 }
                 $course->gugradesenabled = $hascap;
-
-                // Add first level grade categories.
-                $course->firstlevel = \local_gugrades\grades::get_firstlevel($id);
             }
 
             // Check if (old) GCAT is enabled for this course?
