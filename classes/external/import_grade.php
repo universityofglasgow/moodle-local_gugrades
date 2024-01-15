@@ -71,7 +71,7 @@ class import_grade extends \external_api {
         $conversion = \local_gugrades\grades::conversion_factory($courseid, $gradeitemid);
         $success = \local_gugrades\api::import_grade($courseid, $gradeitemid, $conversion, $userid);
 
-        //Audit?
+        // Audit?
         if ($success) {
             \local_gugrades\audit::write($courseid, $userid, $gradeitemid, 'Grade imported for user.');
         }
