@@ -7,13 +7,24 @@
                 <h4>{{ mstrings.importgrades }}</h4>
             </template>
             <template #body>
-                <div class="alert alert-info">
-                    {{  mstrings.importinfo }}
-                </div>
                 <div v-if="is_importgrades" class="alert alert-warning">
                     {{ mstrings.gradesimported }}
                 </div>
-                <p><button class="btn btn-primary" @click="importgrades">{{ mstrings.import }}</button></p>
+                <div v-else class="alert alert-info">
+                    {{ mstrings.importinfo }}
+                </div>
+            </template>
+            <template #footer>
+                <button
+                    class="modal-default-button btn btn-primary"
+                    @click="importgrades()"
+                    >{{ mstrings.yesimport }}
+                </button>
+                <button
+                    class="modal-default-button btn btn-warning"
+                    @click="showimportmodal = false"
+                    >{{ mstrings.cancel }}
+                </button>
             </template>
         </ModalForm>
     </Teleport>

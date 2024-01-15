@@ -134,11 +134,22 @@ class assign_activity extends base {
      * @param int $userid
      */
     public function get_first_grade(int $userid) {
+        global $DB;
+
+        // If the grade is overridden in the Gradebook then we can
+        // revert to the base - i.e., get the grade from the Gradebook.
+        if ($grade = $DB->get_record('grade_grades', ['itemid' => $this->gradeitemid, 'userid' => $userid])) {
+            if ($grade->overridden) {
+                return parent::get_first_grade($userid);
+            }
+        }
 
         // This just pulls the grade from assign. Not sure it's that simple
         // False, means do not create grade if it does not exist
         // This is the grade object from mdl_assign_grades (check negative values).
         $assigngrade = $this->assign->get_user_grade($userid, false);
+
+
 
         if ($assigngrade !== false) {
 

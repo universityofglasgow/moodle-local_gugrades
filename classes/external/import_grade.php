@@ -68,9 +68,15 @@ class import_grade extends \external_api {
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        \local_gugrades\api::import_grade($courseid, $gradeitemid, $userid);
+        $conversion = \local_gugrades\grades::conversion_factory($courseid, $gradeitemid);
+        $success = \local_gugrades\api::import_grade($courseid, $gradeitemid, $conversion, $userid);
 
-        return ['success' => true];
+        //Audit?
+        if ($success) {
+            \local_gugrades\audit::write($courseid, $userid, $gradeitemid, 'Grade imported for user.');
+        }
+
+        return ['success' => $success];
     }
 
     /**

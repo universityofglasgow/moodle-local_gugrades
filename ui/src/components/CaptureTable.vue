@@ -55,7 +55,16 @@
                         <CaptureGrades :grades="item.grades"></CaptureGrades>
                     </template>
                     <template #item-actions="item">
-                        <CaptureMenu :itemid="itemid" :userid="parseInt(item.id)" :name="item.displayname" :itemname="itemname" @gradeadded = "get_page_data(itemid, firstname, lastname)"></CaptureMenu>
+                        <CaptureMenu
+                            :itemid="itemid"
+                            :userid="parseInt(item.id)"
+                            :name="item.displayname"
+                            :itemname="itemname"
+                            :gradesimported="gradesimported"
+                            :awaitingcapture="item.awaitingcapture"
+                            @gradeadded = "get_page_data(itemid, firstname, lastname)"
+                            >
+                        </CaptureMenu>
                     </template>
                     <template #item-alert="item">
                         <span v-if="item.alert" class="badge badge-danger">{{ mstrings.discrepancy }}</span>
@@ -181,11 +190,15 @@
             if (user.alert) {
                 showalert.value = true;
             }
+
+            // Allow import if there are no grades for this user.
+            user.awaitingcapture = true;
             columns.forEach(column => {
                 grade = user.grades.find((element) => {
                     return (element.columnid == column.id);
                 });
                 if (grade) {
+                    user.awaitingcapture = false;
                     user['GRADE' + column.id] = grade.displaygrade;
                 } else if (column.gradetype == 'FIRST') {
                     user['GRADE' + column.id] = mstrings.awaitingcapture;
