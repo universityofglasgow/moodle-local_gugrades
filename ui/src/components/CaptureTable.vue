@@ -174,7 +174,7 @@
      */
     function viewfullnames(toggleview) {
         revealnames.value = toggleview;
-        get_page_data(itemid.value, firstname, lastname);
+        get_page_data(itemid.value, firstname, lastname, groupid.value);
     }
 
     /**

@@ -56,9 +56,9 @@ class get_groups_test extends \local_gugrades\external\gugrades_advanced_testcas
 
         // Create some groups in the course.
         $courseid = $this->course->id;
-        $this->getDataGenerator()->create_group(array('courseid' => $courseid));
-        $this->getDataGenerator()->create_group(array('courseid' => $courseid));
-        $this->getDataGenerator()->create_group(array('courseid' => $courseid));
+        $this->getDataGenerator()->create_group(['courseid' => $courseid]));
+        $this->getDataGenerator()->create_group(['courseid' => $courseid]));
+        $this->getDataGenerator()->create_group(['courseid' => $courseid]));
 
         // Check we can 'see' the groups we just created.
         $groups = get_groups::execute($this->course->id);
