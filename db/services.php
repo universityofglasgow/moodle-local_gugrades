@@ -50,6 +50,7 @@ $services = [
             'local_gugrades_dashboard_get_grades',
             'local_gugrades_release_grades',
             'local_gugrades_reset',
+            'get_groups',
         ],
         'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,
@@ -184,6 +185,12 @@ $functions = [
         'classname' => 'local_gugrades\external\reset',
         'description' => 'Completely deletes MyGrades data for given course. Process cannot be undone!',
         'type' => 'write',
+        'ajax' => true,
+    ],
+    'local_gugrades_get_groups' => [
+        'classname' => 'local_gugrades\external\get_groups',
+        'description' => 'Get the list of groups for the course (if any).',
+        'type' => 'read',
         'ajax' => true,
     ],
 ];

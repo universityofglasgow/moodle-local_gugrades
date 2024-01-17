@@ -48,11 +48,12 @@ class api {
      * @param int $gradeitemid
      * @param string $firstname (first letter of)
      * @param string $lastname (last letter of)
+     * @param int $groupid
      * @param bool $viewfullnames
      * @return array
      */
     public static function get_capture_page(int $courseid, int $gradeitemid,
-        string $firstname, string $lastname, bool $viewfullnames) {
+        string $firstname, string $lastname, int $groupid, bool $viewfullnames) {
 
         // Sanity checks for selected grade item.
         if (!\local_gugrades\grades::is_grade_supported($gradeitemid)) {
@@ -72,7 +73,7 @@ class api {
         list($gradehidden, $gradelocked) = \local_gugrades\grades::is_grade_hidden_locked($gradeitemid);
 
         // Instantiate object for this activity type.
-        $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid);
+        $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid, $groupid);
         $activity->set_name_filter($firstname, $lastname);
         $activity->set_viewfullnames($viewfullnames);
 
@@ -732,5 +733,19 @@ class api {
         $DB->delete_records('local_gugrades_column', ['courseid' => $courseid]);
 
         // TODO: Likely to be other stuff.
+    }
+
+    /**
+     * Get course groups
+     * @param int $courseid
+     * @return array
+     *
+     */
+    public static function get_groups(int $courseid) {
+        global $DB;
+
+        $groups = $DB->get_records('groups', ['courseid' => $courseid]);
+
+        return $groups;
     }
 }

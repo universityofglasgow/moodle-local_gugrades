@@ -54,21 +54,22 @@ class users {
      * for everything else
      * @param int $gradeitemid
      * @param int $courseid
+     * @param int $groupid
      * @return object
      */
-    public static function activity_factory(int $gradeitemid, int $courseid) {
+    public static function activity_factory(int $gradeitemid, int $courseid, int $groupid = 0) {
         global $DB;
 
         $item = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
         $module = $item->itemmodule;
         if ($item->itemtype == 'manual') {
-            return new \local_gugrades\activities\manual($gradeitemid, $courseid);
+            return new \local_gugrades\activities\manual($gradeitemid, $courseid, $groupid);
         } else {
             $classname = '\\local_gugrades\\activities\\' . $module . '_activity';
             if (class_exists($classname)) {
-                return new $classname($gradeitemid, $courseid);
+                return new $classname($gradeitemid, $courseid, $groupid);
             } else {
-                return new \local_gugrades\activities\default_activity($gradeitemid, $courseid, $item->itemtype);
+                return new \local_gugrades\activities\default_activity($gradeitemid, $courseid, $groupid);
             }
         }
     }
@@ -78,12 +79,13 @@ class users {
      * @param \context $context
      * @param string $firstname (first letter of first name)
      * @param string $lastname (first letter of last name)
+     * @param int $groupid (0 means ignore groups)
      * @return array
      */
-    public static function get_gradeable_users(\context $context, $firstname = '', $lastname = '') {
+    public static function get_gradeable_users(\context $context, $firstname = '', $lastname = '', $groupid = 0) {
         $fields = 'u.id, u.username, u.idnumber, u.firstname, u.lastname, u.email,
             u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename, u.picture, u.imagealt';
-        $users = get_enrolled_users($context, 'moodle/grade:view', 0, $fields);
+        $users = get_enrolled_users($context, 'moodle/grade:view', $groupid, $fields);
 
         // Filter.
         if ($firstname || $lastname) {
@@ -107,15 +109,16 @@ class users {
      * @param \context $context
      * @param string $firstname (first letter of first name)
      * @param string $lastname (first letter of last name)
+     * @param int $groupid
      * @return array
      */
-    public static function get_available_users_from_cm($cmi, $context, $firstname, $lastname) {
+    public static function get_available_users_from_cm($cmi, $context, $firstname, $lastname, $groupid) {
 
         // See https://moodledev.io/docs/apis/subsystems/availability.
         $info = new \core_availability\info_module($cmi);
 
         // Get all the possible users in this course.
-        $users = self::get_gradeable_users($context, $firstname, $lastname);
+        $users = self::get_gradeable_users($context, $firstname, $lastname, $groupid);
 
         // Filter using availability API.
         $filteredusers = $info->filter_user_list($users);

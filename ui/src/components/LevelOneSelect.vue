@@ -1,5 +1,5 @@
 /**
- * Display drop-drown for top-level 
+ * Display drop-drown for top-level
  */
 
 <template>
@@ -11,7 +11,7 @@
             <option value="0">{{ mstrings.selectgradecategory }}</option>
             <option v-for="category in level1categories" :key="category.id" :value="category.id">{{ category.fullname }}</option>
         </select>
-    </div>  
+    </div>
 </template>
 
 <script setup>
@@ -54,5 +54,5 @@
 
     onMounted(() => {
         getLevelOne();
-    })
+    });
 </script>

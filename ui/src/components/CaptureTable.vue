@@ -62,7 +62,7 @@
                             :itemname="itemname"
                             :gradesimported="gradesimported"
                             :awaitingcapture="item.awaitingcapture"
-                            @gradeadded = "get_page_data(itemid, firstname, lastname)"
+                            @gradeadded = "get_page_data(itemid, firstname, lastname, groupid)"
                             >
                         </CaptureMenu>
                     </template>
@@ -91,6 +91,7 @@
     const users = ref([]);
     const userids = ref([]);
     const itemid = ref(0);
+    const groupid = ref(0);
     const mstrings = inject('mstrings');
     const totalrows = ref(0);
     const currentpage = ref(1);
@@ -130,11 +131,13 @@
     }
 
     /**
-     * New itemid has been selected
+     * New itemid and/or groupid has been selected
      */
-    function selecteditemid(id) {
-        itemid.value = id;
-        get_page_data(id, firstname, lastname);
+    function selecteditemid(itemgroup) {
+        itemid.value = itemgroup.itemid;
+        groupid.value = itemgroup.groupid;
+
+        get_page_data(itemid.value, firstname, lastname, groupid.value);
     }
 
     /**
@@ -216,8 +219,9 @@
      * @param int itemid
      * @param char first
      * @param char last
+     * @param int gid (group id)
      */
-     function get_page_data(itemid, first, last) {
+     function get_page_data(itemid, first, last, gid) {
         const GU = window.GU;
         const courseid = GU.courseid;
         const fetchMany = GU.fetchMany;
@@ -231,6 +235,7 @@
                 gradeitemid: itemid,
                 firstname: first,
                 lastname: last,
+                groupid: gid,
                 viewfullnames: revealnames.value,
             }
         }])[0]
@@ -274,14 +279,14 @@
 
         // Reset page
         currentpage.value = 1;
-        get_page_data(itemid.value, first, last);
+        get_page_data(itemid.value, first, last, groupid.value);
     }
 
     /**
      * Refresh the data table
      */
     function refresh() {
-        get_page_data(itemid.value, firstname, lastname);
+        get_page_data(itemid.value, firstname, lastname, groupid.value);
     }
 
     /**

@@ -48,9 +48,19 @@ abstract class base {
     protected int $gradeitemid;
 
     /**
+     * @var object $gradeitem
+     */
+    protected object $gradeitem;
+
+    /**
      * @var int $courseid
      */
     protected int $courseid;
+
+    /**
+     * @var int $groupid
+     */
+    protected int $groupid;
 
     /**
      * @var string $itemtype
@@ -66,12 +76,14 @@ abstract class base {
      * Constructor, set grade itemid
      * @param int $gradeitemid Grade item id
      * @param int $courseid
+     * @param int $groupid
      */
-    public function __construct(int $gradeitemid, int $courseid) {
+    public function __construct(int $gradeitemid, int $courseid, int $groupid) {
         global $DB;
 
         $this->gradeitemid = $gradeitemid;
         $this->courseid = $courseid;
+        $this->groupid = $groupid;
 
         // Default filter.
         $this->firstnamefilter = '';
@@ -99,7 +111,7 @@ abstract class base {
      */
     public function get_users() {
         $context = \context_course::instance($this->courseid);
-        $users = \local_gugrades\users::get_gradeable_users($context, $this->firstnamefilter, $this->lastnamefilter);
+        $users = \local_gugrades\users::get_gradeable_users($context, $this->firstnamefilter, $this->lastnamefilter, $this->groupid);
 
         // Displayname.
         foreach ($users as $user) {

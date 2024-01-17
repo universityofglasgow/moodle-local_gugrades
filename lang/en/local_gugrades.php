@@ -27,6 +27,7 @@ $string['activityname'] = 'Activity name';
 $string['addgrade'] = 'Add grade';
 $string['admingrades'] = 'Admin grade';
 $string['all'] = 'All';
+$string['allparticipants'] = 'All participants';
 $string['areyousure'] = 'Are you sure you want to do this?';
 $string['assessmentgradecapture'] = 'Assessment grade capture';
 $string['auditlog'] = 'Audit log';

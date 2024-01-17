@@ -47,9 +47,10 @@ class assign_activity extends base {
      * Constructor, set grade itemid
      * @param int $gradeitemid Grade item id
      * @param int $courseid
+     * @param int $groupid
      */
-    public function __construct(int $gradeitemid, int $courseid) {
-        parent::__construct($gradeitemid, $courseid);
+    public function __construct(int $gradeitemid, int $courseid, int $groupid) {
+        parent::__construct($gradeitemid, $courseid, $groupid);
 
         // Get the assignment object.
         $this->cm = \local_gugrades\users::get_cm_from_grade_item($gradeitemid, $courseid);
@@ -77,7 +78,7 @@ class assign_activity extends base {
     public function get_users() {
         $context = \context_course::instance($this->courseid);
         $users = \local_gugrades\users::get_available_users_from_cm(
-            $this->cm, $context, $this->firstnamefilter, $this->lastnamefilter);
+            $this->cm, $context, $this->firstnamefilter, $this->lastnamefilter, $this->groupid);
 
         $assigninstance = $this->assign->get_instance();
 
