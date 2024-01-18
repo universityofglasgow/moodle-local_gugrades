@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-2">
+    <div v-if="showgroupselect" class="mt-2">
         <select class="form-control border-dark" @change="group_change($event)">
             <option value="0">{{ mstrings.allparticipants }}</option>
             <option v-for="group in groups" :key="group.id" :value="group.id">{{ group.name }}</option>
@@ -13,6 +13,7 @@
 
     const groups = ref([]);
     const mstrings = inject('mstrings');
+    const showgroupselect = ref(false);
 
     const emit = defineEmits(['groupselected']);
 
@@ -32,6 +33,7 @@
         }])[0]
         .then((result) => {
             groups.value = result;
+            showgroupselect.value = groups.value.length > 0;
         })
         .catch((error) => {
             window.console.error(error);
