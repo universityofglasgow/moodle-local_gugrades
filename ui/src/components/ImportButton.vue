@@ -1,5 +1,8 @@
 <template>
-    <button type="button" class="btn btn-outline-dark  mr-1" @click="import_button_click()">{{ mstrings.importgrades }}</button>
+    <button type="button" class="btn btn-outline-dark  mr-1" @click="import_button_click()">
+        <span v-if="groupimport">{{ mstrings.importgradesgroup }}</span>
+        <span v-else>{{ mstrings.importgrades }}</span>
+    </button>
 
     <Teleport to="body">
         <ModalForm :show="showimportmodal" @close="showimportmodal = false">
@@ -9,9 +12,11 @@
             <template #body>
                 <div v-if="is_importgrades" class="alert alert-warning">
                     {{ mstrings.gradesimported }}
+                    <p v-if="groupimport" class="mt-1"><b>{{ mstrings.importinfogroup }}</b></p>
                 </div>
                 <div v-else class="alert alert-info">
                     {{ mstrings.importinfo }}
+                    <p v-if="groupimport" class="mt-1"><b>{{ mstrings.importinfogroup }}</b></p>
                 </div>
             </template>
             <template #footer>
@@ -31,16 +36,20 @@
 </template>
 
 <script setup>
-    import {ref, defineProps, defineEmits, inject} from '@vue/runtime-core';
+    import {ref, defineProps, defineEmits, inject, computed} from '@vue/runtime-core';
     import ModalForm from '@/components/ModalForm.vue';
     import { useToast } from "vue-toastification";
 
     const props = defineProps({
         userids: Array,
-        itemid: Number
+        itemid: Number,
+        groupid: Number,
     });
 
     const toast = useToast();
+    const groupimport = computed(() => {
+        return props.groupid > 0;
+    });
 
     const emit = defineEmits(['imported']);
 
@@ -97,6 +106,7 @@
             args: {
                 courseid: courseid,
                 gradeitemid: props.itemid,
+                groupid: props.groupid,
             }
         }])[0]
         .then((result) => {

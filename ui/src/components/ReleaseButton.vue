@@ -1,5 +1,8 @@
 <template>
-    <button type="button" class="btn btn-outline-success mr-1" @click="showreleasemodal=true">{{ mstrings.releasegrades }}</button>
+    <button type="button" class="btn btn-outline-success mr-1" @click="showreleasemodal=true">
+        <span v-if="grouprelease">{{ mstrings.releasegradesgroup }}</span>
+        <span v-else>{{ mstrings.releasegrades }}</span>
+    </button>
 
     <Teleport to="body">
         <ModalForm :show="showreleasemodal" @close="showreleasemodal = false">
@@ -7,7 +10,10 @@
                 <h4>{{ mstrings.releasegrades }}</h4>
             </template>
             <template #body>
-                <div class="alert alert-warning">{{ mstrings.releaseconfirm }}</div>
+                <div class="alert alert-warning">
+                    {{ mstrings.releaseconfirm }}
+                    <p v-if="grouprelease" class="mt-1"><b>{{ mstrings.releaseconfirmgroup }}</b></p>
+                </div>
             </template>
             <template #footer>
                 <button
@@ -26,7 +32,7 @@
 </template>
 
 <script setup>
-    import {ref, inject, defineProps, defineEmits} from '@vue/runtime-core';
+    import {ref, inject, defineProps, defineEmits, computed} from '@vue/runtime-core';
     import ModalForm from '@/components/ModalForm.vue';
     import { useToast } from "vue-toastification";
 
@@ -39,6 +45,11 @@
 
     const props = defineProps({
         gradeitemid: Number,
+        groupid: Number,
+    });
+
+    const grouprelease = computed(() => {
+        return props.groupid > 0;
     });
 
     /**
@@ -54,6 +65,7 @@
             args: {
                 courseid: courseid,
                 gradeitemid: props.gradeitemid,
+                groupid: props.groupid,
             }
         }])[0]
         .then(() => {

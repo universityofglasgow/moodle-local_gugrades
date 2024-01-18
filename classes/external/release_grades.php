@@ -46,6 +46,7 @@ class release_grades extends \external_api {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course id'),
             'gradeitemid' => new external_value(PARAM_INT, 'Grade item id number'),
+            'groupid' => new external_value(PARAM_INT, 'Group ID. 0 means everybody'),
         ]);
     }
 
@@ -53,18 +54,20 @@ class release_grades extends \external_api {
      * Execute function
      * @param int $courseid
      * @param int $gradeitemid
+     * @param int $groupid
      */
-    public static function execute($courseid, $gradeitemid) {
+    public static function execute($courseid, $gradeitemid, $groupid) {
 
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
             'courseid' => $courseid,
             'gradeitemid' => $gradeitemid,
+            'groupid' => $groupid,
         ]);
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        \local_gugrades\api::release_grades($courseid, $gradeitemid);
+        \local_gugrades\api::release_grades($courseid, $gradeitemid, $groupid);
 
         // Log.
         $event = \local_gugrades\event\release_grades::create([
@@ -72,6 +75,7 @@ class release_grades extends \external_api {
             'context' => $context,
             'other' => [
                 'gradeitemid' => $gradeitemid,
+                'groupid' => $groupid,
             ],
         ]);
         $event->trigger();

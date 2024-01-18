@@ -397,13 +397,24 @@ class grades {
      * Have any grades already been imported for gradeitem
      * @param int $courseid
      * @param int $gradeitemid
+     * @param int $groupid
      * @return bool
      */
-    public static function is_grades_imported(int $courseid, int $gradeitemid) {
+    public static function is_grades_imported(int $courseid, int $gradeitemid, int $groupid = 0) {
         global $DB;
 
-        return $DB->record_exists_sql('select * from {local_gugrades_grade} where gradeitemid=:gradeitemid',
-            ['gradeitemid' => $gradeitemid]);
+        if ($groupid) {
+            $sql = "SELECT * FROM {local_gugrades_grade} gg
+                JOIN {groups_members} gm ON gm.userid = gg.userid
+                WHERE gg.gradeitemid = :gradeitemid
+                AND gm.groupid = :groupid";
+                $params = ['gradeitemid' => $gradeitemid, 'groupid' => $groupid];
+        } else {
+            $sql = 'select * from {local_gugrades_grade} where gradeitemid=:gradeitemid';
+            $params = ['gradeitemid' => $gradeitemid];
+        }
+
+        return $DB->record_exists_sql($sql, $params);
     }
 
     /**

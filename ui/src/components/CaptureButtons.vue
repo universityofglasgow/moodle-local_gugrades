@@ -1,7 +1,7 @@
 <template>
     <div class="col-12 mt-2">
-        <ImportButton :itemid="props.itemid" :userids="props.userids" @imported="emit('refreshtable')"></ImportButton>
-        <ReleaseButton v-if="props.gradesimported" :gradeitemid="props.itemid" @released="emit('refreshtable')"></ReleaseButton>
+        <ImportButton :itemid="props.itemid" :groupid="groupid" :userids="props.userids" @imported="emit('refreshtable')"></ImportButton>
+        <ReleaseButton v-if="props.gradesimported" :gradeitemid="props.itemid" :groupid="groupid" @released="emit('refreshtable')"></ReleaseButton>
         <ExportWorksheetButton v-if="itemtype=='assign'" :users="props.users" :itemtype="props.itemtype" :itemname="props.itemname"></ExportWorksheetButton>
         <ViewFullNamesButton v-if="props.usershidden" @viewfullnames="viewfullnames"></ViewFullNamesButton>
     </div>
@@ -16,6 +16,7 @@
 
     const props = defineProps({
         itemid: Number,
+        groupid: Number,
         userids: Array,
         users: Array,
         itemtype: String,

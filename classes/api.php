@@ -304,10 +304,11 @@ class api {
      * Has anything been defined for gradeitemid
      * @param int $courseid
      * @param int $gradeitemid
+     * @param int $groupid
      * @return boolean
      */
-    public static function is_grades_imported(int $courseid, int $gradeitemid) {
-        return \local_gugrades\grades::is_grades_imported($courseid, $gradeitemid);
+    public static function is_grades_imported(int $courseid, int $gradeitemid, $groupid) {
+        return \local_gugrades\grades::is_grades_imported($courseid, $gradeitemid, $groupid);
     }
 
     /**
@@ -687,12 +688,13 @@ class api {
      * Release grades
      * @param int $courseid
      * @param int $gradeitemid
+     * @param int $groupid
      */
-    public static function release_grades(int $courseid, int $gradeitemid) {
+    public static function release_grades(int $courseid, int $gradeitemid, int $groupid) {
         global $DB;
 
         // Get list of users.
-        $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid);
+        $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid, $groupid);
         $users = $activity->get_users();
 
         // Iterate over users releasing grades.

@@ -46,6 +46,7 @@ class is_grades_imported extends \external_api {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course id'),
             'gradeitemid' => new external_value(PARAM_INT, 'Grade item id'),
+            'groupid' => new external_value(PARAM_INT, 'Group ID. 0 means everybody'),
         ]);
     }
 
@@ -53,19 +54,21 @@ class is_grades_imported extends \external_api {
      * Execute function
      * @param int $courseid
      * @param int $gradeitemid
+     * @param int $groupid
      * @return array
      */
-    public static function execute($courseid, $gradeitemid) {
+    public static function execute($courseid, $gradeitemid, $groupid) {
 
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
             'courseid' => $courseid,
             'gradeitemid' => $gradeitemid,
+            'groupid' => $groupid,
         ]);
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        return ['imported' => \local_gugrades\api::is_grades_imported($courseid, $gradeitemid)];
+        return ['imported' => \local_gugrades\api::is_grades_imported($courseid, $gradeitemid, $groupid)];
     }
 
     /**
