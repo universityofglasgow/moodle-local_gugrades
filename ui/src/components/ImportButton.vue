@@ -4,40 +4,32 @@
         <span v-else>{{ mstrings.importgrades }}</span>
     </button>
 
-    <Teleport to="body">
-        <ModalForm :show="showimportmodal" @close="showimportmodal = false">
-            <template #header>
-                <h4>{{ mstrings.importgrades }}</h4>
-            </template>
-            <template #body>
-                <div v-if="is_importgrades" class="alert alert-warning">
-                    {{ mstrings.gradesimported }}
-                    <p v-if="groupimport" class="mt-1"><b>{{ mstrings.importinfogroup }}</b></p>
-                </div>
-                <div v-else class="alert alert-info">
-                    {{ mstrings.importinfo }}
-                    <p v-if="groupimport" class="mt-1"><b>{{ mstrings.importinfogroup }}</b></p>
-                </div>
-            </template>
-            <template #footer>
-                <button
-                    class="modal-default-button btn btn-primary"
+    <VueModal v-model="showimportmodal" modalClass="col-11 col-lg-5" :title="mstrings.importgrades">
+        <div v-if="is_importgrades" class="alert alert-warning">
+            {{ mstrings.gradesimported }}
+            <p v-if="groupimport" class="mt-1"><b>{{ mstrings.importinfogroup }}</b></p>
+        </div>
+        <div v-else class="alert alert-info">
+            {{ mstrings.importinfo }}
+            <p v-if="groupimport" class="mt-1"><b>{{ mstrings.importinfogroup }}</b></p>
+        </div>
+        <div class="mt-2 pt-2 border-top">
+            <button
+                    class="btn btn-primary mr-1"
                     @click="importgrades()"
                     >{{ mstrings.yesimport }}
-                </button>
-                <button
-                    class="modal-default-button btn btn-warning"
-                    @click="showimportmodal = false"
-                    >{{ mstrings.cancel }}
-                </button>
-            </template>
-        </ModalForm>
-    </Teleport>
+            </button>
+            <button
+                class="btn btn-warning"
+                @click="showimportmodal = false"
+                >{{ mstrings.cancel }}
+            </button>
+        </div>
+    </VueModal>
 </template>
 
 <script setup>
     import {ref, defineProps, defineEmits, inject, computed} from '@vue/runtime-core';
-    import ModalForm from '@/components/ModalForm.vue';
     import { useToast } from "vue-toastification";
 
     const props = defineProps({

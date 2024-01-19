@@ -1,14 +1,9 @@
 <template>
     <a class="dropdown-item" href="#" @click="add_grade()">{{ mstrings.addgrade }}</a>
 
-    <Teleport to="body">
-        <ModalForm :show="showaddgrademodal" @close="showaddgrademodal = false">
-            <template #header>
-                <h4>{{ mstrings.addgrade }}</h4>
-                
-            </template>
-            <template #body>
-                <ul class="list-unstyled">
+    <VueModal v-model="showaddgrademodal" modalClass="col-11 col-lg-5" :title="mstrings.addgrade">
+        <template #content>
+            <ul class="list-unstyled">
                     <li><b>{{ mstrings.itemname }}:</b> {{ itemname }}</li>
                     <li><b>{{ mstrings.username }}:</b> {{ name }}</li>
                     <li><b>{{ mstrings.idnumber }}:</b> {{ idnumber }}</li>
@@ -69,14 +64,12 @@
                         v-model="notes"
                     />
                 </FormKit>
-            </template>
-        </ModalForm>
-    </Teleport>
+        </template>
+    </VueModal>
 </template>
 
 <script setup>
     import {ref, defineProps, defineEmits, inject} from '@vue/runtime-core';
-    import ModalForm from '@/components/ModalForm.vue';
     import { useToast } from "vue-toastification";
 
     const showaddgrademodal = ref(false);
@@ -166,7 +159,7 @@
                 courseid: courseid,
                 gradeitemid: props.itemid,
                 userid: props.userid,
-                admingrade: admingrade.value == 'GRADE' ? '' : admingrade.value, 
+                admingrade: admingrade.value == 'GRADE' ? '' : admingrade.value,
                 reason: reason.value,
                 other: other.value,
                 scale: scale.value ? scale.value : 0, // WS expecting int

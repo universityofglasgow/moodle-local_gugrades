@@ -3,9 +3,7 @@
         {{ mstrings.resetcourse }}
     </button>
 
-    <Teleport to="body">
-        <ConfirmModal :show="showconfirm" :message="mstrings.resetcourseconfirm" @confirm="confirmdelete"></ConfirmModal>
-    </Teleport>
+    <ConfirmModal :show="showconfirm" :message="mstrings.resetcourseconfirm" @confirm="confirmdelete"></ConfirmModal>
 </template>
 
 <script setup>

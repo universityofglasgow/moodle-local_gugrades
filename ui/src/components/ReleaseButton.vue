@@ -4,36 +4,28 @@
         <span v-else>{{ mstrings.releasegrades }}</span>
     </button>
 
-    <Teleport to="body">
-        <ModalForm :show="showreleasemodal" @close="showreleasemodal = false">
-            <template #header>
-                <h4>{{ mstrings.releasegrades }}</h4>
-            </template>
-            <template #body>
-                <div class="alert alert-warning">
-                    {{ mstrings.releaseconfirm }}
-                    <p v-if="grouprelease" class="mt-1"><b>{{ mstrings.releaseconfirmgroup }}</b></p>
-                </div>
-            </template>
-            <template #footer>
-                <button
-                    class="modal-default-button btn btn-primary"
-                    @click="release_grades()"
-                    >{{ mstrings.yesrelease }}
-                </button>
-                <button
-                    class="modal-default-button btn btn-warning"
-                    @click="showreleasemodal = false"
-                    >{{ mstrings.cancel }}
-                </button>
-            </template>
-        </ModalForm>
-    </Teleport>
+    <VueModal v-model="showreleasemodal" modalClass="col-11 col-lg-5" :title="mstrings.releasegrades">
+        <div class="alert alert-warning">
+            {{ mstrings.releaseconfirm }}
+            <p v-if="grouprelease" class="mt-1"><b>{{ mstrings.releaseconfirmgroup }}</b></p>
+        </div>
+        <div class="mt-2 pt-2 border-top">
+            <button
+                class="btn btn-primary mr-1"
+                @click="release_grades()"
+                >{{ mstrings.yesrelease }}
+            </button>
+            <button
+                class="btn btn-warning"
+                @click="showreleasemodal = false"
+                >{{ mstrings.cancel }}
+            </button>
+        </div>
+    </VueModal>
 </template>
 
 <script setup>
     import {ref, inject, defineProps, defineEmits, computed} from '@vue/runtime-core';
-    import ModalForm from '@/components/ModalForm.vue';
     import { useToast } from "vue-toastification";
 
     const showreleasemodal = ref(false);

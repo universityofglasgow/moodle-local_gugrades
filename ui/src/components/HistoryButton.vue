@@ -1,31 +1,25 @@
 <template>
     <a class="dropdown-item" href="#" @click="read_history()">{{ mstrings.history }}</a>
 
-    <Teleport to="body">
-        <ModalForm :show="showhistorymodal" @close="showhistorymodal = false">
-            <template #header>
-                <h4>{{ mstrings.gradehistory }}</h4>
-                
-            </template>
-            <template #body>
-                <div>
-                    <ul class="list-unstyled">
-                        <li><b>{{ mstrings.name }}:</b> {{ name }}</li>
-                        <li><b>{{ mstrings.itemname }}:</b> {{ itemname }}</li>
-                    </ul>
-                </div>
-                <div v-if="grades.length == 0" class="alert alert-warning">{{ mstrings.nohistory }}</div>
+    <VueModal v-model="showhistorymodal" modalClass="col-11 col-lg-5" :title="mstrings.gradehistory">
+        <template #content>
+            <div>
+                <ul class="list-unstyled">
+                    <li><b>{{ mstrings.name }}:</b> {{ name }}</li>
+                    <li><b>{{ mstrings.itemname }}:</b> {{ itemname }}</li>
+                </ul>
+            </div>
+            <div v-if="grades.length == 0" class="alert alert-warning">{{ mstrings.nohistory }}</div>
 
-                <EasyDataTable v-else :headers="headers" :items="grades">
-                </EasyDataTable>
-            </template>
-        </ModalForm>
-    </Teleport>
+            <EasyDataTable v-else :headers="headers" :items="grades">
+            </EasyDataTable>
+        </template>
+
+    </VueModal>
 </template>
 
 <script setup>
     import {ref, defineProps, onMounted, inject} from '@vue/runtime-core';
-    import ModalForm from '@/components/ModalForm.vue';
     import { useToast } from "vue-toastification";
 
     const showhistorymodal = ref(false);

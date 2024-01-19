@@ -6,6 +6,8 @@ import "vue-toastification/dist/index.css";
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
 import { plugin, defaultConfig } from '@formkit/vue';
+import { Modal } from '@kouts/vue-modal';
+import '../src/assets/VueModal.css';
 
 import customConfig from '@/js/formkit.config.js'
 
@@ -48,6 +50,7 @@ ensureGUIsSet(timeout)
         config: customConfig.config
     }));
     app.component('EasyDataTable', Vue3EasyDataTable);
+    app.component('VueModal', Modal);
     app.mount('#app');
 
     // Read strings
