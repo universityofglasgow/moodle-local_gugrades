@@ -4,7 +4,7 @@
         <span v-else>{{ mstrings.releasegrades }}</span>
     </button>
 
-    <VueModal v-model="showreleasemodal" modalClass="col-11 col-lg-5" :title="mstrings.releasegrades">
+    <VueModal v-model="showreleasemodal" modalClass="col-11 col-lg-5 rounded" :title="mstrings.releasegrades">
         <div class="alert alert-warning">
             {{ mstrings.releaseconfirm }}
             <p v-if="grouprelease" class="mt-1"><b>{{ mstrings.releaseconfirmgroup }}</b></p>

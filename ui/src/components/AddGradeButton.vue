@@ -1,7 +1,7 @@
 <template>
     <a class="dropdown-item" href="#" @click="add_grade()">{{ mstrings.addgrade }}</a>
 
-    <VueModal v-model="showaddgrademodal" modalClass="col-11 col-lg-5" :title="mstrings.addgrade">
+    <VueModal v-model="showaddgrademodal" modalClass="col-11 col-lg-5 rounded" :title="mstrings.addgrade">
         <template #content>
             <ul class="list-unstyled">
                     <li><b>{{ mstrings.itemname }}:</b> {{ itemname }}</li>

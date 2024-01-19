@@ -1,7 +1,7 @@
 <template>
     <a class="dropdown-item" href="#" @click="read_history()">{{ mstrings.history }}</a>
 
-    <VueModal v-model="showhistorymodal" modalClass="col-11 col-lg-5" :title="mstrings.gradehistory">
+    <VueModal v-model="showhistorymodal" modalClass="col-11 col-lg-5 rounded" :title="mstrings.gradehistory">
         <template #content>
             <div>
                 <ul class="list-unstyled">

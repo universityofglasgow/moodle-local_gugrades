@@ -4,7 +4,7 @@
         <span v-else>{{ mstrings.importgrades }}</span>
     </button>
 
-    <VueModal v-model="showimportmodal" modalClass="col-11 col-lg-5" :title="mstrings.importgrades">
+    <VueModal v-model="showimportmodal" modalClass="col-11 col-lg-5 rounded" :title="mstrings.importgrades">
         <div v-if="is_importgrades" class="alert alert-warning">
             {{ mstrings.gradesimported }}
             <p v-if="groupimport" class="mt-1"><b>{{ mstrings.importinfogroup }}</b></p>

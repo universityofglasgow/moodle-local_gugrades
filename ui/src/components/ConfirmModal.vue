@@ -16,7 +16,7 @@
         </template>
     </ModalForm>
 -->
-    <VueModal v-model="showmodal" modalClass="col-11 col-lg-5" :title="mstrings.confirm">
+    <VueModal v-model="showmodal" modalClass="col-11 col-lg-5 rounded" :title="mstrings.confirm">
         <div class="alert alert-danger">
             <p><strong>{{  props.message }}</strong></p>
             <p>{{ mstrings.areyousure }}</p>
