@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="text-center pb-1">
-            <img alt="MyGrade logo" src="@/assets/MyGradesLogo.png">
+            <img alt="MyGrade logo" src="@/assets/MyGradesLogoSmall.png">
         </div>
 
         <TabsNav @tabchange="tabChange"></TabsNav>
