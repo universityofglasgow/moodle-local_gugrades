@@ -137,6 +137,39 @@ class grades {
     }
 
     /**
+     * Check that all grades are the same for a potential recursive import
+     * For a given gradeitemid, we're looking at that items *peers* and any
+     * children thereof. So we want to start with the parent category of the
+     * supplied gradeitemid
+     * @param $gradeitemid
+     * @return array(recursiveavailable, recursivematch)
+     */
+    public static function recursive_import_match(int $gradeitemid) {
+        global $DB;
+
+        $gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
+        $courseid = $gradeitem->courseid;
+        $categoryid = $gradeitem->categoryid;
+
+        $recursiveavailable = false;
+        $recursivematch = false;
+
+        // This MUST be a 'second level' category. Which is actually the 3rd one down.
+        // SO it will have a path field like /a/b/c/ or longer.
+        // If not, recursive import is not available
+        $gradecategory = $DB->get_record('grade_categories', ['id' => $categoryid], '*', MUST_EXIST);
+        $pathcats = explode('/', $gradecategory->path);
+        if (count($pathcats) > 2) {
+
+        }
+
+        return [
+            $recursiveavailable,
+            $recursivematch,
+        ];
+    }
+
+    /**
      * Get the grade column record for the gradetype and (optionally)
      * 'other' text
      * @param int $courseid

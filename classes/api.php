@@ -301,14 +301,24 @@ class api {
     }
 
     /**
-     * Has anything been defined for gradeitemid
+     * Has anything been defined for gradeitemid?
+     * Are the grades going to "match" for a recursive import?
      * @param int $courseid
      * @param int $gradeitemid
      * @param int $groupid
-     * @return boolean
+     * @return array
      */
     public static function is_grades_imported(int $courseid, int $gradeitemid, $groupid) {
-        return \local_gugrades\grades::is_grades_imported($courseid, $gradeitemid, $groupid);
+        $imported = \local_gugrades\grades::is_grades_imported($courseid, $gradeitemid, $groupid);
+        list($recursiveavailable, $recursivematch) = \local_gugrades\grades::recursive_import_match($gradeitemid);
+        $recursiveavailable = false;
+        $recursivematch = false;
+
+        return [
+            'imported' => $imported,
+            'recursiveavailable' => $recursiveavailable,
+            'recursivematch' => $recursivematch,
+        ];
     }
 
     /**

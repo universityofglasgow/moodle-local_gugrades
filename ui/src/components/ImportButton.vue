@@ -47,10 +47,12 @@
 
     const showimportmodal = ref(false);
     const is_importgrades = ref(false);
+    const recursiveavailable = ref(false);
+    const recursivematch = ref(false);
     const mstrings = inject('mstrings');
 
     /**
-     * Import grades button clicked
+     * Import grades confirmed
      */
      function importgrades() {
         const GU = window.GU;
@@ -103,6 +105,8 @@
         }])[0]
         .then((result) => {
             is_importgrades.value = result.imported;
+            recursiveavailable.value = result.recursiveavailable;
+            recursivematch.value = result.recursivematch;
         })
         .catch((error) => {
             window.console.log(error);
