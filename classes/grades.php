@@ -139,7 +139,7 @@ class grades {
     /**
      * Given gradecatoryid - get all the items in that category
      * and in an child categories (recursively)
-     * (a bit like @link recurse_activitytree but only items)
+     * (a bit like recurse_activitytree but only items)
      * We don't actually recurse - just use the path
      * @param object $gradecategory
      * @return array (of grade_items)
@@ -162,7 +162,7 @@ class grades {
      * For a given gradeitemid, we're looking at that items *peers* and any
      * children thereof. So we want to start with the parent category of the
      * supplied gradeitemid
-     * @param $gradeitemid
+     * @param int $gradeitemid
      * @return array(recursiveavailable, recursivematch)
      */
     public static function recursive_import_match(int $gradeitemid) {

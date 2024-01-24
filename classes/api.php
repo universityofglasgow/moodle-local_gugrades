@@ -142,6 +142,7 @@ class api {
      * @param int $courseid
      * @param int $gradeitemid
      * @param \local_gugrades\conversion\base $conversion
+     * @param \local_gugrades\activities\base $activity
      * @param int $userid
      * @return bool - was a grade imported
      */

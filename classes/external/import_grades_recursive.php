@@ -55,6 +55,7 @@ class import_grades_recursive extends \external_api {
      * Execute function
      * @param int $courseid
      * @param int $gradeitemid
+     * @param int $groupid
      * @return array
      */
     public static function execute(int $courseid, int $gradeitemid, int $groupid) {
