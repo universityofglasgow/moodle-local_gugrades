@@ -137,6 +137,27 @@ class grades {
     }
 
     /**
+     * Given gradecatoryid - get all the items in that category
+     * and in an child categories (recursively)
+     * (a bit like @link recurse_activitytree but only items)
+     * We don't actually recurse - just use the path
+     * @param object $gradecategory
+     * @return array (of grade_items)
+     */
+    public static function get_gradeitems_recursive(object $gradecategory) {
+        global $DB;
+
+        // Whatever path this has will be the start of all other paths that we want.
+        $path = $gradecategory->path;
+        $sql = "SELECT gi.* from {grade_items} gi
+            JOIN {grade_categories} gc ON gi.categoryid = gc.id
+            WHERE gc.path LIKE :path";
+        $items = $DB->get_records_sql($sql, ['path' => $path . '%']);
+
+        return $items;
+    }
+
+    /**
      * Check that all grades are the same for a potential recursive import
      * For a given gradeitemid, we're looking at that items *peers* and any
      * children thereof. So we want to start with the parent category of the
@@ -158,9 +179,28 @@ class grades {
         // SO it will have a path field like /a/b/c/ or longer.
         // If not, recursive import is not available
         $gradecategory = $DB->get_record('grade_categories', ['id' => $categoryid], '*', MUST_EXIST);
-        $pathcats = explode('/', $gradecategory->path);
-        if (count($pathcats) > 2) {
 
+        // trim to remove leading and trailing /, otherwise you get two extra empty fields.
+        $pathcats = explode('/', trim($gradecategory->path, '/'));
+        if (count($pathcats) > 2) {
+            $recursiveavailable = true;
+
+            // Get grade items
+            if ($items = self::get_gradeitems_recursive($gradecategory)) {
+
+                // As a basic check grade min, max and scale type need to match
+                $first = array_shift($items);
+                $recursivematch = true;
+                foreach ($items as $item) {
+                    if (
+                        ($first->grademax != $item->grademax) ||
+                        ($first->grademin != $item->grademin) ||
+                        ($first->scaleid != $item->scaleid)
+                    ) {
+                        $recursivematch = false;
+                    }
+                }
+            }
         }
 
         return [

@@ -78,6 +78,16 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
     protected int $gradeitemidassign2;
 
     /**
+     * @var int $gradeitemsecond1
+     */
+    protected int $gradeitemsecond1;
+
+    /**
+     * @var int $gradeitemsecond2
+     */
+    protected int $gradeitemsecond2;
+
+    /**
      * Get gradeitemid
      * @param string $itemtype
      * @param string $itemmodule
@@ -239,6 +249,19 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
     }
 
     /**
+     * Move grade item into specified category
+     * @param int $gradeitemid
+     * @param int $gradecategoryid
+     */
+    protected function move_gradeitem_to_category(int $gradeitemid, int $gradecategoryid) {
+        global $DB;
+
+        $gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
+        $gradeitem->categoryid = $gradecategoryid;
+        $DB->update_record('grade_items', $gradeitem);
+    }
+
+    /**
      * Called before every test
      */
     protected function setUp(): void {
@@ -305,11 +328,20 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
             $DB->update_record('grade_items', $item);
         }
 
+        // Create a "second level" grade category and pu some iems in it
+        $gradecatsecond = $this->getDataGenerator()->create_grade_category(['courseid' => $course->id, 'fullname' => 'Second Level', 'parent' => $gradecatsumm->id]);
+        $seconditem1 = $this->getDataGenerator()->create_grade_item(['courseid' => $course->id]);
+        $this->move_gradeitem_to_category($seconditem1->id, $gradecatsecond->id);
+        $seconditem2 = $this->getDataGenerator()->create_grade_item(['courseid' => $course->id]);
+        $this->move_gradeitem_to_category($seconditem2->id, $gradecatsecond->id);
+
         $this->course = $course;
         $this->teacher = $teacher;
         $this->student = $student;
         $this->student2 = $student2;
         $this->gradecatsumm = $gradecatsumm;
         $this->gradecatform = $gradecatform;
+        $this->gradeitemsecond1 = $seconditem1->id;
+        $this->gradeitemsecond2 = $seconditem2->id;
     }
 }

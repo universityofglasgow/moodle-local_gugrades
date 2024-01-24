@@ -13,6 +13,21 @@
             {{ mstrings.importinfo }}
             <p v-if="groupimport" class="mt-1"><b>{{ mstrings.importinfogroup }}</b></p>
         </div>
+
+        <div v-if="recursiveavailable" class="alert alert-secondary">
+            <FormKit
+                type="checkbox"
+                :label="mstrings.recursiveimport"
+                :help="mstrings.recursiveimporthelp"
+                name="recursiveimport"
+                v-model="recursiveselect"
+                />
+        </div>
+
+        <div v-if="recursiveavailable && recursiveselect && !recursivematch" class="alert alert-warning">
+            {{ mstrings.importnomatch }}
+        </div>
+
         <div class="mt-2 pt-2 border-top">
             <button
                     class="btn btn-primary mr-1"
@@ -49,12 +64,24 @@
     const is_importgrades = ref(false);
     const recursiveavailable = ref(false);
     const recursivematch = ref(false);
+    const recursiveselect = ref(false);
     const mstrings = inject('mstrings');
 
     /**
-     * Import grades confirmed
+     * Import confirmed. Select appropriate importfunction
      */
-     function importgrades() {
+    function importgrades() {
+        if (recursiveselect) {
+            importrecursive();
+        } else {
+            importsingle();
+        }
+    }
+
+    /**
+     * Import single grade item
+     */
+     function importsingle() {
         const GU = window.GU;
         const courseid = GU.courseid;
         const fetchMany = GU.fetchMany;
@@ -82,6 +109,38 @@
         });
 
         showimportmodal.value = false;
+    }
+
+    /**
+     * Import recursive grades
+     */
+    function importrecursive() {
+        const GU = window.GU;
+        const courseid = GU.courseid;
+        const fetchMany = GU.fetchMany;
+
+        fetchMany([{
+            methodname: 'local_gugrades_import_grades_recursive',
+            args: {
+                courseid: courseid,
+                gradeitemid: props.itemid,
+                userlist: props.groupid,
+            }
+        }])[0]
+        .then((result) => {
+            const itemcount = result.itemcount;
+            const gradecount = result.gradecount;
+            emit('imported');
+            if (gradecount) {
+                toast.success(mstrings.gradesimportedsuccess + ' (' + itemcount + ', ' + gradecount + ')');
+            } else {
+                toast.warning(mstrings.nogradestoimport);
+            }
+        })
+        .catch((error) => {
+            window.console.error(error);
+            toast.error('Error communicating with server (see console)');
+        });
     }
 
     /**

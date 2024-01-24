@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Define function import_grades_users
+ * Define function import_grades_recursive
  * @package    local_gugrades
- * @copyright  2023
+ * @copyright  2024
  * @author     Howard Miller
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -37,7 +37,7 @@ require_once($CFG->libdir . '/externallib.php');
 /**
  * Define function import_grades_users
  */
-class import_grades_users extends \external_api {
+class import_grades_recursive extends \external_api {
 
     /**
      * Define function parameters
@@ -46,10 +46,8 @@ class import_grades_users extends \external_api {
     public static function execute_parameters() {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
-            'gradeitemid' => new external_value(PARAM_INT, 'Grade item id number'),
-            'userlist' => new external_multiple_structure(
-                new external_value(PARAM_INT)
-            ),
+            'gradeitemid' => new external_value(PARAM_INT, 'Grade item id number - import peers and children'),
+            'groupid' => new external_value(PARAM_INT, 'Group to import for'),
         ]);
     }
 
@@ -57,33 +55,23 @@ class import_grades_users extends \external_api {
      * Execute function
      * @param int $courseid
      * @param int $gradeitemid
-     * @param array $userlist
      * @return array
      */
-    public static function execute(int $courseid, int $gradeitemid, array $userlist) {
+    public static function execute(int $courseid, int $gradeitemid, int $groupid) {
 
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
             'courseid' => $courseid,
             'gradeitemid' => $gradeitemid,
-            'userlist' => $userlist,
+            'groupid' => $groupid,
         ]);
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        // Get conversion object for whatever grade type this is.
-        $conversion = \local_gugrades\grades::conversion_factory($courseid, $gradeitemid);
-        $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid);
-
-        $userids = $userlist;
-        $importcount = 0;
-        foreach ($userids as $userid) {
-            if (\local_gugrades\api::import_grade($courseid, $gradeitemid, $conversion, $activity, intval($userid))) {
-                $importcount++;
-            }
-        }
+        list($itemcount, $gradecount) = \local_gugrades\api::import_grades_recursive($courseid, $gradeitemid, $groupid);
 
         // Log.
+        /*
         $event = \local_gugrades\event\import_grades_users::create([
             'objectid' => $gradeitemid,
             'context' => \context_course::instance($courseid),
@@ -92,11 +80,12 @@ class import_grades_users extends \external_api {
             ],
         ]);
         $event->trigger();
+        */
 
         // Audit.
         \local_gugrades\audit::write($courseid, 0, $gradeitemid, 'Grades imported.');
 
-        return ['importcount' => $importcount];
+        return ['itemcount' => $itemcount, 'gradecount' => $gradecount];
     }
 
     /**
@@ -105,7 +94,8 @@ class import_grades_users extends \external_api {
      */
     public static function execute_returns() {
         return new external_single_structure([
-            'importcount' => new external_value(PARAM_INT, 'Number of grades imported'),
+            'itemcount' => new external_value(PARAM_INT, 'Number of individual gradeitems processed'),
+            'gradecount' => new external_value(PARAM_INT, 'Number of individual grades imported'),
         ]);
     }
 

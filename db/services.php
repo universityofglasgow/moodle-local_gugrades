@@ -35,6 +35,7 @@ $services = [
             'local_gugrades_get_grade_item',
             'local_gugrades_import_grade',
             'local_gugrades_import_grades_users',
+            'local_gugrades_import_grades_recursive',
             'local_gugrades_get_user_picture_url',
             'local_gugrades_get_user_grades',
             'local_gugrades_get_history',
@@ -92,6 +93,12 @@ $functions = [
     'local_gugrades_import_grades_users' => [
         'classname' => 'local_gugrades\external\import_grades_users',
         'description' => 'Import 1st grade from activity or grade item for list of users',
+        'type' => 'write',
+        'ajax' => true,
+    ],
+    'local_gugrades_import_grades_recursive' => [
+        'classname' => 'local_gugrades\external\import_grades_recursive',
+        'description' => 'Import 1st grade from activity and all its peers and children.',
         'type' => 'write',
         'ajax' => true,
     ],

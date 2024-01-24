@@ -145,10 +145,10 @@ class api {
      * @param int $userid
      * @return bool - was a grade imported
      */
-    public static function import_grade(int $courseid, int $gradeitemid, \local_gugrades\conversion\base $conversion, int $userid) {
+    public static function import_grade(int $courseid, int $gradeitemid, \local_gugrades\conversion\base $conversion, \local_gugrades\activities\base $activity, int $userid) {
 
         // Instantiate object for this activity type.
-        $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid);
+        // $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid);
 
         // Ask activity for grade.
         $rawgrade = $activity->get_first_grade($userid);
@@ -311,14 +311,57 @@ class api {
     public static function is_grades_imported(int $courseid, int $gradeitemid, $groupid) {
         $imported = \local_gugrades\grades::is_grades_imported($courseid, $gradeitemid, $groupid);
         list($recursiveavailable, $recursivematch) = \local_gugrades\grades::recursive_import_match($gradeitemid);
-        $recursiveavailable = false;
-        $recursivematch = false;
 
         return [
             'imported' => $imported,
             'recursiveavailable' => $recursiveavailable,
             'recursivematch' => $recursivematch,
         ];
+    }
+
+    /**
+     * Import grades recursively. A basic import for all peers and children
+     * of the supplied gradeitemid. Group selection is ignored!
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param int $groupid
+     * @return array [itemcount, gradecount]
+     */
+    public static function import_grades_recursive(int $courseid, int $gradeitemid, int $groupid) {
+        global $DB;
+
+        // Check!
+        list($recursiveavailable, $recursivematch) = \local_gugrades\grades::recursive_import_match($gradeitemid);
+        if (!$recursiveavailable) {
+            throw new \moodle_exception("import_grades_recursive called for <2nd level grade item. ID = " . $gradeitemid);
+        }
+
+        // Get parent grade category.
+        $gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
+        $categoryid = $gradeitem->categoryid;
+        $gradecategory = $DB->get_record('grade_categories', ['id' => $categoryid], '*', MUST_EXIST);
+
+        // Get a list of all the grade items under the above.
+        $items = \local_gugrades\grades::get_gradeitems_recursive($gradecategory);
+        $itemcount = count($items);
+        $gradecount = 0;
+
+        foreach ($items as $item) {
+            $activity = \local_gugrades\users::activity_factory($item->id, $courseid, $groupid);
+            $conversion = \local_gugrades\grades::conversion_factory($courseid, $item->id);
+
+            // Get all the permitted users in this activity
+            $users = $activity->get_users();
+
+            // iterate over these users importing grade
+            foreach ($users as $user) {
+                if (self::import_grade($courseid, $item->id, $conversion, $activity, $user->id)) {
+                    $gradecount++;
+                }
+            }
+        }
+
+        return [$itemcount, $gradecount];
     }
 
     /**
