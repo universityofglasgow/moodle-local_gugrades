@@ -82,7 +82,7 @@ class import_grades_recursive extends \external_api {
         $event->trigger();
 
         // Audit.
-        \local_gugrades\audit::write($courseid, 0, $gradeitemid, 'Grades imported.');
+        \local_gugrades\audit::write($courseid, 0, $gradeitemid, 'Grades imported - recursive.');
 
         return ['itemcount' => $itemcount, 'gradecount' => $gradecount];
     }

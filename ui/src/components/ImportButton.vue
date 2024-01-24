@@ -76,6 +76,8 @@
         } else {
             importsingle();
         }
+
+        showimportmodal.value = false;
     }
 
     /**
@@ -107,8 +109,6 @@
             window.console.error(error);
             toast.error('Error communicating with server (see console)');
         });
-
-        showimportmodal.value = false;
     }
 
     /**
@@ -124,7 +124,7 @@
             args: {
                 courseid: courseid,
                 gradeitemid: props.itemid,
-                userlist: props.groupid,
+                groupid: props.groupid,
             }
         }])[0]
         .then((result) => {
