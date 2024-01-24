@@ -71,7 +71,7 @@
      * Import confirmed. Select appropriate importfunction
      */
     function importgrades() {
-        if (recursiveselect) {
+        if (recursiveselect.value) {
             importrecursive();
         } else {
             importsingle();
