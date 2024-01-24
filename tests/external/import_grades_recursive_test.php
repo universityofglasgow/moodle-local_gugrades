@@ -76,11 +76,11 @@ class import_grades_recursive_test extends \local_gugrades\external\gugrades_adv
         // Note to self:
         // Manual grades cannot have raw grades, that only applies to 'external'
         // grades (e.g. mod_assign). So, don't try to use update_raw_grade().
-        $grade_item = \grade_item::fetch(['id' => $this->gradeitemsecond1]);
-        $grade_item->update_final_grade($this->student->id, 16.7);
+        $gradeitem = \grade_item::fetch(['id' => $this->gradeitemsecond1]);
+        $gradeitem->update_final_grade($this->student->id, 16.7);
 
-        $grade_item = \grade_item::fetch(['id' => $this->gradeitemsecond2]);
-        $grade_item->update_final_grade($this->student->id, 48.5);
+        $gradeitem = \grade_item::fetch(['id' => $this->gradeitemsecond2]);
+        $gradeitem->update_final_grade($this->student->id, 48.5);
 
         // This time we should get those two grades.
         $counts = import_grades_recursive::execute($this->course->id, $this->gradeitemsecond1, 0);
@@ -89,11 +89,11 @@ class import_grades_recursive_test extends \local_gugrades\external\gugrades_adv
             $counts
         );
 
-        // Two grade items and two grades
+        // Two grade items and two grades.
         $this->assertEquals(2, $counts['itemcount']);
         $this->assertEquals(2, $counts['gradecount']);
 
-        // Check that they have been imported
+        // Check that they have been imported.
         $grades = $DB->get_records('local_gugrades_grade', ['courseid' => $this->course->id]);
         $grades = array_values($grades);
 

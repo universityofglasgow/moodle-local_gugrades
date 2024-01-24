@@ -43,7 +43,7 @@ class is_grades_imported_test extends \local_gugrades\external\gugrades_advanced
      */
     public function test_recursiveavailable_false() {
 
-        // Log in as teacher
+        // Log in as teacher.
         $this->setUser($this->teacher);
 
         $gradesimported = is_grades_imported::execute($this->course->id, $this->gradeitemidassign1, 0);
@@ -52,11 +52,11 @@ class is_grades_imported_test extends \local_gugrades\external\gugrades_advanced
             $gradesimported
         );
 
-        // Check recursiveavailable field
+        // Check recursiveavailable field.
         $this->assertArrayHasKey('recursiveavailable', $gradesimported);
         $this->assertFalse($gradesimported['recursiveavailable']);
 
-        // Check recursivematch field
+        // Check recursivematch field.
         $this->assertArrayHasKey('recursivematch', $gradesimported);
         $this->assertFalse($gradesimported['recursivematch']);
     }
@@ -68,7 +68,7 @@ class is_grades_imported_test extends \local_gugrades\external\gugrades_advanced
      */
     public function test_recursiveavailable_true() {
 
-        // Log in as teacher
+        // Log in as teacher.
         $this->setUser($this->teacher);
 
         $gradesimported = is_grades_imported::execute($this->course->id, $this->gradeitemsecond1, 0);
@@ -77,11 +77,11 @@ class is_grades_imported_test extends \local_gugrades\external\gugrades_advanced
             $gradesimported
         );
 
-        // Check recursiveavailable field
+        // Check recursiveavailable field.
         $this->assertArrayHasKey('recursiveavailable', $gradesimported);
         $this->assertTrue($gradesimported['recursiveavailable']);
 
-        // Check recursivematch field
+        // Check recursivematch field.
         $this->assertArrayHasKey('recursivematch', $gradesimported);
         $this->assertTrue($gradesimported['recursivematch']);
     }

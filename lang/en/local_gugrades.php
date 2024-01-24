@@ -44,6 +44,7 @@ $string['description'] = 'Description';
 $string['discrepancy'] = 'Discrepancy';
 $string['enabledashboard'] = 'Enable student dashboard for this course';
 $string['eventadditionalgrade'] = 'Add additional grade';
+$string['importgradesrecursive'] = 'Import grades recursive';
 $string['eventimportgradesusers'] = 'Import grades for user list';
 $string['eventreleasegrades'] = 'Release grades';
 $string['eventreset'] = 'Reset course';

@@ -177,18 +177,18 @@ class grades {
 
         // This MUST be a 'second level' category. Which is actually the 3rd one down.
         // SO it will have a path field like /a/b/c/ or longer.
-        // If not, recursive import is not available
+        // If not, recursive import is not available.
         $gradecategory = $DB->get_record('grade_categories', ['id' => $categoryid], '*', MUST_EXIST);
 
-        // trim to remove leading and trailing /, otherwise you get two extra empty fields.
+        // Trim to remove leading and trailing /, otherwise you get two extra empty fields.
         $pathcats = explode('/', trim($gradecategory->path, '/'));
         if (count($pathcats) > 2) {
             $recursiveavailable = true;
 
-            // Get grade items
+            // Get grade items.
             if ($items = self::get_gradeitems_recursive($gradecategory)) {
 
-                // As a basic check grade min, max and scale type need to match
+                // As a basic check grade min, max and scale type need to match.
                 $first = array_shift($items);
                 $recursivematch = true;
                 foreach ($items as $item) {

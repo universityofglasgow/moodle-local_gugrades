@@ -145,10 +145,8 @@ class api {
      * @param int $userid
      * @return bool - was a grade imported
      */
-    public static function import_grade(int $courseid, int $gradeitemid, \local_gugrades\conversion\base $conversion, \local_gugrades\activities\base $activity, int $userid) {
-
-        // Instantiate object for this activity type.
-        // $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid);
+    public static function import_grade(int $courseid, int $gradeitemid,
+        \local_gugrades\conversion\base $conversion, \local_gugrades\activities\base $activity, int $userid) {
 
         // Ask activity for grade.
         $rawgrade = $activity->get_first_grade($userid);
@@ -350,10 +348,10 @@ class api {
             $activity = \local_gugrades\users::activity_factory($item->id, $courseid, $groupid);
             $conversion = \local_gugrades\grades::conversion_factory($courseid, $item->id);
 
-            // Get all the permitted users in this activity
+            // Get all the permitted users in this activity.
             $users = $activity->get_users();
 
-            // iterate over these users importing grade
+            // Iterate over these users importing grade.
             foreach ($users as $user) {
                 if (self::import_grade($courseid, $item->id, $conversion, $activity, $user->id)) {
                     $gradecount++;

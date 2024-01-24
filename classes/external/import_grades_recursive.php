@@ -71,8 +71,7 @@ class import_grades_recursive extends \external_api {
         list($itemcount, $gradecount) = \local_gugrades\api::import_grades_recursive($courseid, $gradeitemid, $groupid);
 
         // Log.
-        /*
-        $event = \local_gugrades\event\import_grades_users::create([
+        $event = \local_gugrades\event\import_grades_recursive::create([
             'objectid' => $gradeitemid,
             'context' => \context_course::instance($courseid),
             'other' => [
@@ -80,7 +79,6 @@ class import_grades_recursive extends \external_api {
             ],
         ]);
         $event->trigger();
-        */
 
         // Audit.
         \local_gugrades\audit::write($courseid, 0, $gradeitemid, 'Grades imported.');
