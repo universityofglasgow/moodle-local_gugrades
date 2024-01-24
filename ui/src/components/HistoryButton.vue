@@ -2,19 +2,24 @@
     <a class="dropdown-item" href="#" @click="read_history()">{{ mstrings.history }}</a>
 
     <VueModal v-model="showhistorymodal" modalClass="col-11 col-lg-5 rounded" :title="mstrings.gradehistory">
-        <template #content>
-            <div>
-                <ul class="list-unstyled">
-                    <li><b>{{ mstrings.name }}:</b> {{ name }}</li>
-                    <li><b>{{ mstrings.itemname }}:</b> {{ itemname }}</li>
-                </ul>
+        <div>
+            <ul class="list-unstyled">
+                <li><b>{{ mstrings.name }}:</b> {{ name }}</li>
+                <li><b>{{ mstrings.itemname }}:</b> {{ itemname }}</li>
+            </ul>
+        </div>
+        <div v-if="grades.length == 0" class="alert alert-warning">{{ mstrings.nohistory }}</div>
+
+        <EasyDataTable v-else :headers="headers" :items="grades">
+        </EasyDataTable>
+
+        <div class="row mt-2">
+            <div class="col-sm-12">
+                <div class="float-right">
+                    <button class="btn btn-warning" type="button" @click="showhistorymodal = false">{{  mstrings.close }}</button>
+                </div>
             </div>
-            <div v-if="grades.length == 0" class="alert alert-warning">{{ mstrings.nohistory }}</div>
-
-            <EasyDataTable v-else :headers="headers" :items="grades">
-            </EasyDataTable>
-        </template>
-
+        </div>
     </VueModal>
 </template>
 

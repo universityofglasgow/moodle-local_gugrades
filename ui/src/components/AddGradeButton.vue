@@ -2,69 +2,75 @@
     <a class="dropdown-item" href="#" @click="add_grade()">{{ mstrings.addgrade }}</a>
 
     <VueModal v-model="showaddgrademodal" modalClass="col-11 col-lg-5 rounded" :title="mstrings.addgrade">
-        <template #content>
-            <ul class="list-unstyled">
-                    <li><b>{{ mstrings.itemname }}:</b> {{ itemname }}</li>
-                    <li><b>{{ mstrings.username }}:</b> {{ name }}</li>
-                    <li><b>{{ mstrings.idnumber }}:</b> {{ idnumber }}</li>
-                    <li>{{ reason }}</li>
-                </ul>
-                <FormKit type="form" @submit="submit_form">
-                    <FormKit
-                        type="select"
-                        :label="mstrings.reasonforadditionalgrade"
-                        name="reason"
-                        v-model="reason"
-                        :options="gradetypes"
-                        :placeholder="mstrings.selectareason"
-                        validation="required"
-                    />
-                    <FormKit
-                        v-if = 'reason == "OTHER"'
-                        :label="mstrings.pleasespecify"
-                        type="text"
-                        :placeholder="mstrings.pleasespecify"
-                        name="other"
-                        v-model="other"
-                    />
-                    <FormKit
-                        type="select"
-                        :label="mstrings.admingrades"
-                        name="admingrades"
-                        v-model="admingrade"
-                        :options="adminmenu"
-                    ></FormKit>
-                    <FormKit
-                        v-if="usescale"
-                        type="select"
-                        :label="mstrings.grade"
-                        :placeholder="mstrings.specifyscale"
-                        :disabled="admingrade != 'GRADE'"
-                        name="scale"
-                        v-model="scale"
-                        :options="scalemenu"
-                    ></FormKit>
-                    <FormKit
-                        v-if="!usescale"
-                        type="text"
-                        :label="mstrings.grade"
-                        :placeholder="mstrings.specifygrade"
-                        :validation="gradevalidation"
-                        :disabled="admingrade != 'GRADE'"
-                        number="float"
-                        validation-visibility="live"
-                        name="grade"
-                        v-model="grade"
-                    ></FormKit>
-                    <FormKit
-                        type="textarea"
-                        label="Notes"
-                        :placeholder="mstrings.reasonforammendment"
-                        name="notes"
-                        v-model="notes"
-                    />
-                </FormKit>
-        </template>
+        <ul class="list-unstyled">
+            <li><b>{{ mstrings.itemname }}:</b> {{ itemname }}</li>
+            <li><b>{{ mstrings.username }}:</b> {{ name }}</li>
+            <li><b>{{ mstrings.idnumber }}:</b> {{ idnumber }}</li>
+            <li>{{ reason }}</li>
+        </ul>
+        <FormKit class="border rounded" type="form" @submit="submit_form">
+            <FormKit
+                type="select"
+                :label="mstrings.reasonforadditionalgrade"
+                name="reason"
+                v-model="reason"
+                :options="gradetypes"
+                :placeholder="mstrings.selectareason"
+                validation="required"
+            />
+            <FormKit
+                v-if = 'reason == "OTHER"'
+                :label="mstrings.pleasespecify"
+                type="text"
+                :placeholder="mstrings.pleasespecify"
+                name="other"
+                v-model="other"
+            />
+            <FormKit
+                type="select"
+                :label="mstrings.admingrades"
+                name="admingrades"
+                v-model="admingrade"
+                :options="adminmenu"
+            ></FormKit>
+            <FormKit
+                v-if="usescale"
+                type="select"
+                :label="mstrings.grade"
+                :placeholder="mstrings.specifyscale"
+                :disabled="admingrade != 'GRADE'"
+                name="scale"
+                v-model="scale"
+                :options="scalemenu"
+            ></FormKit>
+            <FormKit
+                v-if="!usescale"
+                type="text"
+                :label="mstrings.grade"
+                :placeholder="mstrings.specifygrade"
+                :validation="gradevalidation"
+                :disabled="admingrade != 'GRADE'"
+                number="float"
+                validation-visibility="live"
+                name="grade"
+                v-model="grade"
+            ></FormKit>
+            <FormKit
+                type="textarea"
+                label="Notes"
+                :placeholder="mstrings.reasonforammendment"
+                name="notes"
+                v-model="notes"
+            />
+        </FormKit>
+
+        <div class="row mt-2">
+            <div class="col-sm-12">
+                <div class="float-right">
+                    <button class="btn btn-warning" type="button" @click="showaddgrademodal = false">{{  mstrings.close }}</button>
+                </div>
+            </div>
+        </div>
     </VueModal>
 </template>
 

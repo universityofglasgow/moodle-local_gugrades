@@ -35,6 +35,7 @@ $string['awaitingcapture'] = 'Awaiting capture';
 $string['by'] = 'By';
 $string['cancel'] = 'Cancel';
 $string['captureaggregation'] = '\'MyGrades\' Grade capture and aggregation';
+$string['close'] = 'Close';
 $string['comment'] = 'Comment';
 $string['confirm'] = 'Confirm';
 $string['coursegradeaggregation'] = 'Course grade aggregation';
