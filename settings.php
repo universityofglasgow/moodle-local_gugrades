@@ -64,7 +64,7 @@ if ($hassiteconfig) {
             $scalesetting->set_updatedcallback('scale_setting_updated');
             $settingspage->add($scalesetting);
 
-            // Add option for type
+            // Add option for type.
             $typename  = "local_gugrades/scaletype_" . $scale->id;
             $typesetting = new admin_setting_configtext($typename, $scale->name . ' type',
                 new lang_string('scaletypehelp', 'local_gugrades'),

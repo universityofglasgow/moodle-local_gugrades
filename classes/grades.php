@@ -569,12 +569,12 @@ class grades {
         // Is it a scale of some sort?
         if ($gradetype == GRADE_TYPE_SCALE) {
 
-            // See if scale is in our scaletype table
+            // See if scale is in our scaletype table.
             if (!$scaletype = $DB->get_record('local_gugrades_scaletype', ['scaleid' => $gradeitem->scaleid])) {
                 throw new \moodle_exception('Unsupported scale in conversion_factory. ID = ' . $gradeitem->scaleid);
             }
 
-            // Get the name of the class and see if it exists
+            // Get the name of the class and see if it exists.
             $classname = 'local_gugrades\\conversion\\' . $scaletype->type;
             if (!class_exists($classname, true)) {
                 throw new \moodle_exception('Unknown conversion class - "' . $scaletype->scale . '"');

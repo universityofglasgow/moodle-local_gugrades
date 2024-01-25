@@ -66,7 +66,7 @@ function scale_setting_updated($name) {
             }
         }
 
-        // Get add type
+        // Get add type.
         $typename = "scaletype_" . $scale->id;
         $type = get_config('local_gugrades', $typename);
         if ($scaletype = $DB->get_record('local_gugrades_scaletype', ['scaleid' => $scale->id])) {
