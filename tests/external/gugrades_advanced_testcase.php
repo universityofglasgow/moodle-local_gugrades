@@ -115,7 +115,7 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
      * Fill local_gugrades_scalevalue table
      * @param string $scale
      * @param int $scaleid
-     * @param string type
+     * @param string $type
      */
     protected function fill_scalevalue($scale, $scaleid, $type) {
         global $DB;
