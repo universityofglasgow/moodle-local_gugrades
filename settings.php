@@ -39,15 +39,23 @@ if ($hassiteconfig) {
         $scales = $DB->get_records('scale', ['courseid' => 0]);
         foreach ($scales as $scale) {
             $name = "local_gugrades/scalevalue_" . $scale->id;
+
             $items = explode(',', $scale->scale);
             $default = '';
+            $typedefault = '';
 
             // If id = 1 or 2 then leave them blank (built in scales).
             if ($scale->id > 2) {
-                $count = 0;
+                if (count($items) == 23) {
+                    $values = range(0, 23);
+                    $typedefault = 'schedulea';
+                } else if (count($items) == 8) {
+                    $values = [0, 2, 5, 8, 11, 14, 17, 22];
+                    $typedefault = 'scheduleb';
+                }
                 foreach ($items as $item) {
-                    $default .= $item . ', ' . $count . PHP_EOL;
-                    $count++;
+                    $value = array_shift($values);
+                    $default .= $item . ', ' . $value . PHP_EOL;
                 }
             }
             $scalesetting = new admin_setting_configtextarea($name, $scale->name,
@@ -55,6 +63,14 @@ if ($hassiteconfig) {
                 $default, PARAM_RAW, 30, count($items) + 1);
             $scalesetting->set_updatedcallback('scale_setting_updated');
             $settingspage->add($scalesetting);
+
+            // Add option for type
+            $typename  = "local_gugrades/scaletype_" . $scale->id;
+            $typesetting = new admin_setting_configtext($typename, $scale->name . ' type',
+                new lang_string('scaletypehelp', 'local_gugrades'),
+                $typedefault, PARAM_ALPHA, 25);
+            $typesetting->set_updatedcallback('scale_setting_updated');
+            $settingspage->add($typesetting);
         }
     }
 

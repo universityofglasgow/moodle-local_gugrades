@@ -127,6 +127,7 @@ $string['resetcourseconfirm'] = 'This will delete all MyGrades data for this cou
 $string['resetfilter'] = 'Reset filter';
 $string['resetsuccess'] = 'MyGrades has been reset for this course.';
 $string['rulesdefault'] = 'Standard rules';
+$string['scaletypehelp'] = 'Name of scale type - schedulea or scheduleb at the moment.';
 $string['scalevalues'] = 'Scale values';
 $string['scalevalueshelp'] = 'Add scale value on each line followed by a space and then the numeric value';
 $string['scalevaluesinfo'] = 'Define the numeric values for each scale to be available in tool.';

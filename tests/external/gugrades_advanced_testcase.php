@@ -115,8 +115,9 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
      * Fill local_gugrades_scalevalue table
      * @param string $scale
      * @param int $scaleid
+     * @param string type
      */
-    protected function fill_scalevalue($scale, $scaleid) {
+    protected function fill_scalevalue($scale, $scaleid, $type) {
         global $DB;
 
         $items = explode(',', $scale);
@@ -127,6 +128,11 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
             $scalevalue->value = $value;
             $DB->insert_record('local_gugrades_scalevalue', $scalevalue);
         }
+
+        $scaletype = new \stdClass;
+        $scaletype->scaleid = $scaleid;
+        $scaletype->type = $type;
+        $DB->insert_record('local_gugrades_scaletype', $scaletype);
     }
 
     /**
@@ -281,7 +287,16 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
             'scale' => $scaleitems,
             'courseid' => $course->id,
         ]);
-        $this->fill_scalevalue($scaleitems, $scale->id);
+        $this->fill_scalevalue($scaleitems, $scale->id, 'schedulea');
+
+        // Add another scale
+        $scaleitemsb = 'H, G0, F0, E0, D0, C0, B0, A0';
+        $scaleb = $this->getDataGenerator()->create_scale([
+            'name' => 'UofG Schedule B',
+            'scale' => $scaleitems,
+            'courseid' => $course->id,
+        ]);
+        $this->fill_scalevalue($scaleitemsb, $scaleb->id, 'scheduleb');
 
         // Add a teacher to the course.
         // Teacher will be logged in unless changed in tests.

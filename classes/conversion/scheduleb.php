@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Conversion class for Schedule A
+ * Conversion class for Schedule B
  *
  * @package    local_gugrades
- * @copyright  2023
+ * @copyright  2024
  * @author     Howard Miller
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,9 +26,9 @@
 namespace local_gugrades\conversion;
 
 /**
- * Handle 22-point scale / Schedule A
+ * Handle Schedule B
  */
-class schedulea extends base {
+class scheduleb extends base {
 
     /**
      * @var array $scaleitems
@@ -68,28 +68,13 @@ class schedulea extends base {
     public function get_map() {
         return [
             0 => 'H',
-            1 => 'G2',
-            2 => 'G1',
-            3 => 'F3',
-            4 => 'F2',
-            5 => 'F1',
-            6 => 'E3',
-            7 => 'E2',
-            8 => 'E1',
-            9 => 'D3',
-            10 => 'D2',
-            11 => 'D1',
-            12 => 'C3',
-            13 => 'C2',
-            14 => 'C1',
-            15 => 'B3',
-            16 => 'B2',
-            17 => 'B1',
-            18 => 'A5',
-            19 => 'A4',
-            20 => 'A3',
-            21 => 'A2',
-            22 => 'A1',
+            2 => 'G0',
+            5 => 'F0',
+            8 => 'E0',
+            11 => 'D0',
+            14 => 'C0',
+            17 => 'B0',
+            22 => 'A0',
         ];
     }
 

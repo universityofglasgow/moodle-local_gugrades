@@ -569,15 +569,18 @@ class grades {
         // Is it a scale of some sort?
         if ($gradetype == GRADE_TYPE_SCALE) {
 
-            // If it "looks like" a 22-point scale then we'll assume it is.
-            // TODO: Consider an explicit option for this in the setup
-            // 22-point scale has **23** items (0 to 22).
-            if ($DB->count_records('local_gugrades_scalevalue', ['scaleid' => $gradeitem->scaleid]) == 23) {
-                return new \local_gugrades\conversion\schedulea($courseid, $gradeitemid);
-            } else {
-                throw new \moodle_exception('Unsupported scale in conversion_factory');
+            // See if scale is in our scaletype table
+            if (!$scaletype = $DB->get_record('local_gugrades_scaletype', ['scaleid' => $gradeitem->scaleid])) {
+                throw new \moodle_exception('Unsupported scale in conversion_factory. ID = ' . $gradeitem->scaleid);
             }
 
+            // Get the name of the class and see if it exists
+            $classname = 'local_gugrades\\conversion\\' . $scaletype->type;
+            if (!class_exists($classname, true)) {
+                throw new \moodle_exception('Unknown conversion class - "' . $scaletype->scale . '"');
+            }
+
+            return new $classname($courseid, $gradeitemid);
         } else {
 
             // We're assuming it's a points scale (already checked for weird types).
