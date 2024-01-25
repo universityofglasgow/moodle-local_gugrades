@@ -14,6 +14,20 @@
             <p v-if="groupimport" class="mt-1"><b>{{ mstrings.importinfogroup }}</b></p>
         </div>
 
+        <div v-if="is_importgrades" class="alert alert-info">
+            <FormKit
+                type="checkbox"
+                :label="mstrings.importadditional"
+                :help="mstrings.importadditionalhelp"
+                name="importadditional"
+                v-model="importadditional"
+                >
+                <template #help>
+                    <p><i class="fa fa-info-circle" aria-hidden="true"></i> {{ mstrings.importadditionalhelp }}</p>
+                </template>
+            </FormKit>
+        </div>
+
         <div v-if="recursiveavailable" class="alert alert-secondary">
             <FormKit
                 type="checkbox"
@@ -21,7 +35,11 @@
                 :help="mstrings.recursiveimporthelp"
                 name="recursiveimport"
                 v-model="recursiveselect"
-                />
+                >
+                <template #help>
+                    <p><i class="fa fa-info-circle" aria-hidden="true"></i> {{ mstrings.recursiveimporthelp }}</p>
+                </template>
+            </FormKit>
         </div>
 
         <div v-if="recursiveavailable && recursiveselect && !recursivematch" class="alert alert-warning">
@@ -65,6 +83,7 @@
     const recursiveavailable = ref(false);
     const recursivematch = ref(false);
     const recursiveselect = ref(false);
+    const importadditional = ref(false);
     const mstrings = inject('mstrings');
 
     /**
@@ -93,6 +112,7 @@
             args: {
                 courseid: courseid,
                 gradeitemid: props.itemid,
+                additional: importadditional.value,
                 userlist: props.userids,
             }
         }])[0]
@@ -125,6 +145,7 @@
                 courseid: courseid,
                 gradeitemid: props.itemid,
                 groupid: props.groupid,
+                additional: importadditional.value,
             }
         }])[0]
         .then((result) => {

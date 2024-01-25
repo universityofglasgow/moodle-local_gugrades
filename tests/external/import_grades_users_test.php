@@ -50,7 +50,7 @@ class import_grades_users_test extends \local_gugrades\external\gugrades_advance
         ];
 
         // Assign2 (which is useing scale).
-        $status = import_grades_users::execute($this->course->id, $this->gradeitemidassign2, $userlist);
+        $status = import_grades_users::execute($this->course->id, $this->gradeitemidassign2, false, $userlist);
         $status = \external_api::clean_returnvalue(
             import_grades_users::execute_returns(),
             $status
@@ -66,7 +66,7 @@ class import_grades_users_test extends \local_gugrades\external\gugrades_advance
         $this->assertEquals(10, $grades[1]->convertedgrade);
 
         // Assign1 (which is useing points).
-        $status = import_grades_users::execute($this->course->id, $this->gradeitemidassign1, $userlist);
+        $status = import_grades_users::execute($this->course->id, $this->gradeitemidassign1, false, $userlist);
         $status = \external_api::clean_returnvalue(
             import_grades_users::execute_returns(),
             $status

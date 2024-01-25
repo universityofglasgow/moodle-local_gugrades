@@ -491,6 +491,18 @@ class grades {
     }
 
     /**
+     * Check if gradeitem / user combo has any imported/added grades
+     * @param int $gradeitemid
+     * @param int $userid
+     * @return bool
+     */
+    public static function user_has_grades(int $gradeitemid, int $userid) {
+        global $DB;
+
+        return $DB->record_exists('local_gugrades_grade', ['gradeitemid' => $gradeitemid, 'userid' => $userid]);
+    }
+
+    /**
      * Get grade capture columns
      * Get the different grade types used for this capture
      * Each gradetype == OTHER with distinct 'other' text is considered a different column

@@ -144,10 +144,16 @@ class api {
      * @param \local_gugrades\conversion\base $conversion
      * @param \local_gugrades\activities\base $activity
      * @param int $userid
+     * @param int $additional
      * @return bool - was a grade imported
      */
     public static function import_grade(int $courseid, int $gradeitemid,
-        \local_gugrades\conversion\base $conversion, \local_gugrades\activities\base $activity, int $userid) {
+        \local_gugrades\conversion\base $conversion, \local_gugrades\activities\base $activity, int $userid, bool $additional) {
+
+        // If additional selected then skip users who already have data
+        if ($additional && \local_gugrades\grades::user_has_grades($gradeitemid, $userid)) {
+            return false;
+        }
 
         // Ask activity for grade.
         $rawgrade = $activity->get_first_grade($userid);
@@ -324,9 +330,10 @@ class api {
      * @param int $courseid
      * @param int $gradeitemid
      * @param int $groupid
+     * @param bool $additional
      * @return array [itemcount, gradecount]
      */
-    public static function import_grades_recursive(int $courseid, int $gradeitemid, int $groupid) {
+    public static function import_grades_recursive(int $courseid, int $gradeitemid, int $groupid, bool $additional) {
         global $DB;
 
         // Check!
@@ -354,7 +361,7 @@ class api {
 
             // Iterate over these users importing grade.
             foreach ($users as $user) {
-                if (self::import_grade($courseid, $item->id, $conversion, $activity, $user->id)) {
+                if (self::import_grade($courseid, $item->id, $conversion, $activity, $user->id, $additional)) {
                     $gradecount++;
                 }
             }
