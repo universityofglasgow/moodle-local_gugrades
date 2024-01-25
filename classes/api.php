@@ -150,7 +150,7 @@ class api {
     public static function import_grade(int $courseid, int $gradeitemid,
         \local_gugrades\conversion\base $conversion, \local_gugrades\activities\base $activity, int $userid, bool $additional) {
 
-        // If additional selected then skip users who already have data
+        // If additional selected then skip users who already have data.
         if ($additional && \local_gugrades\grades::user_has_grades($gradeitemid, $userid)) {
             return false;
         }

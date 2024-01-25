@@ -82,7 +82,7 @@ class import_grades_users extends \external_api {
         $importcount = 0;
         foreach ($userids as $userid) {
 
-            // If additional selected then skip users who already have data
+            // If additional selected then skip users who already have data.
             if ($additional && \local_gugrades\grades::user_has_grades($gradeitemid, $userid)) {
                 continue;
             }

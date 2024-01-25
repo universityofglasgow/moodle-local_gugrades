@@ -72,7 +72,8 @@ class import_grades_recursive extends \external_api {
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        list($itemcount, $gradecount) = \local_gugrades\api::import_grades_recursive($courseid, $gradeitemid, $groupid, $additional);
+        list($itemcount, $gradecount) = \local_gugrades\api::import_grades_recursive($courseid,
+            $gradeitemid, $groupid, $additional);
 
         // Log.
         $event = \local_gugrades\event\import_grades_recursive::create([
