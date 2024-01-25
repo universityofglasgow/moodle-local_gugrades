@@ -631,4 +631,15 @@ class grades {
 
         return $grades;
     }
+
+    /**
+     * Delete all data for gradeitemid
+     * @param int $gradeitemid
+     */
+    public static function delete_grade_item(int $gradeitemid) {
+        global $DB;
+
+        $DB->delete_records('local_gugrades_grade', ['gradeitemid' => $gradeitemid]);
+        $DB->delete_records('local_gugrades_audit', ['gradeitemid' => $gradeitemid]);
+    }
 }
