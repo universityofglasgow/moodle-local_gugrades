@@ -27,10 +27,10 @@
         let csv = '';
         let line = [];
 
-        csv += mstrings.value.recordid + ',' + mstrings.value.gradenoun + ',' + mstrings.value.lastmodifiedgrade + ',' + mstrings.value.idnumber + '\n';
+        csv += mstrings.recordid + ',' + mstrings.gradenoun + ',' + mstrings.lastmodifiedgrade + ',' + mstrings.idnumber + '\n';
         props.users.forEach((user) => {
             line = [
-                mstrings.value.hiddenuser + ' ' + user.uniqueid,
+                mstrings.hiddenuser + ' ' + user.uniqueid,
                 '',
                 '',
                 user.idnumber,
@@ -48,7 +48,7 @@
     onMounted(() => {
         const GU = window.GU;
         const courseid = GU.courseid;
-        const fetchMany = GU.fetchMany; 
+        const fetchMany = GU.fetchMany;
 
         fetchMany([{
             methodname: 'local_gugrades_has_capability',

@@ -51,7 +51,8 @@ $services = [
             'local_gugrades_dashboard_get_grades',
             'local_gugrades_release_grades',
             'local_gugrades_reset',
-            'get_groups',
+            'local_gugrades_get_groups',
+            'local_gugrades_get_csv_download',
         ],
         'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,
@@ -197,6 +198,12 @@ $functions = [
     'local_gugrades_get_groups' => [
         'classname' => 'local_gugrades\external\get_groups',
         'description' => 'Get the list of groups for the course (if any).',
+        'type' => 'read',
+        'ajax' => true,
+    ],
+    'local_gugrades_get_csv_download' => [
+        'classname' => 'local_gugrades\external\get_csv_download',
+        'description' => 'Get the contents of CSV add-grades pro-forma.',
         'type' => 'read',
         'ajax' => true,
     ],

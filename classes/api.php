@@ -98,6 +98,32 @@ class api {
     }
 
     /**
+     * Get CSV download
+     * Contents of pro-forma CSV file
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param int $groupid
+     * @return string
+     */
+    public static function get_csv_download(int $courseid, int $gradeitemid, int $groupid) {
+
+        // Get activity object
+        $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid, $groupid);
+
+        // Get array of users
+        $users = $activity->get_users();
+
+        // Build CSV file
+        $csv = '';
+        $csv .= 'Name' . ',' . 'IDnumber' . ',' . 'Grade' . PHP_EOL;
+        foreach ($users as $user) {
+            $csv .= $user->displayname . ',' . $user->idnumber . ',' . PHP_EOL;
+        }
+
+        return $csv;
+    }
+
+    /**
      * Get grade item
      * @param int $itemid
      * @return array
