@@ -556,6 +556,7 @@ class grades {
     /**
      * Factory for conversion class
      * TODO: May need some improvement in detecting correct/supported grade (type)
+     * The name of the class is in the scaletype table.
      * @param int $courseid
      * @param int $gradeitemid
      * @return object

@@ -29,6 +29,24 @@
     const toast = useToast();
 
     /**
+     * Greyscale MyGrades icon if not enabled :)
+     */
+    function greyscale_icon() {
+
+        // Bodge to get jQuery needed for Bootstrap JS.
+        const $ = window.jQuery;
+
+        if (enabledashboard.value) {
+            $('#mygradeslogo').css('filter', 'grayscale(0)');
+        } else {
+            $('#mygradeslogo').css('filter', 'grayscale(1)');
+        }
+
+        const selector = $('#mygradeslogo');
+        window.console.log(selector);
+    }
+
+    /**
      * Submit button clicked
      */
     function submit_form() {
@@ -56,6 +74,8 @@
             window.console.error(error);
             toast.error('Error communicating with server (see console)');
         });
+
+        greyscale_icon();
     }
 
     /**
