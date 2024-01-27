@@ -30,6 +30,22 @@ namespace local_gugrades\conversion;
  */
 class points extends base {
 
+   /**
+     * "Human" name of this type of grade
+     * @return string
+     */
+    public function name() {
+        return 'Points';
+    }
+
+    /**
+     * Is the conversion a scale (as opposed to points)?
+     * @return bool
+     */
+    public function is_scale() {
+        return false;
+    }
+
     /**
      * Handle imported grade
      * Create both converted grade (actual value) and display grade

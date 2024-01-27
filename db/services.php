@@ -207,4 +207,10 @@ $functions = [
         'type' => 'read',
         'ajax' => true,
     ],
+    'local_gugrades_upload_csv' => [
+        'classname' => 'local_gugrades\external\upload_csv',
+        'description' => 'Upload / test csv add grades in bulk.',
+        'type' => 'write',
+        'ajax' => true,
+    ],
 ];

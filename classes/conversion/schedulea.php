@@ -36,11 +36,6 @@ class schedulea extends base {
     protected array $scaleitems = [];
 
     /**
-     * @var array $items
-     */
-    protected array $items = [];
-
-    /**
      * Constructor. Get grade info
      * @param int $courseid
      * @param int $gradeitemid
@@ -59,6 +54,22 @@ class schedulea extends base {
         foreach ($items as $item) {
             $this->items[$item->item] = $item->value;
         }
+    }
+
+    /**
+     * "Human" name of this type of grade
+     * @return string
+     */
+    public function name() {
+        return 'Schedule A Scale';
+    }
+
+    /**
+     * Is the conversion a scale (as opposed to points)?
+     * @return bool
+     */
+    public function is_scale() {
+        return true;
     }
 
     /**

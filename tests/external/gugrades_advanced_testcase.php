@@ -305,9 +305,9 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
         $this->setUser($teacher);
 
         // Add some students to the course.
-        $student = $this->getDataGenerator()->create_user(['idnumber' => '1234567']);
+        $student = $this->getDataGenerator()->create_user(['idnumber' => '1234567', 'firstname' => 'Fred', 'lastname' => 'Bloggs']);
         $this->getDataGenerator()->enrol_user($student->id, $course->id, 'student');
-        $student2 = $this->getDataGenerator()->create_user(['idnumber' => '1234560']);
+        $student2 = $this->getDataGenerator()->create_user(['idnumber' => '1234560', 'firstname' => 'Juan', 'lastname' => 'Perez']);
         $this->getDataGenerator()->enrol_user($student2->id, $course->id, 'student');
 
         // Add grade categories.

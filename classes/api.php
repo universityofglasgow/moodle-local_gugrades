@@ -98,6 +98,27 @@ class api {
     }
 
     /**
+     * Unpack a (string) CSV file
+     * @param string $csv
+     * @return array
+     */
+    public static function unpack_csv($csv) {
+
+        // first split into lines
+        $lines = explode(PHP_EOL, $csv);
+
+        $data = [];
+        foreach ($lines as $line) {
+            if (trim($line)) {
+                $items = array_map('trim', explode(',', $line));
+                $data[] = $items;
+            }
+        }
+
+        return $data;
+    }
+
+    /**
      * Get CSV download
      * Contents of pro-forma CSV file
      * @param int $courseid
@@ -115,12 +136,101 @@ class api {
 
         // Build CSV file
         $csv = '';
-        $csv .= 'Name' . ',' . 'IDnumber' . ',' . 'Grade' . PHP_EOL;
+        $csv .= get_string('name', 'local_gugrades') . ',' . get_string('idnumber', 'local_gugrades') . ',' . get_string('grade', 'local_gugrades') . PHP_EOL;
         foreach ($users as $user) {
             $csv .= $user->displayname . ',' . $user->idnumber . ',' . PHP_EOL;
         }
 
         return $csv;
+    }
+
+    /**
+     * CSV upload
+     * Upload the data or (optionaly) just do a check
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param int $groupid
+     * @param bool $testrun
+     * @param string $reason
+     * @param string $csv
+     * @return array
+     */
+    public static function csv_upload(int $courseid, int $gradeitemid, int $groupid, bool $testrun, string $reason, string $csv) {
+
+        // Turn csv into an array - and ditch first line.
+        $lines = self::unpack_csv($csv);
+        array_shift($lines);
+
+        // Get the possible users for this grade item. And re-key by idnumber.
+        $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid, $groupid);
+        $users = $activity->get_users();
+        $idusers = [];
+        foreach ($users as $user) {
+            if (!empty($user->idnumber)) {
+                $idusers[$user->idnumber] = $user;
+            }
+        }
+
+        // Get the grade conversion class
+        $conversion = \local_gugrades\grades::conversion_factory($courseid, $gradeitemid);
+        //var_dump($conversion);
+
+        // (only for testrun) accumulate output.
+        $testrunlines = [];
+
+        // Count success.
+        $addcount = 0;
+
+        // Iterate over CSV lines, checking and (optionally) adding new grade.
+        foreach ($lines as $line) {
+
+            // Need prefilled to keep web service return check happy.
+            $testrunline = [
+                'name' => '',
+                'idnumber' => '',
+                'grade' => '',
+                'gradevalue' => 0.0,
+                'error' => '',
+            ];
+
+            // We just need the idnumber, so must have at least two entries.
+            if (count($line) < 2) {
+                $testrunline['error'] = get_string('csvtoofewitems', 'local_gugrades');
+                $testrunlines[] = $testrunline;
+                continue;
+            }
+
+            // Get the data.
+            $username = $line[0];
+            $testrunline['name'] = $username;
+            $idnumber = $line[1];
+            $testrunline['idnumber'] = $idnumber;
+            $grade = isset($line[2]) ? $grade = $line[2] : '';
+            $testrunline['grade'] = $grade;
+
+            // Check we have a (valid) idnumber
+            if (!isset($idusers[$idnumber])) {
+                $testrunline['error'] = get_string('csvidinvalid', 'local_gugrades');
+                $testrunlines[] = $testrunline;
+                continue;
+            }
+            $user = $idusers[$idnumber];
+
+            // Check if valid grade
+            if ($grade) {
+                list($gradevalid, $gradevalue) = $conversion->csv_value($grade);
+                if (!$gradevalid) {
+                    $testrunline['error'] = get_string('csvgradeinvalid', 'local_gugrades');
+                    $testrunlines[] = $testrunline;
+                    continue;
+                }
+                $testrunline['gradevalue'] = $gradevalue;
+            }
+
+            $testrunlines[] = $testrunline;
+        }
+
+        return $testrunlines;
     }
 
     /**

@@ -41,6 +41,11 @@ abstract class base {
     protected int $gradeitemid;
 
     /**
+     * @var array $items
+     */
+    protected array $items = [];
+
+    /**
      * @var object $gradeitem
      */
     protected $gradeitem;
@@ -57,6 +62,22 @@ abstract class base {
         $this->gradeitemid = $gradeitemid;
 
         $this->gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
+    }
+
+    /**
+     * "Human" name of this type of grade
+     * @return string
+     */
+    public function name() {
+        return '';
+    }
+
+    /**
+     * Is the conversion a scale (as opposed to points)?
+     * @return bool
+     */
+    public function is_scale() {
+        return false;
     }
 
     /**
@@ -87,6 +108,31 @@ abstract class base {
      */
     public function validate(float $grade) {
         return ($grade >= $this->gradeitem->grademin) && ($grade <= $this->gradeitem->grademax);
+    }
+
+    /**
+     * Get CSV value
+     * A string grade from a CSV file is validated and returned as a grade value
+     * @param string $csvgrade
+     * @return array [bool $valid, float $grade]
+     */
+    public function csv_value(string $csvgrade) {
+        if ($this->is_scale()) {
+            $csvgrade = trim($csvgrade);
+
+            // check if the grade is in the array of scale values
+            if (!array_key_exists($csvgrade, $this->items)) {
+                return [false, 0];
+            }
+            $grade = $this->items[$csvgrade];
+        } else {
+            $grade = floatval(trim($csvgrade));
+        }
+        if (!$this->validate($grade)) {
+            return [false, 0];
+        }
+
+        return [true, $grade];
     }
 
 }
