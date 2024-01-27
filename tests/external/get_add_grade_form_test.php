@@ -74,7 +74,7 @@ class get_add_grade_form_test extends \local_gugrades\external\gugrades_advanced
 
         // Check id number.
         $this->assertArrayHasKey('idnumber', $form);
-        $this->assertEmpty($form['idnumber']);
+        $this->assertEquals('1234567', $form['idnumber']);
 
         // Check usescale.
         $this->assertArrayHasKey('usescale', $form);
@@ -141,7 +141,7 @@ class get_add_grade_form_test extends \local_gugrades\external\gugrades_advanced
 
         // Check id number.
         $this->assertArrayHasKey('idnumber', $form);
-        $this->assertEmpty($form['idnumber']);
+        $this->assertEquals('1234567', $form['idnumber']);
 
         // Check usescale.
         $this->assertArrayHasKey('usescale', $form);
