@@ -84,6 +84,20 @@ class upload_csv extends \external_api {
 
         list($lines, $errorcount, $addcount) = \local_gugrades\api::csv_upload($courseid, $gradeitemid, $groupid,
             $testrun, $reason, $other, $csv);
+
+        // Log.
+        $event = \local_gugrades\event\upload_csv::create([
+            'objectid' => $gradeitemid,
+            'context' => \context_course::instance($courseid),
+            'other' => [
+                'gradeitemid' => $gradeitemid,
+            ],
+        ]);
+        $event->trigger();
+
+        // Audit.
+        \local_gugrades\audit::write($courseid, 0, $gradeitemid, 'Grades uploaded from CSV.');
+
         return [
             'lines' => $lines,
             'errorcount' => $errorcount,

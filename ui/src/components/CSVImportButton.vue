@@ -9,16 +9,22 @@
 
             <button class="btn btn-primary" type="button" @click="csv_download()">{{  mstrings.csvdownload }}</button>
 
-            <FormKit class="border rounded" type="form" @submit="submit_csv_form">
-                <FormKit
-                    type="file"
-                    name="csvupload"
-                    label="CSV Upload"
-                    accept=".csv"
-                    help="Upload CSV blah blah."
-                    multiple="false"
-                    />
-            </FormKit>
+            <form>
+                <FormKit class="border rounded" type="form" @submit="submit_csv_form">
+                    <FormKit
+                        type="file"
+                        name="csvupload"
+                        label="CSV Upload"
+                        accept=".csv"
+                        :help="mstrings.csvuploadhelp"
+                        multiple="false"
+                        inner-class="form-group"
+                        input-class="form-control-file"
+                        fileList-class="d-none"
+                        nFiles-class="d-none"
+                        />
+                </FormKit>
+            </form>
         </div>
 
         <!-- Test-run / confirm page -->
@@ -72,7 +78,7 @@
 </template>
 
 <script setup>
-    import {ref, defineProps, inject, onMounted, computed} from '@vue/runtime-core';
+    import {ref, defineProps, defineEmits, inject, onMounted, computed} from '@vue/runtime-core';
     import { useToast } from "vue-toastification";
     import { saveAs } from 'file-saver';
 
@@ -98,6 +104,8 @@
         groupid: Number,
         itemname: String,
     });
+
+    const emits = defineEmits(['uploaded']);
 
     /**
      * Download the pro-forma csv file
@@ -156,6 +164,8 @@
             pagestate.value = 'showtestrun';
             if (!testrun) {
                 toast.success(mstrings.csvgradesadd + ' (' + addcount.value + ')');
+                emits('uploaded');
+                close_modal();
             }
         })
         .catch((error) => {
