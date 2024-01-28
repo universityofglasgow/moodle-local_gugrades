@@ -152,10 +152,12 @@ class api {
      * @param int $groupid
      * @param bool $testrun
      * @param string $reason
+     * @param string $other
      * @param string $csv
-     * @return array
+     * @return array [$testrunlines, $errorcount, $addcount]
      */
-    public static function csv_upload(int $courseid, int $gradeitemid, int $groupid, bool $testrun, string $reason, string $csv) {
+    public static function csv_upload(int $courseid, int $gradeitemid, int $groupid,
+        bool $testrun, string $reason, string $other, string $csv) {
 
         // Turn csv into an array - and ditch first line.
         $lines = self::unpack_csv($csv);
@@ -178,8 +180,9 @@ class api {
         // (only for testrun) accumulate output.
         $testrunlines = [];
 
-        // Count success.
+        // Count success and misery (not all errors are fatal).
         $addcount = 0;
+        $errorcount = 0;
 
         // Iterate over CSV lines, checking and (optionally) adding new grade.
         foreach ($lines as $line) {
@@ -190,13 +193,16 @@ class api {
                 'idnumber' => '',
                 'grade' => '',
                 'gradevalue' => 0.0,
+                'state' => 0,
                 'error' => '',
             ];
 
             // We just need the idnumber, so must have at least two entries.
             if (count($line) < 2) {
                 $testrunline['error'] = get_string('csvtoofewitems', 'local_gugrades');
+                $testrunline['state'] = -1;
                 $testrunlines[] = $testrunline;
+                $errorcount++;
                 continue;
             }
 
@@ -211,7 +217,9 @@ class api {
             // Check we have a (valid) idnumber
             if (!isset($idusers[$idnumber])) {
                 $testrunline['error'] = get_string('csvidinvalid', 'local_gugrades');
+                $testrunline['state'] = -1;
                 $testrunlines[] = $testrunline;
+                $errorcount++;
                 continue;
             }
             $user = $idusers[$idnumber];
@@ -222,15 +230,40 @@ class api {
                 if (!$gradevalid) {
                     $testrunline['error'] = get_string('csvgradeinvalid', 'local_gugrades');
                     $testrunlines[] = $testrunline;
+                    $errorcount++;
                     continue;
                 }
                 $testrunline['gradevalue'] = $gradevalue;
+                $testrunline['state'] = 1;
+            } else {
+                $testrunline['error'] = get_string('csvnograde', 'local_gugrades'); // Warning.
+                $testrunlines[] = $testrunline;
+                continue;
             }
 
             $testrunlines[] = $testrunline;
+
+            // If we get to here and not a testrun, we can actually save the data
+            if (!$testrun) {
+                \local_gugrades\grades::write_grade(
+                    $courseid,
+                    $gradeitemid,
+                    $user->id,
+                    '',
+                    $gradevalue,
+                    $gradevalue,
+                    $grade,
+                    0.0,
+                    $reason,
+                    $other,
+                    true,
+                    ''
+                );
+                $addcount++;
+            }
         }
 
-        return $testrunlines;
+        return [$testrunlines, $errorcount, $addcount];
     }
 
     /**
@@ -595,6 +628,19 @@ class api {
             'scalemenu' => $scalemenu,
             'adminmenu' => $adminmenu,
         ];
+    }
+
+    /**
+     * Get menu of gradetypes
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @return array
+     */
+    public static function get_gradetypes(int $courseid, int $gradeitemid) {
+        $gradetypes = \local_gugrades\gradetype::get_menu($gradeitemid, LOCAL_GUGRADES_FORMENU);
+        $wsgradetypes = self::formkit_menu($gradetypes);
+
+        return $wsgradetypes;
     }
 
     /**

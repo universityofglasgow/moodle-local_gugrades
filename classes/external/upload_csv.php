@@ -49,6 +49,7 @@ class upload_csv extends \external_api {
             'groupid' => new external_value(PARAM_INT, 'Group ID'),
             'testrun' => new external_value(PARAM_BOOL, 'If true, only test data and return. Do not write'),
             'reason' => new external_value(PARAM_ALPHA, 'Reason (SECOND, THIRD and so on)'),
+            'other' => new external_value(PARAM_TEXT, '...if Other reason'),
             'csv' => new external_value(PARAM_TEXT, 'Raw CSV file data'),
         ]);
     }
@@ -60,10 +61,11 @@ class upload_csv extends \external_api {
      * @param int $groupid
      * @param int $testrun
      * @param string $reason
+     * @param string $other
      * @param string $csv
      * @return array
      */
-    public static function execute($courseid, $gradeitemid, $groupid, $testrun, $reason, $csv) {
+    public static function execute($courseid, $gradeitemid, $groupid, $testrun, $reason, $other, $csv) {
 
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
@@ -72,6 +74,7 @@ class upload_csv extends \external_api {
             'groupid' => $groupid,
             'testrun' => $testrun,
             'reason' => $reason,
+            'other' => $other,
             'csv' => $csv,
         ]);
 
@@ -79,8 +82,13 @@ class upload_csv extends \external_api {
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        $lines = \local_gugrades\api::csv_upload($courseid, $gradeitemid, $groupid, $testrun, $reason, $csv);
-        return $lines;
+        list($lines, $errorcount, $addcount) = \local_gugrades\api::csv_upload($courseid, $gradeitemid, $groupid,
+            $testrun, $reason, $other, $csv);
+        return [
+            'lines' => $lines,
+            'errorcount' => $errorcount,
+            'addcount' => $addcount,
+        ];
     }
 
     /**
@@ -88,14 +96,19 @@ class upload_csv extends \external_api {
      * @return external_multiple_structure
      */
     public static function execute_returns() {
-        return new external_multiple_structure(
-            new external_single_structure([
-                'name' => new external_value(PARAM_TEXT, 'User name'),
-                'idnumber' => new external_value(PARAM_TEXT, 'User ID number'),
-                'grade' => new external_value(PARAM_TEXT, 'Grade to assign'),
-                'gradevalue' => new external_value(PARAM_FLOAT, 'Grade value'),
-                'error' => new external_value(PARAM_TEXT, 'Any error condition'),
-            ])
-        );
+        return new external_single_structure([
+            'lines' => new external_multiple_structure(
+                new external_single_structure([
+                    'name' => new external_value(PARAM_TEXT, 'User name'),
+                    'idnumber' => new external_value(PARAM_TEXT, 'User ID number'),
+                    'grade' => new external_value(PARAM_TEXT, 'Grade to assign'),
+                    'gradevalue' => new external_value(PARAM_FLOAT, 'Grade value'),
+                    'state' => new external_value(PARAM_INT, '< 0 is error; 0 is skip; >0 is ok'),
+                    'error' => new external_value(PARAM_TEXT, 'Any error condition'),
+                ])
+            ),
+            'errorcount' => new external_value(PARAM_INT, 'Count of error lines'),
+            'addcount' => new external_value(PARAM_INT, 'Count of added grades'),
+        ]);
     }
 }

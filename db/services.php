@@ -44,6 +44,7 @@ $services = [
             'local_gugrades_is_grades_imported',
             'local_gugrades_get_all_strings',
             'local_gugrades_get_add_grade_form',
+            'local_gugrades_get_gradetypes',
             'local_gugrades_write_additional_grade',
             'local_gugrades_save_settings',
             'local_gugrades_get_settings',
@@ -148,6 +149,12 @@ $functions = [
     'local_gugrades_get_add_grade_form' => [
         'classname' => 'local_gugrades\external\get_add_grade_form',
         'description' => 'Get the stuff to construct the add grade form.',
+        'type' => 'read',
+        'ajax' => true,
+    ],
+    'local_gugrades_get_gradetypes' => [
+        'classname' => 'local_gugrades\external\get_gradetypes',
+        'description' => 'Get list of gradetypes (in menu format).',
         'type' => 'read',
         'ajax' => true,
     ],

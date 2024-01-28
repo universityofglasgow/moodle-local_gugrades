@@ -124,32 +124,61 @@ class csv_capture_test extends \local_gugrades\external\gugrades_advanced_testca
      * @covers \local_gugrades\external\upload_csv::execute
      */
     public function test_upload_csv() {
+        global $DB;
 
         // Make sure that we're a teacher
         $this->setUser($this->teacher);
 
         // Get first csv test string
         $csv = $this->make_csv($this->uploaddata1);
-        $lines = upload_csv::execute($this->course->id, $this->gradeitemidassign2, 0, true, 'SECOND', $csv);
-        $lines = \external_api::clean_returnvalue(
+        $data = upload_csv::execute($this->course->id, $this->gradeitemidassign2, 0, true, 'SECOND', '', $csv);
+        $data = \external_api::clean_returnvalue(
             upload_csv::execute_returns(),
-            $lines
+            $data
         );
+        $lines = $data['lines'];
+        $errorcount = $data['errorcount'];
+        $addcount = $data['addcount'];
 
         $this->assertCount(2, $lines);
         $this->assertEquals(4, $lines[0]['gradevalue']);
+        $this->assertEquals(1, $lines[0]['state']);
         $this->assertEquals(18, $lines[1]['gradevalue']);
+        $this->assertEquals(1, $lines[1]['state']);
 
         // Get second (with errors) csv test string
         $csv = $this->make_csv($this->uploaddata2);
-        $lines = upload_csv::execute($this->course->id, $this->gradeitemidassign2, 0, true, 'SECOND', $csv);
-        $lines = \external_api::clean_returnvalue(
+        $data = upload_csv::execute($this->course->id, $this->gradeitemidassign2, 0, true, 'SECOND', '', $csv);
+        $data = \external_api::clean_returnvalue(
             upload_csv::execute_returns(),
-            $lines
+            $data
         );
+        $lines = $data['lines'];
+        $errorcount = $data['errorcount'];
+        $addcount = $data['addcount'];
 
         $this->assertCount(2, $lines);
         $this->assertEquals(get_string('csvidinvalid', 'local_gugrades'), $lines[0]['error']);
+        $this->assertEquals(-1, $lines[0]['state']);
         $this->assertEquals(get_string('csvgradeinvalid', 'local_gugrades'), $lines[1]['error']);
+        $this->assertEquals(0, $lines[1]['state']);
+
+        // Run first again, but this time save the grades (not testrun).
+        $csv = $this->make_csv($this->uploaddata1);
+        $data = upload_csv::execute($this->course->id, $this->gradeitemidassign2, 0, false, 'SECOND', '', $csv);
+        $data = \external_api::clean_returnvalue(
+            upload_csv::execute_returns(),
+            $data
+        );
+        $lines = $data['lines'];
+        $errorcount = $data['errorcount'];
+        $addcount = $data['addcount'];
+
+        $grades = $DB->get_records('local_gugrades_grade');
+        $grades = array_values($grades);
+
+        $this->assertEquals(2, $addcount);
+        $this->assertCount(2, $grades);
+        $this->assertEquals(18.0, $grades[1]->rawgrade);
     }
 }
