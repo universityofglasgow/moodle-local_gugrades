@@ -30,7 +30,7 @@ namespace local_gugrades\conversion;
  */
 class points extends base {
 
-   /**
+    /**
      * "Human" name of this type of grade
      * @return string
      */

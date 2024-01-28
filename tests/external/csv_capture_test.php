@@ -129,7 +129,7 @@ class csv_capture_test extends \local_gugrades\external\gugrades_advanced_testca
         // Make sure that we're a teacher.
         $this->setUser($this->teacher);
 
-        // Get first csv test string
+        // Get first csv test string.
         $csv = $this->make_csv($this->uploaddata1);
         $data = upload_csv::execute($this->course->id, $this->gradeitemidassign2, 0, true, 'SECOND', '', $csv);
         $data = \external_api::clean_returnvalue(
