@@ -72,7 +72,7 @@
         <div class="row mt-2">
             <div class="col-sm-12">
                 <div class="float-right">
-                    <button class="btn btn-warning" type="button" @click="close_modal()">{{  mstrings.close }}</button>
+                    <button class="btn btn-warning" type="button" @click="close_modal()">{{  mstrings.cancel }}</button>
                 </div>
             </div>
         </div>
