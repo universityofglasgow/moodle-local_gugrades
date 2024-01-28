@@ -43,18 +43,18 @@ class csv_capture_test extends \local_gugrades\external\gugrades_advanced_testca
         [
             "Name",
             "ID number",
-            "Grade"
+            "Grade",
         ],
         [
             "Fred Bloggs",
             "1234567",
-            "F2:4"
+            "F2:4",
         ],
         [
             "Juan Perez",
             "1234560",
-            "A5:18"
-        ]
+            "A5:18",
+        ],
     ];
 
     /**
@@ -64,18 +64,18 @@ class csv_capture_test extends \local_gugrades\external\gugrades_advanced_testca
         [
             "Name",
             "ID number",
-            "Grade"
+            "Grade",
         ],
         [
             "Fred Bloggs",
             "123456A",
-            "F2:4"
+            "F2:4",
         ],
         [
             "Juan Perez",
             "1234560",
-            "A5:20"
-        ]
+            "A5:20",
+        ],
     ];
 
     /**
@@ -99,17 +99,17 @@ class csv_capture_test extends \local_gugrades\external\gugrades_advanced_testca
      */
     public function test_return_csv() {
 
-        // Make sure that we're a teacher
+        // Make sure that we're a teacher.
         $this->setUser($this->teacher);
 
-        // Check for one of the assignments
+        // Check for one of the assignments.
         $csv = get_csv_download::execute($this->course->id, $this->gradeitemidassign1, 0);
         $csv = \external_api::clean_returnvalue(
             get_csv_download::execute_returns(),
             $csv
         );
 
-        // Parse csv (sort of - I know!)
+        // Parse csv (sort of - I know!).
         $data = \local_gugrades\api::unpack_csv($csv['csv']);
 
         $this->assertCount(3, $data);
@@ -126,7 +126,7 @@ class csv_capture_test extends \local_gugrades\external\gugrades_advanced_testca
     public function test_upload_csv() {
         global $DB;
 
-        // Make sure that we're a teacher
+        // Make sure that we're a teacher.
         $this->setUser($this->teacher);
 
         // Get first csv test string
@@ -146,7 +146,7 @@ class csv_capture_test extends \local_gugrades\external\gugrades_advanced_testca
         $this->assertEquals(18, $lines[1]['gradevalue']);
         $this->assertEquals(1, $lines[1]['state']);
 
-        // Get second (with errors) csv test string
+        // Get second (with errors) csv test string.
         $csv = $this->make_csv($this->uploaddata2);
         $data = upload_csv::execute($this->course->id, $this->gradeitemidassign2, 0, true, 'SECOND', '', $csv);
         $data = \external_api::clean_returnvalue(

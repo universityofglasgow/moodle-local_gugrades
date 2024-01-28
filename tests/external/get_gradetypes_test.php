@@ -44,7 +44,7 @@ class get_gradetypes_test extends \local_gugrades\external\gugrades_advanced_tes
     public function test_get_gradetypes() {
         global $DB;
 
-        // Use the test teacher
+        // Use the test teacher.
         $this->setUser($this->teacher->id);
 
         $gradetypes = get_gradetypes::execute($this->course->id, $this->gradeitemidassign1);

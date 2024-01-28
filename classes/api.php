@@ -104,7 +104,7 @@ class api {
      */
     public static function unpack_csv($csv) {
 
-        // first split into lines
+        // First split into lines.
         $lines = explode(PHP_EOL, $csv);
 
         $data = [];
@@ -128,15 +128,16 @@ class api {
      */
     public static function get_csv_download(int $courseid, int $gradeitemid, int $groupid) {
 
-        // Get activity object
+        // Get activity object.
         $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid, $groupid);
 
-        // Get array of users
+        // Get array of users.
         $users = $activity->get_users();
 
-        // Build CSV file
+        // Build CSV file.
         $csv = '';
-        $csv .= get_string('name', 'local_gugrades') . ',' . get_string('idnumber', 'local_gugrades') . ',' . get_string('grade', 'local_gugrades') . PHP_EOL;
+        $csv .= get_string('name', 'local_gugrades') . ',' . get_string('idnumber', 'local_gugrades') . ',' .
+            get_string('grade', 'local_gugrades') . PHP_EOL;
         foreach ($users as $user) {
             $csv .= $user->displayname . ',' . $user->idnumber . ',' . PHP_EOL;
         }
@@ -173,11 +174,10 @@ class api {
             }
         }
 
-        // Get the grade conversion class
+        // Get the grade conversion class.
         $conversion = \local_gugrades\grades::conversion_factory($courseid, $gradeitemid);
-        //var_dump($conversion);
 
-        // (only for testrun) accumulate output.
+        // Only for testrun, accumulate output.
         $testrunlines = [];
 
         // Count success and misery (not all errors are fatal).
@@ -214,7 +214,7 @@ class api {
             $grade = isset($line[2]) ? $grade = $line[2] : '';
             $testrunline['grade'] = $grade;
 
-            // Check we have a (valid) idnumber
+            // Check we have a (valid) idnumber.
             if (!isset($idusers[$idnumber])) {
                 $testrunline['error'] = get_string('csvidinvalid', 'local_gugrades');
                 $testrunline['state'] = -1;
@@ -224,7 +224,7 @@ class api {
             }
             $user = $idusers[$idnumber];
 
-            // Check if valid grade
+            // Check if valid grade.
             if ($grade) {
                 list($gradevalid, $gradevalue) = $conversion->csv_value($grade);
                 if (!$gradevalid) {
@@ -243,7 +243,7 @@ class api {
 
             $testrunlines[] = $testrunline;
 
-            // If we get to here and not a testrun, we can actually save the data
+            // If we get to here and not a testrun, we can actually save the data.
             if (!$testrun) {
                 \local_gugrades\grades::write_grade(
                     $courseid,

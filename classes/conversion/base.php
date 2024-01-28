@@ -120,7 +120,7 @@ abstract class base {
         if ($this->is_scale()) {
             $csvgrade = trim($csvgrade);
 
-            // check if the grade is in the array of scale values
+            // Check if the grade is in the array of scale values.
             if (!array_key_exists($csvgrade, $this->items)) {
                 return [false, 0];
             }
