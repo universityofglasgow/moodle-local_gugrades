@@ -5,9 +5,11 @@
 
         <!-- Initial download/upload page -->
         <div v-if="pagestate == 'showuploadpage'">
-            <p>{{  mstrings.csvdownloadhelp }}</p>
+            <div class="border rounded p-5">
+                <p><b>{{  mstrings.csvdownloadhelp }}</b></p>
 
-            <button class="btn btn-primary" type="button" @click="csv_download()">{{  mstrings.csvdownload }}</button>
+                <button class="btn btn-primary" type="button" @click="csv_download()">{{  mstrings.csvdownload }}</button>
+            </div>
 
             <form>
                 <FormKit class="border rounded" type="form" @submit="submit_csv_form">
