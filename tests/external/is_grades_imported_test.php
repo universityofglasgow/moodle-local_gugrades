@@ -39,7 +39,7 @@ class is_grades_imported_test extends \local_gugrades\external\gugrades_advanced
     /**
      * Check that a top=level activiy shows recursiveavailable = false
      *
-     * @covers \local_gugrades\external\has_capability::execute
+     * @covers \local_gugrades\external\is_grades_imported::execute
      */
     public function test_recursiveavailable_false() {
 
@@ -64,7 +64,7 @@ class is_grades_imported_test extends \local_gugrades\external\gugrades_advanced
     /**
      * Check that a top=level activiy shows recursiveavailable = true
      *
-     * @covers \local_gugrades\external\has_capability::execute
+     * @covers \local_gugrades\external\is_grades_imported::execute
      */
     public function test_recursiveavailable_true() {
 
@@ -84,5 +84,44 @@ class is_grades_imported_test extends \local_gugrades\external\gugrades_advanced
         // Check recursivematch field.
         $this->assertArrayHasKey('recursivematch', $gradesimported);
         $this->assertTrue($gradesimported['recursivematch']);
+
+        // Check all grades valid
+        $this->assertArrayHasKey('allgradesvalid', $gradesimported);
+        $this->assertTrue($gradesimported['allgradesvalid']);
+    }
+
+
+    /**
+     * Check introducing an invalid gradetype into the recursive set
+     *
+     * @covers \local_gugrades\external\is_grades_imported::execute
+     */
+    public function test_recursiveavailable_bad_gradetype() {
+
+        // Log in as teacher.
+        $this->setUser($this->teacher);
+
+        // Final item has an invalid grade type
+        // Just being there is the thing
+        $seconditemx = $this->getDataGenerator()->create_grade_item(['courseid' => $this->course->id, 'gradetype' => GRADE_TYPE_TEXT]);
+        $this->move_gradeitem_to_category($seconditemx->id, $this->gradecatsecond->id);
+
+        $gradesimported = is_grades_imported::execute($this->course->id, $this->gradeitemsecond1, 0);
+        $gradesimported = \external_api::clean_returnvalue(
+            is_grades_imported::execute_returns(),
+            $gradesimported
+        );
+
+        // Check recursiveavailable field.
+        $this->assertArrayHasKey('recursiveavailable', $gradesimported);
+        $this->assertTrue($gradesimported['recursiveavailable']);
+
+        // Check recursivematch field.
+        $this->assertArrayHasKey('recursivematch', $gradesimported);
+        $this->assertFalse($gradesimported['recursivematch']);
+
+        // Check all grades valid
+        $this->assertArrayHasKey('allgradesvalid', $gradesimported);
+        $this->assertFalse($gradesimported['allgradesvalid']);
     }
 }

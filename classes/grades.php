@@ -161,9 +161,10 @@ class grades {
      * Check that all grades are the same for a potential recursive import
      * For a given gradeitemid, we're looking at that items *peers* and any
      * children thereof. So we want to start with the parent category of the
-     * supplied gradeitemid
+     * supplied gradeitemid.
+     * ALSO, check that all gradestypes are valid
      * @param int $gradeitemid
-     * @return array(recursiveavailable, recursivematch)
+     * @return array(recursiveavailable, recursivematch, allgradesvalid)
      */
     public static function recursive_import_match(int $gradeitemid) {
         global $DB;
@@ -174,6 +175,7 @@ class grades {
 
         $recursiveavailable = false;
         $recursivematch = false;
+        $allgradesvalid = true;
 
         // This MUST be a 'second level' category. Which is actually the 3rd one down.
         // SO it will have a path field like /a/b/c/ or longer.
@@ -187,6 +189,15 @@ class grades {
 
             // Get grade items.
             if ($items = self::get_gradeitems_recursive($gradecategory)) {
+
+                // Check for any items with invalid grade types
+                foreach ($items as $item) {
+                    if (!self::is_grade_supported($gradeitemid)) {
+
+                        // Recursive is technically available but a grade is invalid
+                        return [true, false, false];
+                    }
+                }
 
                 // As a basic check grade min, max and scale type need to match.
                 $first = array_shift($items);
@@ -206,6 +217,7 @@ class grades {
         return [
             $recursiveavailable,
             $recursivematch,
+            $allgradesvalid,
         ];
     }
 

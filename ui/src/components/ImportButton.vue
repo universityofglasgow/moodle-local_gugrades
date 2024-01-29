@@ -29,17 +29,22 @@
         </div>
 
         <div v-if="recursiveavailable" class="alert alert-secondary">
-            <FormKit
-                type="checkbox"
-                :label="mstrings.recursiveimport"
-                :help="mstrings.recursiveimporthelp"
-                name="recursiveimport"
-                v-model="recursiveselect"
-                >
-                <template #help>
-                    <p><i class="fa fa-info-circle" aria-hidden="true"></i> {{ mstrings.recursiveimporthelp }}</p>
-                </template>
-            </FormKit>
+            <div v-if="!allgradesvalid" class="alert alert-danger">
+                {{ mstrings.invalidgradetype }}
+            </div>
+            <div v-else>
+                <FormKit
+                    type="checkbox"
+                    :label="mstrings.recursiveimport"
+                    :help="mstrings.recursiveimporthelp"
+                    name="recursiveimport"
+                    v-model="recursiveselect"
+                    >
+                    <template #help>
+                        <p><i class="fa fa-info-circle" aria-hidden="true"></i> {{ mstrings.recursiveimporthelp }}</p>
+                    </template>
+                </FormKit>
+            </div>
         </div>
 
         <div v-if="recursiveavailable && recursiveselect && !recursivematch" class="alert alert-warning">
@@ -84,6 +89,7 @@
     const recursivematch = ref(false);
     const recursiveselect = ref(false);
     const importadditional = ref(false);
+    const allgradesvalid = ref(false);
     const mstrings = inject('mstrings');
 
     /**
@@ -187,6 +193,7 @@
             is_importgrades.value = result.imported;
             recursiveavailable.value = result.recursiveavailable;
             recursivematch.value = result.recursivematch;
+            allgradesvalid.value = result.allgradesvald;
         })
         .catch((error) => {
             window.console.log(error);

@@ -486,12 +486,13 @@ class api {
      */
     public static function is_grades_imported(int $courseid, int $gradeitemid, $groupid) {
         $imported = \local_gugrades\grades::is_grades_imported($courseid, $gradeitemid, $groupid);
-        list($recursiveavailable, $recursivematch) = \local_gugrades\grades::recursive_import_match($gradeitemid);
+        list($recursiveavailable, $recursivematch, $allgradesvalid) = \local_gugrades\grades::recursive_import_match($gradeitemid);
 
         return [
             'imported' => $imported,
             'recursiveavailable' => $recursiveavailable,
             'recursivematch' => $recursivematch,
+            'allgradesvalid' => $allgradesvalid,
         ];
     }
 
@@ -508,7 +509,7 @@ class api {
         global $DB;
 
         // Check!
-        list($recursiveavailable, $recursivematch) = \local_gugrades\grades::recursive_import_match($gradeitemid);
+        list($recursiveavailable, $recursivematch, $allgradesvalid) = \local_gugrades\grades::recursive_import_match($gradeitemid);
         if (!$recursiveavailable) {
             throw new \moodle_exception("import_grades_recursive called for <2nd level grade item. ID = " . $gradeitemid);
         }
