@@ -79,7 +79,9 @@ class get_capture_page extends \external_api {
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        return \local_gugrades\api::get_capture_page($courseid, $gradeitemid, $firstname, $lastname, $groupid, $viewfullnames);
+        $page = \local_gugrades\api::get_capture_page($courseid, $gradeitemid, $firstname, $lastname, $groupid, $viewfullnames);
+
+        return $page;
     }
 
     /**

@@ -64,6 +64,7 @@ class api {
                 'itemtype' => '',
                 'itemname' => '',
                 'gradesupported' => false,
+                'gradesimported' => false,
                 'gradehidden' => false,
                 'gradelocked' => false,
             ];
@@ -83,6 +84,7 @@ class api {
         $users = \local_gugrades\grades::add_grades_to_user_records($courseid, $gradeitemid, $users);
         $users = \local_gugrades\users::add_pictures_to_user_records($users);
         $columns = \local_gugrades\grades::get_grade_capture_columns($courseid, $gradeitemid);
+        $gradesimported = \local_gugrades\grades::is_grades_imported($courseid, $gradeitemid);
 
         return [
             'users' => $users,
@@ -91,7 +93,7 @@ class api {
             'itemtype' => $activity->get_itemtype(),
             'itemname' => $activity->get_itemname(),
             'gradesupported' => true,
-            'gradesimported' => \local_gugrades\grades::is_grades_imported($courseid, $gradeitemid),
+            'gradesimported' => $gradesimported,
             'gradehidden' => $gradehidden ? true : false,
             'gradelocked' => $gradelocked ? true : false,
         ];

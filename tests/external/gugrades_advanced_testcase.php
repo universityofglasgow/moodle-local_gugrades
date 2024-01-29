@@ -53,6 +53,11 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
     protected $gradecatform;
 
     /**
+     * @var object $gradecatsecond
+     */
+    protected $gradecatsecond;
+
+    /**
      * @var object $teacher
      */
     protected $teacher;
@@ -357,6 +362,7 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
         $this->student2 = $student2;
         $this->gradecatsumm = $gradecatsumm;
         $this->gradecatform = $gradecatform;
+        $this->gradecatsecond = $gradecatsecond;
         $this->gradeitemsecond1 = $seconditem1->id;
         $this->gradeitemsecond2 = $seconditem2->id;
     }
