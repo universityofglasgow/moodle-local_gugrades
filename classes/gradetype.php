@@ -77,6 +77,29 @@ class gradetype {
     }
 
     /**
+     * Is the gradetype one that can be edited on the capture page?
+     * @param string $gradetype
+     * @return bool
+     */
+    public static function can_gradetype_be_edited(string $gradetype) {
+
+        // list of eligible types.
+        $edittypes = [
+            'SECOND',
+            'THIRD',
+            'AGREED',
+            'MODERATED',
+            'LATE',
+            'GOODCAUSE',
+            'CAPPED',
+            'CONDUCT',
+            'OTHER',
+        ];
+
+        return in_array($gradetype, $edittypes);
+    }
+
+    /**
      * Get description
      * @param string $gradetype
      * @return string

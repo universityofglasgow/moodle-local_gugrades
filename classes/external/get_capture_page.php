@@ -110,6 +110,7 @@ class get_capture_page extends \external_api {
                 new external_single_structure([
                     'id' => new external_value(PARAM_INT, 'Column id'),
                     'gradetype' => new external_value(PARAM_TEXT, 'FIRST, SECOND and so on'),
+                    'editable' => new external_value(PARAM_BOOL, 'Is it a column that can be edited after the fact?'),
                     'description' => new external_value(PARAM_TEXT, 'Heading for this grade type'),
                 ])
             ),

@@ -351,9 +351,9 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
         // Create a "second level" grade category and pu some iems in it.
         $gradecatsecond = $this->getDataGenerator()->create_grade_category(
             ['courseid' => $course->id, 'fullname' => 'Second Level', 'parent' => $gradecatsumm->id]);
-        $seconditem1 = $this->getDataGenerator()->create_grade_item(['courseid' => $course->id]);
+        $seconditem1 = $this->getDataGenerator()->create_grade_item(['courseid' => $course->id, 'fullname' => 'Second item 1']);
         $this->move_gradeitem_to_category($seconditem1->id, $gradecatsecond->id);
-        $seconditem2 = $this->getDataGenerator()->create_grade_item(['courseid' => $course->id]);
+        $seconditem2 = $this->getDataGenerator()->create_grade_item(['courseid' => $course->id, 'fullname' => 'Second item 2']);
         $this->move_gradeitem_to_category($seconditem2->id, $gradecatsecond->id);
 
         $this->course = $course;

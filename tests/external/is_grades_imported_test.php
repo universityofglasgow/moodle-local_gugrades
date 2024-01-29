@@ -41,7 +41,7 @@ class is_grades_imported_test extends \local_gugrades\external\gugrades_advanced
      *
      * @covers \local_gugrades\external\is_grades_imported::execute
      */
-    public function test_recursiveavailable_false() {
+     public function test_recursiveavailable_false() {
 
         // Log in as teacher.
         $this->setUser($this->teacher);
@@ -97,16 +97,17 @@ class is_grades_imported_test extends \local_gugrades\external\gugrades_advanced
      * @covers \local_gugrades\external\is_grades_imported::execute
      */
     public function test_recursiveavailable_bad_gradetype() {
+        global $DB;
 
         // Log in as teacher.
         $this->setUser($this->teacher);
 
         // Final item has an invalid grade type
         // Just being there is the thing
-        $seconditemx = $this->getDataGenerator()->create_grade_item(['courseid' => $this->course->id, 'gradetype' => GRADE_TYPE_TEXT]);
+        $seconditemx = $this->getDataGenerator()->create_grade_item(['courseid' => $this->course->id, 'gradetype' => GRADE_TYPE_TEXT, 'fullname' => 'Second item XX']);
         $this->move_gradeitem_to_category($seconditemx->id, $this->gradecatsecond->id);
 
-        $gradesimported = is_grades_imported::execute($this->course->id, $this->gradeitemsecond1, 0);
+        $gradesimported = is_grades_imported::execute($this->course->id, $this->gradeitemsecond2, 0);
         $gradesimported = \external_api::clean_returnvalue(
             is_grades_imported::execute_returns(),
             $gradesimported

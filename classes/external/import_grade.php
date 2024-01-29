@@ -70,7 +70,7 @@ class import_grade extends \external_api {
 
         $conversion = \local_gugrades\grades::conversion_factory($courseid, $gradeitemid);
         $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid);
-        $success = \local_gugrades\api::import_grade($courseid, $gradeitemid, $conversion, $activity, $userid);
+        $success = \local_gugrades\api::import_grade($courseid, $gradeitemid, $conversion, $activity, $userid, false);
 
         // Audit?
         if ($success) {

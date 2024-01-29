@@ -49,6 +49,10 @@
                     :items="users"
                     :headers="headers"
                     >
+                    <template #header="header">
+                        {{ header.text }}
+                        <CaptureColumnEditCog v-if="header.editable"></CaptureColumnEditCog>
+                    </template>
                     <template #item-slotuserpicture="item">
                         <img :src="item.pictureurl" :alt="item.displayname" class="userpicture defaultuserpic" width="35" height="35"/>
                     </template>
@@ -88,6 +92,7 @@
     import { useToast } from "vue-toastification";
     import CaptureButtons from '@/components/CaptureButtons.vue';
     import CaptureAlerts from '@/components/CaptureAlerts.vue';
+    import CaptureColumnEditCog from '@/components/CaptureColumnEditCog.vue';
 
     const users = ref([]);
     const userids = ref([]);
@@ -160,7 +165,7 @@
         // Add the grades columns
         columns.value.forEach(column => {
             // Make sure that the value is a string
-            heads.push({text: column.description, value: 'GRADE' + column.id});
+            heads.push({text: column.description, value: 'GRADE' + column.id, editable: column.editable});
         });
 
         // Space for the buttons

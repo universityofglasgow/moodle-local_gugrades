@@ -73,7 +73,7 @@ class get_gradetypes extends \external_api {
 
     /**
      * Define function result
-     * @return external_single_structure
+     * @return external_multiple_structure
      */
     public static function execute_returns() {
         return new external_multiple_structure(

@@ -2,6 +2,7 @@
     <div class="col-12 mt-2">
         <ImportButton :itemid="props.itemid" :groupid="props.groupid" :userids="props.userids" @imported="emit('refreshtable')"></ImportButton>
         <CSVImportButton :itemid="props.itemid" :groupid="props.groupid" :itemname="props.itemname" @uploaded="emit('refreshtable')"></CSVImportButton>
+        <AddMultipleButton :itemid="props.itemid" :groupid="props.groupid" :itemname="props.itemname"></AddMultipleButton>
         <ReleaseButton v-if="props.gradesimported" :gradeitemid="props.itemid" :groupid="props.groupid" @released="emit('refreshtable')"></ReleaseButton>
         <ExportWorksheetButton v-if="itemtype=='assign'" :users="props.users" :itemtype="props.itemtype" :itemname="props.itemname"></ExportWorksheetButton>
         <ViewFullNamesButton v-if="props.usershidden" @viewfullnames="viewfullnames"></ViewFullNamesButton>
@@ -15,6 +16,7 @@
     import ReleaseButton from '@/components/ReleaseButton.vue';
     import ExportWorksheetButton from '@/components/ExportWorksheetButton.vue';
     import ViewFullNamesButton from './ViewFullNamesButton.vue';
+    import AddMultipleButton from '@/components/AddMultipleButton.vue';
 
     const props = defineProps({
         itemid: Number,
