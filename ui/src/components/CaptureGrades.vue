@@ -26,7 +26,7 @@
 -->
 
 <template>
-    <td>{{ firstgrade }}</td>
+    <td>{{ firstgrade }} BLAH</td>
 </template>
 
 <script setup>

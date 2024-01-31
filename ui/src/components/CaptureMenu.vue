@@ -12,9 +12,9 @@
 
 <script setup>
     import {defineProps, defineEmits} from '@vue/runtime-core';
-    import HistoryButton from '@/components/HistoryButton.vue';
-    import ImportUserGradeButton from '@/components/ImportUserGradeButton.vue';
-    import AddGradeButton from '@/components/AddGradeButton.vue';
+    import HistoryButton from '@/components/Capture/HistoryButton.vue';
+    import ImportUserGradeButton from '@/components/Capture/ImportUserGradeButton.vue';
+    import AddGradeButton from '@/components/Capture/AddGradeButton.vue';
 
     //const mstrings = inject('mstrings');
 

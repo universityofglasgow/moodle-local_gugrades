@@ -192,7 +192,7 @@
             }
         }])[0]
         .then((result) => {
-            gradetypes.value = result;
+            gradetypes.value = result.gradetypes;
             window.console.log(gradetypes.value);
         })
         .catch((error) => {

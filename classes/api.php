@@ -584,6 +584,43 @@ class api {
     }
 
     /**
+     * Get capture cell form
+     * Various 'stuff' to construct the editable grade cells
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @return array
+     */
+    public static function get_capture_cell_form(int $courseid, int $gradeitemid) {
+        global $DB;
+
+        // Gradeitem.
+        list($itemtype, $gradeitem) = \local_gugrades\grades::analyse_gradeitem($gradeitemid);
+        if ($gradeitem == false) {
+            throw new \moodle_exception('Unsupported grade item encountered in get_add_grade_form. Gradeitemid = ' . $gradeitemid);
+        }
+        $grademax = ($gradeitem->gradetype == GRADE_TYPE_VALUE) ? $gradeitem->grademax : 0;
+
+        // Scale.
+        if ($gradeitem->gradetype == GRADE_TYPE_SCALE) {
+            $scale = \local_gugrades\grades::get_scale($gradeitem->scaleid);
+            $scalemenu = self::formkit_menu($scale, true);
+        } else {
+            $scalemenu = [];
+        }
+
+        // Administrative grades.
+        $admingrades = \local_gugrades\admin_grades::get_menu();
+        $adminmenu = self::formkit_menu($admingrades, true);
+
+        return [
+            'usescale' => ($itemtype == 'scale') || ($itemtype == 'scale22'),
+            'grademax' => $grademax,
+            'scalemenu' => $scalemenu,
+            'adminmenu' => $adminmenu,
+        ];
+    }
+
+    /**
      * Get add grade form
      * Various 'stuff' to construct the form
      * @param int $courseid
@@ -634,16 +671,20 @@ class api {
     }
 
     /**
-     * Get menu of gradetypes
+     * Get menu of gradetypes and admin grades in menu format
      * @param int $courseid
      * @param int $gradeitemid
-     * @return array
+     * @return array [$gradetypes, $admingrades]
      */
     public static function get_gradetypes(int $courseid, int $gradeitemid) {
         $gradetypes = \local_gugrades\gradetype::get_menu($gradeitemid, LOCAL_GUGRADES_FORMENU);
         $wsgradetypes = self::formkit_menu($gradetypes);
 
-        return $wsgradetypes;
+        // Administrative grades.
+        $admingrades = \local_gugrades\admin_grades::get_menu();
+        $adminmenu = self::formkit_menu($admingrades, true);
+
+        return [$wsgradetypes, $adminmenu];
     }
 
     /**

@@ -47,14 +47,20 @@ class get_gradetypes_test extends \local_gugrades\external\gugrades_advanced_tes
         // Use the test teacher.
         $this->setUser($this->teacher->id);
 
-        $gradetypes = get_gradetypes::execute($this->course->id, $this->gradeitemidassign1);
-        $gradetypes = \external_api::clean_returnvalue(
+        $data = get_gradetypes::execute($this->course->id, $this->gradeitemidassign1);
+        $data = \external_api::clean_returnvalue(
             get_gradetypes::execute_returns(),
-            $gradetypes
+            $data
         );
+
+        $gradetypes = $data['gradetypes'];
+        $admingrades = $data['admingrades'];
 
         $this->assertCount(9, $gradetypes);
         $this->assertEquals('OTHER', $gradetypes[8]['value']);
         $this->assertEquals('Late penalty', $gradetypes[4]['label']);
+
+        $this->assertCount(16, $admingrades);
+        $this->assertEquals('MV', $admingrades[15]['value']);
     }
 }

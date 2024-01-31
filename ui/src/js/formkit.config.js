@@ -4,9 +4,9 @@ const config = {
   config: {
     classes: generateClasses({
       global: { // classes
-        outer: '$reset mb-3',
+        outer: '$reset my-1',
         input: 'form-control',
-        label: 'form-label',
+        label: '$reset mb-0',
         help: 'form-text',
         messages: 'list-unstyled mt-1',
         message: 'text-danger',

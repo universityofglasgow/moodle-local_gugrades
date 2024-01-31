@@ -68,19 +68,32 @@ class get_gradetypes extends \external_api {
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        return \local_gugrades\api::get_gradetypes($courseid, $gradeitemid);
+        list($gradetypes, $admingrades) = \local_gugrades\api::get_gradetypes($courseid, $gradeitemid);
+
+        return [
+            'gradetypes' => $gradetypes,
+            'admingrades' => $admingrades,
+        ];
     }
 
     /**
      * Define function result
-     * @return external_multiple_structure
+     * @return external_single_structure
      */
     public static function execute_returns() {
-        return new external_multiple_structure(
-            new external_single_structure([
-                'value' => new external_value(PARAM_TEXT, 'Short name of gradetype'),
-                'label' => new external_value(PARAM_TEXT, 'Description of gradetype'),
-            ])
-        );
+        return new external_single_structure([
+            'gradetypes' => new external_multiple_structure(
+                new external_single_structure([
+                    'value' => new external_value(PARAM_TEXT, 'Short name of gradetype'),
+                    'label' => new external_value(PARAM_TEXT, 'Description of gradetype'),
+                ])
+            ),
+            'admingrades' => new external_multiple_structure(
+                new external_single_structure([
+                    'value' => new external_value(PARAM_TEXT, 'Short name of gradetype'),
+                    'label' => new external_value(PARAM_TEXT, 'Description of gradetype'),
+                ])
+            ),
+        ]);
     }
 }

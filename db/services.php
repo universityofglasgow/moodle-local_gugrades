@@ -54,6 +54,7 @@ $services = [
             'local_gugrades_reset',
             'local_gugrades_get_groups',
             'local_gugrades_get_csv_download',
+            'local_gugrades_get_capture_cell_form',
         ],
         'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,
@@ -149,6 +150,12 @@ $functions = [
     'local_gugrades_get_add_grade_form' => [
         'classname' => 'local_gugrades\external\get_add_grade_form',
         'description' => 'Get the stuff to construct the add grade form.',
+        'type' => 'read',
+        'ajax' => true,
+    ],
+    'local_gugrades_get_capture_cell_form' => [
+        'classname' => 'local_gugrades\external\get_capture_cell_form',
+        'description' => 'Get the stuff to construct the small forms for bulk grade editing.',
         'type' => 'read',
         'ajax' => true,
     ],

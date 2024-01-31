@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Define function get_add_grade_form
+ * Define function get_capture_cell_form
  * @package    local_gugrades
- * @copyright  2023
+ * @copyright  2024
  * @author     Howard Miller
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -34,9 +34,9 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/externallib.php');
 
 /**
- * Get the information to construct add grade form
+ * Get the information to construct capture cells in capture table
  */
-class get_add_grade_form extends \external_api {
+class get_capture_cell_form extends \external_api {
 
     /**
      * Define function parameters
@@ -46,7 +46,6 @@ class get_add_grade_form extends \external_api {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
             'gradeitemid' => new external_value(PARAM_INT, 'Grade item id'),
-            'userid' => new external_value(PARAM_INT, 'User id - for user we are adding grade'),
         ]);
     }
 
@@ -54,27 +53,22 @@ class get_add_grade_form extends \external_api {
      * Execute function
      * @param int $courseid
      * @param int $gradeitemid
-     * @param int $userid
      * @return array
      */
-    public static function execute($courseid, $gradeitemid, $userid) {
+    public static function execute($courseid, $gradeitemid) {
         global $DB;
 
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
             'courseid' => $courseid,
             'gradeitemid' => $gradeitemid,
-            'userid' => $userid,
         ]);
-
-        // Get item (if it exists).
-        $item = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
 
         // More security.
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        return \local_gugrades\api::get_add_grade_form($courseid, $gradeitemid, $userid);
+        return \local_gugrades\api::get_capture_cell_form($courseid, $gradeitemid);
     }
 
     /**
@@ -83,15 +77,6 @@ class get_add_grade_form extends \external_api {
      */
     public static function execute_returns() {
         return new external_single_structure([
-            'gradetypes' => new external_multiple_structure(
-                new external_single_structure([
-                    'value' => new external_value(PARAM_TEXT, 'Short name of gradetype'),
-                    'label' => new external_value(PARAM_TEXT, 'Description of gradetype'),
-                ])
-            ),
-            'itemname' => new external_value(PARAM_TEXT, 'Grade item name'),
-            'fullname' => new external_value(PARAM_TEXT, 'User full name'),
-            'idnumber' => new external_value(PARAM_TEXT, 'User ID number'),
             'usescale' => new external_value(PARAM_BOOL, 'Is it a scale (true) or value/points (false)'),
             'grademax' => new external_value(PARAM_FLOAT, 'Maximum grade value - or 0 if not value'),
             'scalemenu' => new external_multiple_structure(

@@ -11,12 +11,12 @@
 
 <script setup>
     import {defineProps, defineEmits} from '@vue/runtime-core';
-    import ImportButton from '@/components/ImportButton.vue';
-    import CSVImportButton from '@/components/CSVImportButton.vue';
-    import ReleaseButton from '@/components/ReleaseButton.vue';
-    import ExportWorksheetButton from '@/components/ExportWorksheetButton.vue';
-    import ViewFullNamesButton from './ViewFullNamesButton.vue';
-    import AddMultipleButton from '@/components/AddMultipleButton.vue';
+    import ImportButton from '@/components/Capture/ImportButton.vue';
+    import CSVImportButton from '@/components/Capture/CSVImportButton.vue';
+    import ReleaseButton from '@/components/Capture/ReleaseButton.vue';
+    import ExportWorksheetButton from '@/components/Capture/ExportWorksheetButton.vue';
+    import ViewFullNamesButton from '@/components/Capture/ViewFullNamesButton.vue';
+    import AddMultipleButton from '@/components/Capture/AddMultipleButton.vue';
 
     const props = defineProps({
         itemid: Number,

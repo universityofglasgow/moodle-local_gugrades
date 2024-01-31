@@ -49,16 +49,30 @@
                     :items="users"
                     :headers="headers"
                     >
+
+                    <!-- add header text and edit cog next to cell if required -->
                     <template #header="header">
                         {{ header.text }}
-                        <CaptureColumnEditCog v-if="header.editable"></CaptureColumnEditCog>
+                        <CaptureColumnEditCog v-if="header.editable  && !editcolumn" :colname="header.value" :itemid="itemid" @editcolumn="editcog_clicked"></CaptureColumnEditCog>
                     </template>
+
+                    <!-- User picture column -->
                     <template #item-slotuserpicture="item">
                         <img :src="item.pictureurl" :alt="item.displayname" class="userpicture defaultuserpic" width="35" height="35"/>
                     </template>
+
+                    <!--
                     <template #item-grade="item">
                         <CaptureGrades :grades="item.grades"></CaptureGrades>
                     </template>
+                    -->
+
+                    <!-- switch to input for bulk editing (if selected) -->
+                    <template v-slot:[editcolumnslot]="item">
+                        <EditCaptureCell :item="item" :column="editcolumn" @editcolumn="edit_cell_change"></EditCaptureCell>
+                    </template>
+
+                    <!-- dropdown in the final column -->
                     <template #item-actions="item">
                         <CaptureMenu
                             :itemid="itemid"
@@ -71,6 +85,8 @@
                             >
                         </CaptureMenu>
                     </template>
+
+                    <!-- show warning if grade sdo not agree -->
                     <template #item-alert="item">
                         <span v-if="item.alert" class="badge badge-danger">{{ mstrings.discrepancy }}</span>
                     </template>
@@ -86,13 +102,14 @@
     import {ref, computed, inject} from '@vue/runtime-core';
     import NameFilter from '@/components/NameFilter.vue';
     import CaptureSelect from '@/components/CaptureSelect.vue';
-    import CaptureGrades from '@/components/CaptureGrades.vue';
+    //import CaptureGrades from '@/components/CaptureGrades.vue';
     import CaptureMenu from '@/components/CaptureMenu.vue';
     import PreLoader from '@/components/PreLoader.vue';
     import { useToast } from "vue-toastification";
-    import CaptureButtons from '@/components/CaptureButtons.vue';
+    import CaptureButtons from '@/components/Capture/CaptureButtons.vue';
     import CaptureAlerts from '@/components/CaptureAlerts.vue';
     import CaptureColumnEditCog from '@/components/CaptureColumnEditCog.vue';
+    import EditCaptureCell from '@/components/Capture/EditCaptureCell.vue';
 
     const users = ref([]);
     const userids = ref([]);
@@ -114,6 +131,8 @@
     const showalert = ref(false);
     const revealnames = ref(false);
     const collapsed = ref(false);
+    const editcolumn = ref('');
+    const editcolumnslot = ref('');
 
     const toast = useToast();
 
@@ -147,6 +166,30 @@
     }
 
     /**
+     * Column editcog has been clicked
+     */
+     function editcog_clicked(cellform) {
+
+        // Unpack data
+        const columnname = cellform.columnname;
+        window.console.log(cellform);
+
+        // Note: this is the EasyDataTable slot name for the column.
+        editcolumnslot.value = 'item-' + columnname;
+        editcolumn.value = columnname;
+        get_page_data(itemid.value, firstname, lastname, groupid.value);
+    }
+
+    /**
+     * In edit mode, a cell has change
+     */
+    function edit_cell_change(item) {
+        //const id = item.id;
+        const grade = item.grade;
+        window.console.log(grade);
+    }
+
+    /**
      * Get headers
      */
     const headers = computed(() => {
@@ -164,8 +207,13 @@
 
         // Add the grades columns
         columns.value.forEach(column => {
+
             // Make sure that the value is a string
-            heads.push({text: column.description, value: 'GRADE' + column.id, editable: column.editable});
+            heads.push({
+                text: column.description,
+                value: 'GRADE' + column.id,
+                editable: column.editable,
+            });
         });
 
         // Space for the buttons
@@ -203,19 +251,26 @@
             // Allow import if there are no grades for this user.
             user.awaitingcapture = true;
             columns.forEach(column => {
+                const columnname = 'GRADE' + column.id;
                 grade = user.grades.find((element) => {
                     return (element.columnid == column.id);
                 });
                 if (grade) {
                     user.awaitingcapture = false;
-                    user['GRADE' + column.id] = grade.displaygrade;
+                    user[columnname] = grade.displaygrade;
                 } else if (column.gradetype == 'FIRST') {
-                    user['GRADE' + column.id] = mstrings.awaitingcapture;
+                    user[columnname] = mstrings.awaitingcapture;
                 } else {
-                    user['GRADE' + column.id] = ' ';
+                    user[columnname] = ' ';
                 }
+
+                // Is this column in 'editing mode'?
+                // If so, we add the 'editcolumn' ta (true) to each cell in that column
+                // The table slot can then pick it up and display an edit box
+                user.editcolumn = (columnname == editcolumn.value);
             });
         });
+        window.console.log(users);
 
         return users;
     }
