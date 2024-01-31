@@ -69,7 +69,15 @@
 
                     <!-- switch to input for bulk editing (if selected) -->
                     <template v-slot:[editcolumnslot]="item">
-                        <EditCaptureCell :item="item" :column="editcolumn" @editcolumn="edit_cell_change"></EditCaptureCell>
+                        <EditCaptureCell
+                            :item="item"
+                            :column="editcolumn"
+                            :usescale="editusescale"
+                            :scalemenu="editscalemenu"
+                            :adminmenu="editadminmenu"
+                             @editcolumn="edit_cell_change"
+                             >
+                        </EditCaptureCell>
                     </template>
 
                     <!-- dropdown in the final column -->
@@ -133,6 +141,9 @@
     const collapsed = ref(false);
     const editcolumn = ref('');
     const editcolumnslot = ref('');
+    const editusescale = ref(false);
+    const editscalemenu = ref([]);
+    const editadminmenu = ref([]);
 
     const toast = useToast();
 
@@ -177,6 +188,9 @@
         // Note: this is the EasyDataTable slot name for the column.
         editcolumnslot.value = 'item-' + columnname;
         editcolumn.value = columnname;
+        editusescale.value = cellform.usescale;
+        editscalemenu.value = cellform.scalemenu;
+        editadminmenu.value = cellform.adminmenu;
         get_page_data(itemid.value, firstname, lastname, groupid.value);
     }
 

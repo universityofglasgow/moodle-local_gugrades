@@ -41,7 +41,7 @@
             // Add 'use grade' option onto front of adminmenu
             adminmenu.unshift({
                 value: 'GRADE',
-                label: mstrings.selectnormalgrade,
+                label: mstrings.selectnormalgradeshort,
             });
 
             // send all this stuff back
