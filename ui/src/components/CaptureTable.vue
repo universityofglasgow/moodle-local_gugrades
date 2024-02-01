@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="border rounded p-2 mt-2">
+        <div v-if="!ineditcellmode" class="border rounded p-2 mt-2">
             <div class="col-12 mb-2">
                 <button class="badge badge-primary" @click="selectcollapse">
                     <span v-if="collapsed"><i class="fa fa-arrow-right"></i> {{ mstrings.show }}</span>
@@ -43,6 +43,12 @@
             <PreLoader v-if="!loaded"></PreLoader>
 
             <div v-if="showtable">
+
+                <!-- button for saving cell edits -->
+                <div class="pb-1 clearfix" v-if="ineditcellmode">
+                    <button class="btn btn-primary float-right" @click="edit_cell_saved">{{ mstrings.save }}</button>
+                </div>
+
                 <EasyDataTable
                     buttons-pagination
                     alternating
@@ -53,7 +59,7 @@
                     <!-- add header text and edit cog next to cell if required -->
                     <template #header="header">
                         {{ header.text }}
-                        <CaptureColumnEditCog v-if="header.editable  && !editcolumn" :colname="header.value" :itemid="itemid" @editcolumn="editcog_clicked"></CaptureColumnEditCog>
+                        <CaptureColumnEditCog v-if="header.editable  && !ineditcellmode" :colname="header.value" :itemid="itemid" @editcolumn="editcog_clicked"></CaptureColumnEditCog>
                     </template>
 
                     <!-- User picture column -->
@@ -75,7 +81,6 @@
                             :usescale="editusescale"
                             :scalemenu="editscalemenu"
                             :adminmenu="editadminmenu"
-                             @editcolumn="edit_cell_change"
                              >
                         </EditCaptureCell>
                     </template>
@@ -83,6 +88,7 @@
                     <!-- dropdown in the final column -->
                     <template #item-actions="item">
                         <CaptureMenu
+                            v-if="!ineditcellmode"
                             :itemid="itemid"
                             :userid="parseInt(item.id)"
                             :name="item.displayname"
@@ -99,6 +105,11 @@
                         <span v-if="item.alert" class="badge badge-danger">{{ mstrings.discrepancy }}</span>
                     </template>
                 </EasyDataTable>
+
+                <!-- button for saving cell edits -->
+                <div class="pt-1 clearfix" v-if="ineditcellmode">
+                    <button class="btn btn-primary float-right">{{ mstrings.save }}</button>
+                </div>
             </div>
 
             <h2 v-if="!showtable">{{ mstrings.nothingtodisplay }}</h2>
@@ -183,7 +194,6 @@
 
         // Unpack data
         const columnname = cellform.columnname;
-        window.console.log(cellform);
 
         // Note: this is the EasyDataTable slot name for the column.
         editcolumnslot.value = 'item-' + columnname;
@@ -195,13 +205,21 @@
     }
 
     /**
-     * In edit mode, a cell has change
+     * In edit mode, the save button is clicked
      */
-    function edit_cell_change(item) {
-        //const id = item.id;
-        const grade = item.grade;
-        window.console.log(grade);
+    function edit_cell_saved() {
+        editcolumn.value = '';
+        editcolumnslot.value = '';
+        get_page_data(itemid.value, firstname, lastname, groupid.value);
     }
+
+    /**
+     * Are we in "edit a cell" mode?
+     * Stuff doesn't appear, if so, and 'Save' button appears.
+     */
+    const ineditcellmode = computed(() => {
+        return editcolumn.value != '';
+    });
 
     /**
      * Get headers
@@ -281,10 +299,14 @@
                 // Is this column in 'editing mode'?
                 // If so, we add the 'editcolumn' ta (true) to each cell in that column
                 // The table slot can then pick it up and display an edit box
+                // Similarly the reason/gradetype stuff
                 user.editcolumn = (columnname == editcolumn.value);
+                user.reason = column.gradetype;
+                user.other = column.other;
+                user.gradeitemid = column.gradeitemid;
             });
         });
-        window.console.log(users);
+        //window.console.log(users);
 
         return users;
     }

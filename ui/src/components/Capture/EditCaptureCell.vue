@@ -3,13 +3,14 @@
         <FormKit
             type="select"
             name="admingrades"
-            outer-class="col"
+            outer-class="col pr-1"
             v-model="admingrade"
             :options="adminmenu"
+            @input="input_updated"
         ></FormKit>
         <FormKit
             v-if="!props.usescale"
-            outer-class="col"
+            outer-class="col pl-0"
             type="text"
             validation-visibility="live"
             maxlength="8"
@@ -21,18 +22,24 @@
         <FormKit
             v-if="props.usescale"
             type="select"
-            outer-class="col"
+            outer-class="col pl-0"
             :disabled="admingrade != 'GRADE'"
             name="scale"
-            v-model="grade"
+            v-model="scale"
             :options="scalemenu"
+            @input="input_updated"
         ></FormKit>
     </div>
 </template>
 
 <script setup>
-    import {ref, defineProps, onMounted, defineEmits} from '@vue/runtime-core';
+    import {ref, defineProps, onMounted, onBeforeUnmount} from '@vue/runtime-core';
+    import { useToast } from "vue-toastification";
 
+    // (item.id is current userid)
+    // (item.reason is the reason/gradetype)
+    // (item.other is the other text)
+    // (item.gradeitemid)
     const props = defineProps({
         item: Object,
         column: String,
@@ -41,9 +48,11 @@
         adminmenu: Array,
     });
 
-    const grade = ref('');
+    const grade = ref(0);
+    const scale = ref(0);
     const admingrade = ref('GRADE');
-    const emits = defineEmits(['editcolumn']);
+    const edited = ref(false);
+    const toast = useToast();
 
     // const mstrings = inject('mstrings');
 
@@ -67,10 +76,56 @@
      *
      */
     function input_updated() {
-        emits('editcolumn', {
-            grade: grade.value,
-            id: props.item.id,
-        });
+
+        // If anything has changed, flag that we will need
+        // to save it at some point.
+        edited.value = true;
     }
+
+    /**
+     * When this component closes, save the data
+     */
+    onBeforeUnmount(() => {
+
+        // if this cell hasn't been edited then nothing to do!
+        if (!edited.value) {
+            return
+        }
+
+        const userid = props.item.id;
+        const reason = props.item.reason;
+        const other = props.item.other;
+        const gradeitemid = props.item.gradeitemid;
+        const saveadmingrade = admingrade.value == 'GRADE' ? '' : admingrade.value;
+        const savescale = (admingrade.value == 'GRADE') && props.usescale ? scale.value : 0;
+        const savegrade = (admingrade.value == 'GRADE') && !props.usescale ? grade.value : 0;
+        const notes = '';
+
+        //window.console.log(savescale, savegrade);
+        window.console.log(props.item);
+
+        const GU = window.GU;
+        const courseid = GU.courseid;
+        const fetchMany = GU.fetchMany;
+
+        fetchMany([{
+            methodname: 'local_gugrades_write_additional_grade',
+            args: {
+                courseid: courseid,
+                gradeitemid: gradeitemid,
+                userid: userid,
+                admingrade: saveadmingrade,
+                reason: reason,
+                other: other,
+                scale: savescale,
+                grade: savegrade,
+                notes: notes,
+            }
+        }])[0]
+        .catch((error) => {
+            window.console.error(error);
+            toast.error('Error communicating with server (see console)');
+        });
+    });
 
 </script>

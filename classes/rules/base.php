@@ -119,9 +119,9 @@ class base {
         }
 
         // The -1 if they don't exist (not existing is proxy for equal).
-        $first = array_key_exists('FIRST', $gradesbygt) ? $gradesbygt['FIRST'] : -1;
-        $second = array_key_exists('SECOND', $gradesbygt) ? $gradesbygt['SECOND'] : -1;
-        $third = array_key_exists('THIRD', $gradesbygt) ? $gradesbygt['THIRD'] : -1;
+        $first = array_key_exists('FIRST', $gradesbygt) ? $gradesbygt['FIRST']->rawgrade : -1;
+        $second = array_key_exists('SECOND', $gradesbygt) ? $gradesbygt['SECOND']->rawgrade : -1;
+        $third = array_key_exists('THIRD', $gradesbygt) ? $gradesbygt['THIRD']->rawgrade : -1;
 
         // Only 1st grade is acceptable.
         if (($second == -1) && ($third == -1)) {

@@ -65,6 +65,19 @@ class get_capture_page_test extends \local_gugrades\external\gugrades_advanced_t
         // Make sure that we're a teacher.
         $this->setUser($this->teacher);
 
+        // Import grades
+        $userlist = [
+            $this->student->id,
+            $this->student2->id,
+        ];
+
+        // Assign2 (which is useing scale).
+        $status = import_grades_users::execute($this->course->id, $this->gradeitemidassign2, false, $userlist);
+        $status = \external_api::clean_returnvalue(
+            import_grades_users::execute_returns(),
+            $status
+        );
+
         // Get first csv test string.
         $page = get_capture_page::execute($this->course->id, $this->gradeitemidassign2, '', '', 0, false);
         $page = \external_api::clean_returnvalue(
