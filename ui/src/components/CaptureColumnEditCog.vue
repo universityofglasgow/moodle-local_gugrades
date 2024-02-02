@@ -8,7 +8,7 @@
 
     const props = defineProps({
         itemid: Number,
-        colname: String,
+        header: Object,
         active: Boolean,
     });
 
@@ -46,7 +46,8 @@
 
             // send all this stuff back
             emits('editcolumn', {
-                columnname: props.colname,
+                columnname: props.header.colname,
+                gradetype: props.header.gradetpe,
                 usescale: usescale,
                 grademax: grademax,
                 scalemenu: scalemenu,

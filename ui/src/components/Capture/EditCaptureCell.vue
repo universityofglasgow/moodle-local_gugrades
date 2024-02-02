@@ -43,6 +43,7 @@
     const props = defineProps({
         item: Object,
         column: String,
+        gradetype: String,
         usescale: Boolean,
         scalemenu: Array,
         adminmenu: Array,
@@ -102,7 +103,7 @@
         const notes = '';
 
         //window.console.log(savescale, savegrade);
-        window.console.log(props.item);
+        window.console.log(props);
 
         const GU = window.GU;
         const courseid = GU.courseid;

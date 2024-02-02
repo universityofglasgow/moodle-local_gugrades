@@ -59,7 +59,7 @@
                     <!-- add header text and edit cog next to cell if required -->
                     <template #header="header">
                         {{ header.text }}
-                        <CaptureColumnEditCog v-if="header.editable  && !ineditcellmode" :colname="header.value" :itemid="itemid" @editcolumn="editcog_clicked"></CaptureColumnEditCog>
+                        <CaptureColumnEditCog v-if="header.editable  && !ineditcellmode" :header="header" :itemid="itemid" @editcolumn="editcog_clicked"></CaptureColumnEditCog>
                     </template>
 
                     <!-- User picture column -->
@@ -79,6 +79,7 @@
                             :item="item"
                             :column="editcolumn"
                             :usescale="editusescale"
+                            :gradetype="editgradetype"
                             :scalemenu="editscalemenu"
                             :adminmenu="editadminmenu"
                              >
@@ -155,6 +156,7 @@
     const editusescale = ref(false);
     const editscalemenu = ref([]);
     const editadminmenu = ref([]);
+    const editgradetype = ref('');
 
     const toast = useToast();
 
@@ -201,6 +203,7 @@
         editusescale.value = cellform.usescale;
         editscalemenu.value = cellform.scalemenu;
         editadminmenu.value = cellform.adminmenu;
+        editgradetype.value = cellform.gradetype;
         get_page_data(itemid.value, firstname, lastname, groupid.value);
     }
 
@@ -244,6 +247,7 @@
             heads.push({
                 text: column.description,
                 value: 'GRADE' + column.id,
+                gradetype: column.gradetype,
                 editable: column.editable,
             });
         });
