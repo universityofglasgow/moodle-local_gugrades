@@ -49,6 +49,7 @@
                     <button class="btn btn-primary float-right" @click="edit_cell_saved">{{ mstrings.save }}</button>
                 </div>
 
+                <!-- Note. The array 'users' contains he lines of data. One record for each user -->
                 <EasyDataTable
                     buttons-pagination
                     alternating
@@ -57,6 +58,7 @@
                     >
 
                     <!-- add header text and edit cog next to cell if required -->
+                    <!-- component needs to return info about which column (which reason/gradetype has been selected)-->
                     <template #header="header">
                         {{ header.text }}
                         <CaptureColumnEditCog v-if="header.editable  && !ineditcellmode" :header="header" :itemid="itemid" @editcolumn="editcog_clicked"></CaptureColumnEditCog>
@@ -78,10 +80,12 @@
                         <EditCaptureCell
                             :item="item"
                             :column="editcolumn"
-                            :usescale="editusescale"
+                            :gradeitemid="itemid"
                             :gradetype="editgradetype"
+                            :usescale="editusescale"
                             :scalemenu="editscalemenu"
                             :adminmenu="editadminmenu"
+                            @gradewritten = "edit_grade_written()"
                              >
                         </EditCaptureCell>
                     </template>
@@ -90,7 +94,7 @@
                     <template #item-actions="item">
                         <CaptureMenu
                             v-if="!ineditcellmode"
-                            :itemid="itemid"
+                            :gradeitemid="itemid"
                             :userid="parseInt(item.id)"
                             :name="item.displayname"
                             :itemname="itemname"
@@ -214,6 +218,14 @@
         editcolumn.value = '';
         editcolumnslot.value = '';
         get_page_data(itemid.value, firstname, lastname, groupid.value);
+    }
+
+    /**
+     * A cell has declared that it has been written
+     * (We're probably getting lots of these)
+     */
+    function edit_grade_written() {
+        window.console.log('GRADE WRITTEN');
     }
 
     /**

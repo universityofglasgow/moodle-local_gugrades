@@ -46,8 +46,8 @@
 
             // send all this stuff back
             emits('editcolumn', {
-                columnname: props.header.colname,
-                gradetype: props.header.gradetpe,
+                columnname: props.header.value,
+                gradetype: props.header.gradetype,
                 usescale: usescale,
                 grademax: grademax,
                 scalemenu: scalemenu,

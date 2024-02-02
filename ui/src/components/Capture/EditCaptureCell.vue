@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-    import {ref, defineProps, onMounted, onBeforeUnmount} from '@vue/runtime-core';
+    import {ref, defineProps, onMounted, onBeforeUnmount, defineEmits} from '@vue/runtime-core';
     import { useToast } from "vue-toastification";
 
     // (item.id is current userid)
@@ -42,6 +42,7 @@
     // (item.gradeitemid)
     const props = defineProps({
         item: Object,
+        gradeitemid: Number,
         column: String,
         gradetype: String,
         usescale: Boolean,
@@ -54,6 +55,8 @@
     const admingrade = ref('GRADE');
     const edited = ref(false);
     const toast = useToast();
+
+    const emits = defineEmits('gradewritten');
 
     // const mstrings = inject('mstrings');
 
@@ -94,16 +97,13 @@
         }
 
         const userid = props.item.id;
-        const reason = props.item.reason;
+        const reason = props.gradetype;
         const other = props.item.other;
-        const gradeitemid = props.item.gradeitemid;
+        const gradeitemid = props.gradeitemid;
         const saveadmingrade = admingrade.value == 'GRADE' ? '' : admingrade.value;
         const savescale = (admingrade.value == 'GRADE') && props.usescale ? scale.value : 0;
         const savegrade = (admingrade.value == 'GRADE') && !props.usescale ? grade.value : 0;
         const notes = '';
-
-        //window.console.log(savescale, savegrade);
-        window.console.log(props);
 
         const GU = window.GU;
         const courseid = GU.courseid;
@@ -123,6 +123,10 @@
                 notes: notes,
             }
         }])[0]
+        .then(() => {
+            window.console.log('INSIDE GRADE WRITTEN');
+            emits('gradewritten');
+        })
         .catch((error) => {
             window.console.error(error);
             toast.error('Error communicating with server (see console)');
