@@ -556,6 +556,7 @@ class grades {
                 'id' => 0,
                 'gradetype' => 'FIRST',
                 'description' => gradetype::get_description('FIRST'),
+                'other' => '',
             ];
             array_unshift($columns, $firstcolumn);
         }
