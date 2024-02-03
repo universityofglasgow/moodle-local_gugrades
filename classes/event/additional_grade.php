@@ -36,7 +36,7 @@ class additional_grade extends \core\event\base {
     protected function init() {
         $this->data['crud'] = 'c';
         $this->data['edulevel'] = self::LEVEL_TEACHING;
-        $this->data['objecttable'] = 'local_gugrade_grade';
+        $this->data['objecttable'] = 'local_gugrades_grade';
     }
 
     /**

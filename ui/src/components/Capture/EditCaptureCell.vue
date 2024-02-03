@@ -56,9 +56,7 @@
     const edited = ref(false);
     const toast = useToast();
 
-    const emits = defineEmits('gradewritten');
-
-    // const mstrings = inject('mstrings');
+    const emits = defineEmits(['gradewritten']);
 
     onMounted(() => {
 
@@ -124,13 +122,14 @@
             }
         }])[0]
         .then(() => {
-            window.console.log('INSIDE GRADE WRITTEN');
-            emits('gradewritten');
+            //emits('gradewritten');
         })
         .catch((error) => {
             window.console.error(error);
             toast.error('Error communicating with server (see console)');
         });
+
+        emits('gradewritten');
     });
 
 </script>

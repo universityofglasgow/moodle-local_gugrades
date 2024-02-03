@@ -225,7 +225,7 @@
      * (We're probably getting lots of these)
      */
     function edit_grade_written() {
-        window.console.log('GRADE WRITTEN');
+        window.console.log('BLAH BLAH BLAH');
     }
 
     /**
