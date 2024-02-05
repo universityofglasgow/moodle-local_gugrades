@@ -498,7 +498,7 @@ class api {
 
     /**
      * Import grades recursively. A basic import for all peers and children
-     * of the supplied gradeitemid. Group selection is ignored!
+     * of the supplied gradeitemid. 
      * @param int $courseid
      * @param int $gradeitemid
      * @param int $groupid
@@ -563,7 +563,7 @@ class api {
     }
 
     /**
-     * Convert to array to FormKit menu
+     * Convert array to FormKit menu
      * @param array $inputarray
      * @param bool $reverse
      * @return array (of objects)

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="!ineditcellmode" class="border rounded p-2 mt-2">
+        <div class="border rounded p-2 mt-2">
             <div class="col-12 mb-2">
                 <button class="badge badge-primary" @click="selectcollapse">
                     <span v-if="collapsed"><i class="fa fa-arrow-right"></i> {{ mstrings.show }}</span>
@@ -42,7 +42,7 @@
 
             <PreLoader v-if="!loaded"></PreLoader>
 
-            <div v-if="showtable">
+            <div v-if="showtable && loaded">
 
                 <!-- button for saving cell edits -->
                 <div class="pb-1 clearfix" v-if="ineditcellmode">
@@ -94,7 +94,7 @@
                     <template #item-actions="item">
                         <CaptureMenu
                             v-if="!ineditcellmode"
-                            :gradeitemid="itemid"
+                            :itemid="itemid"
                             :userid="parseInt(item.id)"
                             :name="item.displayname"
                             :itemname="itemname"
@@ -134,6 +134,7 @@
     import CaptureAlerts from '@/components/CaptureAlerts.vue';
     import CaptureColumnEditCog from '@/components/CaptureColumnEditCog.vue';
     import EditCaptureCell from '@/components/Capture/EditCaptureCell.vue';
+    import { watchDebounced } from '@vueuse/core'
 
     const users = ref([]);
     const userids = ref([]);
@@ -161,6 +162,7 @@
     const editscalemenu = ref([]);
     const editadminmenu = ref([]);
     const editgradetype = ref('');
+    const editgradecount = ref(0);
 
     const toast = useToast();
 
@@ -217,16 +219,29 @@
     function edit_cell_saved() {
         editcolumn.value = '';
         editcolumnslot.value = '';
-        get_page_data(itemid.value, firstname, lastname, groupid.value);
+        //get_page_data(itemid.value, firstname, lastname, groupid.value);
     }
 
     /**
      * A cell has declared that it has been written
      * (We're probably getting lots of these)
+     * Just count them and we'll watch/debounce the count to update the table
      */
     function edit_grade_written() {
-        window.console.log('BLAH BLAH BLAH');
+        editgradecount.value++;
     }
+
+    /**
+     * See above - watching edit cell written count in order to
+     * upgrade the main table
+     */
+     watchDebounced(
+        editgradecount,
+        () => {
+            get_page_data(itemid.value, firstname, lastname, groupid.value);
+        },
+        { debounce: 500, maxWait: 1000 },
+    );
 
     /**
      * Are we in "edit a cell" mode?

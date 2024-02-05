@@ -143,6 +143,7 @@ $string['resetfilter'] = 'Reset filter';
 $string['resetsuccess'] = 'MyGrades has been reset for this course.';
 $string['rulesdefault'] = 'Standard rules';
 $string['save'] = 'Save changes';
+$string['scale'] = 'Scale...';
 $string['scaletypehelp'] = 'Name of scale type - schedulea or scheduleb at the moment.';
 $string['scalevalues'] = 'Scale values';
 $string['scalevalueshelp'] = 'Add scale value on each line followed by a comma and then the numeric value';

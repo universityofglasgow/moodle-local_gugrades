@@ -22,10 +22,11 @@
         <FormKit
             v-if="props.usescale"
             type="select"
+            :placeholder="mstrings.scale"
             outer-class="col pl-0"
             :disabled="admingrade != 'GRADE'"
             name="scale"
-            v-model="scale"
+            v-model="grade"
             :options="scalemenu"
             @input="input_updated"
         ></FormKit>
@@ -33,7 +34,7 @@
 </template>
 
 <script setup>
-    import {ref, defineProps, onMounted, onBeforeUnmount, defineEmits} from '@vue/runtime-core';
+    import {ref, defineProps, onMounted, onBeforeUnmount, defineEmits, inject} from '@vue/runtime-core';
     import { useToast } from "vue-toastification";
 
     // (item.id is current userid)
@@ -50,11 +51,13 @@
         adminmenu: Array,
     });
 
-    const grade = ref(0);
-    const scale = ref(0);
+    const grade = ref('');
+    let   originalgrade = '';
+    //const scale = ref(0);
     const admingrade = ref('GRADE');
     const edited = ref(false);
     const toast = useToast();
+    const mstrings = inject('mstrings');
 
     const emits = defineEmits(['gradewritten']);
 
@@ -62,7 +65,20 @@
 
         // Extract the correct current grade from the item
         const value = props.item[props.column];
-        grade.value = value;
+
+        // If it's a scale - find the value
+        if (props.usescale) {
+            props.scalemenu.forEach((scaleitem) => {
+                if (scaleitem.label == value) {
+                    
+                    grade.value = scaleitem.value;
+                    window.console.log(scaleitem.value);
+                    window.console.log(grade.value);
+                }
+            });
+        } else {
+            grade.value = value;
+        }
 
         // Could is be an admingrade?
         props.adminmenu.forEach((adminitem) => {
@@ -70,7 +86,9 @@
                 admingrade.value = value;
                 grade.value = '';
             }
-        })
+        });
+
+        originalgrade = grade.value;
     });
 
     /**
@@ -90,7 +108,7 @@
     onBeforeUnmount(() => {
 
         // if this cell hasn't been edited then nothing to do!
-        if (!edited.value) {
+        if (originalgrade == grade.value) {
             return
         }
 
@@ -99,7 +117,7 @@
         const other = props.item.other;
         const gradeitemid = props.gradeitemid;
         const saveadmingrade = admingrade.value == 'GRADE' ? '' : admingrade.value;
-        const savescale = (admingrade.value == 'GRADE') && props.usescale ? scale.value : 0;
+        const savescale = (admingrade.value == 'GRADE') && props.usescale ? grade.value : 0;
         const savegrade = (admingrade.value == 'GRADE') && !props.usescale ? grade.value : 0;
         const notes = '';
 
@@ -117,7 +135,7 @@
                 reason: reason,
                 other: other,
                 scale: savescale,
-                grade: savegrade,
+                grade: parseFloat(savegrade),
                 notes: notes,
             }
         }])[0]

@@ -21,6 +21,8 @@ To install all the node module requirements for Vue, navigate to the ui/ directo
 
 ...this should install all the dependencies. This is all that is required. 
 
+IMPORTANT: For development, set $CFG->cachejs = false; in config.php. Otherwise, changes to the Vue code will not be loaded in Moodle. 
+
 ## Building Vue components
 
 Vue has a build step. In order to to see new updates to the Vue code it must first be built. The resulting minified javascript is written to the dist/ directory. Note that Vue normally deletes the contents of this directory when the build step runs. In this project we have disabled this and the dist directory also contains the Moodle index.php file that renders the page. It also includes the Vue javascript using normal Moodle functionality. 
