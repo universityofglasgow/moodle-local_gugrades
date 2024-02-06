@@ -86,7 +86,9 @@
                             :usescale="editusescale"
                             :scalemenu="editscalemenu"
                             :adminmenu="editadminmenu"
+                            :cancelled="editcancelled"
                             @gradewritten = "edit_grade_written()"
+                            @gradecancel = "edit_grade_written()"
                              >
                         </EditCaptureCell>
                     </template>
@@ -113,8 +115,9 @@
                 </EasyDataTable>
 
                 <!-- button for saving cell edits -->
-                <div class="pt-1 clearfix" v-if="ineditcellmode">
-                    <button class="btn btn-primary float-right">{{ mstrings.save }}</button>
+                <div class="pb-1 clearfix" v-if="ineditcellmode">
+                    <button class="btn btn-warning float-right mr-1" @click="edit_cell_cancelled">{{ mstrings.cancel }}</button>
+                    <button class="btn btn-primary float-right mr-1" @click="edit_cell_saved">{{ mstrings.save }}</button>
                 </div>
             </div>
 
@@ -164,6 +167,7 @@
     const editadminmenu = ref([]);
     const editgradetype = ref('');
     const editgradecount = ref(0);
+    const editcancelled = ref(false);
 
     const toast = useToast();
 
@@ -222,6 +226,7 @@
         editscalemenu.value = cellform.scalemenu;
         editadminmenu.value = cellform.adminmenu;
         editgradetype.value = cellform.gradetype;
+        editcancelled.value = false;
         reload_page();
     }
 
@@ -235,13 +240,15 @@
 
     /**
      * In edit mode, the cancel button is clicked
+     * Set editcancelled to true and pass as prop to edit cells
+     * so it knows not to save.
      */
     function edit_cell_cancelled() {
-
+        editcancelled.value = true;
     }
 
     /**
-     * A cell has declared that it has been written
+     * A cell has declared that it has been written (or cancelled)
      * (We're probably getting lots of these)
      * Just count them and we'll watch/debounce the count to update the table
      */
@@ -256,6 +263,11 @@
      watchDebounced(
         editgradecount,
         () => {
+
+            // Duplicated for cancel
+            editcolumn.value = '';
+            editcolumnslot.value = '';
+
             reload_page();
         },
         { debounce: 500, maxWait: 1000 },

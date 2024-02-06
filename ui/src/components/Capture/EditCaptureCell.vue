@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-    import {ref, defineProps, onMounted, onBeforeUnmount, defineEmits, inject} from '@vue/runtime-core';
+    import {ref, defineProps, onMounted, onBeforeUnmount, defineEmits, inject, watch} from '@vue/runtime-core';
     import { useToast } from "vue-toastification";
 
     // (item.id is current userid)
@@ -49,6 +49,7 @@
         usescale: Boolean,
         scalemenu: Array,
         adminmenu: Array,
+        cancelled: Boolean,
     });
 
     const grade = ref('');
@@ -59,7 +60,19 @@
     const toast = useToast();
     const mstrings = inject('mstrings');
 
-    const emits = defineEmits(['gradewritten']);
+    const emits = defineEmits(['gradewritten', 'gradecancel']);
+
+    /**
+     * Watch out for cancel being clicked 
+     * This carry on because the prop doesn't get updated when
+     * unMount in progress
+     */
+    watch(
+        () => props.cancelled,
+        () => {
+            emits('gradecancel');
+        }
+    );
 
     onMounted(() => {
 
@@ -105,8 +118,8 @@
     onBeforeUnmount(() => {
 
         // if this cell hasn't been edited then nothing to do!
-        if (originalgrade == grade.value) {
-            return
+        if (props.cancelled || (originalgrade == grade.value)) {
+            return;
         }
 
         const userid = props.item.id;
