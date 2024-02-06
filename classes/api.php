@@ -787,6 +787,21 @@ class api {
     }
 
     /**
+     * Add an aditional column (if it doesn't exist already)
+     * TODO: Something about notes.
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param string $reason
+     * @param string $other
+     * @param string $notes
+     */
+    public static function write_column(int $courseid, int $gradeitemid, string $reason, string $other, string $notes) {
+        $column = \local_gugrades\grades::get_column($courseid, $gradeitemid, $reason, $other);
+
+        return $column->id;
+    }
+
+    /**
      * Save settings
      * Options in tool UI (not sitewide settings)
      * @param int $courseid

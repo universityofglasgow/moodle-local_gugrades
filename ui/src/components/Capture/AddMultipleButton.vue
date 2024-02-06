@@ -49,24 +49,17 @@
     const mstrings = inject('mstrings');
     const gradetypes = ref({});
     const reason = ref('');
-    const admingrade = ref('GRADE'); // GRADE == not an admin grade (a real grade)
-    const scale = ref('');
-    const grade = ref(0);
     const notes = ref('');
     const other = ref('');
 
-    const emit = defineEmits([
-        'gradeadded'
+    const emits = defineEmits([
+        'editcolumn'
     ]);
 
     const toast = useToast();
 
     const props = defineProps({
-        userid: Number,
         itemid: Number,
-        groupid: Number,
-        itemname: String,
-        name: String,
     });
 
     /**
@@ -96,6 +89,49 @@
     }
 
     /**
+     * Get all the details for the cell forms
+     */
+     function get_capture_cell_form(columnid) {
+        const GU = window.GU;
+        const courseid = GU.courseid;
+        const fetchMany = GU.fetchMany;
+
+        fetchMany([{
+            methodname: 'local_gugrades_get_capture_cell_form',
+            args: {
+                courseid: courseid,
+                gradeitemid: props.itemid,
+            }
+        }])[0]
+        .then((result) => {
+            const usescale = result.usescale;
+            const grademax = result.grademax;
+            const scalemenu = result.scalemenu;
+            const adminmenu = result.adminmenu;
+
+            // Add 'use grade' option onto front of adminmenu
+            adminmenu.unshift({
+                value: 'GRADE',
+                label: mstrings.selectnormalgradeshort,
+            });
+
+            // send all this stuff back
+            emits('editcolumn', {
+                columnname: 'GRADE' + columnid,
+                gradetype: reason.value,
+                usescale: usescale,
+                grademax: grademax,
+                scalemenu: scalemenu,
+                adminmenu: adminmenu,
+            });
+        })
+        .catch((error) => {
+            window.console.error(error);
+            toast.error('Error communicating with server (see console)');
+        });
+    }
+
+    /**
      * Process form submission
      */
     function submit_form() {
@@ -104,22 +140,18 @@
         const fetchMany = GU.fetchMany;
 
         fetchMany([{
-            methodname: 'local_gugrades_write_additional_grade',
+            methodname: 'local_gugrades_write_column',
             args: {
                 courseid: courseid,
                 gradeitemid: props.itemid,
-                userid: props.userid,
-                admingrade: admingrade.value == 'GRADE' ? '' : admingrade.value,
                 reason: reason.value,
                 other: other.value,
-                scale: scale.value ? scale.value : 0, // WS expecting int
-                grade: grade.value,
                 notes: notes.value,
             }
         }])[0]
-        .then(() => {
-            emit('gradeadded');
-            toast.success(mstrings.gradeadded);
+        .then((result) => {
+            const columnid = result.columnid;
+            get_capture_cell_form(columnid);
         })
         .catch((error) => {
             window.console.error(error);

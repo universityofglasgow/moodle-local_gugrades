@@ -2,7 +2,7 @@
     <div class="col-12 mt-2">
         <ImportButton :itemid="props.itemid" :groupid="props.groupid" :userids="props.userids" @imported="emit('refreshtable')"></ImportButton>
         <CSVImportButton :itemid="props.itemid" :groupid="props.groupid" :itemname="props.itemname" @uploaded="emit('refreshtable')"></CSVImportButton>
-        <AddMultipleButton :itemid="props.itemid" :groupid="props.groupid" :itemname="props.itemname"></AddMultipleButton>
+        <AddMultipleButton :itemid="props.itemid"  @editcolumn="multipleclicked"></AddMultipleButton>
         <ReleaseButton v-if="props.gradesimported" :gradeitemid="props.itemid" :groupid="props.groupid" @released="emit('refreshtable')"></ReleaseButton>
         <ExportWorksheetButton v-if="itemtype=='assign'" :users="props.users" :itemtype="props.itemtype" :itemname="props.itemname"></ExportWorksheetButton>
         <ViewFullNamesButton v-if="props.usershidden" @viewfullnames="viewfullnames"></ViewFullNamesButton>
@@ -29,7 +29,7 @@
         gradesimported: Boolean,
     });
 
-    const emit = defineEmits(['viewfullnames', 'refreshtable']);
+    const emit = defineEmits(['viewfullnames', 'refreshtable', 'editcolumn']);
 
     /**
      * Handle viewfullnames
@@ -37,6 +37,14 @@
      */
      function viewfullnames(toggleview) {
         emit('viewfullnames', toggleview);
+    }
+
+    /**
+     * Multiple button has added another column
+     * We need to know what it was
+     */
+    function multipleclicked(cellform) {
+        emit('editcolumn', cellform);
     }
 
 </script>

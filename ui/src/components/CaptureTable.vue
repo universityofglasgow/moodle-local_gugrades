@@ -31,6 +31,7 @@
                         :gradesimported="gradesimported"
                         @refreshtable="refresh"
                         @viewfullnames="viewfullnames"
+                        @editcolumn="editcog_clicked"
                         >
                     </CaptureButtons>
                 </div>

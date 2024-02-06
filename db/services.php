@@ -55,6 +55,7 @@ $services = [
             'local_gugrades_get_groups',
             'local_gugrades_get_csv_download',
             'local_gugrades_get_capture_cell_form',
+            'local_gugrades_write_column',
         ],
         'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,
@@ -224,6 +225,12 @@ $functions = [
     'local_gugrades_upload_csv' => [
         'classname' => 'local_gugrades\external\upload_csv',
         'description' => 'Upload / test csv add grades in bulk.',
+        'type' => 'write',
+        'ajax' => true,
+    ],
+    'local_gugrades_write_column' => [
+        'classname' => 'local_gugrades\external\write_column',
+        'description' => 'Create column in capture table (if not existing).',
         'type' => 'write',
         'ajax' => true,
     ],
