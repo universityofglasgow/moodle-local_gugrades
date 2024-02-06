@@ -498,7 +498,7 @@ class api {
 
     /**
      * Import grades recursively. A basic import for all peers and children
-     * of the supplied gradeitemid. 
+     * of the supplied gradeitemid.
      * @param int $courseid
      * @param int $gradeitemid
      * @param int $groupid

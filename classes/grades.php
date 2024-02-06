@@ -170,7 +170,6 @@ class grades {
         global $DB;
 
         $gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
-        //var_dump($gradeitem);
         $courseid = $gradeitem->courseid;
         $categoryid = $gradeitem->categoryid;
 
@@ -191,11 +190,11 @@ class grades {
             // Get grade items.
             if ($items = self::get_gradeitems_recursive($gradecategory)) {
 
-                // Check for any items with invalid grade types
+                // Check for any items with invalid grade types.
                 foreach ($items as $item) {
                     if (!self::is_grade_supported($item->id)) {
 
-                        // Recursive is technically available but a grade is invalid
+                        // Recursive is technically available but a grade is invalid.
                         return [true, false, false];
                     }
                 }
@@ -564,7 +563,7 @@ class grades {
         // Sort columns.
         $columns = \local_gugrades\gradetype::sort($columns);
 
-        // Add editable flag
+        // Add editable flag.
         foreach ($columns as $column) {
             $column->editable = \local_gugrades\gradetype::can_gradetype_be_edited($column->gradetype);
         }

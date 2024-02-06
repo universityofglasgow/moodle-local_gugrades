@@ -41,14 +41,16 @@ class get_capture_page_test extends \local_gugrades\external\gugrades_advanced_t
      */
     protected int $gradeitemsecondx;
 
-     /**
+    /**
      * Called before every test
      */
     protected function setUp(): void {
         parent::setUp();
 
-        // Final item has an invalid grade type
-        $seconditemx = $this->getDataGenerator()->create_grade_item(['courseid' => $this->course->id, 'gradetype' => GRADE_TYPE_TEXT]);
+        // Final item has an invalid grade type.
+        $seconditemx = $this->getDataGenerator()->create_grade_item(
+            ['courseid' => $this->course->id, 'gradetype' => GRADE_TYPE_TEXT]
+        );
         $this->move_gradeitem_to_category($seconditemx->id, $this->gradecatsecond->id);
 
         $this->gradeitemsecondx = $seconditemx->id;
@@ -65,7 +67,7 @@ class get_capture_page_test extends \local_gugrades\external\gugrades_advanced_t
         // Make sure that we're a teacher.
         $this->setUser($this->teacher);
 
-        // Import grades
+        // Import grades.
         $userlist = [
             $this->student->id,
             $this->student2->id,

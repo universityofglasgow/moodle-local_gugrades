@@ -41,7 +41,7 @@ class write_column_test extends \local_gugrades\external\gugrades_advanced_testc
      *
      * @covers \local_gugrades\external\write_column::execute
      */
-     public function test_new_column() {
+    public function test_new_column() {
         global $DB;
 
         // Log in as teacher.
@@ -57,7 +57,7 @@ class write_column_test extends \local_gugrades\external\gugrades_advanced_testc
         $this->assertCount(1, $columns);
         $this->assertEquals('AGREED', $columns[0]->gradetype);
 
-        // Check that trying to add it again doesn't create a new column
+        // Check that trying to add it again doesn't create a new column.
         $nullreturn = write_column::execute($this->course->id, $this->gradeitemidassign1, 'AGREED', '', '');
         $nullreturn = \external_api::clean_returnvalue(
             write_column::execute_returns(),

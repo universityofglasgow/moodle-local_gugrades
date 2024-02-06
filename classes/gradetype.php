@@ -83,7 +83,7 @@ class gradetype {
      */
     public static function can_gradetype_be_edited(string $gradetype) {
 
-        // list of eligible types.
+        // List of eligible types.
         $edittypes = [
             'SECOND',
             'THIRD',
