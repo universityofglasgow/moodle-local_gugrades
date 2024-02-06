@@ -193,7 +193,7 @@
             is_importgrades.value = result.imported;
             recursiveavailable.value = result.recursiveavailable;
             recursivematch.value = result.recursivematch;
-            allgradesvalid.value = result.allgradesvald;
+            allgradesvalid.value = result.allgradesvalid;
         })
         .catch((error) => {
             window.console.log(error);

@@ -192,7 +192,7 @@
         itemid.value = itemgroup.itemid;
         groupid.value = itemgroup.groupid;
 
-        get_page_data(itemid.value, firstname, lastname, groupid.value);
+        reload_page();
     }
 
     /**
@@ -210,7 +210,7 @@
         editscalemenu.value = cellform.scalemenu;
         editadminmenu.value = cellform.adminmenu;
         editgradetype.value = cellform.gradetype;
-        get_page_data(itemid.value, firstname, lastname, groupid.value);
+        reload_page();
     }
 
     /**
@@ -219,7 +219,6 @@
     function edit_cell_saved() {
         editcolumn.value = '';
         editcolumnslot.value = '';
-        //get_page_data(itemid.value, firstname, lastname, groupid.value);
     }
 
     /**
@@ -238,7 +237,7 @@
      watchDebounced(
         editgradecount,
         () => {
-            get_page_data(itemid.value, firstname, lastname, groupid.value);
+            reload_page();
         },
         { debounce: 500, maxWait: 1000 },
     );
@@ -291,7 +290,7 @@
      */
     function viewfullnames(toggleview) {
         revealnames.value = toggleview;
-        get_page_data(itemid.value, firstname, lastname, groupid.value);
+        reload_page();
     }
 
     /**
@@ -340,6 +339,14 @@
         //window.console.log(users);
 
         return users;
+    }
+
+    /**
+     * Helper function to reload the page
+     * (We have to do this in lots of places)
+     */
+    function reload_page() {
+        get_page_data(itemid.value, firstname, lastname, groupid.value);
     }
 
     /**
