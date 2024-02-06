@@ -64,7 +64,7 @@
             Object.keys(results).forEach((name) => {strings.value[name] = results[name]});
         })
         .catch((error) => {
-            window.console.log(error);
+            window.console.error(error);
         });
      });
 

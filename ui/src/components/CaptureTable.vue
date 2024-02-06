@@ -46,7 +46,8 @@
 
                 <!-- button for saving cell edits -->
                 <div class="pb-1 clearfix" v-if="ineditcellmode">
-                    <button class="btn btn-primary float-right" @click="edit_cell_saved">{{ mstrings.save }}</button>
+                    <button class="btn btn-warning float-right mr-1" @click="edit_cell_cancelled">{{ mstrings.cancel }}</button>
+                    <button class="btn btn-primary float-right mr-1" @click="edit_cell_saved">{{ mstrings.save }}</button>
                 </div>
 
                 <!-- Note. The array 'users' contains he lines of data. One record for each user -->
@@ -123,7 +124,7 @@
 </template>
 
 <script setup>
-    import {ref, computed, inject} from '@vue/runtime-core';
+    import {ref, computed, inject, watch} from '@vue/runtime-core';
     import NameFilter from '@/components/NameFilter.vue';
     import CaptureSelect from '@/components/CaptureSelect.vue';
     //import CaptureGrades from '@/components/CaptureGrades.vue';
@@ -168,6 +169,17 @@
 
     let firstname = '';
     let lastname = '';
+
+    /**
+     * A watch for the itemid changing
+     * Lots of stuff gets reset if the itemid is changed. 
+     */
+    watch(itemid, () => {
+        currentpage.value = 1;
+        revealnames.value = false;
+        editcolumn.value = '';
+        editcolumnslot.value = '';
+    });
 
     /**
      * Collapse selection area
@@ -219,6 +231,13 @@
     function edit_cell_saved() {
         editcolumn.value = '';
         editcolumnslot.value = '';
+    }
+
+    /**
+     * In edit mode, the cancel button is clicked
+     */
+    function edit_cell_cancelled() {
+
     }
 
     /**
@@ -336,7 +355,6 @@
                 user.gradeitemid = column.gradeitemid;
             });
         });
-        //window.console.log(users);
 
         return users;
     }

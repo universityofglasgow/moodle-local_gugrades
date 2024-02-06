@@ -133,7 +133,7 @@
             saveAs(blob, filename);
         })
         .catch((error) => {
-            window.console.log(error);
+            window.console.error(error);
             toast.error('Error communicating with server (see console)');
         });
     }
@@ -171,7 +171,7 @@
             }
         })
         .catch((error) => {
-            window.console.log(error);
+            window.console.error(error);
             toast.error('Error communicating with server (see console)');
         });
     }
@@ -193,7 +193,6 @@
         }])[0]
         .then((result) => {
             gradetypes.value = result.gradetypes;
-            window.console.log(gradetypes.value);
         })
         .catch((error) => {
             window.console.error(error);

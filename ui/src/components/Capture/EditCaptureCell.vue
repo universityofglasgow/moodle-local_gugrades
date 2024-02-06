@@ -70,10 +70,7 @@
         if (props.usescale) {
             props.scalemenu.forEach((scaleitem) => {
                 if (scaleitem.label == value) {
-                    
                     grade.value = scaleitem.value;
-                    window.console.log(scaleitem.value);
-                    window.console.log(grade.value);
                 }
             });
         } else {

@@ -44,7 +44,7 @@
             hascapability.value = result['hascapability'];
         })
         .catch((error) => {
-            window.console.log(error);
+            window.console.error(error);
             toast.error('Error communicating with server (see console)');
         });
 

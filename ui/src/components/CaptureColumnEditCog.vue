@@ -38,8 +38,6 @@
             const scalemenu = result.scalemenu;
             const adminmenu = result.adminmenu;
 
-            window.console.log(scalemenu);
-
             // Add 'use grade' option onto front of adminmenu
             adminmenu.unshift({
                 value: 'GRADE',

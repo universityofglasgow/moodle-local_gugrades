@@ -34,7 +34,7 @@
             loaded.value = true;
         })
         .catch((error) => {
-            window.console.log(error);
+            window.console.error(error);
         });
     });
 </script>

@@ -42,8 +42,7 @@
             $('#mygradeslogo').css('filter', 'grayscale(1)');
         }
 
-        const selector = $('#mygradeslogo');
-        window.console.log(selector);
+        //const selector = $('#mygradeslogo');
     }
 
     /**

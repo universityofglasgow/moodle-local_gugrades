@@ -55,7 +55,7 @@
             loaded.value = true;
         })
         .catch((error) => {
-            window.console.log(error);
+            window.console.error(error);
         })
     }
 
@@ -74,7 +74,7 @@
             collapsed.value = true;
         })
         .catch((error) => {
-            window.console.log(error);
+            window.console.error(error);
         });
 
         // Emit id as well
