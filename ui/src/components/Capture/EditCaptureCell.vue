@@ -12,6 +12,8 @@
             v-if="!props.usescale"
             outer-class="col pl-0"
             type="text"
+            number="float"
+            :validation="gradevalidation"
             validation-visibility="live"
             maxlength="8"
             name="grade"
@@ -34,7 +36,7 @@
 </template>
 
 <script setup>
-    import {ref, defineProps, onMounted, onBeforeUnmount, defineEmits, inject, watch} from '@vue/runtime-core';
+    import {ref, defineProps, onMounted, onBeforeUnmount, defineEmits, inject, watch, computed} from '@vue/runtime-core';
     import { useToast } from "vue-toastification";
 
     // (item.id is current userid)
@@ -49,6 +51,7 @@
         usescale: Boolean,
         scalemenu: Array,
         adminmenu: Array,
+        grademax: Number,
         cancelled: Boolean,
     });
 
@@ -61,6 +64,14 @@
     const mstrings = inject('mstrings');
 
     const emits = defineEmits(['gradewritten', 'gradecancel']);
+
+    // validation depends on grademax
+    const gradevalidation = computed(() => {
+        return [
+            ['number'],
+            ['between', 0, props.grademax],
+        ];
+    })
 
     /**
      * Watch out for cancel being clicked 

@@ -1,10 +1,10 @@
 <template>
     <ul class="nav nav-pills mb-4 border-bottom">
         <li class="nav-item">
-            <a class="nav-link btn btn-secondary" :class="{active: activetab == 'capture'}" @click="clickTab('capture')">
+            <router-link to="/" class="nav-link btn btn-secondary" :class="{active: activetab == 'capture'}" @click="clickTab('capture')">
                 <i class="fa fa-download" aria-hidden="true"></i>&nbsp;
                 {{ mstrings.assessmentgradecapture }}
-            </a>
+            </router-link>
         </li>
         <li class="nav-item">
             <a class="nav-link btn btn-secondary" :class="{active: activetab == 'aggregate'}" @click="clickTab('aggregate')">
@@ -13,16 +13,16 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link btn btn-secondary" :class="{active: activetab == 'audit'}" @click="clickTab('audit')">
+            <router-link to="/audit" class="nav-link btn btn-secondary" :class="{active: activetab == 'audit'}" @click="clickTab('audit')">
                 <i class="fa fa-history" aria-hidden="true"></i>&nbsp;
                 {{ mstrings.auditlog }}
-            </a>
+            </router-link>
         </li>
         <li class="nav-item" v-if="settingscapability">
-            <a class="nav-link btn btn-secondary" :class="{active: activetab == 'settings'}" @click="clickTab('settings')">
+            <router-link to="/settings" class="nav-link btn btn-secondary" :class="{active: activetab == 'settings'}" @click="clickTab('settings')">
                 <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;
                 {{ mstrings.settings }}
-            </a>
+            </router-link>
         </li>
     </ul>
 </template>

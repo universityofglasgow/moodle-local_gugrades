@@ -87,6 +87,7 @@
                             :usescale="editusescale"
                             :scalemenu="editscalemenu"
                             :adminmenu="editadminmenu"
+                            :grademax="editgrademax"
                             :cancelled="editcancelled"
                             @gradewritten = "edit_grade_written()"
                             @gradecancel = "edit_grade_written()"
@@ -167,6 +168,7 @@
     const editscalemenu = ref([]);
     const editadminmenu = ref([]);
     const editgradetype = ref('');
+    const editgrademax = ref(0);
     const editgradecount = ref(0);
     const editcancelled = ref(false);
 
@@ -227,6 +229,7 @@
         editscalemenu.value = cellform.scalemenu;
         editadminmenu.value = cellform.adminmenu;
         editgradetype.value = cellform.gradetype;
+        editgrademax.value = cellform.grademax;
         editcancelled.value = false;
         reload_page();
     }

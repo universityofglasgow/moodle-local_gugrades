@@ -1,7 +1,8 @@
 <template>
-  <router-view />
+    <TabMenu />
 </template>
 
-<style>
+<script setup>
+    import TabMenu from '@/views/TabMenu.vue';
+</script>
 
-</style>
