@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-    import {ref, defineProps, defineEmits, inject} from '@vue/runtime-core';
+    import {ref, defineProps, defineEmits, inject, onMounted} from '@vue/runtime-core';
     import { useToast } from "vue-toastification";
 
     const showaddmultiplemodal = ref(false);
@@ -60,6 +60,14 @@
 
     const props = defineProps({
         itemid: Number,
+    });
+
+    /**
+     * Initialise form
+     */
+    onMounted(() => {
+        other.value = '';
+        reason.value = '';
     });
 
     /**
@@ -90,6 +98,8 @@
 
     /**
      * Get all the details for the cell forms
+     * This is called immediately after the submit_form() promise
+     * completes.
      */
      function get_capture_cell_form(columnid) {
         const GU = window.GU;
@@ -119,6 +129,7 @@
             emits('editcolumn', {
                 columnname: 'GRADE' + columnid,
                 gradetype: reason.value,
+                other: other.value,
                 usescale: usescale,
                 grademax: grademax,
                 scalemenu: scalemenu,
@@ -138,6 +149,17 @@
         const GU = window.GU;
         const courseid = GU.courseid;
         const fetchMany = GU.fetchMany;
+
+        // Where reason looks like OTHER_nn,
+        // It's an exiting other, the corresponding
+        // label is 'other' and reason is 'OTHER'
+        if (reason.value.startsWith('OTHER_')) {
+            const gtype = gradetypes.value.find(o => o.value == reason.value);
+            if (gtype) {
+                reason.value = 'OTHER';
+                other.value = gtype.label;
+            }
+        }
 
         fetchMany([{
             methodname: 'local_gugrades_write_column',
