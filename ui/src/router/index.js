@@ -7,6 +7,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "capture" */ '../views/CaptureTable.vue'),
   },
   {
+    path: '/conversion',
+    name: 'conversion',
+    component: () => import(/* webpackChunkName: "aggregation" */ '../views/ConversionPage.vue'),
+  },
+  {
     path: '/aggregation',
     name: 'aggregation',
     component: () => import(/* webpackChunkName: "aggregation" */ '../views/AggregationTable.vue'),

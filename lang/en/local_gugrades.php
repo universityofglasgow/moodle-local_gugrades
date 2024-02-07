@@ -39,6 +39,7 @@ $string['captureaggregation'] = '\'MyGrades\' Grade capture and aggregation';
 $string['close'] = 'Close';
 $string['comment'] = 'Comment';
 $string['confirm'] = 'Confirm';
+$string['conversion'] = 'Conversion';
 $string['coursegradeaggregation'] = 'Course grade aggregation';
 $string['csvdownload'] = 'Download CSV';
 $string['csvdownloadhelp'] = 'Download partial CSV file to complete and re-upload...';

@@ -7,6 +7,12 @@
             </router-link>
         </li>
         <li class="nav-item">
+            <router-link to="/conversion" class="nav-link btn btn-secondary" :class="{active: activetab == 'conversion'}" @click="clickTab('conversion')">
+                <i class="fa fa-exchange" aria-hidden="true"></i>&nbsp;
+                {{ mstrings.conversion }}
+            </router-link>
+        </li>
+        <li class="nav-item">
             <router-link to="/aggregation" class="nav-link btn btn-secondary" :class="{active: activetab == 'aggregate'}" @click="clickTab('aggregate')">
                 <i class="fa fa-compress" aria-hidden="true"></i>&nbsp;
                 {{ mstrings.coursegradeaggregation }}
