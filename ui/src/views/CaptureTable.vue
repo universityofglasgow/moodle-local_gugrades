@@ -82,6 +82,8 @@
                         <EditCaptureCell
                             :item="item"
                             :column="editcolumn"
+                            :columnid="editcolumnid"
+                            :other="editother"
                             :gradeitemid="itemid"
                             :gradetype="editgradetype"
                             :usescale="editusescale"
@@ -170,6 +172,8 @@
     const editgradetype = ref('');
     const editgrademax = ref(0);
     const editgradecount = ref(0);
+    const editcolumnid = ref(0);
+    const editother = ref('');
     const editcancelled = ref(false);
 
     const toast = useToast();
@@ -230,6 +234,8 @@
         editadminmenu.value = cellform.adminmenu;
         editgradetype.value = cellform.gradetype;
         editgrademax.value = cellform.grademax;
+        editcolumnid.value = cellform.columnid;
+        editother.value = cellform.other;
         editcancelled.value = false;
         reload_page();
     }
@@ -312,6 +318,8 @@
                 value: 'GRADE' + column.id,
                 gradetype: column.gradetype,
                 editable: column.editable,
+                columnid: column.id,
+                other: column.other,
             });
         });
 
@@ -426,6 +434,8 @@
             users.value = add_grades(users.value, columns.value);
 
             loaded.value = true;
+
+            window.console.log(columns.value);
         })
         .catch((error) => {
             window.console.error(error);

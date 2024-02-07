@@ -47,6 +47,8 @@
         item: Object,
         gradeitemid: Number,
         column: String,
+        columnid: Number,
+        other: String,
         gradetype: String,
         usescale: Boolean,
         scalemenu: Array,
@@ -140,7 +142,7 @@
 
         const userid = props.item.id;
         const reason = props.gradetype;
-        const other = props.item.other;
+        const other = props.other;
         const gradeitemid = props.gradeitemid;
         const saveadmingrade = admingrade.value == 'GRADE' ? '' : admingrade.value;
         const savescale = (admingrade.value == 'GRADE') && props.usescale ? grade.value : 0;
