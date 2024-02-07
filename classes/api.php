@@ -608,8 +608,6 @@ class api {
             $scalemenu = [];
         }
 
-        // Table column
-
         // Administrative grades.
         $admingrades = \local_gugrades\admin_grades::get_menu();
         $adminmenu = self::formkit_menu($admingrades, true);
