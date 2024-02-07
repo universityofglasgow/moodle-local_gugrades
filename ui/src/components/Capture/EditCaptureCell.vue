@@ -49,6 +49,7 @@
         column: String,
         columnid: Number,
         other: String,
+        notes: String,
         gradetype: String,
         usescale: Boolean,
         scalemenu: Array,
@@ -147,7 +148,7 @@
         const saveadmingrade = admingrade.value == 'GRADE' ? '' : admingrade.value;
         const savescale = (admingrade.value == 'GRADE') && props.usescale ? grade.value : 0;
         const savegrade = (admingrade.value == 'GRADE') && !props.usescale ? grade.value : 0;
-        const notes = '';
+        const notes = props.notes;
 
         const GU = window.GU;
         const courseid = GU.courseid;

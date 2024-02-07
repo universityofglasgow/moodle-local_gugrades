@@ -84,6 +84,7 @@
                             :column="editcolumn"
                             :columnid="editcolumnid"
                             :other="editother"
+                            :notes="editnotes"
                             :gradeitemid="itemid"
                             :gradetype="editgradetype"
                             :usescale="editusescale"
@@ -174,6 +175,7 @@
     const editgradecount = ref(0);
     const editcolumnid = ref(0);
     const editother = ref('');
+    const editnotes = ref('');
     const editcancelled = ref(false);
 
     const toast = useToast();
@@ -236,6 +238,7 @@
         editgrademax.value = cellform.grademax;
         editcolumnid.value = cellform.columnid;
         editother.value = cellform.other;
+        editnotes.value = cellform.notes;
         editcancelled.value = false;
         reload_page();
     }

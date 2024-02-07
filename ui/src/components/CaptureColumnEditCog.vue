@@ -54,6 +54,7 @@
                 grademax: grademax,
                 scalemenu: scalemenu,
                 adminmenu: adminmenu,
+                notes: '',
             });
         })
         .catch((error) => {

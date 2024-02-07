@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-    import {ref, defineProps, defineEmits, inject, onMounted} from '@vue/runtime-core';
+    import {ref, defineProps, defineEmits, inject} from '@vue/runtime-core';
     import { useToast } from "vue-toastification";
 
     const showaddmultiplemodal = ref(false);
@@ -63,20 +63,16 @@
     });
 
     /**
-     * Initialise form
-     */
-    onMounted(() => {
-        other.value = '';
-        reason.value = '';
-    });
-
-    /**
      * Button clicked
      */
     function add_multiple_button_click() {
         const GU = window.GU;
         const courseid = GU.courseid;
         const fetchMany = GU.fetchMany;
+
+        // Clear for new form
+        other.value = '';
+        reason.value = '';
 
         fetchMany([{
             methodname: 'local_gugrades_get_gradetypes',
@@ -134,6 +130,7 @@
                 grademax: grademax,
                 scalemenu: scalemenu,
                 adminmenu: adminmenu,
+                notes: notes.value,
             });
         })
         .catch((error) => {
