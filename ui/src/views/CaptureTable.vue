@@ -110,7 +110,7 @@
                         </CaptureMenu>
                     </template>
 
-                    <!-- show warning if grade sdo not agree -->
+                    <!-- show warning if grades do not agree -->
                     <template #item-alert="item">
                         <span v-if="item.alert" class="badge badge-danger">{{ mstrings.discrepancy }}</span>
                     </template>
@@ -236,6 +236,7 @@
 
     /**
      * In edit mode, the save button is clicked
+     * The cells save themselves using a hook on before close.
      */
     function edit_cell_saved() {
         editcolumn.value = '';
@@ -286,7 +287,8 @@
     });
 
     /**
-     * Get headers
+     * Get headers for table
+     * These also define what data is displayed.
      */
     const headers = computed(() => {
         let heads = [];
@@ -313,7 +315,7 @@
             });
         });
 
-        // Space for the buttons
+        // Space for the buttons column
         heads.push({text: "", value: "actions"});
 
         return heads;

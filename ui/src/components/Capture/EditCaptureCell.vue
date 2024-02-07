@@ -74,9 +74,11 @@
     })
 
     /**
-     * Watch out for cancel being clicked 
+     * Watch out for cancel being clicked.
      * This carry on because the prop doesn't get updated when
-     * unMount in progress
+     * unMount in progress.
+     * Each cell will emit so CaptureTable debounces it to avoid multiple 
+     * page refreshes. 
      */
     watch(
         () => props.cancelled,
@@ -85,6 +87,9 @@
         }
     );
 
+    /**
+     * Mostly, set up initial values for the form.
+     */
     onMounted(() => {
 
         // Extract the correct current grade from the item
