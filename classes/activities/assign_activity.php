@@ -101,7 +101,7 @@ class assign_activity extends base {
         // Re-order by uniqueid.
         if ($hidden) {
             usort($users, function($a, $b) {
-                return $a->uniqueid > $b->uniqueid;
+                return $a->uniqueid <=> $b->uniqueid;
             });
         }
 

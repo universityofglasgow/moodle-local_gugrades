@@ -185,7 +185,7 @@
 
     /**
      * A watch for the itemid changing
-     * Lots of stuff gets reset if the itemid is changed. 
+     * Lots of stuff gets reset if the itemid is changed.
      */
     watch(itemid, () => {
         currentpage.value = 1;
@@ -437,8 +437,6 @@
             users.value = add_grades(users.value, columns.value);
 
             loaded.value = true;
-
-            window.console.log(columns.value);
         })
         .catch((error) => {
             window.console.error(error);

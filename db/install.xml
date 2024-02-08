@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/gugrades/db" VERSION="20240125" COMMENT="XMLDB file for Moodle local/gugrades"
+<XMLDB PATH="local/gugrades/db" VERSION="20240208" COMMENT="XMLDB file for Moodle local/gugrades"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -104,6 +104,45 @@
       <INDEXES>
         <INDEX NAME="uq_sid" UNIQUE="false" FIELDS="scaleid"/>
       </INDEXES>
+    </TABLE>
+    <TABLE NAME="local_gugrades_map" COMMENT="List of conversion table maps">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false" COMMENT="Which course does this belong to"/>
+        <FIELD NAME="name" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Descriptive name of map"/>
+        <FIELD NAME="scale" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="schedulea" SEQUENCE="false" COMMENT="schedulea, scheduleb (per the factory in the code)"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false" COMMENT="User who created this"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="local_gugrades_map_item" COMMENT="Associate conversion map with grade item or grade category">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false" COMMENT="Which course is this used in"/>
+        <FIELD NAME="mapid" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false" COMMENT="Link to local_gugrades_map table"/>
+        <FIELD NAME="gradeitemid" TYPE="int" LENGTH="11" NOTNULL="false" SEQUENCE="false" COMMENT="Which grade item is this linked to (if grade item)"/>
+        <FIELD NAME="gradecategoryid" TYPE="int" LENGTH="11" NOTNULL="false" SEQUENCE="false" COMMENT="Link to grade category table (if it is)"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false" COMMENT="user who linked this"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="local_gugrades_map_value" COMMENT="The map percentage points">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="mapid" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false" COMMENT="Link to local_gugrades_map"/>
+        <FIELD NAME="percentage" TYPE="number" LENGTH="11" NOTNULL="true" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="scalevalue" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false" COMMENT="scale value"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
     </TABLE>
   </TABLES>
 </XMLDB>

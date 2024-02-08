@@ -1,13 +1,11 @@
 <template>
     <div class="col-12 mt-2">
-        <div class="row">
-            <ImportButton :itemid="props.itemid" :groupid="props.groupid" :userids="props.userids" @imported="emit('refreshtable')"></ImportButton>
-            <CSVImportButton :itemid="props.itemid" :groupid="props.groupid" :itemname="props.itemname" @uploaded="emit('refreshtable')"></CSVImportButton>
-            <AddMultipleButton :itemid="props.itemid"  @editcolumn="multipleclicked"></AddMultipleButton>
-            <ReleaseButton v-if="props.gradesimported" :gradeitemid="props.itemid" :groupid="props.groupid" @released="emit('refreshtable')"></ReleaseButton>
-            <ExportWorksheetButton v-if="itemtype=='assign'" :users="props.users" :itemtype="props.itemtype" :itemname="props.itemname"></ExportWorksheetButton>
-            <ViewFullNamesButton v-if="props.usershidden"  @viewfullnames="viewfullnames"></ViewFullNamesButton>
-        </div>
+        <ImportButton :itemid="props.itemid" :groupid="props.groupid" :userids="props.userids" @imported="emit('refreshtable')"></ImportButton>
+        <CSVImportButton :itemid="props.itemid" :groupid="props.groupid" :itemname="props.itemname" @uploaded="emit('refreshtable')"></CSVImportButton>
+        <AddMultipleButton :itemid="props.itemid"  @editcolumn="multipleclicked"></AddMultipleButton>
+        <ReleaseButton v-if="props.gradesimported" :gradeitemid="props.itemid" :groupid="props.groupid" @released="emit('refreshtable')"></ReleaseButton>
+        <ExportWorksheetButton v-if="itemtype=='assign'" :users="props.users" :itemtype="props.itemtype" :itemname="props.itemname"></ExportWorksheetButton>
+        <ViewFullNamesButton v-if="props.usershidden"  @viewfullnames="viewfullnames"></ViewFullNamesButton>
     </div>
 </template>
 
