@@ -60,6 +60,7 @@
 
     const grade = ref('');
     let   originalgrade = '';
+    let   originaladmingrade = '';
     //const scale = ref(0);
     const admingrade = ref('GRADE');
     const edited = ref(false);
@@ -80,8 +81,8 @@
      * Watch out for cancel being clicked.
      * This carry on because the prop doesn't get updated when
      * unMount in progress.
-     * Each cell will emit so CaptureTable debounces it to avoid multiple 
-     * page refreshes. 
+     * Each cell will emit so CaptureTable debounces it to avoid multiple
+     * page refreshes.
      */
     watch(
         () => props.cancelled,
@@ -118,6 +119,7 @@
         });
 
         originalgrade = grade.value;
+        originaladmingrade = admingrade.value;
     });
 
     /**
@@ -137,7 +139,7 @@
     onBeforeUnmount(() => {
 
         // if this cell hasn't been edited then nothing to do!
-        if (props.cancelled || (originalgrade == grade.value)) {
+        if (props.cancelled || ((originalgrade == grade.value) && (originaladmingrade == admingrade.value))) {
             return;
         }
 
