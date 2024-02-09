@@ -15,19 +15,42 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Conversion
  *
  * @package    local_gugrades
- * @copyright  2022
+ * @copyright  2024
  * @author     Howard Miller
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace local_gugrades;
 
-$plugin->version      = 2024020900;
-$plugin->requires     = 2022041900; // Moodle 4.0.
-$plugin->component    = 'local_gugrades';
+/**
+ * Various functions related to conversion tasks
+ */
+class conversion {
 
-$plugin->maturity     = MATURITY_STABLE;
+    /**
+     * Get maps for course
+     * @param int $courseid
+     * @return array
+     */
+    public static function get_maps(int $courseid): array {
+        global $DB;
 
+        $maps = $DB->get_records('local_gugrades_map', ['courseid' => $courseid]);
+
+        return $maps;
+    }
+
+    /**
+     * Is a map being used anywhere?
+     * @param $mapid
+     * @return bool
+     */
+    public static function inuse(int $mapid) {
+
+        // TODO: Finish this
+        return false;
+    }
+}

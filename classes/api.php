@@ -1050,4 +1050,18 @@ class api {
 
         return $groups;
     }
+
+    /**
+     * Get conversion maps
+     * @param int $courseid
+     * @return array
+     */
+    public static function get_conversion_maps(int $courseid): array {
+        $maps = \local_gugrades\conversion::get_maps($courseid);
+        foreach ($maps as $map) {
+            $map->inuse = \local_gugades\conversion::inuse($map->id);
+        }
+
+        return $maps;
+    }
 }

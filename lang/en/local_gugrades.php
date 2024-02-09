@@ -24,6 +24,7 @@
  */
 
 $string['activityname'] = 'Activity name';
+$string['addconversionmap'] = 'Add map...';
 $string['addgrade'] = 'Add grade';
 $string['admingrades'] = 'Admin grade';
 $string['addmultiple'] = 'Add multiple';
@@ -40,6 +41,7 @@ $string['close'] = 'Close';
 $string['comment'] = 'Comment';
 $string['confirm'] = 'Confirm';
 $string['conversion'] = 'Conversion';
+$string['conversionmaps'] = 'Conversion Maps';
 $string['coursegradeaggregation'] = 'Course grade aggregation';
 $string['csvdownload'] = 'Download CSV';
 $string['csvdownloadhelp'] = 'Download partial CSV file to complete and re-upload...';
@@ -116,6 +118,7 @@ $string['moodlegrade'] = 'Moodle grade';
 $string['name'] = 'Name';
 $string['no'] = 'No';
 $string['noaudit'] = 'No audit logs for this course';
+$string['noconversionmaps'] = 'No conversion maps have been defined. Click \'Add\' to create the first one.';
 $string['nogradestoimport'] = 'There were no grades to import.';
 $string['nohistory'] = 'No history';
 $string['notoplevel'] = 'Course has not been properly setup (no top-level Grade categories)';
@@ -171,6 +174,7 @@ $string['yesimport'] = 'Yes, import grades';
 $string['yesrelease'] = 'Yes, release grades';
 
 // Capabilities.
+$string['gugrades:editconversionmaps'] = 'Edit grade conversion maps';
 $string['gugrades:exportworksheet'] = 'Export empty worksheet for selected assignment';
 $string['gugrades:readdashboard'] = 'Read own Dashboard data';
 $string['gugrades:readotheraudit'] = 'Read another user\'s audit trail';

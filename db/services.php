@@ -56,6 +56,8 @@ $services = [
             'local_gugrades_get_csv_download',
             'local_gugrades_get_capture_cell_form',
             'local_gugrades_write_column',
+            'local_gugrades_get_conversion_maps',
+            'local_gugrades_write_conversion_maps',
         ],
         'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,
@@ -231,6 +233,19 @@ $functions = [
     'local_gugrades_write_column' => [
         'classname' => 'local_gugrades\external\write_column',
         'description' => 'Create column in capture table (if not existing).',
+        'type' => 'write',
+        'ajax' => true,
+    ],
+    'local_gugrades_get_conversion_maps' => [
+        'classname' => 'local_gugrades\external\get_conversion_maps',
+        'description' => 'Read conversion maps for course.',
+        'type' => 'read',
+        'ajax' => true,
+    ],
+    'local_gugrades_write_conversion_maps' => [
+        'classname' => 'local_gugrades\external\write_conversion_maps',
+        'capabilities' => 'local/gugrades:editconversionmaps',
+        'description' => 'Edit/delete conversion maps for course.',
         'type' => 'write',
         'ajax' => true,
     ],

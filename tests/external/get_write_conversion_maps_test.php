@@ -15,19 +15,40 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
- *
+ * Test get_conversion_maps AND write_conversion_maps
  * @package    local_gugrades
- * @copyright  2022
+ * @copyright  2024
  * @author     Howard Miller
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace local_gugrades\external;
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version      = 2024020900;
-$plugin->requires     = 2022041900; // Moodle 4.0.
-$plugin->component    = 'local_gugrades';
+global $CFG;
 
-$plugin->maturity     = MATURITY_STABLE;
+require_once($CFG->dirroot . '/webservice/tests/helpers.php');
+require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_testcase.php');
 
+/**
+ * Test get_activities web service.
+ */
+class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_advanced_testcase {
+
+    /**
+     * Check writing and reading data
+     */
+    public function test_conversion_maps() {
+
+        // Read maps for course (should be none)
+        $maps = get_conversion_maps::execute($this->course->id);
+        $maps = \external_api::clean_returnvalue(
+            get_conversion_maps::execute_returns(),
+            $maps
+        );
+
+        // Empty response
+        $this->assertEmpty($maps);
+    }
+}

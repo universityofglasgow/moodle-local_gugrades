@@ -9,7 +9,7 @@ const routes = [
   {
     path: '/conversion',
     name: 'conversion',
-    component: () => import(/* webpackChunkName: "aggregation" */ '../views/ConversionPage.vue'),
+    component: () => import(/* webpackChunkName: "conversion" */ '../views/ConversionPage.vue'),
   },
   {
     path: '/aggregation',
