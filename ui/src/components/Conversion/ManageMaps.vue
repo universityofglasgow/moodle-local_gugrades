@@ -1,13 +1,23 @@
 <template>
-    <div>
-        <h2>{{ mstrings.conversionmaps }}</h2>
+    <div class="row">
+        <div class="col-xl-6 col-md-8 col-12">
+            <h2>{{ mstrings.conversionmaps }}</h2>
 
-        <div v-if="!maps.length" class="alert alert-warning">
-            {{ mstrings.noconversionmaps }}
-        </div>
+            <!-- show available maps -->
+            <div v-if="!editmap">
+                <div v-if="!maps.length" class="alert alert-warning">
+                    {{ mstrings.noconversionmaps }}
+                </div>
 
-        <div class="mt-2">
-            <button class="btn btn-primary">{{ mstrings.addconversionmap }}</button>
+                <div class="mt-2">
+                    <button class="btn btn-primary" @click="add_map">{{ mstrings.addconversionmap }}</button>
+                </div>
+            </div>
+
+            <!-- Map creation/editing -->
+            <div v-if="editmap">
+                <EditMap :mapid="editmapid"></EditMap>
+            </div>
         </div>
     </div>
 </template>
@@ -15,8 +25,11 @@
 <script setup>
     import {ref, inject, onMounted} from '@vue/runtime-core';
     import { useToast } from "vue-toastification";
+    import EditMap from '@/components/Conversion/EditMap.vue';
 
     const maps = ref([]);
+    const editmap = ref(false);
+    const editmapid = ref(0);
     const mstrings = inject('mstrings');
 
     const toast = useToast();
@@ -43,4 +56,12 @@
             toast.error('Error communicating with server (see console)');
         });
     });
+
+    /**
+     * Add map button has been pressed
+     */
+    function add_map() {
+        editmap.value = true;
+        editmapid.value = 0;
+    }
 </script>

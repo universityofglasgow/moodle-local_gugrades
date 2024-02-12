@@ -7,6 +7,7 @@ const config = {
         outer: '$reset my-1',
         input: 'form-control',
         label: '$reset mb-0',
+        legend: '$reset mb-0 fs-1',
         help: 'form-text',
         messages: 'list-unstyled mt-1',
         message: 'text-danger',
@@ -24,6 +25,12 @@ const config = {
       checkbox: {
         outer: '$reset form-check',
         input: '$reset form-check-input',
+      },
+      radio: {
+        outer: '$reset form-check form-check-inline',
+        input: '$reset form-check-input',
+        options: '$reset list-unstyled list-inline',
+        option: '$reset list-inline-item'
       },
     })
   }

@@ -74,6 +74,25 @@ if ($hassiteconfig) {
         }
     }
 
+    // Heading for conversion stuff.
+    $settingspage->add(new admin_setting_heading('local_gugrades/headingconversion',
+    new lang_string('conversion', 'local_gugrades'),
+    new lang_string('conversioninfo', 'local_gugrades')));
+
+    // Schedule A default
+    $defaulta = '9, 14, 19, 23, 26, 29, 33, 36, 39, 43, 46, 53, 56, 59, 63, 66, 69, 73, 78, 84, 91';
+    $mapasetting = new admin_setting_configtext('local_gugrades/mapdefault_schedulea', new lang_string('mapdefaultschedulea', 'local_gugrades'),
+    new lang_string('mapdefaultinfo', 'local_gugrades'),
+    $defaulta, PARAM_TEXT, 50);
+    $settingspage->add($mapasetting);
+
+    // Schedule B default
+    $defaultb = '9, 19, 29, 39, 53, 59, 69';
+    $mapbsetting = new admin_setting_configtext('local_gugrades/mapdefault_scheduleb', new lang_string('mapdefaultscheduleb', 'local_gugrades'),
+    new lang_string('mapdefaultinfo', 'local_gugrades'),
+    $defaultb, PARAM_TEXT, 50);
+    $settingspage->add($mapbsetting);
+
     $ADMIN->add('localplugins', $settingspage);
 }
 
