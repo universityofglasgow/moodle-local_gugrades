@@ -4,6 +4,7 @@
             type="text"
             outer-class="mb-3"
             :label="mstrings.conversionmapname"
+            validation="required"
             validation-visibility="live"
             name="mapname"
             v-model="mapname"
@@ -13,6 +14,7 @@
             outer-class="mb-3"
             :label="mstrings.maxgrade"
             number="float"
+            validation="required|between:0,100"
             validation-visibility="live"
             name="maxgrade"
             v-model="maxgrade"
@@ -43,19 +45,24 @@
                     outer-class="mb-3"
                     :disabled="entrytype != 'percentage'"
                     :label="item.band"
+                    validation="required|between:0,100"
                     validation-visibility="live"
-                    name="mapname"
                     v-model="item.boundpc"
                 ></FormKit>
             </div>    
             <div class="col">
                 <FormKit
                     type="text"
+                    number="float"
                     outer-class="mb-3"
                     :disabled="entrytype != 'points'"
                     :label="item.band"
+                    :validation-rules="{ validate_points }"
+                    validation="required|validate_points"
                     validation-visibility="live"
-                    name="mapname"
+                    :validation-messages="{
+                        validate_points: 'Number must be between 0 and the maximum grade set'
+                    }"
                     v-model="item.boundpoints"
                 ></FormKit>
             </div>   
@@ -104,6 +111,13 @@
 
         return finalitems;
     });
+
+    /**
+     * Custom rule for points values
+     */
+    function validate_points(node) {
+        return (node.value >= 0) && (node.value <= maxgrade.value);
+    }
 
     /**
      * Form submitted

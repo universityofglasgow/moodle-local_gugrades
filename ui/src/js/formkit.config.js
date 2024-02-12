@@ -1,3 +1,8 @@
+/**
+ * Styling config for FormKit
+ * See,  https://formkit.com/essentials/styling
+ */
+
 import { generateClasses } from '@formkit/themes'
 
 const config = {
@@ -30,7 +35,7 @@ const config = {
         outer: '$reset form-check form-check-inline',
         input: '$reset form-check-input',
         options: '$reset list-unstyled list-inline',
-        option: '$reset list-inline-item'
+        option: '$reset list-inline-item pr-3'
       },
     })
   }
