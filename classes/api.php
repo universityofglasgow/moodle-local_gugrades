@@ -1064,4 +1064,20 @@ class api {
 
         return $maps;
     }
+
+    /**
+     * Get conversion map, given mapid
+     * If mapid = 0 then return default mapping values
+     * @param int $courseid
+     * @param int $mapid
+     * @param string $schedule
+     * @return array
+     */
+    public static function get_conversion_map(int $courseid, int $mapid, string $schedule): array {
+        
+        // If mapid = 0, then get the new/default map
+        if ($mapid == 0) {
+            $map = \local_gugrades\conversion::get_default_map($schedule);
+        }
+    }
 }

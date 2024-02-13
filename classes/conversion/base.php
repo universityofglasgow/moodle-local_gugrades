@@ -83,9 +83,10 @@ abstract class base {
     /**
      * Define scale mapping (if it's a scale)
      * Define array of (e.g.) 10 => 'E3' and so on
+     * (Static so we can call it outside of the normal use)
      * @return mixed (array or false if not a scale)
      */
-    public function get_map() {
+    public static function get_map() {
         return false;
     }
 

@@ -76,7 +76,7 @@ class schedulea extends base {
      * Define scale mapping
      * @return array
      */
-    public function get_map() {
+    public static function get_map() {
         return [
             0 => 'H',
             1 => 'G2',

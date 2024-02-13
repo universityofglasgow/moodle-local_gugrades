@@ -41,7 +41,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
      */
     public function test_conversion_maps() {
 
-        // Read maps for course (should be none)
+        // Read maps for course (should be none).
         $maps = get_conversion_maps::execute($this->course->id);
         $maps = \external_api::clean_returnvalue(
             get_conversion_maps::execute_returns(),
@@ -50,5 +50,18 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         // Empty response
         $this->assertEmpty($maps);
+    }
+
+    /**
+     * Check reading default map
+     */
+    public function test_get_default_map() {
+
+        // Read map with id 0 (new map).
+        $map = get_conversion_map::execute($this->course->id, 0, 'schedulea');
+        $map = \external_api::clean_returnvalue(
+            get_conversion_map::execute_returns(),
+            $map
+        );
     }
 }

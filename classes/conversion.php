@@ -31,6 +31,22 @@ namespace local_gugrades;
 class conversion {
 
     /**
+     * Get schedule a/b mapping
+     * @param string $schedule
+     * @return object
+     */
+    protected static function get_scale(string $schedule) {
+
+        // Get the name of the class and see if it exists.
+        $classname = 'local_gugrades\\conversion\\' . $schedule;
+        if (!class_exists($classname, true)) {
+            throw new \moodle_exception('Unknown conversion class - "' . $classname . '"');
+        }
+
+        return $classname::get_map();
+    }
+
+    /**
      * Get maps for course
      * @param int $courseid
      * @return array
@@ -52,5 +68,31 @@ class conversion {
 
         // TODO: Finish this
         return false;
+    }
+
+    /**
+     * Return the default mapping for the given schedule
+     * @param string $schedule
+     * @return array
+     */
+    public static function get_default_map(string $schedule) {
+
+        // Get correct default from settings
+        if ($schedule == 'schedulea') {
+            $default = get_config('local_gugrades', 'mapdefault_schedulea');
+        } else if ($schedule == 'scheduleb') {
+            $default = get_config('local_gugrades', 'mapdefault_scheduleb');
+        } else {
+            throw new \moodle_exception('Invalid schedule specified in get_default map - "' . $schedule . '"');
+        }
+
+        // Get scale
+        $scale = self::get_scale($schedule);
+
+        // Unpack defaults
+        $defaultpoints = array_map('trim', explode(',', $default));
+
+        var_dump($scale);
+        var_dump($defaultpoints);
     }
 }
