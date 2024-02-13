@@ -87,12 +87,29 @@ class conversion {
         }
 
         // Get scale
-        $scale = self::get_scale($schedule);
+        $scaleitems = self::get_scale($schedule);
 
         // Unpack defaults
         $defaultpoints = array_map('trim', explode(',', $default));
+        array_unshift($defaultpoints, 0);
 
-        var_dump($scale);
-        var_dump($defaultpoints);
+        // Iterate over scale to add data
+        $map = [];
+        foreach ($scaleitems as $grade => $band) {
+            
+            // Get correct default point
+            $default = array_shift($defaultpoints);
+            if (is_null($default)) {
+                $default = 0;
+            }
+
+            $map[] = [
+                'band' => $band,
+                'grade' => $grade,
+                'bound' => $default,
+            ];
+        }
+
+        return $map;
     }
 }

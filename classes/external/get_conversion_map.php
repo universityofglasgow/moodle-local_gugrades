@@ -84,11 +84,11 @@ class get_conversion_map extends \external_api {
         return new external_single_structure([
             'name' => new external_value(PARAM_TEXT, 'Conversion map name'),
             'schedule' => new external_value(PARAM_ALPHA, 'schedulea or scheduleb'),
-            'maxgrade' => new externa_value(PARAM_FLOAT, 'Maximum grade value'),
+            'maxgrade' => new external_value(PARAM_FLOAT, 'Maximum grade value'),
             'inuse' => new external_value(PARAM_BOOL, 'Is conversion map in use?'),
             'map' => new external_multiple_structure(
                 new external_single_structure([
-                    'band' => new external_value(PARAM_ALPHA, 'Scale band - A1, A2 etc'),
+                    'band' => new external_value(PARAM_ALPHANUM, 'Scale band - A1, A2 etc'),
                     'bound' => new external_value(PARAM_FLOAT, 'Lower boundary for this band (as a percentage)'),
                     'grade' => new external_value(PARAM_INT, 'Grade point'),
                 ])

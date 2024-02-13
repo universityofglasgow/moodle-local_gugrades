@@ -1078,6 +1078,14 @@ class api {
         // If mapid = 0, then get the new/default map
         if ($mapid == 0) {
             $map = \local_gugrades\conversion::get_default_map($schedule);
+
+            return [
+                'name' => '',
+                'schedule' => $schedule,
+                'maxgrade' => 100,
+                'inuse' => false,
+                'map' => $map,
+            ];
         }
     }
 }
