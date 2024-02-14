@@ -1,5 +1,5 @@
 <template>
-    <FormKit type="form" @submit="submit_form">
+    <FormKit v-if="loaded" type="form" @submit="submit_form">
         <FormKit
             type="text"
             outer-class="mb-3"
@@ -22,6 +22,7 @@
         <FormKit
             type="select"
             :label="mstrings.scaletype"
+            :disabled="props.mapid != 0"
             name="scaletype"
             v-model="scaletype"
             value="schedulea"
@@ -45,8 +46,12 @@
                     outer-class="mb-3"
                     :disabled="entrytype != 'percentage'"
                     :label="item.band"
-                    validation="required|between:0,100"
+                    :validation-rules="{ validate_order }"
+                    validation="required|validate_order|between:0,100"
                     validation-visibility="live"
+                    :validation-messages="{
+                        validate_order: 'Values must be in ascending sequence',
+                    }"
                     v-model="item.boundpc"
                 ></FormKit>
             </div>    
@@ -57,11 +62,12 @@
                     outer-class="mb-3"
                     :disabled="entrytype != 'points'"
                     :label="item.band"
-                    :validation-rules="{ validate_points }"
-                    validation="required|validate_points"
+                    :validation-rules="{ validate_points, validate_order }"
+                    validation="required|validate_points|validate_order"
                     validation-visibility="live"
                     :validation-messages="{
-                        validate_points: 'Number must be between 0 and the maximum grade set ' + maxgrade,
+                        validate_points: 'Number must be between 0 and ' + maxgrade,
+                        validate_order: 'Values must be in ascending sequence',
                     }"
                     v-model="item.boundpoints"
                 ></FormKit>
@@ -78,6 +84,7 @@
     //import {scheduleb} from '@/js/scheduleb.js';
 
     const mstrings = inject('mstrings');
+    const loaded = ref(false);
     const mapname = ref('');
     const maxgrade = ref(100);
     const rawmap = ref([]);
@@ -100,6 +107,14 @@
     });
 
     /**
+     * Round values to 2 decimal place
+     * TODO: This might change
+     */
+    function precision(n) {
+        return Math.floor(n * 100) / 100;
+    }
+
+    /**
      * Build items array
      * (depending on scale type)
      */
@@ -110,9 +125,29 @@
                 band: item.band,
                 grade: item.grade,
                 boundpc: item.bound,
-                boundpoints: item.bound * maxgrade.value / 100,
+                boundpoints: precision(item.bound * maxgrade.value / 100),
             });
         });
+    }
+
+    /**
+     * Recalculate items. 
+     * When settings change match percent to point according to 
+     * entrytypeoptions setting
+     */
+    function recalculate() {
+        items.value.forEach((item) => {
+
+            // If percent selected then recalc points
+            if (entrytype.value == 'percentage') {
+                item.boundpoints = precision(item.boundpc * maxgrade.value / 100);    
+            }
+
+            // If points selected then recalc percent
+            if (entrytype.value == 'points') {
+                item.boundpc = precision(item.boundpoints * 100 / maxgrade.value);
+            }
+        })
     }
 
     /**
@@ -141,10 +176,44 @@
     );
 
     /**
+     * Watch the map array for changes to 
+     */
+    watch(
+        items,
+        () => {
+            recalculate();
+        },
+        {deep: true},
+    );
+
+    /**
      * Custom rule for points values
      */
     function validate_points(node) {
         return (node.value >= 0) && (node.value <= maxgrade.value);
+    }
+
+    /**
+     * Custom rule to check that points/percentages are in order
+     */
+    function validate_order() {
+        let currentpercent = 0;
+        let currentpoints = 0;
+        let inorder = true;
+        items.value.forEach((item) => {
+            if (currentpercent > item.boundpc) {
+                inorder = false;
+            } else {
+                currentpercent = item.boundpc;
+            }
+            if (currentpoints > item.boundpoints) {
+                inorder = false;
+            } else {
+                currentpoints = item.boundpoints;
+            }
+        });
+
+        return inorder;
     }
 
     /**
@@ -171,13 +240,14 @@
             }
         }])[0]
         .then((result) => {
-            window.console.log(result);
             mapname.value = result.name;
             //scaletype.value = result.scaletype;
             maxgrade.value = result.maxgrade;
             rawmap.value = result.map;
 
             build_items();
+
+            loaded.value = true;
         })
         .catch((error) => {
             window.console.error(error);
