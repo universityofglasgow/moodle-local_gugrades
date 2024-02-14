@@ -61,7 +61,7 @@
                     validation="required|validate_points"
                     validation-visibility="live"
                     :validation-messages="{
-                        validate_points: 'Number must be between 0 and the maximum grade set'
+                        validate_points: 'Number must be between 0 and the maximum grade set ' + maxgrade,
                     }"
                     v-model="item.boundpoints"
                 ></FormKit>
@@ -71,13 +71,17 @@
 </template>
 
 <script setup>
-    import {ref, inject, defineProps, onMounted, computed} from '@vue/runtime-core';
-    import {schedulea} from '@/js/schedulea.js';
-    import {scheduleb} from '@/js/scheduleb.js';
+    import {ref, inject, defineProps, onMounted, watch} from '@vue/runtime-core';
+    import { useToast } from "vue-toastification";
+    import { watchDebounced } from '@vueuse/core';
+    //import {schedulea} from '@/js/schedulea.js';
+    //import {scheduleb} from '@/js/scheduleb.js';
 
     const mstrings = inject('mstrings');
     const mapname = ref('');
     const maxgrade = ref(100);
+    const rawmap = ref([]);
+    const items = ref([]);
     const scaletype = ref('schedulea');
     const entrytype = ref('percentage');
     const scaletypeoptions = [
@@ -89,28 +93,52 @@
         {value: 'points', label: 'Points'},
     ];
 
+    const toast = useToast();
+
     const props = defineProps({
         mapid: Number,
     });
 
     /**
-     * Array to build map
+     * Build items array
      * (depending on scale type)
      */
-    const items = computed(() => {
-        const scaleitems = scaletype.value == 'schedulea' ? schedulea : scheduleb;
-        const finalitems = [];
-        scaleitems.forEach((item) => {
-            finalitems.push({
+    function build_items() {
+        items.value = [];
+        rawmap.value.forEach((item) => {
+            items.value.push({
                 band: item.band,
                 grade: item.grade,
-                boundpc: 0,
-                boundpoints: 0,
-            })
+                boundpc: item.bound,
+                boundpoints: item.bound * maxgrade.value / 100,
+            });
         });
+    }
 
-        return finalitems;
-    });
+    /**
+     * If maxgrade changes then we need to recalculate the map
+     */
+     watchDebounced(
+        maxgrade,
+        () => {
+            build_items();
+        },
+        { debounce: 500, maxWait: 1000 },
+    );
+
+    /**
+     * If the schedule changes then the map can be reloaded
+     * only if mapid==0. If it's an existing map, then it would
+     * need to be deleted and recreated
+     */
+    watch(
+        scaletype,
+        () => {
+            if (props.mapid == 0) {
+                update_map();
+            }
+        }
+    );
 
     /**
      * Custom rule for points values
@@ -127,11 +155,40 @@
     }
 
     /**
+     * Update the conversion map
+     */
+    function update_map() {
+        const GU = window.GU;
+        const courseid = GU.courseid;
+        const fetchMany = GU.fetchMany;
+
+        fetchMany([{
+            methodname: 'local_gugrades_get_conversion_map',
+            args: {
+                courseid: courseid,
+                mapid: props.mapid,
+                schedule: scaletype.value,
+            }
+        }])[0]
+        .then((result) => {
+            window.console.log(result);
+            mapname.value = result.name;
+            //scaletype.value = result.scaletype;
+            maxgrade.value = result.maxgrade;
+            rawmap.value = result.map;
+
+            build_items();
+        })
+        .catch((error) => {
+            window.console.error(error);
+            toast.error('Error communicating with server (see console)');
+        });   
+    }
+
+    /**
      * Is this a new map (id=0) or an existing one
      */
     onMounted(() => {
-        if (props.mapid) {
-            return;
-        }
+        update_map();
     })
 </script>

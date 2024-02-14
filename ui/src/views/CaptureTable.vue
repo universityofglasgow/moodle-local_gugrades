@@ -143,7 +143,7 @@
     import CaptureAlerts from '@/components/CaptureAlerts.vue';
     import CaptureColumnEditCog from '@/components/CaptureColumnEditCog.vue';
     import EditCaptureCell from '@/components/Capture/EditCaptureCell.vue';
-    import { watchDebounced } from '@vueuse/core'
+    import { watchDebounced } from '@vueuse/core';
 
     const users = ref([]);
     const userids = ref([]);

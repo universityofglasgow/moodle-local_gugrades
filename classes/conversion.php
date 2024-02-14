@@ -61,7 +61,7 @@ class conversion {
 
     /**
      * Is a map being used anywhere?
-     * @param $mapid
+     * @param int $mapid
      * @return bool
      */
     public static function inuse(int $mapid) {
