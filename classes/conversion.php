@@ -165,7 +165,7 @@ class conversion {
             $mapinfo->timemodified = time();
             $DB->update_record('local_gugrades_map', $mapinfo);
 
-            $newmapid = mapid;
+            $newmapid = $mapid;
 
         } else {
             $mapinfo = new \stdClass();
