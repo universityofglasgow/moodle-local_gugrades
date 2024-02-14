@@ -112,4 +112,53 @@ class conversion {
 
         return $map;
     }
+
+        /**
+     * Write conversion map, mapid=0 means a new one
+     * @param int $courseid
+     * @param int $mapid
+     * @param string $name
+     * @param string $schedule
+     * @param float $maxgrade
+     * @param array map
+     * @return int
+     */
+    public static function write_conversion_map(int $courseid, int $mapid, string $name, string $schedule, float $maxgrade, array $map): int {
+        global $DB, $USER;
+
+        if ($mapid) {
+            $mapinfo = $DB->get_record('local_gugrades_map', ['id' => $mapid], '*', MUST_EXIST);
+            if ($courseid != $mapinfo->courseid) {
+                throw new \moodle_exception('courseid does not match ' . $courseid);
+            }
+
+            // Write main record.
+            // Name is the only thing you can change
+            $mapinfo->name = $name;
+            $mapinfo->timemodified = time();
+            $DB->update_record('local_gugrades_map', $mapinfo);
+
+            $newmapid = mapid;
+
+        } else {
+            $mapinfo = new \stdClass();
+            $mapinfo->courseid = $courseid;
+            $mapinfo->name = $name;
+            $mapinfo->scale = $schedule;
+            $mapinfo->userid = $USER->id;
+            $mapinfo->timecreated = time();
+            $mapinfo->timemodified = time();
+            $newmapid = $DB->insert_record('local_gugrades_map', $mapinfo);
+
+            foreach ($map as $item) {
+                $value = new \stdClass();
+                $value->mapid = $newmapid;
+                $value->percentage = $item['bound'];
+                $value->scalevalue = $item['grade'];
+                $DB->insert_record('local_gugrades_map_value', $value);
+            }
+        }
+
+        return $newmapid;
+    }
 }

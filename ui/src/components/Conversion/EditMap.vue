@@ -35,17 +35,20 @@
             :options="entrytypeoptions"
         ></FormKit>
         <div class="row mt-3">
-            <div class="col"><h3>{{ mstrings.percentage}}</h3></div>
-            <div class="col"><h3>{{ mstrings.points }}</h3></div>
+            <div class="col-2"><h3>{{  mstrings.band }}</h3></div>
+            <div class="col-5"><h3>{{ mstrings.percentage}}</h3></div>
+            <div class="col-5"><h3>{{ mstrings.points }}</h3></div>
         </div>
 
         <div  class="row" v-for="item in items" :key="item.band">
-            <div class="col">
+            <div class="col-2 pt-2">
+                <h3>{{  item.band  }}</h3>
+            </div>
+            <div class="col-5">
                 <FormKit
                     type="text"
                     outer-class="mb-3"
                     :disabled="entrytype != 'percentage'"
-                    :label="item.band"
                     :validation-rules="{ validate_order }"
                     validation="required|validate_order|between:0,100"
                     validation-visibility="live"
@@ -55,13 +58,12 @@
                     v-model="item.boundpc"
                 ></FormKit>
             </div>    
-            <div class="col">
+            <div class="col-5">
                 <FormKit
                     type="text"
                     number="float"
                     outer-class="mb-3"
                     :disabled="entrytype != 'points'"
-                    :label="item.band"
                     :validation-rules="{ validate_points, validate_order }"
                     validation="required|validate_points|validate_order"
                     validation-visibility="live"
@@ -77,11 +79,9 @@
 </template>
 
 <script setup>
-    import {ref, inject, defineProps, onMounted, watch} from '@vue/runtime-core';
+    import {ref, inject, defineProps, defineEmits, onMounted, watch} from '@vue/runtime-core';
     import { useToast } from "vue-toastification";
     import { watchDebounced } from '@vueuse/core';
-    //import {schedulea} from '@/js/schedulea.js';
-    //import {scheduleb} from '@/js/scheduleb.js';
 
     const mstrings = inject('mstrings');
     const loaded = ref(false);
@@ -105,6 +105,8 @@
     const props = defineProps({
         mapid: Number,
     });
+
+    const emits = defineEmits(['close']);
 
     /**
      * Round values to 2 decimal place
@@ -220,7 +222,38 @@
      * Form submitted
      */
     function submit_form() {
+        const GU = window.GU;
+        const courseid = GU.courseid;
+        const fetchMany = GU.fetchMany;
 
+        const map = [];
+        items.value.forEach((item) => {
+            map.push({
+                band: item.band,
+                bound: item.boundpc,
+                grade: item.grade,
+            });
+        });
+
+        fetchMany([{
+            methodname: 'local_gugrades_write_conversion_map',
+            args: {
+                courseid: courseid,
+                mapid: props.mapid,
+                name: mapname.value,
+                schedule: scaletype.value,
+                maxgrade: maxgrade.value,
+                map: map,
+            }
+        }])[0]
+        .then(() => {
+            toast.success(mstrings.conversionmapsaved);
+            emits('close')
+        })
+        .catch((error) => {
+            window.console.error(error);
+            toast.error('Error communicating with server (see console)');
+        }); 
     }
 
     /**

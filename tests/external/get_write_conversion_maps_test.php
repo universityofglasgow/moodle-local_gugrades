@@ -88,6 +88,37 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         $this->assertEquals(0, $map[0]['grade']);
         $this->assertEquals('A0', $map[7]['band']);
         $this->assertEquals(22, $map[7]['grade']);
+    }
 
+    /**
+     * Check getting then writing default map
+     */
+    public function test_read_write_default_map() {
+        global $DB;
+
+        // Read map with id 0 (new map) for Schedule A.
+        $mapstuff = get_conversion_map::execute($this->course->id, 0, 'schedulea');
+        $mapstuff = \external_api::clean_returnvalue(
+            get_conversion_map::execute_returns(),
+            $mapstuff
+        );
+
+
+        // Write map back
+        $name = 'Test conversion map';
+        $schedule = 'schedulea';
+        $maxgrade = 100.0;
+        $map = $mapstuff['map'];
+        $mapid = write_conversion_map::execute($this->course->id, 0, $name, $schedule, $maxgrade, $map);
+        $mapid = \external_api::clean_returnvalue(
+            write_conversion_map::execute_returns(),
+            $mapid
+        );
+        $mapid = $mapid['mapid'];
+
+        $values = array_values($DB->get_records('local_gugrades_map_value', ['mapid' => $mapid]));
+
+        $this->assertCount(23, $values);
+        $this->assertEquals(92, $values[22]->percentage);
     }
 }

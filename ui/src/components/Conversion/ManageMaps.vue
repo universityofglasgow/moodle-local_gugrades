@@ -9,6 +9,12 @@
                     {{ mstrings.noconversionmaps }}
                 </div>
 
+                <div v-else>
+                    <div v-for="map in maps" :key="map.id">
+                        {{  map.name }}
+                    </div>
+                </div>
+
                 <div class="mt-2">
                     <button class="btn btn-primary" @click="add_map">{{ mstrings.addconversionmap }}</button>
                 </div>
@@ -16,7 +22,7 @@
 
             <!-- Map creation/editing -->
             <div v-if="editmap">
-                <EditMap :mapid="editmapid"></EditMap>
+                <EditMap :mapid="editmapid" @close="editmap = false"></EditMap>
             </div>
         </div>
     </div>

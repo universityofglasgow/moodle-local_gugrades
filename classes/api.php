@@ -1059,7 +1059,7 @@ class api {
     public static function get_conversion_maps(int $courseid): array {
         $maps = \local_gugrades\conversion::get_maps($courseid);
         foreach ($maps as $map) {
-            $map->inuse = \local_gugades\conversion::inuse($map->id);
+            $map->inuse = \local_gugrades\conversion::inuse($map->id);
         }
 
         return $maps;
@@ -1071,7 +1071,7 @@ class api {
      * @param int $courseid
      * @param int $mapid
      * @param string $schedule
-     * @return array
+     * @return int
      */
     public static function get_conversion_map(int $courseid, int $mapid, string $schedule): array {
         
@@ -1087,5 +1087,21 @@ class api {
                 'map' => $map,
             ];
         }
+    }
+
+    /**
+     * Write conversion map, mapid=0 means a new one
+     * @param int $courseid
+     * @param int $mapid
+     * @param string $name
+     * @param string $schedule
+     * @param float $maxgrade
+     * @param array map
+     * @return array
+     */
+    public static function write_conversion_map(int $courseid, int $mapid, string $name, string $schedule, float $maxgrade, array $map): int {
+        $mapid = \local_gugrades\conversion::write_conversion_map($courseid, $mapid, $name, $schedule, $maxgrade, $map);
+
+        return $mapid;
     }
 }
