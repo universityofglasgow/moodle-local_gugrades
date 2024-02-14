@@ -113,7 +113,34 @@ class conversion {
         return $map;
     }
 
-        /**
+    /**
+     * Get existing map for edit page
+     */
+    public static function get_map_for_editing(int $mapid) {
+        global $DB;
+
+        $mapinfo = $DB->get_record('local_gugrades_map', ['id' => $mapid], '*', MUST_EXIST);
+        $mapvalues = $DB->get_records('local_gugrades_map_value', ['mapid' => $mapid], 'scalevalue ASC');
+
+        $map = [];
+        foreach ($mapvalues as $mapvalue) {
+            $map[] = [
+                'band' => $mapvalue->band,
+                'grade' => $mapvalue->scalevalue,
+                'bound' => $mapvalue->percentage,
+            ];
+        }
+
+        return [
+            'name' => $mapinfo->name,
+            'schedule' => $mapinfo->scale,
+            'maxgrade' => $mapinfo->maxgrade,
+            'inuse' => self::inuse($mapid),
+            'map' => $map,
+        ];
+    }
+
+    /**
      * Write conversion map, mapid=0 means a new one
      * @param int $courseid
      * @param int $mapid
@@ -145,6 +172,7 @@ class conversion {
             $mapinfo->courseid = $courseid;
             $mapinfo->name = $name;
             $mapinfo->scale = $schedule;
+            $mapinfo->maxgrade = $maxgrade;
             $mapinfo->userid = $USER->id;
             $mapinfo->timecreated = time();
             $mapinfo->timemodified = time();
@@ -153,6 +181,7 @@ class conversion {
             foreach ($map as $item) {
                 $value = new \stdClass();
                 $value->mapid = $newmapid;
+                $value->band = $item['band'];
                 $value->percentage = $item['bound'];
                 $value->scalevalue = $item['grade'];
                 $DB->insert_record('local_gugrades_map_value', $value);

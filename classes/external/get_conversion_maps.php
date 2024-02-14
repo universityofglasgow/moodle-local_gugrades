@@ -80,6 +80,8 @@ class get_conversion_maps extends \external_api {
                 'id' => new external_value(PARAM_INT, 'Conversion map ID'),
                 'name' => new external_value(PARAM_TEXT, 'Conversion map name'),
                 'inuse' => new external_value(PARAM_BOOL, 'Is conversion map in use?'),
+                'maxgrade' => new external_value(PARAM_FLOAT, 'Maximum grade assigned'),
+                'scale' => new external_value(PARAM_ALPHANUM, 'schedulea, scheduleb'),
             ])
         );
     }

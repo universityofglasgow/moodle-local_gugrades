@@ -1086,6 +1086,8 @@ class api {
                 'inuse' => false,
                 'map' => $map,
             ];
+        } else {
+            return \local_gugrades\conversion::get_map_for_editing($mapid);
         }
     }
 

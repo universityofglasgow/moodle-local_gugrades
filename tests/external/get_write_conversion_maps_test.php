@@ -116,9 +116,20 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         );
         $mapid = $mapid['mapid'];
 
-        $values = array_values($DB->get_records('local_gugrades_map_value', ['mapid' => $mapid]));
+        // Check map table
+        $mapinfo = $DB->get_record('local_gugrades_map', ['id' => $mapid], '*', MUST_EXIST);
+        $this->assertEquals('Test conversion map', $mapinfo->name);
 
+        // Check map values
+        $values = array_values($DB->get_records('local_gugrades_map_value', ['mapid' => $mapid]));
         $this->assertCount(23, $values);
         $this->assertEquals(92, $values[22]->percentage);
+
+        // Read back uploaded map.
+        $mapstuff = get_conversion_map::execute($this->course->id, $mapid, 'schedulea');
+        $mapstuff = \external_api::clean_returnvalue(
+            get_conversion_map::execute_returns(),
+            $mapstuff
+        );
     }
 }
