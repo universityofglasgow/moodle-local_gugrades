@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="tabmenu">
         <TabsNav @tabchange="tabChange"></TabsNav>
 
         <div v-if="currenttab == 'capture'">

@@ -1,42 +1,44 @@
 <template>
-    <div class="row">
-        <div class="col-xl-6 col-md-8 col-12">
-            <h2>{{ mstrings.conversionmaps }}</h2>
+    <div id="managemaps">
+        <h2>{{ mstrings.conversionmaps }}</h2>
 
-            <!-- show available maps -->
-            <div v-if="!editmap">
-                <div v-if="!maps.length" class="alert alert-warning">
-                    {{ mstrings.noconversionmaps }}
+        <!-- show available maps -->
+        <div v-if="!editmap">
+            <div v-if="!maps.length" class="alert alert-warning">
+                {{ mstrings.noconversionmaps }}
+            </div>
+
+            <div v-else class="border rounded p-4">
+                <div class="row">
+                    <div class="col"><h4>{{ mstrings.name }}</h4></div>
+                    <div class="col"><h4>{{ mstrings.scale }}</h4></div>
+                    <div class="col"><h4>{{ mstrings.maxgrade }}</h4></div>
+                    <div class="col"><h4>{{ mstrings.createdby }}</h4></div>
+                    <div class="col"><h4>{{ mstrings.createdat }}</h4></div>
+                    <div class="col">&nbsp;</div>
                 </div>
-
-                <div v-else class="border rounded p-4">
-                    <div class="row">
-                        <div class="col"><h4>{{ mstrings.name }}</h4></div>
-                        <div class="col"><h4>{{ mstrings.scale }}</h4></div>
-                        <div class="col"><h4>{{ mstrings.maxgrade }}</h4></div>
-                        <div class="col">&nbsp;</div>
+                <div v-for="map in maps" :key="map.id" class="row lead">
+                    <div class="col"><b>{{ map.name }}</b></div>
+                    <div class="col">{{ map.scale }}</div>
+                    <div class="col">{{ map.maxgrade }}</div>
+                    <div class="col">{{ map.createdby }}</div>
+                    <div class="col">{{ map.createdat }}</div>
+                    <div class="col">
+                        <button class="btn btn-success btn-sm mr-1" @click="edit_clicked(map.id)">{{ mstrings.edit }}</button>
+                        <button class="btn btn-danger btn-sm mr-1" :class="{ disabled: map.inuse }">{{ mstrings.delete }}</button>
+                        <button class="btn btn-info btn-sm mr-1">{{ mstrings.export }}</button>
                     </div>
-                    <div v-for="map in maps" :key="map.id" class="row lead">
-                        <div class="col"><b>{{ map.name }}</b></div>
-                        <div class="col">{{ map.scale }}</div>
-                        <div class="col">{{ map.maxgrade }}</div>
-                        <div class="col">
-                            <button class="btn btn-success btn-sm mr-1" @click="edit_clicked(map.id)">{{ mstrings.edit }}</button>
-                            <button class="btn btn-danger btn-sm mr-1" :class="{ disabled: map.inuse }">{{ mstrings.delete }}</button>
-                            <button class="btn btn-info btn-sm mr-1">{{ mstrings.export }}</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-4">
-                    <button class="btn btn-primary" @click="add_map">{{ mstrings.addconversionmap }}</button>
                 </div>
             </div>
 
-            <!-- Map creation/editing -->
-            <div v-if="editmap">
-                <EditMap :mapid="editmapid" @close="editmap_closed"></EditMap>
+            <div class="mt-4">
+                <button class="btn btn-primary" @click="add_map">{{ mstrings.addconversionmap }}</button>
             </div>
+        </div>
+
+        <!-- Map creation/editing -->
+        <div v-if="editmap">
+            <EditMap :mapid="editmapid" @close="editmap_closed"></EditMap>
         </div>
     </div>
 </template>
@@ -73,7 +75,7 @@
         .catch((error) => {
             window.console.error(error);
             toast.error('Error communicating with server (see console)');
-        });        
+        });
     }
 
     /**

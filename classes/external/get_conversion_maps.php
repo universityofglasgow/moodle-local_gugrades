@@ -82,6 +82,8 @@ class get_conversion_maps extends \external_api {
                 'inuse' => new external_value(PARAM_BOOL, 'Is conversion map in use?'),
                 'maxgrade' => new external_value(PARAM_FLOAT, 'Maximum grade assigned'),
                 'scale' => new external_value(PARAM_ALPHANUM, 'schedulea, scheduleb'),
+                'createdby' => new external_value(PARAM_TEXT, 'Name of user creating map'),
+                'createdat' => new external_value(PARAM_TEXT, '(Formatted) date/time when map was created'),
             ])
         );
     }

@@ -1,36 +1,38 @@
 <template>
-    <ul class="nav nav-pills mb-4 border-bottom">
-        <li class="nav-item">
-            <a class="nav-link btn btn-secondary" :class="{active: activetab == 'capture'}" @click="clickTab('capture')">
-                <i class="fa fa-download" aria-hidden="true"></i>&nbsp;
-                {{ mstrings.assessmentgradecapture }}
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link btn btn-secondary" :class="{active: activetab == 'conversion'}" @click="clickTab('conversion')">
-                <i class="fa fa-exchange" aria-hidden="true"></i>&nbsp;
-                {{ mstrings.conversion }}
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link btn btn-secondary" :class="{active: activetab == 'aggregate'}" @click="clickTab('aggregate')">
-                <i class="fa fa-compress" aria-hidden="true"></i>&nbsp;
-                {{ mstrings.coursegradeaggregation }}
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link btn btn-secondary" :class="{active: activetab == 'audit'}" @click="clickTab('audit')">
-                <i class="fa fa-history" aria-hidden="true"></i>&nbsp;
-                {{ mstrings.auditlog }}
-            </a>
-        </li>
-        <li class="nav-item" v-if="settingscapability">
-            <a class="nav-link btn btn-secondary" :class="{active: activetab == 'settings'}" @click="clickTab('settings')">
-                <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;
-                {{ mstrings.settings }}
-            </a>
-        </li>
-    </ul>
+    <div id="tabsnav">
+        <ul class="nav nav-pills mb-4 border-bottom">
+            <li class="nav-item">
+                <a class="nav-link btn btn-secondary" :class="{active: activetab == 'capture'}" @click="clickTab('capture')">
+                    <i class="fa fa-download" aria-hidden="true"></i>&nbsp;
+                    {{ mstrings.assessmentgradecapture }}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link btn btn-secondary" :class="{active: activetab == 'conversion'}" @click="clickTab('conversion')">
+                    <i class="fa fa-exchange" aria-hidden="true"></i>&nbsp;
+                    {{ mstrings.conversion }}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link btn btn-secondary" :class="{active: activetab == 'aggregate'}" @click="clickTab('aggregate')">
+                    <i class="fa fa-compress" aria-hidden="true"></i>&nbsp;
+                    {{ mstrings.coursegradeaggregation }}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link btn btn-secondary" :class="{active: activetab == 'audit'}" @click="clickTab('audit')">
+                    <i class="fa fa-history" aria-hidden="true"></i>&nbsp;
+                    {{ mstrings.auditlog }}
+                </a>
+            </li>
+            <li class="nav-item" v-if="settingscapability">
+                <a class="nav-link btn btn-secondary" :class="{active: activetab == 'settings'}" @click="clickTab('settings')">
+                    <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;
+                    {{ mstrings.settings }}
+                </a>
+            </li>
+        </ul>
+    </div>
 </template>
 
 <script setup>

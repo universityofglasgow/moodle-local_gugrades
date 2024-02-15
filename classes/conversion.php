@@ -56,6 +56,16 @@ class conversion {
 
         $maps = $DB->get_records('local_gugrades_map', ['courseid' => $courseid]);
 
+        // Add created by and created at
+        foreach ($maps as $map) {
+            if ($user = $DB->get_record('user', ['id' => $map->userid])) {
+                $map->createdby = fullname($user);
+            } else {
+                $map->createdby = '-';
+            }
+            $map->createdat = userdate($map->timecreated, get_string('strftimedatetimeshort', 'langconfig'));
+        }
+
         return $maps;
     }
 
@@ -96,7 +106,7 @@ class conversion {
         // Iterate over scale to add data
         $map = [];
         foreach ($scaleitems as $grade => $band) {
-            
+
             // Get correct default point
             $default = array_shift($defaultpoints);
             if (is_null($default)) {
