@@ -1,34 +1,34 @@
 <template>
     <ul class="nav nav-pills mb-4 border-bottom">
         <li class="nav-item">
-            <router-link to="/" class="nav-link btn btn-secondary" :class="{active: activetab == 'capture'}" @click="clickTab('capture')">
+            <a class="nav-link btn btn-secondary" :class="{active: activetab == 'capture'}" @click="clickTab('capture')">
                 <i class="fa fa-download" aria-hidden="true"></i>&nbsp;
                 {{ mstrings.assessmentgradecapture }}
-            </router-link>
+            </a>
         </li>
         <li class="nav-item">
-            <router-link to="/conversion" class="nav-link btn btn-secondary" :class="{active: activetab == 'conversion'}" @click="clickTab('conversion')">
+            <a class="nav-link btn btn-secondary" :class="{active: activetab == 'conversion'}" @click="clickTab('conversion')">
                 <i class="fa fa-exchange" aria-hidden="true"></i>&nbsp;
                 {{ mstrings.conversion }}
-            </router-link>
+            </a>
         </li>
         <li class="nav-item">
-            <router-link to="/aggregation" class="nav-link btn btn-secondary" :class="{active: activetab == 'aggregate'}" @click="clickTab('aggregate')">
+            <a class="nav-link btn btn-secondary" :class="{active: activetab == 'aggregate'}" @click="clickTab('aggregate')">
                 <i class="fa fa-compress" aria-hidden="true"></i>&nbsp;
                 {{ mstrings.coursegradeaggregation }}
-            </router-link>
+            </a>
         </li>
         <li class="nav-item">
-            <router-link to="/audit" class="nav-link btn btn-secondary" :class="{active: activetab == 'audit'}" @click="clickTab('audit')">
+            <a class="nav-link btn btn-secondary" :class="{active: activetab == 'audit'}" @click="clickTab('audit')">
                 <i class="fa fa-history" aria-hidden="true"></i>&nbsp;
                 {{ mstrings.auditlog }}
-            </router-link>
+            </a>
         </li>
         <li class="nav-item" v-if="settingscapability">
-            <router-link to="/settings" class="nav-link btn btn-secondary" :class="{active: activetab == 'settings'}" @click="clickTab('settings')">
+            <a class="nav-link btn btn-secondary" :class="{active: activetab == 'settings'}" @click="clickTab('settings')">
                 <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;
                 {{ mstrings.settings }}
-            </router-link>
+            </a>
         </li>
     </ul>
 </template>

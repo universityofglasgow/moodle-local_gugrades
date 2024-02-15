@@ -35,11 +35,6 @@ $PAGE->requires->js_call_amd('local_gugrades/interface', 'init', [['courseid' =>
 $PAGE->requires->css('/local/gugrades/ui/dist/css/app.css');
 $PAGE->requires->js('/local/gugrades/ui/dist/js/chunk-vendors.js');
 $PAGE->requires->js('/local/gugrades/ui/dist/js/app.js');
-$PAGE->requires->js('/local/gugrades/ui/dist/js/capture.js');
-$PAGE->requires->js('/local/gugrades/ui/dist/js/conversion.js');
-$PAGE->requires->js('/local/gugrades/ui/dist/js/aggregation.js');
-$PAGE->requires->js('/local/gugrades/ui/dist/js/settings.js');
-$PAGE->requires->js('/local/gugrades/ui/dist/js/audit.js');
 // I took out the lines for cature, settings and audit
 
 

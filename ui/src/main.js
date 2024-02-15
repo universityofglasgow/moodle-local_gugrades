@@ -1,6 +1,6 @@
 import { createApp, reactive } from 'vue'
 import App from './App.vue'
-import router from './router'
+//import router from './router'
 import Toast  from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import Vue3EasyDataTable from 'vue3-easy-data-table';
@@ -44,7 +44,7 @@ ensureGUIsSet(timeout)
     const app = createApp(App);
     const mstrings = reactive([]);
     app.provide('mstrings', mstrings);
-    app.use(router);
+    //app.use(router);
     app.use(Toast, toastoptions);
     app.use(plugin, defaultConfig({
         config: customConfig.config

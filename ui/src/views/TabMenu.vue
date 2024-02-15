@@ -2,9 +2,16 @@
     <div>
         <TabsNav @tabchange="tabChange"></TabsNav>
 
-        <!--
         <div v-if="currenttab == 'capture'">
             <CaptureTable></CaptureTable>
+        </div>
+
+        <div v-if="currenttab == 'conversion'">
+            <ConversionPage></ConversionPage>
+        </div>
+
+        <div v-if="currenttab == 'aggregation'">
+            <AggregationTable></AggregationTable>
         </div>
 
         <div v-if="currenttab == 'settings'">
@@ -14,7 +21,6 @@
         <div v-if="currenttab == 'audit'">
             <AuditPage></AuditPage>
         </div>
-        -->
 
         <router-view></router-view>
     </div>
@@ -23,9 +29,11 @@
 <script setup>
     import {ref, onMounted} from '@vue/runtime-core';
     import TabsNav from '@/components/TabsNav.vue';
-    //import CaptureTable from '@/components/CaptureTable.vue';
-    //import SettingsPage from '@/views/SettingsPage.vue';
-    //import AuditPage from '@/views/AuditPage.vue';
+    import CaptureTable from '@/views/CaptureTable.vue';
+    import AggregationTable from '@/views/AggregationTable.vue';
+    import ConversionPage from '@/views/ConversionPage.vue';
+    import SettingsPage from '@/views/SettingsPage.vue';
+    import AuditPage from '@/views/AuditPage.vue';
     import { useToast } from "vue-toastification";
 
     const currenttab = ref('capture');
