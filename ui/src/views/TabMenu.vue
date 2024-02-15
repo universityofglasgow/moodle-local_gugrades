@@ -21,8 +21,6 @@
         <div v-if="currenttab == 'audit'">
             <AuditPage></AuditPage>
         </div>
-
-        <router-view></router-view>
     </div>
 </template>
 
