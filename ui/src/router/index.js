@@ -29,7 +29,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHashHistory('/moodle40'),
   //history: createWebHistory(process.env.BASE_URL),
   routes
 })
