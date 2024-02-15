@@ -24,9 +24,9 @@
                     <div class="col">{{ map.createdby }}</div>
                     <div class="col">{{ map.createdat }}</div>
                     <div class="col">
-                        <button class="btn btn-success btn-sm mr-1" @click="edit_clicked(map.id)">{{ mstrings.edit }}</button>
-                        <button class="btn btn-danger btn-sm mr-1" :class="{ disabled: map.inuse }">{{ mstrings.delete }}</button>
-                        <button class="btn btn-info btn-sm mr-1">{{ mstrings.export }}</button>
+                        <button class="btn btn-success btn-sm rounded mr-1" @click="edit_clicked(map.id)">{{ mstrings.edit }}</button>
+                        <button class="btn btn-danger btn-sm rounded mr-1" :class="{ disabled: map.inuse }">{{ mstrings.delete }}</button>
+                        <button class="btn btn-info btn-sm rounded mr-1">{{ mstrings.export }}</button>
                     </div>
                 </div>
             </div>

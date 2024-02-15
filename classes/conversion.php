@@ -175,6 +175,14 @@ class conversion {
             $mapinfo->timemodified = time();
             $DB->update_record('local_gugrades_map', $mapinfo);
 
+            foreach ($map as $item) {
+                if ($value = $DB->get_record('local_gugrades_map_value', ['mapid' => $mapid, 'scalevalue' => $item['grade']])) {
+                    $value->percentage = $item['bound'];
+                    $value->scalevalue = $item['grade'];
+                    $DB->update_record('local_gugrades_map_value', $value);
+                }
+            }
+
             $newmapid = $mapid;
 
         } else {
