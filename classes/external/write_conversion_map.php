@@ -88,6 +88,21 @@ class write_conversion_map extends \external_api {
 
         $mapid = \local_gugrades\api::write_conversion_map($courseid, $mapid, $name, $schedule, $maxgrade, $map);
 
+        // Log.
+        $event = \local_gugrades\event\edit_conversion_map::create([
+            'objectid' => $mapid,
+            'context' => \context_course::instance($courseid),
+            'other' => [
+                'name' => $name,
+                'maxgrade' => $maxgrade,
+                'uschedule' => $schedule,
+            ],
+        ]);
+        $event->trigger();
+
+        // Audit.
+        \local_gugrades\audit::write($courseid, 0, 0, 'Conversion map written "' . $name . '"');
+
         return ['mapid' => $mapid];
     }
 
