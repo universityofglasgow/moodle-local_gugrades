@@ -1,5 +1,5 @@
 <template>
-    <FormKit v-if="loaded" type="form" @submit="submit_form">
+    <FormKit v-if="loaded" type="form" submit-label="Save" @submit="submit_form">
         <FormKit
             type="text"
             outer-class="mb-3"
@@ -75,7 +75,9 @@
                 ></FormKit>
             </div>   
         </div>
+        <button class="btn btn-warning float-right" @click="cancel_button">{{ mstrings.cancel }}</button>
     </FormKit>
+   
 </template>
 
 <script setup>
@@ -254,6 +256,13 @@
             window.console.error(error);
             toast.error('Error communicating with server (see console)');
         }); 
+    }
+
+    /**
+     * Cancel button pressed
+     */
+    function cancel_button() {
+        emits('close');
     }
 
     /**
