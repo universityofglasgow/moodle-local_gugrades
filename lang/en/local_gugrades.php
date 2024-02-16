@@ -62,6 +62,7 @@ $string['csvuploadhelp'] = 'Select and upload your CSV file';
 $string['current'] = 'Current';
 $string['date'] = 'Date';
 $string['delete'] = 'Delete';
+$string['deletemapconfirm'] = 'Do you really want to delete the conversion map (this cannot be undone)?';
 $string['description'] = 'Description';
 $string['discrepancy'] = 'Discrepancy';
 $string['edit'] = 'Edit';

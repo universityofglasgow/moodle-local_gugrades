@@ -59,6 +59,7 @@ $services = [
             'local_gugrades_get_conversion_maps',
             'local_gugrades_get_conversion_maps',
             'local_gugrades_write_conversion_map',
+            'local_gugrades_delete_conversion_map',
         ],
         'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,
@@ -239,7 +240,7 @@ $functions = [
     ],
     'local_gugrades_get_conversion_maps' => [
         'classname' => 'local_gugrades\external\get_conversion_maps',
-        'description' => 'Read conversion maps for course.',
+        'description' => 'Read all conversion maps for course.',
         'type' => 'read',
         'ajax' => true,
     ],
@@ -252,7 +253,14 @@ $functions = [
     'local_gugrades_write_conversion_map' => [
         'classname' => 'local_gugrades\external\write_conversion_map',
         'capabilities' => 'local/gugrades:editconversionmaps',
-        'description' => 'Edit/delete conversion map.',
+        'description' => 'Write conversion map.',
+        'type' => 'write',
+        'ajax' => true,
+    ],
+    'local_gugrades_delete_conversion_map' => [
+        'classname' => 'local_gugrades\external\delete_conversion_map',
+        'capabilities' => 'local/gugrades:editconversionmaps',
+        'description' => 'Delete conversion map.',
         'type' => 'write',
         'ajax' => true,
     ],
