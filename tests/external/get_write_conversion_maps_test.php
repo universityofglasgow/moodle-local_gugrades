@@ -131,5 +131,17 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
             get_conversion_map::execute_returns(),
             $mapstuff
         );
+
+        // Delete map
+        $success = delete_conversion_map::execute($this->course->id, $mapid);
+        $success = \external_api::clean_returnvalue(
+            delete_conversion_map::execute_returns(),
+            $success
+        );
+
+        // Try to read it again (should fail)
+        $this->expectException('dml_missing_record_exception');
+        $mapstuff = get_conversion_map::execute($this->course->id, $mapid, 'schedulea');
+        
     }
 }

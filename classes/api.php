@@ -1106,4 +1106,14 @@ class api {
 
         return $mapid;
     }
+
+    /**
+     * Delete conversion map
+     * @param int $courseid
+     * @param int $mapid
+     * @return bool
+     */
+    public static function delete_conversion_map(int $courseid, int $mapid) {
+        return \local_gugrades\conversion::delete_conversion_map($courseid, $mapid);
+    }
 }

@@ -170,7 +170,7 @@ class conversion {
             }
 
             // Write main record.
-            // Name is the only thing you can change
+            // Name is the only thing you can change.
             $mapinfo->name = $name;
             $mapinfo->timemodified = time();
             $DB->update_record('local_gugrades_map', $mapinfo);
@@ -199,5 +199,30 @@ class conversion {
         }
 
         return $newmapid;
+    }
+
+    /**
+     * Delete conversion map
+     * @param int $courseid
+     * @param int $mapid
+     * @return bool
+     */
+    public static function delete_conversion_map(int $courseid, int $mapid) {
+        global $DB;
+
+        // Can't delete if it's being used.
+        if (self::inuse($mapid)) {
+            return false;
+        }
+
+        $mapinfo = $DB->get_record('local_gugrades_map', ['id' => $mapid], '*', MUST_EXIST);
+        if ($courseid != $mapinfo->courseid) {
+            throw new \moodle_exception('courseid does not match ' . $courseid);
+        }
+
+        $DB->delete_records('local_gugrades_map_value', ['mapid' => $mapid]);
+        $DB->delete_records('local_gugrades_map', ['id' => $mapid]);
+
+        return true;
     }
 }
