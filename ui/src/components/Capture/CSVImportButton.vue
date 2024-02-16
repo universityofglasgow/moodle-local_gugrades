@@ -165,7 +165,7 @@
             addcount.value = result.addcount;
             pagestate.value = 'showtestrun';
             if (!testrun) {
-                toast.success(mstrings.csvgradesadd + ' (' + addcount.value + ')');
+                toast.success(mstrings.csvgradesadded + ' (' + addcount.value + ')');
                 emits('uploaded');
                 close_modal();
             }
