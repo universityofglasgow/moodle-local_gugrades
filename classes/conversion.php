@@ -96,10 +96,10 @@ class conversion {
             throw new \moodle_exception('Invalid schedule specified in get_default map - "' . $schedule . '"');
         }
 
-        // Get scale
+        // Get scale.
         $scaleitems = self::get_scale($schedule);
 
-        // Unpack defaults
+        // Unpack defaults.
         $defaultpoints = array_map('trim', explode(',', $default));
         array_unshift($defaultpoints, 0);
 
@@ -166,7 +166,7 @@ class conversion {
         int $courseid, int $mapid, string $name, string $schedule, float $maxgrade, array $map): int {
         global $DB, $USER;
 
-        // check schedule.
+        // Check schedule.
         if (($schedule != 'schedulea') && ($schedule != 'scheduleb')) {
             throw new \moodle_exception('Schedule parameter must be "schedulea" or "scheduleb".');
         }

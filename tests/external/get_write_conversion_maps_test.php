@@ -107,7 +107,6 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
             $mapstuff
         );
 
-
         // Write map back.
         $name = 'Test conversion map';
         $schedule = 'schedulea';
@@ -124,7 +123,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         $mapinfo = $DB->get_record('local_gugrades_map', ['id' => $mapid], '*', MUST_EXIST);
         $this->assertEquals('Test conversion map', $mapinfo->name);
 
-        // Check map values
+        // Check map values.
         $values = array_values($DB->get_records('local_gugrades_map_value', ['mapid' => $mapid]));
         $this->assertCount(23, $values);
         $this->assertEquals(92, $values[22]->percentage);
@@ -164,7 +163,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
             $mapstuff
         );
 
-        // Write map back
+        // Write map back.
         $name = 'Test conversion map B';
         $schedule = 'scheduleb';
         $maxgrade = 100.0;
