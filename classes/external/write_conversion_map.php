@@ -55,7 +55,7 @@ class write_conversion_map extends \external_api {
                     'bound' => new external_value(PARAM_FLOAT, 'Lower boundary for this band (as a percentage)'),
                     'grade' => new external_value(PARAM_INT, 'Grade point'),
                 ])
-            )
+            ),
         ]);
     }
 

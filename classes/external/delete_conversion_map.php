@@ -71,7 +71,6 @@ class delete_conversion_map extends \external_api {
 
         $success = \local_gugrades\api::delete_conversion_map($courseid, $mapid);
 
-
         // Log.
         $event = \local_gugrades\event\delete_conversion_map::create([
             'objectid' => $mapid,

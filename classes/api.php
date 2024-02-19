@@ -1074,8 +1074,8 @@ class api {
      * @return int
      */
     public static function get_conversion_map(int $courseid, int $mapid, string $schedule): array {
-        
-        // If mapid = 0, then get the new/default map
+
+        // If mapid = 0, then get the new/default map.
         if ($mapid == 0) {
             $map = \local_gugrades\conversion::get_default_map($schedule);
 
@@ -1101,7 +1101,8 @@ class api {
      * @param array map
      * @return array
      */
-    public static function write_conversion_map(int $courseid, int $mapid, string $name, string $schedule, float $maxgrade, array $map): int {
+    public static function write_conversion_map(
+        int $courseid, int $mapid, string $name, string $schedule, float $maxgrade, array $map): int {
         $mapid = \local_gugrades\conversion::write_conversion_map($courseid, $mapid, $name, $schedule, $maxgrade, $map);
 
         return $mapid;

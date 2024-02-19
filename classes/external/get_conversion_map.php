@@ -46,7 +46,7 @@ class get_conversion_map extends \external_api {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
             'mapid' => new external_value(PARAM_INT, 'Map ID - 0 for new/default map'),
-            'schedule' => new external_value(PARAM_ALPHA, 'schedulea or scheduleb - only when mapid = 0')
+            'schedule' => new external_value(PARAM_ALPHA, 'schedulea or scheduleb - only when mapid = 0'),
         ]);
     }
 
@@ -92,7 +92,7 @@ class get_conversion_map extends \external_api {
                     'bound' => new external_value(PARAM_FLOAT, 'Lower boundary for this band (as a percentage)'),
                     'grade' => new external_value(PARAM_INT, 'Grade point'),
                 ])
-            )
+            ),
         ]);
     }
 }

@@ -56,7 +56,7 @@ class conversion {
 
         $maps = $DB->get_records('local_gugrades_map', ['courseid' => $courseid]);
 
-        // Add created by and created at
+        // Add created by and created at.
         foreach ($maps as $map) {
             if ($user = $DB->get_record('user', ['id' => $map->userid])) {
                 $map->createdby = fullname($user);
@@ -76,7 +76,7 @@ class conversion {
      */
     public static function inuse(int $mapid) {
 
-        // TODO: Finish this
+        // TODO: Finish this.
         return false;
     }
 
@@ -87,7 +87,7 @@ class conversion {
      */
     public static function get_default_map(string $schedule) {
 
-        // Get correct default from settings
+        // Get correct default from settings.
         if ($schedule == 'schedulea') {
             $default = get_config('local_gugrades', 'mapdefault_schedulea');
         } else if ($schedule == 'scheduleb') {
@@ -103,11 +103,11 @@ class conversion {
         $defaultpoints = array_map('trim', explode(',', $default));
         array_unshift($defaultpoints, 0);
 
-        // Iterate over scale to add data
+        // Iterate over scale to add data.
         $map = [];
         foreach ($scaleitems as $grade => $band) {
 
-            // Get correct default point
+            // Get correct default point.
             $default = array_shift($defaultpoints);
             if (is_null($default)) {
                 $default = 0;
@@ -160,7 +160,8 @@ class conversion {
      * @param array map
      * @return int
      */
-    public static function write_conversion_map(int $courseid, int $mapid, string $name, string $schedule, float $maxgrade, array $map): int {
+    public static function write_conversion_map(
+        int $courseid, int $mapid, string $name, string $schedule, float $maxgrade, array $map): int {
         global $DB, $USER;
 
         // check schedule.

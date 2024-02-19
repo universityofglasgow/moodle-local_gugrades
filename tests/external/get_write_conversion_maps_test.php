@@ -38,6 +38,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
     /**
      * Check writing and reading data
+     * @covers \local_gugrades\external\get_conversion_maps::execute
      */
     public function test_conversion_maps() {
 
@@ -48,12 +49,13 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
             $maps
         );
 
-        // Empty response
+        // Empty response.
         $this->assertEmpty($maps);
     }
 
     /**
      * Check reading default map
+     * @covers \local_gugrades\external\get_conversion_map::execute
      */
     public function test_get_default_map() {
 
@@ -92,6 +94,8 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
     /**
      * Check getting then writing default map
+     * @covers \local_gugrades\external\get_conversion_map::execute
+     * @covers \local_gugrades\external\write_conversion_map::execute
      */
     public function test_read_write_default_map() {
         global $DB;
@@ -104,7 +108,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         );
 
 
-        // Write map back
+        // Write map back.
         $name = 'Test conversion map';
         $schedule = 'schedulea';
         $maxgrade = 100.0;
@@ -116,7 +120,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         );
         $mapid = $mapid['mapid'];
 
-        // Check map table
+        // Check map table.
         $mapinfo = $DB->get_record('local_gugrades_map', ['id' => $mapid], '*', MUST_EXIST);
         $this->assertEquals('Test conversion map', $mapinfo->name);
 
@@ -132,23 +136,25 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
             $mapstuff
         );
 
-        // Delete map
+        // Delete map.
         $success = delete_conversion_map::execute($this->course->id, $mapid);
         $success = \external_api::clean_returnvalue(
             delete_conversion_map::execute_returns(),
             $success
         );
 
-        // Try to read it again (should fail)
+        // Try to read it again (should fail).
         $this->expectException('dml_missing_record_exception');
         $mapstuff = get_conversion_map::execute($this->course->id, $mapid, 'schedulea');
-        
+
     }
 
     /**
      * Similar to above but for ScheduleB
+     * @covers \local_gugrades\external\get_conversion_map::execute
+     * @covers \local_gugrades\external\write_conversion_map::execute
      */
-    public function test_read_write_scgeduleb() {
+    public function test_read_write_scheduleb() {
         global $DB;
 
         // Read map with id 0 (new map) for Schedule B.
@@ -177,6 +183,6 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
             $mapstuff
         );
 
-        $this->assertEquals('schedulea', $mapstuff['schedule']);
+        $this->assertEquals('scheduleb', $mapstuff['schedule']);
     }
 }
