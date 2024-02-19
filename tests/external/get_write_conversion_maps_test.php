@@ -144,4 +144,39 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         $mapstuff = get_conversion_map::execute($this->course->id, $mapid, 'schedulea');
         
     }
+
+    /**
+     * Similar to above but for ScheduleB
+     */
+    public function test_read_write_scgeduleb() {
+        global $DB;
+
+        // Read map with id 0 (new map) for Schedule B.
+        $mapstuff = get_conversion_map::execute($this->course->id, 0, 'scheduleb');
+        $mapstuff = \external_api::clean_returnvalue(
+            get_conversion_map::execute_returns(),
+            $mapstuff
+        );
+
+        // Write map back
+        $name = 'Test conversion map B';
+        $schedule = 'scheduleb';
+        $maxgrade = 100.0;
+        $map = $mapstuff['map'];
+        $mapid = write_conversion_map::execute($this->course->id, 0, $name, $schedule, $maxgrade, $map);
+        $mapid = \external_api::clean_returnvalue(
+            write_conversion_map::execute_returns(),
+            $mapid
+        );
+        $mapid = $mapid['mapid'];
+
+        // Read back uploaded map.
+        $mapstuff = get_conversion_map::execute($this->course->id, $mapid, 'scheduleb');
+        $mapstuff = \external_api::clean_returnvalue(
+            get_conversion_map::execute_returns(),
+            $mapstuff
+        );
+
+        $this->assertEquals('schedulea', $mapstuff['schedule']);
+    }
 }

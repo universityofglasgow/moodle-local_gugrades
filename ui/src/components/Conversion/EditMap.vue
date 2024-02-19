@@ -283,7 +283,7 @@
         }])[0]
         .then((result) => {
             mapname.value = result.name;
-            //scaletype.value = result.scaletype;
+            scaletype.value = result.schedule;
             maxgrade.value = result.maxgrade;
             rawmap.value = result.map;
 

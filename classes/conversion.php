@@ -163,6 +163,11 @@ class conversion {
     public static function write_conversion_map(int $courseid, int $mapid, string $name, string $schedule, float $maxgrade, array $map): int {
         global $DB, $USER;
 
+        // check schedule.
+        if (($schedule != 'schedulea') && ($schedule != 'scheduleb')) {
+            throw new \moodle_exception('Schedule parameter must be "schedulea" or "scheduleb".');
+        }
+
         if ($mapid) {
             $mapinfo = $DB->get_record('local_gugrades_map', ['id' => $mapid], '*', MUST_EXIST);
             if ($courseid != $mapinfo->courseid) {
