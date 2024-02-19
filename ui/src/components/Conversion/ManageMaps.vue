@@ -12,7 +12,7 @@
                 <template #item-actions="map">
                     <button class="btn btn-success btn-sm mr-1" @click="edit_clicked(map.id)">{{ mstrings.edit }}</button>
                     <button class="btn btn-danger btn-sm mr-1" :class="{ disabled: map.inuse }" @click="delete_clicked(map.id)">{{ mstrings.delete }}</button>
-                    <button class="btn btn-info btn-sm mr-1">{{ mstrings.export }}</button>
+                    <button class="btn btn-info btn-sm mr-1" @click="export_clicked(map.id)">{{ mstrings.export }}</button>
                 </template>
             </EasyDataTable>
 
@@ -36,6 +36,7 @@
     import { useToast } from "vue-toastification";
     import EditMap from '@/components/Conversion/EditMap.vue';
     import ConfirmModal from '@/components/ConfirmModal.vue';
+    import { saveAs } from 'file-saver';
 
     const maps = ref([]);
     const editmap = ref(false);
@@ -87,6 +88,35 @@
     function editmap_closed() {
         editmap.value = false;
         get_maps();
+    }
+
+    /**
+     * Export button was clicked
+     */
+    function export_clicked(mapid) {
+        const GU = window.GU;
+        const courseid = GU.courseid;
+        const fetchMany = GU.fetchMany;
+
+        fetchMany([{
+            methodname: 'local_gugrades_get_conversion_map',
+            args: {
+                courseid: courseid,
+                mapid: mapid,
+                schedule: '',
+            }
+        }])[0]
+        .then((result) => {
+            const json = JSON.stringify(result, null, 4);
+            const filename = result.name + '.json';
+            const blob = new Blob([json], {type: 'text/json;charset=utf-8'});
+            saveAs(blob, filename);
+            toast.success('Map exported');
+        })
+        .catch((error) => {
+            window.console.error(error);
+            toast.error('Error communicating with server (see console)');
+        });
     }
 
     /**
