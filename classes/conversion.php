@@ -153,6 +153,28 @@ class conversion {
     }
 
     /**
+     * Find unique name
+     * Add (n) on the end until it is
+     * @param string $name
+     * @return string
+     */
+    protected static function unique_name(string $name) {
+        global $DB;
+
+        $sql = 'select * from {local_gugrades_map} where `name`=:name';
+        if (!$DB->record_exists_sql($sql, ['name' => $name])) {
+            return $name;
+        }
+
+        $count = 1;
+        while ($DB->record_exists_sql($sql, ['name' => $name . ' (' . $count . ')'])) {
+            $count++;
+        }
+
+        return $name . '(' . $count . ')';
+    }
+
+    /**
      * Write conversion map, mapid=0 means a new one
      * @param int $courseid
      * @param int $mapid
@@ -179,7 +201,7 @@ class conversion {
 
             // Write main record.
             // Name is the only thing you can change.
-            $mapinfo->name = $name;
+            $mapinfo->name = self::unique_name($name);
             $mapinfo->timemodified = time();
             $DB->update_record('local_gugrades_map', $mapinfo);
 
@@ -188,7 +210,7 @@ class conversion {
         } else {
             $mapinfo = new \stdClass();
             $mapinfo->courseid = $courseid;
-            $mapinfo->name = $name;
+            $mapinfo->name = self::unique_name($name);
             $mapinfo->scale = $schedule;
             $mapinfo->maxgrade = $maxgrade;
             $mapinfo->userid = $USER->id;
