@@ -53,8 +53,7 @@ class delete_conversion_map extends \external_api {
      * Execute function
      * @param int $courseid
      * @param int $mapid
-     * @param string $schedule
-     * @return boolean
+     * @return array
      */
     public static function execute($courseid, $mapid) {
         global $DB;

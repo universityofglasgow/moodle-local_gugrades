@@ -159,7 +159,7 @@ class conversion {
      * @param string $name
      * @param string $schedule
      * @param float $maxgrade
-     * @param array map
+     * @param array $map
      * @return int
      */
     public static function write_conversion_map(
