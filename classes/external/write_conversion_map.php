@@ -66,7 +66,7 @@ class write_conversion_map extends \external_api {
      * @param string $name
      * @param string $schedule
      * @param float $maxgrade
-     * @param array map
+     * @param array $map
      * @return int
      */
     public static function execute($courseid, $mapid, $name, $schedule, $maxgrade, $map) {
