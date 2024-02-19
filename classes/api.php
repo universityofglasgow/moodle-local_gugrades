@@ -1117,4 +1117,14 @@ class api {
     public static function delete_conversion_map(int $courseid, int $mapid) {
         return \local_gugrades\conversion::delete_conversion_map($courseid, $mapid);
     }
+
+    /**
+     * Import conversion map (as a new one)
+     * @param int $courseid
+     * @param string $jsonmap
+     * @return int
+     */
+    public static function import_conversion_map(int $courseid, string $jsonmap) {
+        return \local_gugrades\conversion::import_conversion_map($courseid, $jsonmap);
+    }
 }

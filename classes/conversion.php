@@ -233,4 +233,26 @@ class conversion {
 
         return true;
     }
+
+
+    /**
+     * Import conversion map (as a new one)
+     * @param int $courseid
+     * @param string $jsonmap
+     * @return int
+     */
+    public static function import_conversion_map(int $courseid, string $jsonmap) {
+
+        // Is JSON valid?
+        if (!$mapinfo = json_decode($jsonmap, true)) {
+            throw new \moodle_exception('Invalid JSON');
+        }
+
+        $map = $mapinfo['map'];
+        //var_dump($map); die;
+
+        $mapid = self::write_conversion_map($courseid, 0, $mapinfo['name'], $mapinfo['schedule'], $mapinfo['maxgrade'], $map);
+
+        return $mapid;
+    }
 }

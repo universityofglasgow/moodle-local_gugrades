@@ -17,7 +17,8 @@
             </EasyDataTable>
 
             <div class="mt-4">
-                <button class="btn btn-primary" @click="add_map">{{ mstrings.addconversionmap }}</button>
+                <button class="btn btn-primary mr-1" @click="add_map">{{ mstrings.addconversionmap }}</button>
+                <button class="btn btn-info" @click="import_clicked">{{ mstrings.importconversionmap }}</button>
             </div>
         </div>
 
@@ -29,6 +30,26 @@
 
     <!-- Modal for delete confirm -->
     <ConfirmModal :show="showconfirm" :message="mstrings.deletemapconfirm" @confirm="confirmdelete"></ConfirmModal>
+
+    <!-- Model for map upload -->
+    <VueModal v-model="showimportmodal" modalClass="col-11 col-lg-6 rounded" :title="mstrings.importconversionmap">
+        <div class="p-4 mb-3 border rounded">
+            <button class="btn btn-primary mr-1" type="button" @click="open()">
+                Choose files
+            </button>
+            <button class="btn btn-warning" type="button" :disabled="!files" @click="reset()">
+                Reset
+            </button>
+            <div class="mt-2" v-if="files">
+                <p>You have selected: <b>{{ `${files.length} ${files.length === 1 ? 'file' : 'files'}` }}</b></p>
+                <li v-for="file of files" :key="file.name">
+                    {{ file.name }}
+                </li>
+            </div>
+        </div>
+        <button class="btn btn-info mr-1" @click="process_import">{{ mstrings.import }}</button>
+        <button class="btn btn-warning" @click="showimportmodal = false">{{ mstrings.cancel }}</button>
+    </VueModal>
 </template>
 
 <script setup>
@@ -37,6 +58,7 @@
     import EditMap from '@/components/Conversion/EditMap.vue';
     import ConfirmModal from '@/components/ConfirmModal.vue';
     import { saveAs } from 'file-saver';
+    import { useFileDialog } from '@vueuse/core';
 
     const maps = ref([]);
     const editmap = ref(false);
@@ -44,11 +66,25 @@
     const loaded = ref(false);
     const showconfirm = ref(false);
     const deletemapid = ref(0);
+    const showimportmodal = ref(false);
     const mstrings = inject('mstrings');
 
     const toast = useToast();
 
     const headers = ref([]);
+
+    const { files, open, reset, onChange } = useFileDialog({
+        accept: 'text/json', // Set to accept only json files
+        multiple: false,
+        directory: false, // Select directories instead of files if set true
+    })
+
+    /**
+     * Process import file
+     */
+     onChange((files) => {
+        window.console.log(files);
+    });
 
     /**
      * Get/update the maps
@@ -80,6 +116,58 @@
     function edit_clicked(mapid) {
         editmapid.value = mapid;
         editmap.value = true;
+    }
+
+    /**
+     * Import button clicked
+     */
+    function import_clicked() {
+        showimportmodal.value = true;
+    }
+
+    /**
+     * Import json map
+     */
+    function process_json(jsonmap) {
+        const GU = window.GU;
+        const courseid = GU.courseid;
+        const fetchMany = GU.fetchMany;
+
+        fetchMany([{
+            methodname: 'local_gugrades_import_conversion_map',
+            args: {
+                courseid: courseid,
+                jsonmap: jsonmap
+            }
+        }])[0]
+        .then(() => {
+            get_maps();
+        })
+        .catch((error) => {
+            window.console.error(error);
+            toast.error('Error communicating with server (see console)');
+        });
+    }
+
+    /**
+     * Import button on modal clicked
+     * Proces selected file.
+     */
+    function process_import() {
+        if (!files.value) {
+            toast.warning('No file to import');
+            return;
+        }
+
+        const file = files.value[0];
+        const reader = new FileReader();
+        reader.addEventListener('load', (event) => {
+            const jsondata = event.target.result;
+
+            process_json(jsondata);
+            showimportmodal.value = false;
+        });
+        reader.readAsText(file);
     }
 
     /**

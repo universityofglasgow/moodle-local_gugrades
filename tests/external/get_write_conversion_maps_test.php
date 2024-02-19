@@ -184,4 +184,78 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         $this->assertEquals('scheduleb', $mapstuff['schedule']);
     }
+
+    /**
+     * Test import json
+     * @covers \local_gugrades\external\get_conversion_map::execute
+     * @covers \local_gugrades\external\write_conversion_map::execute
+     */
+    public function test_import_json() {
+        global $DB;
+
+        $jsonmap = '{
+            "name": "Test import map",
+            "schedule": "scheduleb",
+            "maxgrade": 100,
+            "inuse": false,
+            "map": [
+                {
+                    "band": "H",
+                    "bound": 0,
+                    "grade": 0
+                },
+                {
+                    "band": "G0",
+                    "bound": 9,
+                    "grade": 2
+                },
+                {
+                    "band": "F0",
+                    "bound": 19,
+                    "grade": 5
+                },
+                {
+                    "band": "E0",
+                    "bound": 29,
+                    "grade": 8
+                },
+                {
+                    "band": "D0",
+                    "bound": 39,
+                    "grade": 11
+                },
+                {
+                    "band": "C0",
+                    "bound": 53,
+                    "grade": 14
+                },
+                {
+                    "band": "B0",
+                    "bound": 59,
+                    "grade": 17
+                },
+                {
+                    "band": "A0",
+                    "bound": 69,
+                    "grade": 22
+                }
+            ]
+        }';
+
+        $mapid = import_conversion_map::execute($this->course->id, $jsonmap);
+        $mapid = \external_api::clean_returnvalue(
+            import_conversion_map::execute_returns(),
+            $mapid
+        );
+        $mapid = $mapid['mapid'];
+
+        // Read back uploaded map.
+        $mapstuff = get_conversion_map::execute($this->course->id, $mapid, '');
+        $mapstuff = \external_api::clean_returnvalue(
+            get_conversion_map::execute_returns(),
+            $mapstuff
+        );
+
+        $this->assertEquals('Test import map', $mapstuff['name']);
+    }
 }

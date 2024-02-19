@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Define function write_conversion_map
+ * Define function import_conversion_map
  * @package    local_gugrades
  * @copyright  2024
  * @author     Howard Miller
@@ -34,9 +34,9 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/externallib.php');
 
 /**
- * Write single map
+ * Import a single map
  */
-class write_conversion_map extends \external_api {
+class import_conversion_map extends \external_api {
 
     /**
      * Define function parameters
@@ -45,63 +45,40 @@ class write_conversion_map extends \external_api {
     public static function execute_parameters() {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
-            'mapid' => new external_value(PARAM_INT, 'Map ID. 0 if new'),
-            'name' => new external_value(PARAM_TEXT, 'Conversion map name'),
-            'schedule' => new external_value(PARAM_ALPHA, 'schedulea or scheduleb'),
-            'maxgrade' => new external_value(PARAM_FLOAT, 'Maximum grade value'),
-            'map' => new external_multiple_structure(
-                new external_single_structure([
-                    'band' => new external_value(PARAM_ALPHANUM, 'Scale band - A1, A2 etc'),
-                    'bound' => new external_value(PARAM_FLOAT, 'Lower boundary for this band (as a percentage)'),
-                    'grade' => new external_value(PARAM_INT, 'Grade point'),
-                ])
-            ),
+            'jsonmap' => new external_value(PARAM_TEXT, 'New map in json format'),
         ]);
     }
 
     /**
      * Execute function
      * @param int $courseid
-     * @param int $mapid
-     * @param string $name
-     * @param string $schedule
-     * @param float $maxgrade
-     * @param array $map
+     * @param string $jsonmap
      * @return int
      */
-    public static function execute($courseid, $mapid, $name, $schedule, $maxgrade, $map) {
+    public static function execute($courseid, $jsonmap) {
         global $DB;
 
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
             'courseid' => $courseid,
-            'mapid' => $mapid,
-            'name' => $name,
-            'schedule' => $schedule,
-            'maxgrade' => $maxgrade,
-            'map' => $map,
+            'jsonmap' => $jsonmap,
         ]);
 
         // More security.
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        $mapid = \local_gugrades\api::write_conversion_map($courseid, $mapid, $name, $schedule, $maxgrade, $map);
+        $mapid = \local_gugrades\api::import_conversion_map($courseid, $jsonmap);
 
         // Log.
-        $event = \local_gugrades\event\edit_conversion_map::create([
+        $event = \local_gugrades\event\import_conversion_map::create([
             'objectid' => $mapid,
             'context' => \context_course::instance($courseid),
-            'other' => [
-                'name' => $name,
-                'maxgrade' => $maxgrade,
-                'uschedule' => $schedule,
-            ],
         ]);
         $event->trigger();
 
         // Audit.
-        \local_gugrades\audit::write($courseid, 0, 0, 'Conversion map written "' . $name . '"');
+        \local_gugrades\audit::write($courseid, 0, 0, 'Conversion map imported. ID = ' . $mapid);
 
         return ['mapid' => $mapid];
     }
