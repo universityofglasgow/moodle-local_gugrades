@@ -73,18 +73,11 @@
 
     const headers = ref([]);
 
-    const { files, open, reset, onChange } = useFileDialog({
+    const { files, open, reset } = useFileDialog({
         accept: 'text/json', // Set to accept only json files
         multiple: false,
         directory: false, // Select directories instead of files if set true
     })
-
-    /**
-     * Process import file
-     */
-     onChange((files) => {
-        window.console.log(files);
-    });
 
     /**
      * Get/update the maps
@@ -122,6 +115,10 @@
      * Import button clicked
      */
     function import_clicked() {
+
+        // Clear any list of import files
+        reset();
+
         showimportmodal.value = true;
     }
 
@@ -219,6 +216,7 @@
             {text: mstrings.createdat, value: 'createdat'},
             {text: '', value: 'actions'},
         ];
+
         get_maps();
     });
 
