@@ -1099,7 +1099,7 @@ class api {
      * @param string $schedule
      * @param float $maxgrade
      * @param array map
-     * @return array
+     * @return int
      */
     public static function write_conversion_map(
         int $courseid, int $mapid, string $name, string $schedule, float $maxgrade, array $map): int {

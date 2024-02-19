@@ -125,6 +125,8 @@ class conversion {
 
     /**
      * Get existing map for edit page
+     * @param int $mapid
+     * @return array
      */
     public static function get_map_for_editing(int $mapid) {
         global $DB;
