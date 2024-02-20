@@ -161,7 +161,7 @@ class conversion {
     protected static function unique_name(string $name) {
         global $DB;
 
-        $sql = 'select * from {local_gugrades_map} where `name`=:name';
+        $sql = 'select * from {local_gugrades_map} where ' . $DB->sql_compare_text('name') . ' = :name';
         if (!$DB->record_exists_sql($sql, ['name' => $name])) {
             return $name;
         }
