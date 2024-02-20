@@ -270,8 +270,12 @@ class conversion {
             throw new \moodle_exception('Invalid JSON');
         }
 
+        // Sanity checks.
+        if (!array_key_exists('map', $mapinfo) || !array_key_exists('name', $mapinfo) || !array_key_exists('schedule', $mapinfo)) {
+            throw new \moodle_exeption('Required fields missing in JSON');
+        }
+
         $map = $mapinfo['map'];
-        //var_dump($map); die;
 
         $mapid = self::write_conversion_map($courseid, 0, $mapinfo['name'], $mapinfo['schedule'], $mapinfo['maxgrade'], $map);
 
