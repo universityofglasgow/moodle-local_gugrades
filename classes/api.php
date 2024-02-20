@@ -870,6 +870,7 @@ class api {
         // Get basic list of enrolments for this user.
         $additionalfields = [
             'enddate',
+            'showgrades',
         ];
         if (!$sort) {
             $sort = null;
@@ -880,6 +881,12 @@ class api {
         // and also add TL grade category data.
         foreach ($courses as $id => $course) {
             $context = \context_course::instance($id);
+
+            // Skip courses with showgrades == 0.
+            if (!$course->showgrades) {
+                unset($courses[$id]);
+                continue;
+            }
 
             // Current/past cutoff is enddate + 30 days.
             $cutoffdate = $course->enddate + (86400 * 30);
