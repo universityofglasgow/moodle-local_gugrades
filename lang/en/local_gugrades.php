@@ -125,6 +125,7 @@ $string['importinfo'] = 'Grades will be imported from selected actvity. Do you w
 $string['importinfogroup'] = 'NOTE: Grades will only be imported for the selected group.';
 $string['importnomatch'] = 'WARNING: Grade configurations should be the same for all items you intent to import. They are not. Please check if you choose to continue.';
 $string['importusergrade'] = 'Import grade';
+$string['inuse'] = 'In use?';
 $string['invalidgradetype'] = 'One of the peers or children of this grade item has an invalid grade type. Recursive import is not possible.';
 $string['itemname'] = 'Item name';
 $string['lastmodifiedgrade'] = 'Last modified (grade)';

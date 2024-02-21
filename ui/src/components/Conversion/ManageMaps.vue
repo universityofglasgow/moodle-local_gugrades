@@ -9,6 +9,10 @@
             </div>
 
             <EasyDataTable v-if="loaded" :headers="headers" :items="maps">
+                <template #item-inuse="map">
+                    <span v-if="map.inuse">{{ mstrings.yes }}</span>
+                    <span v-else>{{ mstrings.no }}</span>
+                </template>
                 <template #item-actions="map">
                     <button class="btn btn-success btn-sm mr-1" @click="edit_clicked(map.id)">{{ mstrings.edit }}</button>
                     <button class="btn btn-danger btn-sm mr-1" :class="{ disabled: map.inuse }" :disabled="map.inuse" @click="delete_clicked(map.id)">{{ mstrings.delete }}</button>
@@ -214,6 +218,7 @@
             {text: mstrings.maxgrade, value: 'maxgrade'},
             {text: mstrings.createdby, value: 'createdby'},
             {text: mstrings.createdat, value: 'createdat'},
+            {text: mstrings.inuse, value: 'inuse'},
             {text: '', value: 'actions'},
         ];
 
