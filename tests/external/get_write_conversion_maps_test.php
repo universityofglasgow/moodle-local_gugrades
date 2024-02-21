@@ -287,14 +287,14 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         );
         $mapid = $mapid['mapid'];
 
-        // Select this map
+        // Select this map.
         $nothing = select_conversion::execute($this->course->id, $this->gradeitemidassign1, $mapid);
         $nothing = \external_api::clean_returnvalue(
             select_conversion::execute_returns(),
             $nothing
         );
 
-        // Check it wrote
+        // Check it wrote.
         $mapitems = array_values($DB->get_records('local_gugrades_map_item'));
         $this->assertEquals($this->course->id, $mapitems[0]->courseid);
         $this->assertEquals($this->gradeitemidassign1, $mapitems[0]->gradeitemid);
