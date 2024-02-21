@@ -123,6 +123,7 @@ class get_capture_page extends \external_api {
             'gradesimported' => new external_value(PARAM_BOOL, 'Have the grades been imported for this grade item?'),
             'gradehidden' => new external_value(PARAM_BOOL, 'Is grade item hidden in gradebook?'),
             'gradelocked' => new external_value(PARAM_BOOL, 'Is grade item locked in gradebook?'),
+            'showconversion' => new external_value(PARAM_BOOL, 'Should the conversion button be displayed?'),
         ]);
     }
 

@@ -67,6 +67,7 @@ class api {
                 'gradesimported' => false,
                 'gradehidden' => false,
                 'gradelocked' => false,
+                'showconversion' => false,
             ];
         }
 
@@ -77,6 +78,9 @@ class api {
         $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid, $groupid);
         $activity->set_name_filter($firstname, $lastname);
         $activity->set_viewfullnames($viewfullnames);
+
+        // Should the conversion button be shown
+        $showconversion = \local_gugrades\grades::showconversion($gradeitemid);
 
         // Get list of users.
         // Will be everybody for 'manual' grades or filtered list for modules.
@@ -96,6 +100,7 @@ class api {
             'gradesimported' => $gradesimported,
             'gradehidden' => $gradehidden ? true : false,
             'gradelocked' => $gradelocked ? true : false,
+            'showconversion' => $showconversion,
         ];
     }
 

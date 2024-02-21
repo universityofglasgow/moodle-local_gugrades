@@ -6,6 +6,7 @@
         <ReleaseButton v-if="props.gradesimported" :gradeitemid="props.itemid" :groupid="props.groupid" @released="emit('refreshtable')"></ReleaseButton>
         <ExportWorksheetButton v-if="itemtype=='assign'" :users="props.users" :itemtype="props.itemtype" :itemname="props.itemname"></ExportWorksheetButton>
         <ViewFullNamesButton v-if="props.usershidden"  @viewfullnames="viewfullnames"></ViewFullNamesButton>
+        <ConversionButton v-if="showconversion" :itemid="props.itemid"></ConversionButton>
     </div>
 </template>
 
@@ -17,6 +18,7 @@
     import ExportWorksheetButton from '@/components/Capture/ExportWorksheetButton.vue';
     import ViewFullNamesButton from '@/components/Capture/ViewFullNamesButton.vue';
     import AddMultipleButton from '@/components/Capture/AddMultipleButton.vue';
+    import ConversionButton from '@/components/Capture/ConversionButton.vue';
 
     const props = defineProps({
         itemid: Number,
@@ -27,6 +29,7 @@
         itemname: String,
         usershidden: Boolean,
         gradesimported: Boolean,
+        showconversion: Boolean,
     });
 
     const emit = defineEmits(['viewfullnames', 'refreshtable', 'editcolumn']);

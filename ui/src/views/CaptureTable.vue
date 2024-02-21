@@ -29,6 +29,7 @@
                         :itemname="itemname"
                         :usershidden="usershidden"
                         :gradesimported="gradesimported"
+                        :showconversion="showconversion"
                         @refreshtable="refresh"
                         @viewfullnames="viewfullnames"
                         @editcolumn="editcog_clicked"
@@ -177,6 +178,7 @@
     const editother = ref('');
     const editnotes = ref('');
     const editcancelled = ref(false);
+    const showconversion = ref(false);
 
     const toast = useToast();
 
@@ -433,6 +435,7 @@
             columns.value = result['columns'];
             userids.value = users.value.map(u => u.id);
             totalrows.value = users.value.length;
+            showconversion.value = result.showconversion;
 
             users.value = add_grades(users.value, columns.value);
 
