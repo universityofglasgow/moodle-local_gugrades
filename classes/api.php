@@ -1139,4 +1139,14 @@ class api {
     public static function import_conversion_map(int $courseid, string $jsonmap) {
         return \local_gugrades\conversion::import_conversion_map($courseid, $jsonmap);
     }
+
+    /**
+     * Select conversion (map).
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param int $mapid
+     */
+    public static function select_conversion(int $courseid, int $gradeitemid, int $mapid) {
+        \local_gugrades\conversion::select_conversion($courseid, $gradeitemid, $mapid);
+    }
 }

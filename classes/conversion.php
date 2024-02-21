@@ -281,4 +281,31 @@ class conversion {
 
         return $mapid;
     }
+
+        /**
+     * Select conversion (map).
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param int $mapid
+     */
+    public static function select_conversion(int $courseid, int $gradeitemid, int $mapid) {
+        global $DB, $USER;
+
+        $mapinfo = $DB->get_record('local_gugrades_map', ['id' => $mapid], '*', MUST_EXIST);
+        if ($courseid != $mapinfo->courseid) {
+            throw new \moodle_exception('courseid does not match ' . $courseid);
+        }
+
+        // Set link to this map
+        if (!$mapitem = $DB->get_record('local_gugrades_map_item', ['mapid' => $gradeitemid, 'gradeitemid' => $gradeitemid])) {
+            $mapitem = new \stdClass();
+            $mapitem->courseid = $courseid;
+            $mapitem->mapid = $mapid;
+            $mapitem->gradeitemid = $gradeitemid;
+            $mapitem->maxgrade = $mapinfo->maxgrade;
+            $mapitem->userid = $USER->id;
+            $mapitem->timemodified = time();
+            $DB->insert_record('local_gugrades_map_item', $mapitem);
+        }
+    }
 }
