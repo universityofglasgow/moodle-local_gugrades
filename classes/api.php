@@ -79,7 +79,7 @@ class api {
         $activity->set_name_filter($firstname, $lastname);
         $activity->set_viewfullnames($viewfullnames);
 
-        // Should the conversion button be shown
+        // Should the conversion button be shown.
         $showconversion = \local_gugrades\grades::showconversion($gradeitemid);
 
         // Get list of users.

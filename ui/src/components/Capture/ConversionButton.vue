@@ -5,7 +5,11 @@
 
     <VueModal v-model="showselectmodal" modalClass="col-11 col-lg-6 rounded" :title="mstrings.conversionselect">
 
-        <EasyDataTable class="mb-3" :items="maps" :headers="headers" :hide-footer="true">
+        <div v-if="nomaps && loaded" class="alert alert-warning">
+            {{ mstrings.nomaps }}
+        </div>
+
+        <EasyDataTable v-if="!nomaps && loaded" class="mb-3" :items="maps" :headers="headers" :hide-footer="true">
             <template #item-select="item">
                 <input type="checkbox" :value="item.id"/>
             </template>
@@ -21,6 +25,7 @@
 
     const mstrings = inject('mstrings');
     const maps = ref([]);
+    const nomaps = ref(true);
     const loaded = ref(false);
     const showselectmodal = ref(false);
 
@@ -52,6 +57,7 @@
         }])[0]
         .then((result) => {
             maps.value = result;
+            nomaps.value = maps.value.length == 0;
             loaded.value = true;
             window.console.log(maps.value);
         })

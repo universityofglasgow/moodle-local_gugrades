@@ -141,6 +141,7 @@ $string['no'] = 'No';
 $string['noaudit'] = 'No audit logs for this course';
 $string['noconversionmaps'] = 'No conversion maps have been defined. Click \'Add\' to create the first one.';
 $string['nogradestoimport'] = 'There were no grades to import.';
+$string['nomaps'] = 'No conversion maps have been defined for this course. Click the \'Conversion\' tab to create one.';
 $string['nohistory'] = 'No history';
 $string['notoplevel'] = 'Course has not been properly setup (no top-level Grade categories)';
 $string['nothingtodisplay'] = 'Nothing to display';
