@@ -75,9 +75,9 @@ class conversion {
      * @return bool
      */
     public static function inuse(int $mapid) {
+        global $DB;
 
-        // TODO: Finish this.
-        return false;
+        return $DB->record_exists('local_gugrades_map_item', ['mapid' => $mapid]);
     }
 
     /**
