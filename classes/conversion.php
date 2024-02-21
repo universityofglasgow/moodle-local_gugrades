@@ -296,7 +296,7 @@ class conversion {
             throw new \moodle_exception('courseid does not match ' . $courseid);
         }
 
-        // Set link to this map
+        // Set link to this map.
         if (!$mapitem = $DB->get_record('local_gugrades_map_item', ['mapid' => $gradeitemid, 'gradeitemid' => $gradeitemid])) {
             $mapitem = new \stdClass();
             $mapitem->courseid = $courseid;
