@@ -661,4 +661,20 @@ class grades {
         $DB->delete_records('local_gugrades_grade', ['gradeitemid' => $gradeitemid]);
         $DB->delete_records('local_gugrades_audit', ['gradeitemid' => $gradeitemid]);
     }
+
+    /**
+     * Show conversion (button)
+     * If the grade eitem is a points grade then the conversion button can be shown
+     * TODO: Figure what this means for level 2+ items
+     * @param int $gradeitemid
+     * @return boolean
+     */
+    public static function showconversion(int $gradeitemid) {
+        global $DB;
+
+        $gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
+        $gradetype = $gradeitem->gradetype;
+
+        return $gradetype == GRADE_TYPE_VALUE;
+    }
 }

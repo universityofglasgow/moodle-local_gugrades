@@ -15,19 +15,43 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Define import conversion map event
  *
  * @package    local_gugrades
- * @copyright  2022
+ * @copyright  2024
  * @author     Howard Miller
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace local_gugrades\event;
 
-$plugin->version      = 2024022100;
-$plugin->requires     = 2022041900; // Moodle 4.0.
-$plugin->component    = 'local_gugrades';
+/**
+ * Import conversion map
+ */
+class import_conversion_map extends \core\event\base {
 
-$plugin->maturity     = MATURITY_STABLE;
+    /**
+     * Initialise event
+     */
+    protected function init() {
+        $this->data['crud'] = 'c';
+        $this->data['edulevel'] = self::LEVEL_TEACHING;
+        $this->data['objecttable'] = 'local_gugrades_map';
+    }
 
+    /**
+     * Get event name
+     * @return string
+     */
+    public static function get_name() {
+        return get_string('eventimportconversionmap', 'local_gugrades');
+    }
+
+    /**
+     * Get event description
+     * @return string
+     */
+    public function get_description() {
+        return "The user with id '$this->userid' imported a conversion map with id '$this->objectid'.";
+    }
+}

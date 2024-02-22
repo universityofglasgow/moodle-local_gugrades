@@ -67,6 +67,7 @@ class api {
                 'gradesimported' => false,
                 'gradehidden' => false,
                 'gradelocked' => false,
+                'showconversion' => false,
             ];
         }
 
@@ -77,6 +78,9 @@ class api {
         $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid, $groupid);
         $activity->set_name_filter($firstname, $lastname);
         $activity->set_viewfullnames($viewfullnames);
+
+        // Should the conversion button be shown.
+        $showconversion = \local_gugrades\grades::showconversion($gradeitemid);
 
         // Get list of users.
         // Will be everybody for 'manual' grades or filtered list for modules.
@@ -96,6 +100,7 @@ class api {
             'gradesimported' => $gradesimported,
             'gradehidden' => $gradehidden ? true : false,
             'gradelocked' => $gradelocked ? true : false,
+            'showconversion' => $showconversion,
         ];
     }
 
@@ -870,6 +875,7 @@ class api {
         // Get basic list of enrolments for this user.
         $additionalfields = [
             'enddate',
+            'showgrades',
         ];
         if (!$sort) {
             $sort = null;
@@ -880,6 +886,12 @@ class api {
         // and also add TL grade category data.
         foreach ($courses as $id => $course) {
             $context = \context_course::instance($id);
+
+            // Skip courses with showgrades == 0.
+            if (!$course->showgrades) {
+                unset($courses[$id]);
+                continue;
+            }
 
             // Current/past cutoff is enddate + 30 days.
             $cutoffdate = $course->enddate + (86400 * 30);
@@ -1074,8 +1086,8 @@ class api {
      * @return int
      */
     public static function get_conversion_map(int $courseid, int $mapid, string $schedule): array {
-        
-        // If mapid = 0, then get the new/default map
+
+        // If mapid = 0, then get the new/default map.
         if ($mapid == 0) {
             $map = \local_gugrades\conversion::get_default_map($schedule);
 
@@ -1098,12 +1110,43 @@ class api {
      * @param string $name
      * @param string $schedule
      * @param float $maxgrade
-     * @param array map
-     * @return array
+     * @param array $map
+     * @return int
      */
-    public static function write_conversion_map(int $courseid, int $mapid, string $name, string $schedule, float $maxgrade, array $map): int {
+    public static function write_conversion_map(
+        int $courseid, int $mapid, string $name, string $schedule, float $maxgrade, array $map): int {
         $mapid = \local_gugrades\conversion::write_conversion_map($courseid, $mapid, $name, $schedule, $maxgrade, $map);
 
         return $mapid;
+    }
+
+    /**
+     * Delete conversion map
+     * @param int $courseid
+     * @param int $mapid
+     * @return bool
+     */
+    public static function delete_conversion_map(int $courseid, int $mapid) {
+        return \local_gugrades\conversion::delete_conversion_map($courseid, $mapid);
+    }
+
+    /**
+     * Import conversion map (as a new one)
+     * @param int $courseid
+     * @param string $jsonmap
+     * @return int
+     */
+    public static function import_conversion_map(int $courseid, string $jsonmap) {
+        return \local_gugrades\conversion::import_conversion_map($courseid, $jsonmap);
+    }
+
+    /**
+     * Select conversion (map).
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param int $mapid
+     */
+    public static function select_conversion(int $courseid, int $gradeitemid, int $mapid) {
+        \local_gugrades\conversion::select_conversion($courseid, $gradeitemid, $mapid);
     }
 }

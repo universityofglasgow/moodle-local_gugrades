@@ -34,7 +34,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/externallib.php');
 
 /**
- * Read a single map
+ * Write single map
  */
 class write_conversion_map extends \external_api {
 
@@ -55,7 +55,7 @@ class write_conversion_map extends \external_api {
                     'bound' => new external_value(PARAM_FLOAT, 'Lower boundary for this band (as a percentage)'),
                     'grade' => new external_value(PARAM_INT, 'Grade point'),
                 ])
-            )
+            ),
         ]);
     }
 
@@ -66,8 +66,8 @@ class write_conversion_map extends \external_api {
      * @param string $name
      * @param string $schedule
      * @param float $maxgrade
-     * @param array map
-     * @return array
+     * @param array $map
+     * @return int
      */
     public static function execute($courseid, $mapid, $name, $schedule, $maxgrade, $map) {
         global $DB;
@@ -87,6 +87,21 @@ class write_conversion_map extends \external_api {
         self::validate_context($context);
 
         $mapid = \local_gugrades\api::write_conversion_map($courseid, $mapid, $name, $schedule, $maxgrade, $map);
+
+        // Log.
+        $event = \local_gugrades\event\edit_conversion_map::create([
+            'objectid' => $mapid,
+            'context' => \context_course::instance($courseid),
+            'other' => [
+                'name' => $name,
+                'maxgrade' => $maxgrade,
+                'uschedule' => $schedule,
+            ],
+        ]);
+        $event->trigger();
+
+        // Audit.
+        \local_gugrades\audit::write($courseid, 0, 0, 'Conversion map written "' . $name . '"');
 
         return ['mapid' => $mapid];
     }

@@ -1,5 +1,5 @@
 <template>
-    <FormKit v-if="loaded" type="form" @submit="submit_form">
+    <FormKit v-if="loaded" type="form" submit-label="Save" @submit="submit_form">
         <FormKit
             type="text"
             outer-class="mb-3"
@@ -75,7 +75,9 @@
                 ></FormKit>
             </div>   
         </div>
+        <button class="btn btn-warning float-right" @click="cancel_button">{{ mstrings.cancel }}</button>
     </FormKit>
+   
 </template>
 
 <script setup>
@@ -257,6 +259,13 @@
     }
 
     /**
+     * Cancel button pressed
+     */
+    function cancel_button() {
+        emits('close');
+    }
+
+    /**
      * Update the conversion map
      */
     function update_map() {
@@ -274,7 +283,7 @@
         }])[0]
         .then((result) => {
             mapname.value = result.name;
-            //scaletype.value = result.scaletype;
+            scaletype.value = result.schedule;
             maxgrade.value = result.maxgrade;
             rawmap.value = result.map;
 

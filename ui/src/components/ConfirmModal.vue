@@ -1,21 +1,4 @@
 <template>
-    <!--
-    <ModalForm>
-        <template #header>
-            <h4>{{ mstrings.confirm }}</h4>
-        </template>
-        <template #body>
-            <div class="alert alert-danger">
-                <p><strong>{{  props.message }}</strong></p>
-                <p>{{ mstrings.areyousure }}</p>
-            </div>
-        </template>
-        <template #footer>
-            <button class="btn btn-primary" @click="emit('confirm', true)">{{ mstrings.yes }}</button>
-            <button class="btn btn-warning" @click="emit('confirm', false)">{{ mstrings.no }}</button>
-        </template>
-    </ModalForm>
--->
     <VueModal v-model="showmodal" modalClass="col-11 col-lg-5 rounded" :title="mstrings.confirm">
         <div class="alert alert-danger">
             <p><strong>{{  props.message }}</strong></p>

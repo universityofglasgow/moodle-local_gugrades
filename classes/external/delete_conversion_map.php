@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Define function get_conversion_map
+ * Define function delete_conversion_map
  * @package    local_gugrades
  * @copyright  2024
  * @author     Howard Miller
@@ -36,7 +36,7 @@ require_once($CFG->libdir . '/externallib.php');
 /**
  * Read a single map
  */
-class get_conversion_map extends \external_api {
+class delete_conversion_map extends \external_api {
 
     /**
      * Define function parameters
@@ -46,7 +46,6 @@ class get_conversion_map extends \external_api {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
             'mapid' => new external_value(PARAM_INT, 'Map ID - 0 for new/default map'),
-            'schedule' => new external_value(PARAM_ALPHA, 'schedulea or scheduleb - only when mapid = 0'),
         ]);
     }
 
@@ -54,26 +53,36 @@ class get_conversion_map extends \external_api {
      * Execute function
      * @param int $courseid
      * @param int $mapid
-     * @param string $schedule
      * @return array
      */
-    public static function execute($courseid, $mapid, $schedule) {
+    public static function execute($courseid, $mapid) {
         global $DB;
 
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
             'courseid' => $courseid,
             'mapid' => $mapid,
-            'schedule' => $schedule,
         ]);
 
         // More security.
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        $map = \local_gugrades\api::get_conversion_map($courseid, $mapid, $schedule);
+        $success = \local_gugrades\api::delete_conversion_map($courseid, $mapid);
 
-        return $map;
+        // Log.
+        $event = \local_gugrades\event\delete_conversion_map::create([
+            'objectid' => $mapid,
+            'context' => \context_course::instance($courseid),
+            'other' => [
+            ],
+        ]);
+        $event->trigger();
+
+        // Audit.
+        \local_gugrades\audit::write($courseid, 0, 0, 'Conversion map deleted - ' . $mapid);
+
+        return ['success' => $success];
     }
 
     /**
@@ -82,17 +91,7 @@ class get_conversion_map extends \external_api {
      */
     public static function execute_returns() {
         return new external_single_structure([
-            'name' => new external_value(PARAM_TEXT, 'Conversion map name'),
-            'schedule' => new external_value(PARAM_ALPHA, 'schedulea or scheduleb'),
-            'maxgrade' => new external_value(PARAM_FLOAT, 'Maximum grade value'),
-            'inuse' => new external_value(PARAM_BOOL, 'Is conversion map in use?'),
-            'map' => new external_multiple_structure(
-                new external_single_structure([
-                    'band' => new external_value(PARAM_ALPHANUM, 'Scale band - A1, A2 etc'),
-                    'bound' => new external_value(PARAM_FLOAT, 'Lower boundary for this band (as a percentage)'),
-                    'grade' => new external_value(PARAM_INT, 'Grade point'),
-                ])
-            ),
+            'success' => new external_value(PARAM_BOOL, 'True if success. False if (e.g.) map is in use'),
         ]);
     }
 }

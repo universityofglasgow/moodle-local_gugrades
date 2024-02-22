@@ -56,7 +56,7 @@ class conversion {
 
         $maps = $DB->get_records('local_gugrades_map', ['courseid' => $courseid]);
 
-        // Add created by and created at
+        // Add created by and created at.
         foreach ($maps as $map) {
             if ($user = $DB->get_record('user', ['id' => $map->userid])) {
                 $map->createdby = fullname($user);
@@ -75,9 +75,9 @@ class conversion {
      * @return bool
      */
     public static function inuse(int $mapid) {
+        global $DB;
 
-        // TODO: Finish this
-        return false;
+        return $DB->record_exists('local_gugrades_map_item', ['mapid' => $mapid]);
     }
 
     /**
@@ -87,7 +87,7 @@ class conversion {
      */
     public static function get_default_map(string $schedule) {
 
-        // Get correct default from settings
+        // Get correct default from settings.
         if ($schedule == 'schedulea') {
             $default = get_config('local_gugrades', 'mapdefault_schedulea');
         } else if ($schedule == 'scheduleb') {
@@ -96,18 +96,18 @@ class conversion {
             throw new \moodle_exception('Invalid schedule specified in get_default map - "' . $schedule . '"');
         }
 
-        // Get scale
+        // Get scale.
         $scaleitems = self::get_scale($schedule);
 
-        // Unpack defaults
+        // Unpack defaults.
         $defaultpoints = array_map('trim', explode(',', $default));
         array_unshift($defaultpoints, 0);
 
-        // Iterate over scale to add data
+        // Iterate over scale to add data.
         $map = [];
         foreach ($scaleitems as $grade => $band) {
 
-            // Get correct default point
+            // Get correct default point.
             $default = array_shift($defaultpoints);
             if (is_null($default)) {
                 $default = 0;
@@ -125,6 +125,8 @@ class conversion {
 
     /**
      * Get existing map for edit page
+     * @param int $mapid
+     * @return array
      */
     public static function get_map_for_editing(int $mapid) {
         global $DB;
@@ -151,17 +153,45 @@ class conversion {
     }
 
     /**
+     * Find unique name
+     * Add (n) on the end until it is
+     * @param string $name
+     * @return string
+     */
+    protected static function unique_name(string $name) {
+        global $DB;
+
+        $sql = 'select * from {local_gugrades_map} where ' . $DB->sql_compare_text('name') . ' = :name';
+        if (!$DB->record_exists_sql($sql, ['name' => $name])) {
+            return $name;
+        }
+
+        $count = 1;
+        while ($DB->record_exists_sql($sql, ['name' => $name . ' (' . $count . ')'])) {
+            $count++;
+        }
+
+        return $name . '(' . $count . ')';
+    }
+
+    /**
      * Write conversion map, mapid=0 means a new one
      * @param int $courseid
      * @param int $mapid
      * @param string $name
      * @param string $schedule
      * @param float $maxgrade
-     * @param array map
+     * @param array $map
      * @return int
      */
-    public static function write_conversion_map(int $courseid, int $mapid, string $name, string $schedule, float $maxgrade, array $map): int {
+    public static function write_conversion_map(
+        int $courseid, int $mapid, string $name, string $schedule, float $maxgrade, array $map): int {
         global $DB, $USER;
+
+        // Check schedule.
+        if (($schedule != 'schedulea') && ($schedule != 'scheduleb')) {
+            throw new \moodle_exception('Schedule parameter must be "schedulea" or "scheduleb".');
+        }
 
         if ($mapid) {
             $mapinfo = $DB->get_record('local_gugrades_map', ['id' => $mapid], '*', MUST_EXIST);
@@ -170,8 +200,8 @@ class conversion {
             }
 
             // Write main record.
-            // Name is the only thing you can change
-            $mapinfo->name = $name;
+            // Name is the only thing you can change.
+            $mapinfo->name = self::unique_name($name);
             $mapinfo->timemodified = time();
             $DB->update_record('local_gugrades_map', $mapinfo);
 
@@ -188,7 +218,7 @@ class conversion {
         } else {
             $mapinfo = new \stdClass();
             $mapinfo->courseid = $courseid;
-            $mapinfo->name = $name;
+            $mapinfo->name = self::unique_name($name);
             $mapinfo->scale = $schedule;
             $mapinfo->maxgrade = $maxgrade;
             $mapinfo->userid = $USER->id;
@@ -207,5 +237,83 @@ class conversion {
         }
 
         return $newmapid;
+    }
+
+    /**
+     * Delete conversion map
+     * @param int $courseid
+     * @param int $mapid
+     * @return bool
+     */
+    public static function delete_conversion_map(int $courseid, int $mapid) {
+        global $DB;
+
+        // Can't delete if it's being used.
+        if (self::inuse($mapid)) {
+            return false;
+        }
+
+        $mapinfo = $DB->get_record('local_gugrades_map', ['id' => $mapid], '*', MUST_EXIST);
+        if ($courseid != $mapinfo->courseid) {
+            throw new \moodle_exception('courseid does not match ' . $courseid);
+        }
+
+        $DB->delete_records('local_gugrades_map_value', ['mapid' => $mapid]);
+        $DB->delete_records('local_gugrades_map', ['id' => $mapid]);
+
+        return true;
+    }
+
+
+    /**
+     * Import conversion map (as a new one)
+     * @param int $courseid
+     * @param string $jsonmap
+     * @return int
+     */
+    public static function import_conversion_map(int $courseid, string $jsonmap) {
+
+        // Is JSON valid?
+        if (!$mapinfo = json_decode($jsonmap, true)) {
+            throw new \moodle_exception('Invalid JSON');
+        }
+
+        // Sanity checks.
+        if (!array_key_exists('map', $mapinfo) || !array_key_exists('name', $mapinfo) || !array_key_exists('schedule', $mapinfo)) {
+            throw new \moodle_exeption('Required fields missing in JSON');
+        }
+
+        $map = $mapinfo['map'];
+
+        $mapid = self::write_conversion_map($courseid, 0, $mapinfo['name'], $mapinfo['schedule'], $mapinfo['maxgrade'], $map);
+
+        return $mapid;
+    }
+
+    /**
+     * Select conversion (map).
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param int $mapid
+     */
+    public static function select_conversion(int $courseid, int $gradeitemid, int $mapid) {
+        global $DB, $USER;
+
+        $mapinfo = $DB->get_record('local_gugrades_map', ['id' => $mapid], '*', MUST_EXIST);
+        if ($courseid != $mapinfo->courseid) {
+            throw new \moodle_exception('courseid does not match ' . $courseid);
+        }
+
+        // Set link to this map.
+        if (!$mapitem = $DB->get_record('local_gugrades_map_item', ['mapid' => $gradeitemid, 'gradeitemid' => $gradeitemid])) {
+            $mapitem = new \stdClass();
+            $mapitem->courseid = $courseid;
+            $mapitem->mapid = $mapid;
+            $mapitem->gradeitemid = $gradeitemid;
+            $mapitem->maxgrade = $mapinfo->maxgrade;
+            $mapitem->userid = $USER->id;
+            $mapitem->timemodified = time();
+            $DB->insert_record('local_gugrades_map_item', $mapitem);
+        }
     }
 }

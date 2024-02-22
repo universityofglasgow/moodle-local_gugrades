@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Define function get_conversion_map
+ * Define function import_conversion_map
  * @package    local_gugrades
  * @copyright  2024
  * @author     Howard Miller
@@ -34,9 +34,9 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/externallib.php');
 
 /**
- * Read a single map
+ * Import a single map
  */
-class get_conversion_map extends \external_api {
+class import_conversion_map extends \external_api {
 
     /**
      * Define function parameters
@@ -45,35 +45,42 @@ class get_conversion_map extends \external_api {
     public static function execute_parameters() {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
-            'mapid' => new external_value(PARAM_INT, 'Map ID - 0 for new/default map'),
-            'schedule' => new external_value(PARAM_ALPHA, 'schedulea or scheduleb - only when mapid = 0'),
+            'jsonmap' => new external_value(PARAM_TEXT, 'New map in json format'),
         ]);
     }
 
     /**
      * Execute function
      * @param int $courseid
-     * @param int $mapid
-     * @param string $schedule
-     * @return array
+     * @param string $jsonmap
+     * @return int
      */
-    public static function execute($courseid, $mapid, $schedule) {
+    public static function execute($courseid, $jsonmap) {
         global $DB;
 
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
             'courseid' => $courseid,
-            'mapid' => $mapid,
-            'schedule' => $schedule,
+            'jsonmap' => $jsonmap,
         ]);
 
         // More security.
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        $map = \local_gugrades\api::get_conversion_map($courseid, $mapid, $schedule);
+        $mapid = \local_gugrades\api::import_conversion_map($courseid, $jsonmap);
 
-        return $map;
+        // Log.
+        $event = \local_gugrades\event\import_conversion_map::create([
+            'objectid' => $mapid,
+            'context' => \context_course::instance($courseid),
+        ]);
+        $event->trigger();
+
+        // Audit.
+        \local_gugrades\audit::write($courseid, 0, 0, 'Conversion map imported. ID = ' . $mapid);
+
+        return ['mapid' => $mapid];
     }
 
     /**
@@ -82,17 +89,7 @@ class get_conversion_map extends \external_api {
      */
     public static function execute_returns() {
         return new external_single_structure([
-            'name' => new external_value(PARAM_TEXT, 'Conversion map name'),
-            'schedule' => new external_value(PARAM_ALPHA, 'schedulea or scheduleb'),
-            'maxgrade' => new external_value(PARAM_FLOAT, 'Maximum grade value'),
-            'inuse' => new external_value(PARAM_BOOL, 'Is conversion map in use?'),
-            'map' => new external_multiple_structure(
-                new external_single_structure([
-                    'band' => new external_value(PARAM_ALPHANUM, 'Scale band - A1, A2 etc'),
-                    'bound' => new external_value(PARAM_FLOAT, 'Lower boundary for this band (as a percentage)'),
-                    'grade' => new external_value(PARAM_INT, 'Grade point'),
-                ])
-            ),
+            'mapid' => new external_value(PARAM_INT, '(new) map ID'),
         ]);
     }
 }

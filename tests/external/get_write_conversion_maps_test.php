@@ -38,6 +38,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
     /**
      * Check writing and reading data
+     * @covers \local_gugrades\external\get_conversion_maps::execute
      */
     public function test_conversion_maps() {
 
@@ -48,12 +49,13 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
             $maps
         );
 
-        // Empty response
+        // Empty response.
         $this->assertEmpty($maps);
     }
 
     /**
      * Check reading default map
+     * @covers \local_gugrades\external\get_conversion_map::execute
      */
     public function test_get_default_map() {
 
@@ -92,6 +94,8 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
     /**
      * Check getting then writing default map
+     * @covers \local_gugrades\external\get_conversion_map::execute
+     * @covers \local_gugrades\external\write_conversion_map::execute
      */
     public function test_read_write_default_map() {
         global $DB;
@@ -103,8 +107,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
             $mapstuff
         );
 
-
-        // Write map back
+        // Write map back.
         $name = 'Test conversion map';
         $schedule = 'schedulea';
         $maxgrade = 100.0;
@@ -116,11 +119,11 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         );
         $mapid = $mapid['mapid'];
 
-        // Check map table
+        // Check map table.
         $mapinfo = $DB->get_record('local_gugrades_map', ['id' => $mapid], '*', MUST_EXIST);
         $this->assertEquals('Test conversion map', $mapinfo->name);
 
-        // Check map values
+        // Check map values.
         $values = array_values($DB->get_records('local_gugrades_map_value', ['mapid' => $mapid]));
         $this->assertCount(23, $values);
         $this->assertEquals(92, $values[22]->percentage);
@@ -131,5 +134,169 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
             get_conversion_map::execute_returns(),
             $mapstuff
         );
+
+        // Delete map.
+        $success = delete_conversion_map::execute($this->course->id, $mapid);
+        $success = \external_api::clean_returnvalue(
+            delete_conversion_map::execute_returns(),
+            $success
+        );
+
+        // Try to read it again (should fail).
+        $this->expectException('dml_missing_record_exception');
+        $mapstuff = get_conversion_map::execute($this->course->id, $mapid, 'schedulea');
+
+    }
+
+    /**
+     * Similar to above but for ScheduleB
+     * @covers \local_gugrades\external\get_conversion_map::execute
+     * @covers \local_gugrades\external\write_conversion_map::execute
+     */
+    public function test_read_write_scheduleb() {
+        global $DB;
+
+        // Read map with id 0 (new map) for Schedule B.
+        $mapstuff = get_conversion_map::execute($this->course->id, 0, 'scheduleb');
+        $mapstuff = \external_api::clean_returnvalue(
+            get_conversion_map::execute_returns(),
+            $mapstuff
+        );
+
+        // Write map back.
+        $name = 'Test conversion map B';
+        $schedule = 'scheduleb';
+        $maxgrade = 100.0;
+        $map = $mapstuff['map'];
+        $mapid = write_conversion_map::execute($this->course->id, 0, $name, $schedule, $maxgrade, $map);
+        $mapid = \external_api::clean_returnvalue(
+            write_conversion_map::execute_returns(),
+            $mapid
+        );
+        $mapid = $mapid['mapid'];
+
+        // Read back uploaded map.
+        $mapstuff = get_conversion_map::execute($this->course->id, $mapid, 'scheduleb');
+        $mapstuff = \external_api::clean_returnvalue(
+            get_conversion_map::execute_returns(),
+            $mapstuff
+        );
+
+        $this->assertEquals('scheduleb', $mapstuff['schedule']);
+    }
+
+    /**
+     * Test import json
+     * @covers \local_gugrades\external\get_conversion_map::execute
+     * @covers \local_gugrades\external\write_conversion_map::execute
+     */
+    public function test_import_json() {
+        global $DB;
+
+        $jsonmap = '{
+            "name": "Test import map",
+            "schedule": "scheduleb",
+            "maxgrade": 100,
+            "inuse": false,
+            "map": [
+                {
+                    "band": "H",
+                    "bound": 0,
+                    "grade": 0
+                },
+                {
+                    "band": "G0",
+                    "bound": 9,
+                    "grade": 2
+                },
+                {
+                    "band": "F0",
+                    "bound": 19,
+                    "grade": 5
+                },
+                {
+                    "band": "E0",
+                    "bound": 29,
+                    "grade": 8
+                },
+                {
+                    "band": "D0",
+                    "bound": 39,
+                    "grade": 11
+                },
+                {
+                    "band": "C0",
+                    "bound": 53,
+                    "grade": 14
+                },
+                {
+                    "band": "B0",
+                    "bound": 59,
+                    "grade": 17
+                },
+                {
+                    "band": "A0",
+                    "bound": 69,
+                    "grade": 22
+                }
+            ]
+        }';
+
+        $mapid = import_conversion_map::execute($this->course->id, $jsonmap);
+        $mapid = \external_api::clean_returnvalue(
+            import_conversion_map::execute_returns(),
+            $mapid
+        );
+        $mapid = $mapid['mapid'];
+
+        // Read back uploaded map.
+        $mapstuff = get_conversion_map::execute($this->course->id, $mapid, '');
+        $mapstuff = \external_api::clean_returnvalue(
+            get_conversion_map::execute_returns(),
+            $mapstuff
+        );
+
+        $this->assertEquals('Test import map', $mapstuff['name']);
+    }
+
+    /**
+     * Check selecting a default map
+     * @covers \local_gugrades\external\get_conversion_map::execute
+     * @covers \local_gugrades\external\write_conversion_map::execute
+     * @covers \local_gugrades\external\select_conversion::execute
+     */
+    public function test_select_map() {
+        global $DB;
+
+        // Read map with id 0 (new map) for Schedule A.
+        $mapstuff = get_conversion_map::execute($this->course->id, 0, 'schedulea');
+        $mapstuff = \external_api::clean_returnvalue(
+            get_conversion_map::execute_returns(),
+            $mapstuff
+        );
+
+        // Write map back.
+        $name = 'Test conversion map';
+        $schedule = 'schedulea';
+        $maxgrade = 100.0;
+        $map = $mapstuff['map'];
+        $mapid = write_conversion_map::execute($this->course->id, 0, $name, $schedule, $maxgrade, $map);
+        $mapid = \external_api::clean_returnvalue(
+            write_conversion_map::execute_returns(),
+            $mapid
+        );
+        $mapid = $mapid['mapid'];
+
+        // Select this map.
+        $nothing = select_conversion::execute($this->course->id, $this->gradeitemidassign1, $mapid);
+        $nothing = \external_api::clean_returnvalue(
+            select_conversion::execute_returns(),
+            $nothing
+        );
+
+        // Check it wrote.
+        $mapitems = array_values($DB->get_records('local_gugrades_map_item'));
+        $this->assertEquals($this->course->id, $mapitems[0]->courseid);
+        $this->assertEquals($this->gradeitemidassign1, $mapitems[0]->gradeitemid);
     }
 }
