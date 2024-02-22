@@ -1149,4 +1149,14 @@ class api {
     public static function select_conversion(int $courseid, int $gradeitemid, int $mapid) {
         \local_gugrades\conversion::select_conversion($courseid, $gradeitemid, $mapid);
     }
+
+    /**
+     * get select conversion (map) info.
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @return array
+     */
+    public static function get_selected_conversion(int $courseid, int $gradeitemid) {
+        return \local_gugrades\conversion::get_selected_conversion($courseid, $gradeitemid);
+    }
 }

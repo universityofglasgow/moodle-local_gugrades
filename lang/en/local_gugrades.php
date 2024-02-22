@@ -166,6 +166,7 @@ $string['releaseconfirmgroup'] = "NOTE: Grades will only be released for the sel
 $string['released'] = 'Released';
 $string['releasegrades'] = 'Release grades';
 $string['releasegradesgroup'] = 'Release grades for group';
+$string['remove'] = 'Remove';
 $string['resetcourse'] = 'Reset course';
 $string['resetcourseconfirm'] = 'This will delete all MyGrades data for this course and cannot be reversed.';
 $string['resetfilter'] = 'Reset filter';

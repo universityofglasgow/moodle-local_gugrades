@@ -9,14 +9,20 @@
             {{ mstrings.nomaps }}
         </div>
 
-        <EasyDataTable v-if="!nomaps && loaded" class="mb-3" :items="maps" :headers="headers" :hide-footer="true">
+        <EasyDataTable v-if="!nomaps && loaded" :items="maps" :headers="headers" :hide-footer="true">
             <template #item-select="item">
                 <input type="radio" :value="item.id" v-model="selection"/>
             </template>
         </EasyDataTable>
 
-        <button class="btn btn-primary mr-1" @click="save_clicked" :disabled="selection == 0">{{ mstrings.save }}</button>
-        <button class="btn btn-warning" @click="showselectmodal = false">{{ mstrings.cancel }}</button>
+        <div class="mt-1 mb-4">
+            <button class="btn btn-danger btn-sm rounded" @click="remove_clicked">{{ mstrings.remove }}</button>
+        </div>
+
+        <div>
+            <button class="btn btn-primary mr-1" @click="save_clicked" :disabled="selection == 0">{{ mstrings.save }}</button>
+            <button class="btn btn-warning" @click="showselectmodal = false">{{ mstrings.cancel }}</button>
+        </div>
     </VueModal>
 </template>
 
@@ -61,7 +67,33 @@
             maps.value = result;
             nomaps.value = maps.value.length == 0;
             loaded.value = true;
-            window.console.log(maps.value);
+        })
+        .catch((error) => {
+            window.console.error(error);
+            toast.error('Error communicating with server (see console)');
+        });
+    }
+
+    /**
+     * Get currently selected map (if any)
+     */
+    function get_selected() {
+        const GU = window.GU;
+        const courseid = GU.courseid;
+        const fetchMany = GU.fetchMany;
+
+        fetchMany([{
+            methodname: 'local_gugrades_get_selected_conversion',
+            args: {
+                courseid: courseid,
+                gradeitemid: props.itemid,
+            }
+        }])[0]
+        .then((result) => {
+            window.console.log(result);
+
+            // id==0 if no selection (which is fine).
+            selection.value = result.id;
         })
         .catch((error) => {
             window.console.error(error);
@@ -74,6 +106,7 @@
      */
     function conversion_clicked() {
         get_maps();
+        get_selected();
         showselectmodal.value = true;
         window.console.log(props.itemid);
     }
@@ -96,6 +129,34 @@
         }])[0]
         .then(() => {
             toast.success('Map selection saved');
+        })
+        .catch((error) => {
+            window.console.error(error);
+            toast.error('Error communicating with server (see console)');
+        });
+
+        showselectmodal.value = false;
+    }
+
+    /**
+     * Remove button has been clicked
+     *
+     */
+    function remove_clicked() {
+        const GU = window.GU;
+        const courseid = GU.courseid;
+        const fetchMany = GU.fetchMany;
+
+        fetchMany([{
+            methodname: 'local_gugrades_select_conversion',
+            args: {
+                courseid: courseid,
+                gradeitemid: props.itemid,
+                mapid: 0,
+            }
+        }])[0]
+        .then(() => {
+            toast.success('Map selection removed');
         })
         .catch((error) => {
             window.console.error(error);

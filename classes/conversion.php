@@ -280,7 +280,7 @@ class conversion {
 
         // Sanity checks.
         if (!array_key_exists('map', $mapinfo) || !array_key_exists('name', $mapinfo) || !array_key_exists('schedule', $mapinfo)) {
-            throw new \moodle_exeption('Required fields missing in JSON');
+            throw new \moodle_exception('Required fields missing in JSON');
         }
 
         $map = $mapinfo['map'];
@@ -292,6 +292,7 @@ class conversion {
 
     /**
      * Select conversion (map).
+     * TODO: Take action when conversion is applied/changed.
      * @param int $courseid
      * @param int $gradeitemid
      * @param int $mapid
@@ -299,13 +300,19 @@ class conversion {
     public static function select_conversion(int $courseid, int $gradeitemid, int $mapid) {
         global $DB, $USER;
 
+        // $mapid==0 means delete the mappings for this item
+        if ($mapid == 0) {
+            $DB->delete_records('local_gugrades_map_item', ['gradeitemid' => $gradeitemid]);
+            return;
+        }
+
         $mapinfo = $DB->get_record('local_gugrades_map', ['id' => $mapid], '*', MUST_EXIST);
         if ($courseid != $mapinfo->courseid) {
             throw new \moodle_exception('courseid does not match ' . $courseid);
         }
 
         // Set link to this map.
-        if (!$mapitem = $DB->get_record('local_gugrades_map_item', ['mapid' => $gradeitemid, 'gradeitemid' => $gradeitemid])) {
+        if (!$mapitem = $DB->get_record('local_gugrades_map_item', ['gradeitemid' => $gradeitemid])) {
             $mapitem = new \stdClass();
             $mapitem->courseid = $courseid;
             $mapitem->mapid = $mapid;
@@ -314,6 +321,44 @@ class conversion {
             $mapitem->userid = $USER->id;
             $mapitem->timemodified = time();
             $DB->insert_record('local_gugrades_map_item', $mapitem);
+        } else {
+            if ($courseid != $mapitem->courseid) {
+                throw new \moodle_exception('courseid does not match ' . $courseid);
+            }
+            $mapitem->mapid = $mapid;
+            $mapitem->userid = $USER->id;
+            $mapitem->timemodified = time();
+            $DB->update_record('local_gugrades_map_item', $mapitem);
+        }
+    }
+
+    /**
+     * get select conversion (map) info.
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @return array
+     */
+    public static function get_selected_conversion(int $courseid, int $gradeitemid) {
+        global $DB;
+
+        if ($mapitem = $DB->get_record('local_gugrades_map_item', ['gradeitemid' => $gradeitemid])) {
+            if ($courseid != $mapitem->courseid) {
+                throw new \moodle_exception('courseid does not match ' . $courseid);
+            }
+
+            $mapinfo = $DB->get_record('local_gugrades_map', ['id' => $mapitem->mapid], '*', MUST_EXIST);
+            if ($courseid != $mapinfo->courseid) {
+                throw new \moodle_exception('courseid does not match ' . $courseid);
+            }
+
+            return $mapinfo;
+        } else {
+            return [
+                'id' => 0,
+                'name' => '',
+                'maxgrade' => 0,
+                'scale' => '',
+            ];
         }
     }
 }

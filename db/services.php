@@ -62,6 +62,7 @@ $services = [
             'local_gugrades_delete_conversion_map',
             'local_gugrades_import_conversion_map',
             'local_gugrades_select_conversion',
+            'get_selected_conversion'
         ],
         'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,
@@ -278,6 +279,12 @@ $functions = [
         'capabilities' => 'local/gugrades:editconversionmaps',
         'description' => 'Select conversion for grade item.',
         'type' => 'write',
+        'ajax' => true,
+    ],
+    'local_gugrades_get_selected_conversion' => [
+        'classname' => 'local_gugrades\external\get_selected_conversion',
+        'description' => 'get the currently selected conversion for grade item.',
+        'type' => 'read',
         'ajax' => true,
     ],
 ];
