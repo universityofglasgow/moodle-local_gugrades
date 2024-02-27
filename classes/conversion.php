@@ -368,13 +368,28 @@ class conversion {
      * Convert a point grade according to map values
      * Note that we only use the percentage value and that as a fraction
      * of the maxgrade recorded in the grade item.
-     * @param float $value
+     * @param float $rawgrade
      * @param float $maxgrade
      * @param array $mapvalues
-     * @return array (int, string)
+     * @return object
      */
-    protected static function convert_grade(float $value, float $maxgrade, array $mapvalues) {
+    protected static function convert_grade(float $rawgrade, float $maxgrade, array $mapvalues) {
+        $values = array_values($mapvalues);
+        for ($i=0; $i < count($values); $i++) {
+            $lower = $values[$i]->percentage * $maxgrade / 100;
 
+            // There's no 100% in the array, so assume this if final item.
+            if ($i == count($values) - 1) {
+                $upper = $maxgrade;
+            } else {
+                $upper = $values[$i+1]->percentage * $maxgrade / 100;
+            }
+            if (($rawgrade >= $lower) && ($rawgrade < $upper)) {
+                return $values[$i];
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -393,19 +408,42 @@ class conversion {
         $users = $activity->get_users();
 
         // Get map values
-        $mapvalues = $DB->get_records('local_gugrades_map_values', ['mapid' => $mapinfo->mapid], 'percentage ASC');
+        $mapvalues = $DB->get_records('local_gugrades_map_value', ['mapid' => $mapinfo->id], 'percentage ASC');
 
         // Get the grade item
         $gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
 
-        var_dump($users); die;
+        //var_dump($users); die;
 
         // Iterate over users converting grades.
         foreach ($users as $user) {
             $usercapture = new usercapture($courseid, $gradeitemid, $user->id);
-            $released = $usercapture->get_released();
+            $provisional = $usercapture->get_provisional();
 
+            // If there's no provision grade, then there's nothing to convert
+            if (!$provisional) {
+                continue;
+            }
 
+            $convertedgrade = self::convert_grade($provisional->rawgrade, $gradeitem->grademax, $mapvalues);
+            if (!$convertedgrade) {
+                throw new \moodle_exception('Unable to convert grade - ' . $provisional->rawgrade . ' (max: ' . $gradeitem->grademax . ')');
+            }
+
+            \local_gugrades\grades::write_grade(
+                $courseid,
+                $gradeitemid,
+                $user->id,
+                '',
+                $provisional->rawgrade, // Moodle scales start at 1
+                $convertedgrade->scalevalue,  // TODO: Is this correct?
+                $convertedgrade->band,
+                0,
+                'CONVERTED',
+                '',
+                true,
+                ''
+            );
         }
     }
 }

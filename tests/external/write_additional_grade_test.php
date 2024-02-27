@@ -59,7 +59,7 @@ class write_additional_grade_test extends \local_gugrades\external\gugrades_adva
             $status
         );
 
-        // Add additional grade
+        // Add additional grade.
         $nothing = write_additional_grade::execute(
             $this->course->id,
             $this->gradeitemidassign2,
@@ -148,7 +148,7 @@ class write_additional_grade_test extends \local_gugrades\external\gugrades_adva
             $status
         );
 
-        // Add additional grade
+        // Add additional grade.
         $nothing = write_additional_grade::execute(
             $this->course->id,
             $this->gradeitemidassign2,

@@ -401,5 +401,10 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
             select_conversion::execute_returns(),
             $nothing
         );
+
+        // What's in the grades table?
+        $grades = $DB->get_records('local_gugrades_grade', ['gradeitemid' => $this->gradeitemidassign1]);
+
+        var_dump($grades);
     }
 }
