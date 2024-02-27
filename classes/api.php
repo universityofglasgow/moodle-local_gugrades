@@ -100,7 +100,7 @@ class api {
             'gradesimported' => $gradesimported,
             'gradehidden' => $gradehidden ? true : false,
             'gradelocked' => $gradelocked ? true : false,
-            'showconversion' => $showconversion,
+            'showconversion' => $showconversion && $gradesimported,
         ];
     }
 

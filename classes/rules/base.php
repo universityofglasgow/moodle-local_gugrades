@@ -128,6 +128,11 @@ class base {
             return false;
         }
 
+        // If no third then first and second must agree.
+        if ($third == -1) {
+            return ($first != $second);
+        }
+
         // Failing all of above, must agree.
         if (($first == $second) && ($second == $third)) {
             return false; // All equal.

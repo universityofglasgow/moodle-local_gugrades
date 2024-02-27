@@ -351,4 +351,55 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         $mapitems = array_values($DB->get_records('local_gugrades_map_item'));
         $this->assertCount(0, $mapitems);
     }
+
+    /**
+     * Check performing an actual conversion
+     * (fun and games this)
+     * @covers \local_gugrades\external\get_conversion_map::execute
+     * @covers \local_gugrades\external\write_conversion_map::execute
+     * @covers \local_gugrades\external\select_conversion::execute
+     */
+    public function test_do_conversion() {
+        global $DB;
+
+        // First step - just create a default map
+        // Read map with id 0 (new map) for Schedule A.
+        $mapstuff = get_conversion_map::execute($this->course->id, 0, 'schedulea');
+        $mapstuff = \external_api::clean_returnvalue(
+            get_conversion_map::execute_returns(),
+            $mapstuff
+        );
+
+        // Write map back.
+        $name = 'Test conversion map';
+        $schedule = 'schedulea';
+        $maxgrade = 100.0;
+        $map = $mapstuff['map'];
+        $mapida = write_conversion_map::execute($this->course->id, 0, $name, $schedule, $maxgrade, $map);
+        $mapida = \external_api::clean_returnvalue(
+            write_conversion_map::execute_returns(),
+            $mapida
+        );
+        $mapida = $mapida['mapid'];
+
+        // Next step is to import some grades for some test students.
+        $userlist = [
+            $this->student->id,
+            $this->student2->id,
+        ];
+
+        // Assign1 (which is useing points).
+        $status = import_grades_users::execute($this->course->id, $this->gradeitemidassign1, false, $userlist);
+        $status = \external_api::clean_returnvalue(
+            import_grades_users::execute_returns(),
+            $status
+        );
+
+        // Apply the test conversion map to Assign1.
+        $nothing = select_conversion::execute($this->course->id, $this->gradeitemidassign1, $mapida);
+        $nothing = \external_api::clean_returnvalue(
+            select_conversion::execute_returns(),
+            $nothing
+        );
+    }
 }

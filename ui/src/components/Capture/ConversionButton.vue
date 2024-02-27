@@ -90,7 +90,6 @@
             }
         }])[0]
         .then((result) => {
-            window.console.log(result);
 
             // id==0 if no selection (which is fine).
             selection.value = result.id;
@@ -108,7 +107,6 @@
         get_maps();
         get_selected();
         showselectmodal.value = true;
-        window.console.log(props.itemid);
     }
 
     /**

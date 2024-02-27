@@ -330,6 +330,8 @@ class conversion {
             $mapitem->timemodified = time();
             $DB->update_record('local_gugrades_map_item', $mapitem);
         }
+
+        self::apply_capture_conversion($courseid, $gradeitemid, $mapinfo);
     }
 
     /**
@@ -359,6 +361,51 @@ class conversion {
                 'maxgrade' => 0,
                 'scale' => '',
             ];
+        }
+    }
+
+    /**
+     * Convert a point grade according to map values
+     * Note that we only use the percentage value and that as a fraction
+     * of the maxgrade recorded in the grade item.
+     * @param float $value
+     * @param float $maxgrade
+     * @param array $mapvalues
+     * @return array (int, string)
+     */
+    protected static function convert_grade(float $value, float $maxgrade, array $mapvalues) {
+
+    }
+
+    /**
+     * Apply the conversion to the grade data.
+     * Called when a conversion is added, changed, edited or deleted
+     * Applies to capture page.
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param object $mapinfo
+     */
+    public static function apply_capture_conversion(int $courseid, int $gradeitemid, object $mapinfo) {
+        global $DB;
+
+        // Get list of users.
+        $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid, 0);
+        $users = $activity->get_users();
+
+        // Get map values
+        $mapvalues = $DB->get_records('local_gugrades_map_values', ['mapid' => $mapinfo->mapid], 'percentage ASC');
+
+        // Get the grade item
+        $gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
+
+        var_dump($users); die;
+
+        // Iterate over users converting grades.
+        foreach ($users as $user) {
+            $usercapture = new usercapture($courseid, $gradeitemid, $user->id);
+            $released = $usercapture->get_released();
+
+
         }
     }
 }

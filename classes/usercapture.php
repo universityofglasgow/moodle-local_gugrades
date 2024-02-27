@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Language EN
+ * Object contains capture data for a single user
  *
  * @package    local_gugrades
  * @copyright  2023
