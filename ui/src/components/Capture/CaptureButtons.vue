@@ -6,7 +6,7 @@
         <ReleaseButton v-if="props.gradesimported" :gradeitemid="props.itemid" :groupid="props.groupid" @released="emit('refreshtable')"></ReleaseButton>
         <ExportWorksheetButton v-if="itemtype=='assign'" :users="props.users" :itemtype="props.itemtype" :itemname="props.itemname"></ExportWorksheetButton>
         <ViewFullNamesButton v-if="props.usershidden"  @viewfullnames="viewfullnames"></ViewFullNamesButton>
-        <ConversionButton v-if="showconversion" :itemid="props.itemid"></ConversionButton>
+        <ConversionButton v-if="showconversion" :itemid="props.itemid" @converted="emit('refreshtable')"></ConversionButton>
     </div>
 </template>
 

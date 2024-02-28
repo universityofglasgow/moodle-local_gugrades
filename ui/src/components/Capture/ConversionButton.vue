@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-    import {ref, inject, defineProps} from '@vue/runtime-core';
+    import {ref, inject, defineProps, defineEmits} from '@vue/runtime-core';
     import { useToast } from "vue-toastification";
 
     const mstrings = inject('mstrings');
@@ -48,6 +48,8 @@
     const props = defineProps({
         itemid: Number,
     });
+
+    const emits = defineEmits(['converted']);
 
     /**
      * Get maps
@@ -127,6 +129,7 @@
         }])[0]
         .then(() => {
             toast.success('Map selection saved');
+            emits('converted');
         })
         .catch((error) => {
             window.console.error(error);
