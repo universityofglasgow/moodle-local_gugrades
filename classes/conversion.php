@@ -435,7 +435,7 @@ class conversion {
                 $gradeitemid,
                 $user->id,
                 '',
-                $provisional->rawgrade, // Moodle scales start at 1
+                $provisional->rawgrade,
                 $convertedgrade->scalevalue,  // TODO: Is this correct?
                 $convertedgrade->band,
                 0,

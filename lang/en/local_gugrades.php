@@ -47,6 +47,7 @@ $string['conversionmapname'] = 'Conversion map name';
 $string['conversionmaps'] = 'Conversion Maps';
 $string['conversionmapsaved'] = 'Conversion map saved';
 $string['conversionselect'] = 'Conversion selection';
+$string['converted'] = 'Converted';
 $string['coursegradeaggregation'] = 'Course grade aggregation';
 $string['createdat'] = 'Created at';
 $string['createdby'] = 'Created by';
