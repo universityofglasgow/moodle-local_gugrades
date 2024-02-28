@@ -300,7 +300,7 @@ class conversion {
     public static function select_conversion(int $courseid, int $gradeitemid, int $mapid) {
         global $DB, $USER;
 
-        // $mapid==0 means delete the mappings for this item.
+        // The $mapid==0 means delete the mappings for this item.
         if ($mapid == 0) {
             $DB->delete_records('local_gugrades_map_item', ['gradeitemid' => $gradeitemid]);
             return;
@@ -425,7 +425,8 @@ class conversion {
 
             $convertedgrade = self::convert_grade($provisional->rawgrade, $gradeitem->grademax, $mapvalues);
             if (!$convertedgrade) {
-                throw new \moodle_exception('Unable to convert grade - ' . $provisional->rawgrade . ' (max: ' . $gradeitem->grademax . ')');
+                throw new \moodle_exception('Unable to convert grade - ' .
+                    $provisional->rawgrade . ' (max: ' . $gradeitem->grademax . ')');
             }
 
             \local_gugrades\grades::write_grade(
