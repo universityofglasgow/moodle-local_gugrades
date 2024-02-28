@@ -73,6 +73,19 @@ class select_conversion extends \external_api {
 
         \local_gugrades\api::select_conversion($courseid, $gradeitemid, $mapid);
 
+        // Log.
+        $event = \local_gugrades\event\select_conversion::create([
+            'objectid' => $gradeitemid,
+            'context' => \context_course::instance($courseid),
+            'other' => [
+                'mapid' => $mapid,
+            ],
+        ]);
+        $event->trigger();
+
+        // Audit.
+        \local_gugrades\audit::write($courseid, $gradeitemid, 0, 'Conversion map selected = ' . $mapid);
+
         return [];
     }
 
