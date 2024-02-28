@@ -649,9 +649,13 @@ class api {
             throw new \moodle_exception('Unsupported grade item encountered in get_add_grade_form. Gradeitemid = ' . $gradeitemid);
         }
         $grademax = ($gradeitem->gradetype == GRADE_TYPE_VALUE) ? $gradeitem->grademax : 0;
+        $converted = \local_gugrades\conversion::is_conversion_applied($courseid, $gradeitemid);
 
         // Scale.
-        if ($gradeitem->gradetype == GRADE_TYPE_SCALE) {
+        if ($converted) {
+            $scale = \local_gugrades\conversion::get_conversion_scale($courseid, $gradeitemid);
+            $scalemenu = self::formkit_menu($scale, true);
+        } else if ($gradeitem->gradetype == GRADE_TYPE_SCALE) {
             $scale = \local_gugrades\grades::get_scale($gradeitem->scaleid);
             $scalemenu = self::formkit_menu($scale, true);
         } else {
@@ -668,7 +672,7 @@ class api {
             'itemname' => $gradeitem->itemname,
             'fullname' => fullname($user),
             'idnumber' => $user->idnumber,
-            'usescale' => ($itemtype == 'scale') || ($itemtype == 'scale22'),
+            'usescale' => ($itemtype == 'scale') || ($itemtype == 'scale22') || $converted,
             'grademax' => $grademax,
             'scalemenu' => $scalemenu,
             'adminmenu' => $adminmenu,

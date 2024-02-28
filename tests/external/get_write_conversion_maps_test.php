@@ -403,8 +403,25 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         );
 
         // What's in the grades table?
-        $grades = $DB->get_records('local_gugrades_grade', ['gradeitemid' => $this->gradeitemidassign1]);
+        $grades = array_values($DB->get_records('local_gugrades_grade', ['gradeitemid' => $this->gradeitemidassign1]));
 
-        var_dump($grades);
+        $this->assertCount(4, $grades);
+        $this->assertEquals('CONVERTED', $grades[2]->gradetype);
+        $this->assertEquals('A1', $grades[2]->displaygrade);
+        $this->assertEquals('CONVERTED', $grades[3]->gradetype);
+        $this->assertEquals('E3', $grades[3]->displaygrade);
+
+        // Get the add grade form and make sure it reflects the converted grade.
+        $form = get_add_grade_form::execute($this->course->id, $this->gradeitemidassign1, $this->student->id);
+        $form = \external_api::clean_returnvalue(
+            get_add_grade_form::execute_returns(),
+            $form
+        );
+
+        $this->assertEquals(true, $form['usescale']);
+        $scalemenu = $form['scalemenu'];
+        $this->assertCount(23, $scalemenu);
+        $this->assertEquals(20, $scalemenu[2]['value']);
+        $this->assertEquals('F3', $scalemenu[19]['label']);
     }
 }

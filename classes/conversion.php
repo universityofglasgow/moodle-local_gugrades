@@ -445,4 +445,50 @@ class conversion {
             );
         }
     }
+
+    /**
+     * Has a gradeitem had a conversion applied?
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @return bool
+     */
+    public static function is_conversion_applied(int $courseid, int $gradeitemid) {
+        global $DB;
+
+        if ($mapitem = $DB->get_record('local_gugrades_map_item', ['gradeitemid' => $gradeitemid])) {
+            if ($courseid != $mapitem->courseid) {
+                throw new \moodle_exception('courseid does not match ' . $courseid);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get value => scale item for map
+     * Compare with \local_gugrades\grade::get_scale()
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @return array
+     */
+    public static function get_conversion_scale(int $courseid, int $gradeitemid) {
+        global $DB;
+
+        $mapitem = $DB->get_record('local_gugrades_map_item', ['gradeitemid' => $gradeitemid], '*', MUST_EXIST);
+        if ($courseid != $mapitem->courseid) {
+            throw new \moodle_exception('courseid does not match ' . $courseid);
+        }
+        $mapid = $mapitem->mapid;
+
+        // Get map values.
+        $mapvalues = $DB->get_records('local_gugrades_map_value', ['mapid' => $mapid], 'percentage ASC');
+        $output = [];
+        foreach ($mapvalues as $mapvalue) {
+            $output[$mapvalue->scalevalue] = $mapvalue->band;
+        }
+
+        return $output;
+    }
 }
