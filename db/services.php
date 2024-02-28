@@ -62,7 +62,7 @@ $services = [
             'local_gugrades_delete_conversion_map',
             'local_gugrades_import_conversion_map',
             'local_gugrades_select_conversion',
-            'get_selected_conversion'
+            'get_selected_conversion',
         ],
         'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,

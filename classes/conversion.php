@@ -300,7 +300,7 @@ class conversion {
     public static function select_conversion(int $courseid, int $gradeitemid, int $mapid) {
         global $DB, $USER;
 
-        // $mapid==0 means delete the mappings for this item
+        // $mapid==0 means delete the mappings for this item.
         if ($mapid == 0) {
             $DB->delete_records('local_gugrades_map_item', ['gradeitemid' => $gradeitemid]);
             return;
@@ -375,14 +375,14 @@ class conversion {
      */
     protected static function convert_grade(float $rawgrade, float $maxgrade, array $mapvalues) {
         $values = array_values($mapvalues);
-        for ($i=0; $i < count($values); $i++) {
+        for ($i = 0; $i < count($values); $i++) {
             $lower = $values[$i]->percentage * $maxgrade / 100;
 
             // There's no 100% in the array, so assume this if final item.
             if ($i == count($values) - 1) {
                 $upper = $maxgrade;
             } else {
-                $upper = $values[$i+1]->percentage * $maxgrade / 100;
+                $upper = $values[$i + 1]->percentage * $maxgrade / 100;
             }
             if (($rawgrade >= $lower) && ($rawgrade < $upper)) {
                 return $values[$i];
@@ -407,20 +407,18 @@ class conversion {
         $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid, 0);
         $users = $activity->get_users();
 
-        // Get map values
+        // Get map values.
         $mapvalues = $DB->get_records('local_gugrades_map_value', ['mapid' => $mapinfo->id], 'percentage ASC');
 
-        // Get the grade item
+        // Get the grade item.
         $gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
-
-        //var_dump($users); die;
 
         // Iterate over users converting grades.
         foreach ($users as $user) {
             $usercapture = new usercapture($courseid, $gradeitemid, $user->id);
             $provisional = $usercapture->get_provisional();
 
-            // If there's no provision grade, then there's nothing to convert
+            // If there's no provision grade, then there's nothing to convert.
             if (!$provisional) {
                 continue;
             }
