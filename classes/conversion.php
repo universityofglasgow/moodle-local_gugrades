@@ -161,6 +161,10 @@ class conversion {
     protected static function unique_name(string $name) {
         global $DB;
 
+        // Remove '(nn)'
+        $name = trim($name);
+        $name = trim(preg_replace('/\(\d+\)$/', '', $name));
+
         $sql = 'select * from {local_gugrades_map} where ' . $DB->sql_compare_text('name') . ' = :name';
         if (!$DB->record_exists_sql($sql, ['name' => $name])) {
             return $name;
@@ -171,7 +175,7 @@ class conversion {
             $count++;
         }
 
-        return $name . '(' . $count . ')';
+        return $name . ' (' . $count . ')';
     }
 
     /**
@@ -188,6 +192,8 @@ class conversion {
         int $courseid, int $mapid, string $name, string $schedule, float $maxgrade, array $map): int {
         global $DB, $USER;
 
+        $name = trim($name);
+
         // Check schedule.
         if (($schedule != 'schedulea') && ($schedule != 'scheduleb')) {
             throw new \moodle_exception('Schedule parameter must be "schedulea" or "scheduleb".');
@@ -200,8 +206,10 @@ class conversion {
             }
 
             // Write main record.
-            // Name is the only thing you can change.
-            $mapinfo->name = self::unique_name($name);
+            // Name is the only thing you can change. Do a de-duplicate only if name has changed
+            if ($name != $mapinfo->name) {
+                $mapinfo->name = self::unique_name($name);
+            }
             $mapinfo->timemodified = time();
             $DB->update_record('local_gugrades_map', $mapinfo);
 

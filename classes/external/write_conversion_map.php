@@ -46,7 +46,7 @@ class write_conversion_map extends \external_api {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
             'mapid' => new external_value(PARAM_INT, 'Map ID. 0 if new'),
-            'name' => new external_value(PARAM_TEXT, 'Conversion map name'),
+            'name' => new external_value(PARAM_RAW, 'Conversion map name'),
             'schedule' => new external_value(PARAM_ALPHA, 'schedulea or scheduleb'),
             'maxgrade' => new external_value(PARAM_FLOAT, 'Maximum grade value'),
             'map' => new external_multiple_structure(

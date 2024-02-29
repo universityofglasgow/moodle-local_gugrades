@@ -5,7 +5,7 @@
             outer-class="mb-3"
             :label="mstrings.conversionmapname"
             validation-visibility="live"
-            validation="required|alpha_spaces:latin"
+            validation="required"
             name="mapname"
             v-model="mapname"
         ></FormKit>
