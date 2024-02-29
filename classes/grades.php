@@ -589,7 +589,19 @@ class grades {
         $converted = \local_gugrades\conversion::is_conversion_applied($courseid, $gradeitemid);
 
         // Is it a scale of some sort?
-        if ($gradetype == GRADE_TYPE_SCALE) {
+        if ($converted) {
+
+            $mapitem = $DB->get_record('local_gugrades_map_item', ['gradeitemid' => $gradeitemid], '*', MUST_EXIST);
+            $map = $DB->get_record('local_gugrades_map', ['id' => $mapitem->mapid], '*', MUST_EXIST);
+
+            $classname = 'local_gugrades\\conversion\\' . $map->scale;
+            if (!class_exists($classname, true)) {
+                throw new \moodle_exception('Unknown conversion class - "' . $map->scale . '"');
+            }
+
+            return new $classname($courseid, $gradeitemid, $converted);
+
+        } else if ($gradetype == GRADE_TYPE_SCALE) {
 
             // See if scale is in our scaletype table.
             if (!$scaletype = $DB->get_record('local_gugrades_scaletype', ['scaleid' => $gradeitem->scaleid])) {
@@ -602,7 +614,7 @@ class grades {
                 throw new \moodle_exception('Unknown conversion class - "' . $scaletype->scale . '"');
             }
 
-            return new $classname($courseid, $gradeitemid);
+            return new $classname($courseid, $gradeitemid, $converted);
         } else {
 
             // We're assuming it's a points scale (already checked for weird types).

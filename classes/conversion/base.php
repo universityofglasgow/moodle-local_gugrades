@@ -51,15 +51,22 @@ abstract class base {
     protected $gradeitem;
 
     /**
+     * @var bool $converted
+     */
+    protected $converted;
+
+    /**
      * Constructor. Get grade info
      * @param int $courseid
      * @param int $gradeitemid
+     * @param bool $converted
      */
-    public function __construct(int $courseid, int $gradeitemid) {
+    public function __construct(int $courseid, int $gradeitemid, bool $converted = false) {
         global $DB;
 
         $this->courseid = $courseid;
         $this->gradeitemid = $gradeitemid;
+        $this->converted = $converted;
 
         $this->gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
     }
@@ -88,6 +95,21 @@ abstract class base {
      */
     public static function get_map() {
         return false;
+    }
+
+    /**
+     * Get reverse map
+     * item => value
+     * @return array
+     */
+    protected function get_reverse_map() {
+        $map = self::get_map();
+        $rmap = [];
+        foreach ($map as $value => $item) {
+            $rmap[$item] = $value;
+        }
+
+        return $rmap;
     }
 
     /**

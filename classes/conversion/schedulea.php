@@ -39,20 +39,28 @@ class schedulea extends base {
      * Constructor. Get grade info
      * @param int $courseid
      * @param int $gradeitemid
+     * @param bool $converted
      */
-    public function __construct(int $courseid, int $gradeitemid) {
+    public function __construct(int $courseid, int $gradeitemid, bool $converted = false) {
         global $DB;
 
-        parent::__construct($courseid, $gradeitemid);
+        parent::__construct($courseid, $gradeitemid, $converted);
 
-        // Get scale.
-        $scale = $DB->get_record('scale', ['id' => $this->gradeitem->scaleid], '*', MUST_EXIST);
-        $this->scaleitems = array_map('trim', explode(',', $scale->scale));
+        // If converted, use the built-in grade
+        if ($converted) {
+            $this->items = self::get_reverse_map();
+            $this->scaleitems = array_values($this->items);
+        } else {
 
-        // Get scale conversion.
-        $items = $DB->get_records('local_gugrades_scalevalue', ['scaleid' => $this->gradeitem->scaleid]);
-        foreach ($items as $item) {
-            $this->items[$item->item] = $item->value;
+            // Get scale.
+            $scale = $DB->get_record('scale', ['id' => $this->gradeitem->scaleid], '*', MUST_EXIST);
+            $this->scaleitems = array_map('trim', explode(',', $scale->scale));
+
+            // Get scale conversion.
+            $items = $DB->get_records('local_gugrades_scalevalue', ['scaleid' => $this->gradeitem->scaleid]);
+            foreach ($items as $item) {
+                $this->items[$item->item] = $item->value;
+            }
         }
     }
 
