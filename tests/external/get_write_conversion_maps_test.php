@@ -424,7 +424,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         $this->assertEquals(20, $scalemenu[2]['value']);
         $this->assertEquals('F3', $scalemenu[19]['label']);
 
-        // Write a grade back using the scale
+        // Write a grade back using the scale.
         $nothing = write_additional_grade::execute(
             $this->course->id,
             $this->gradeitemidassign1,
@@ -448,7 +448,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
             $page
         );
 
-        // Check grades
+        // Check grades.
         $fredgrades = $page['users'][0]['grades'];
         $this->assertCount(4, $fredgrades);
         $this->assertEquals('95.5', $fredgrades[0]['displaygrade']);

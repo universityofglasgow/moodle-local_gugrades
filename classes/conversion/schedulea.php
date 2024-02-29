@@ -46,7 +46,7 @@ class schedulea extends base {
 
         parent::__construct($courseid, $gradeitemid, $converted);
 
-        // If converted, use the built-in grade
+        // If converted, use the built-in grade.
         if (!$converted) {
 
             // Get scale.
@@ -118,7 +118,7 @@ class schedulea extends base {
     public function import(float $floatgrade) {
         global $DB;
 
-        // It's a scale, so it can't be a decimal
+        // It's a scale, so it can't be a decimal.
         $grade = round($floatgrade);
 
         if ($this->converted) {
@@ -139,8 +139,6 @@ class schedulea extends base {
         }
 
         // Convert to value using scalevalue.
-        //var_dump($scaleitem);
-        //var_dump($this->items);
         if (array_key_exists($scaleitem, $this->items)) {
             $converted = $this->items[$scaleitem];
         } else {

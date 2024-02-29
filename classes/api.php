@@ -1053,7 +1053,7 @@ class api {
         // Delete columns.
         $DB->delete_records('local_gugrades_column', ['courseid' => $courseid]);
 
-        // Delete maps
+        // Delete maps.
         $maps = $DB->get_records('local_gugrades_map', ['courseid' => $courseid]);
         foreach ($maps as $map) {
             $DB->delete_records('local_gugrades_map_value', ['mapid' => $map->id]);
