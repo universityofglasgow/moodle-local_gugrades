@@ -768,6 +768,9 @@ class api {
             $rawgrade = 0;
             $convertedgrade = 0.0;
             $displaygrade = $admingrade;
+        } else if ($conversion->is_conversion()) {
+            list($convertedgrade, $displaygrade) = $conversion->import($scale);
+            $rawgrade = $scale;
         } else if ($usescale) {
 
             // TODO: Check! +1 because internal values are 1 - based, our form is 0 - based.
@@ -1049,6 +1052,14 @@ class api {
 
         // Delete columns.
         $DB->delete_records('local_gugrades_column', ['courseid' => $courseid]);
+
+        // Delete maps
+        $maps = $DB->get_records('local_gugrades_map', ['courseid' => $courseid]);
+        foreach ($maps as $map) {
+            $DB->delete_records('local_gugrades_map_value', ['mapid' => $map->id]);
+        }
+        $DB->delete_records('local_gugrades_map_item', ['courseid' => $courseid]);
+        $DB->delete_records('local_gugrades_map', ['courseid' => $courseid]);
 
         // TODO: Likely to be other stuff.
     }

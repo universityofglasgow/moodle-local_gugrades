@@ -80,6 +80,14 @@ abstract class base {
     }
 
     /**
+     * Is the conversion a 'converted' scale
+     * @return bool
+     */
+    public function is_conversion() {
+        return $this->converted;
+    }
+
+    /**
      * Is the conversion a scale (as opposed to points)?
      * @return bool
      */
@@ -94,22 +102,7 @@ abstract class base {
      * @return mixed (array or false if not a scale)
      */
     public static function get_map() {
-        return false;
-    }
-
-    /**
-     * Get reverse map
-     * item => value
-     * @return array
-     */
-    protected function get_reverse_map() {
-        $map = self::get_map();
-        $rmap = [];
-        foreach ($map as $value => $item) {
-            $rmap[$item] = $value;
-        }
-
-        return $rmap;
+        throw new \moodle_exception('This function should be overridden');
     }
 
     /**

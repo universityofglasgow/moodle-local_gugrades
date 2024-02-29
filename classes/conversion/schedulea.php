@@ -47,10 +47,7 @@ class schedulea extends base {
         parent::__construct($courseid, $gradeitemid, $converted);
 
         // If converted, use the built-in grade
-        if ($converted) {
-            $this->items = self::get_reverse_map();
-            $this->scaleitems = array_values($this->items);
-        } else {
+        if (!$converted) {
 
             // Get scale.
             $scale = $DB->get_record('scale', ['id' => $this->gradeitem->scaleid], '*', MUST_EXIST);
@@ -113,18 +110,25 @@ class schedulea extends base {
     }
 
     /**
-     * Get the scale item
-     * @param $
-     */
-
-    /**
      * Handle imported grade
      * Create both converted grade (actual value) and display grade
-     * @param float $grade
+     * @param float $floatgrade
      * @return [float, string]
      */
-    public function import(float $grade) {
+    public function import(float $floatgrade) {
         global $DB;
+
+        // It's a scale, so it can't be a decimal
+        $grade = round($floatgrade);
+
+        if ($this->converted) {
+            $map = $this->get_map();
+            if (!array_key_exists($grade, $map)) {
+                throw new \moodle_exception('Grade ' . $grade . 'is not in Schedule A');
+            } else {
+                return [$grade, $map[$grade]];
+            }
+        }
 
         // Get scale (scales start at 1 not 0).
         if (isset($this->scaleitems[$grade - 1])) {
@@ -135,6 +139,8 @@ class schedulea extends base {
         }
 
         // Convert to value using scalevalue.
+        //var_dump($scaleitem);
+        //var_dump($this->items);
         if (array_key_exists($scaleitem, $this->items)) {
             $converted = $this->items[$scaleitem];
         } else {

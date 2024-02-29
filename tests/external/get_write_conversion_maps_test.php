@@ -455,9 +455,8 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         $this->assertEquals('FIRST', $fredgrades[0]['gradetype']);
         $this->assertEquals('A1', $fredgrades[1]['displaygrade']);
         $this->assertEquals('CONVERTED', $fredgrades[1]['gradetype']);
-        //$this->assertEquals('95.5', $fredgrades[2]['displaygrade']);
+        $this->assertEquals('A5', $fredgrades[2]['displaygrade']);
         $this->assertEquals('SECOND', $fredgrades[2]['gradetype']);
 
-        var_dump($fredgrades);
     }
 }

@@ -53,6 +53,7 @@
                     validation="required|validate_order|between:0,100"
                     validation-visibility="live"
                     :validation-messages="{
+                        between: 'Percentage must be between 0 and 100',
                         validate_order: 'Values must be in ascending sequence',
                     }"
                     v-model="item.boundpc"
