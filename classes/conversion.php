@@ -161,7 +161,7 @@ class conversion {
     protected static function unique_name(string $name) {
         global $DB;
 
-        // Remove '(nn)'
+        // Remove '(nn)'.
         $name = trim($name);
         $name = trim(preg_replace('/\(\d+\)$/', '', $name));
 
@@ -206,7 +206,7 @@ class conversion {
             }
 
             // Write main record.
-            // Name is the only thing you can change. Do a de-duplicate only if name has changed
+            // Name is the only thing you can change. Do a de-duplicate only if name has changed.
             if ($name != $mapinfo->name) {
                 $mapinfo->name = self::unique_name($name);
             }

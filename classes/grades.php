@@ -585,6 +585,9 @@ class grades {
         $gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
         $gradetype = $gradeitem->gradetype;
 
+        // Has it been converted?
+        $converted = \local_gugrades\conversion::is_conversion_applied($courseid, $gradeitemid);
+
         // Is it a scale of some sort?
         if ($gradetype == GRADE_TYPE_SCALE) {
 

@@ -423,5 +423,41 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         $this->assertCount(23, $scalemenu);
         $this->assertEquals(20, $scalemenu[2]['value']);
         $this->assertEquals('F3', $scalemenu[19]['label']);
+
+        // Write a grade back using the scale
+        $nothing = write_additional_grade::execute(
+            $this->course->id,
+            $this->gradeitemidassign1,
+            $this->student->id,
+            'SECOND',
+            '',
+            '',
+            18,
+            0,
+            'Test notes'
+        );
+        $nothing = \external_api::clean_returnvalue(
+            write_additional_grade::execute_returns(),
+            $nothing
+        );
+
+        // Get capture page.
+        $page = get_capture_page::execute($this->course->id, $this->gradeitemidassign1, '', '', 0, false);
+        $page = \external_api::clean_returnvalue(
+            get_capture_page::execute_returns(),
+            $page
+        );
+
+        // Check grades
+        $fredgrades = $page['users'][0]['grades'];
+        $this->assertCount(4, $fredgrades);
+        $this->assertEquals('95.5', $fredgrades[0]['displaygrade']);
+        $this->assertEquals('FIRST', $fredgrades[0]['gradetype']);
+        $this->assertEquals('A1', $fredgrades[1]['displaygrade']);
+        $this->assertEquals('CONVERTED', $fredgrades[1]['gradetype']);
+        //$this->assertEquals('95.5', $fredgrades[2]['displaygrade']);
+        $this->assertEquals('SECOND', $fredgrades[2]['gradetype']);
+
+        var_dump($fredgrades);
     }
 }
