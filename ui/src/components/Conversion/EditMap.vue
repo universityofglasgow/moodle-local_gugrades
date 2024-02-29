@@ -4,8 +4,8 @@
             type="text"
             outer-class="mb-3"
             :label="mstrings.conversionmapname"
-            validation="required"
             validation-visibility="live"
+            validation="required|alpha_spaces:latin"
             name="mapname"
             v-model="mapname"
         ></FormKit>
@@ -57,7 +57,7 @@
                     }"
                     v-model="item.boundpc"
                 ></FormKit>
-            </div>    
+            </div>
             <div class="col-5">
                 <FormKit
                     type="text"
@@ -73,11 +73,11 @@
                     }"
                     v-model="item.boundpoints"
                 ></FormKit>
-            </div>   
+            </div>
         </div>
         <button class="btn btn-warning float-right" @click="cancel_button">{{ mstrings.cancel }}</button>
     </FormKit>
-   
+
 </template>
 
 <script setup>
@@ -135,8 +135,8 @@
     }
 
     /**
-     * Recalculate items. 
-     * When settings change match percent to point according to 
+     * Recalculate items.
+     * When settings change match percent to point according to
      * entrytypeoptions setting
      */
     function recalculate() {
@@ -144,7 +144,7 @@
 
             // If percent selected then recalc points
             if (entrytype.value == 'percentage') {
-                item.boundpoints = precision(item.boundpc * maxgrade.value / 100);    
+                item.boundpoints = precision(item.boundpc * maxgrade.value / 100);
             }
 
             // If points selected then recalc percent
@@ -180,7 +180,7 @@
     );
 
     /**
-     * Watch the map array for changes to 
+     * Watch the map array for changes to
      */
     watch(
         items,
@@ -255,7 +255,7 @@
         .catch((error) => {
             window.console.error(error);
             toast.error('Error communicating with server (see console)');
-        }); 
+        });
     }
 
     /**
@@ -294,7 +294,7 @@
         .catch((error) => {
             window.console.error(error);
             toast.error('Error communicating with server (see console)');
-        });   
+        });
     }
 
     /**

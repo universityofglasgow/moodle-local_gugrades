@@ -197,7 +197,8 @@
         }])[0]
         .then((result) => {
             const json = JSON.stringify(result, null, 4);
-            const filename = result.name + '.json';
+            let filename = result.name + '.json';
+            filename = filename.replace(/[/\\?%*:|"<>]/g, '-');
             const blob = new Blob([json], {type: 'text/json;charset=utf-8'});
             saveAs(blob, filename);
             toast.success('Map exported');
