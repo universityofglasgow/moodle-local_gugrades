@@ -215,7 +215,7 @@
     onMounted(() => {
         headers.value = [
             {text: mstrings.name, value: 'name'},
-            {text: mstrings.scale, value: 'scale'},
+            {text: mstrings.scalehead, value: 'scale'},
             {text: mstrings.maxgrade, value: 'maxgrade'},
             {text: mstrings.createdby, value: 'createdby'},
             {text: mstrings.createdat, value: 'createdat'},
