@@ -32,13 +32,9 @@ $PAGE->set_url($url);
 
 // Stuff to include.
 $PAGE->requires->js_call_amd('local_gugrades/interface', 'init', [['courseid' => $courseid]]);
-//$PAGE->requires->css('/local/gugrades/ui/dist/css/app.css');
-//$PAGE->requires->js('/local/gugrades/ui/dist/js/chunk-vendors.js');
-//$PAGE->requires->js('/local/gugrades/ui/dist/js/app.js');
-//$PAGE->requires->js('/local/gugrades/ui/dist/assets/entry.js');
-$PAGE->requires->css('/local/gugrades/ui/dist/assets/style.css');
-
-echo '<script type="module" crossorigin src="' . $CFG->wwwroot . '/local/gugrades/ui/dist/assets/entry.js"></script>';
+$PAGE->requires->css('/local/gugrades/ui/dist/css/app.css');
+$PAGE->requires->js('/local/gugrades/ui/dist/js/chunk-vendors.js');
+$PAGE->requires->js('/local/gugrades/ui/dist/js/app.js');
 
 // Security.
 $course = $DB->get_record('course', ['id' => $courseid], '*', MUST_EXIST);

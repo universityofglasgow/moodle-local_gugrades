@@ -564,6 +564,9 @@ class grades {
         $columns = \local_gugrades\gradetype::sort($columns);
 
         // Add editable flag.
+        // If gradeitem has been converted then ONLY columns that are now scales can be edited.
+        // Columns in the original points cannot.
+        $converted = \local_gugrades\conversion::is_conversion_applied($courseid, $gradeitemid);
         foreach ($columns as $column) {
             $column->editable = \local_gugrades\gradetype::can_gradetype_be_edited($column->gradetype);
         }

@@ -1,5 +1,6 @@
 import { createApp, reactive } from 'vue'
 import App from './App.vue'
+//import router from './router'
 import Toast  from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import Vue3EasyDataTable from 'vue3-easy-data-table';
@@ -8,7 +9,7 @@ import { plugin, defaultConfig } from '@formkit/vue';
 import { Modal } from '@kouts/vue-modal';
 import '../src/assets/VueModal.css';
 
-import customConfig from './js/formkit.config.js'
+import customConfig from '@/js/formkit.config.js'
 
 // This stuff makes sure that the window.GU variable
 // exists.

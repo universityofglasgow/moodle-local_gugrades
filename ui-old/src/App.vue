@@ -3,6 +3,6 @@
 </template>
 
 <script setup>
-    import TabMenu from '../src/views/TabMenu.vue';
+    import TabMenu from '@/views/TabMenu.vue';
 </script>
 
