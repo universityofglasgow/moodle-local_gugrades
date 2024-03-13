@@ -47,7 +47,7 @@ class write_column_test extends \local_gugrades\external\gugrades_advanced_testc
         // Log in as teacher.
         $this->setUser($this->teacher);
 
-        $nullreturn = write_column::execute($this->course->id, $this->gradeitemidassign1, 'AGREED', '', '');
+        $nullreturn = write_column::execute($this->course->id, $this->gradeitemidassign1, 'AGREED', '', '', true);
         $nullreturn = \external_api::clean_returnvalue(
             write_column::execute_returns(),
             $nullreturn
@@ -58,7 +58,7 @@ class write_column_test extends \local_gugrades\external\gugrades_advanced_testc
         $this->assertEquals('AGREED', $columns[0]->gradetype);
 
         // Check that trying to add it again doesn't create a new column.
-        $nullreturn = write_column::execute($this->course->id, $this->gradeitemidassign1, 'AGREED', '', '');
+        $nullreturn = write_column::execute($this->course->id, $this->gradeitemidassign1, 'AGREED', '', '', true);
         $nullreturn = \external_api::clean_returnvalue(
             write_column::execute_returns(),
             $nullreturn

@@ -113,6 +113,7 @@ class get_capture_page extends \external_api {
                     'editable' => new external_value(PARAM_BOOL, 'Is it a column that can be edited after the fact?'),
                     'description' => new external_value(PARAM_TEXT, 'Heading for this grade type'),
                     'other' => new external_value(PARAM_TEXT, 'Other text'),
+                    'points' => new external_value(PARAM_BOOL, 'True = points, False = scale'),
                 ])
             ),
             'hidden' => new external_value(PARAM_BOOL, 'True if student names are hidden'),

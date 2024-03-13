@@ -406,10 +406,12 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         $grades = array_values($DB->get_records('local_gugrades_grade', ['gradeitemid' => $this->gradeitemidassign1]));
 
         $this->assertCount(4, $grades);
+        $this->assertEquals(1, $grades[0]->points);
         $this->assertEquals('CONVERTED', $grades[2]->gradetype);
         $this->assertEquals('A1', $grades[2]->displaygrade);
         $this->assertEquals('CONVERTED', $grades[3]->gradetype);
         $this->assertEquals('E3', $grades[3]->displaygrade);
+        $this->assertEquals(0, $grades[3]->points);
 
         // Get the add grade form and make sure it reflects the converted grade.
         $form = get_add_grade_form::execute($this->course->id, $this->gradeitemidassign1, $this->student->id);
@@ -457,6 +459,23 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         $this->assertEquals('CONVERTED', $fredgrades[1]['gradetype']);
         $this->assertEquals('A5', $fredgrades[2]['displaygrade']);
         $this->assertEquals('SECOND', $fredgrades[2]['gradetype']);
+
+        // Check columns
+        $columns = $page['columns'];
+        $this->assertCount(4, $columns);
+        $this->assertEquals('FIRST', $columns[0]['gradetype']);
+        $this->assertEquals(true, $columns[0]['points']);
+        $this->assertEquals('CONVERTED', $columns[2]['gradetype']);
+        $this->assertEquals(false, $columns[2]['points']);
+        $this->assertEquals('PROVISIONAL', $columns[3]['gradetype']);
+        $this->assertEquals(false, $columns[3]['points']);
+
+        // Get the add grade form and make sure unconverted columns have been removed from list of gradetypes.
+        $form = get_add_grade_form::execute($this->course->id, $this->gradeitemidassign1, $this->student->id);
+        $form = \external_api::clean_returnvalue(
+            get_add_grade_form::execute_returns(),
+            $form
+        );
 
     }
 }

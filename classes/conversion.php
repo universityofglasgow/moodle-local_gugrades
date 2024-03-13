@@ -449,8 +449,15 @@ class conversion {
                 'CONVERTED',
                 '',
                 true,
-                ''
+                '',
+                false,
             );
+        }
+
+        // Provisional column will now represent a scale
+        if ($provisionalcolumn = $DB->get_record('local_gugrades_column', ['gradeitemid' => $gradeitemid, 'gradetype' => 'PROVISIONAL'])) {
+            $provisionalcolumn->points = false;
+            $DB->update_record('local_gugrades_column', $provisionalcolumn);
         }
     }
 

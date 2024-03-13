@@ -123,8 +123,9 @@ class usercapture {
 
         // Work out / add provisional grade.
         if ($grades) {
-            $provisionalcolumn = \local_gugrades\grades::get_column($this->courseid, $this->gradeitemid, 'PROVISIONAL');
             $provisional = $this->rules->get_provisional($grades);
+            $provisionalcolumn = \local_gugrades\grades::get_column($this->courseid, $this->gradeitemid, 'PROVISIONAL', '',
+                $provisional->points);
 
             $provisional->columnid = $provisionalcolumn->id;
             $this->provisional = $provisional;

@@ -264,7 +264,8 @@ class api {
                     $reason,
                     $other,
                     true,
-                    ''
+                    '',
+                    !$conversion->is_scale(),
                 );
                 $addcount++;
             }
@@ -351,7 +352,8 @@ class api {
                 'FIRST',
                 '',
                 1,
-                get_string('import', 'local_gugrades')
+                get_string('import', 'local_gugrades'),
+                !$conversion->is_scale(),
             );
 
             return true;
@@ -598,6 +600,8 @@ class api {
     public static function get_capture_cell_form(int $courseid, int $gradeitemid) {
         global $DB;
 
+        $converted = \local_gugrades\conversion::is_conversion_applied($courseid, $gradeitemid);
+
         // Gradeitem.
         list($itemtype, $gradeitem) = \local_gugrades\grades::analyse_gradeitem($gradeitemid);
         if ($gradeitem == false) {
@@ -606,7 +610,10 @@ class api {
         $grademax = ($gradeitem->gradetype == GRADE_TYPE_VALUE) ? $gradeitem->grademax : 0;
 
         // Scale.
-        if ($gradeitem->gradetype == GRADE_TYPE_SCALE) {
+        if ($converted) {
+            $scale = \local_gugrades\conversion::get_conversion_scale($courseid, $gradeitemid);
+            $scalemenu = self::formkit_menu($scale, true);
+        } else if ($gradeitem->gradetype == GRADE_TYPE_SCALE) {
             $scale = \local_gugrades\grades::get_scale($gradeitem->scaleid);
             $scalemenu = self::formkit_menu($scale, true);
         } else {
@@ -617,8 +624,15 @@ class api {
         $admingrades = \local_gugrades\admin_grades::get_menu();
         $adminmenu = self::formkit_menu($admingrades, true);
 
+        // Is it a scale?
+        if ($converted) {
+            $usescale = true;
+        } else {
+            $usescale = ($itemtype == 'scale') || ($itemtype == 'scale22');
+        }
+
         return [
-            'usescale' => ($itemtype == 'scale') || ($itemtype == 'scale22'),
+            'usescale' => $usescale,
             'grademax' => $grademax,
             'scalemenu' => $scalemenu,
             'adminmenu' => $adminmenu,
@@ -636,8 +650,22 @@ class api {
     public static function get_add_grade_form(int $courseid, int $gradeitemid, int $userid) {
         global $DB;
 
+        $converted = \local_gugrades\conversion::is_conversion_applied($courseid, $gradeitemid);
+
         // Get gradetype.
         $gradetypes = \local_gugrades\gradetype::get_menu($gradeitemid, LOCAL_GUGRADES_FORMENU);
+
+        // If converted then we can't change existing points columns
+        if ($converted) {
+            foreach ($gradetypes as $gradetype => $description) {
+                if ($column = $DB->get_record('local_gugrades_column', ['gradeitemid' => $gradeitemid, 'gradetype' => $gradetype])) {
+                    if ($column->points) {
+                        unset($gradetypes[$gradetype]);
+                    }
+                }
+            }
+        }
+
         $wsgradetypes = self::formkit_menu($gradetypes);
 
         // Username.
@@ -649,7 +677,6 @@ class api {
             throw new \moodle_exception('Unsupported grade item encountered in get_add_grade_form. Gradeitemid = ' . $gradeitemid);
         }
         $grademax = ($gradeitem->gradetype == GRADE_TYPE_VALUE) ? $gradeitem->grademax : 0;
-        $converted = \local_gugrades\conversion::is_conversion_applied($courseid, $gradeitemid);
 
         // Scale.
         if ($converted) {
@@ -686,7 +713,21 @@ class api {
      * @return array [$gradetypes, $admingrades]
      */
     public static function get_gradetypes(int $courseid, int $gradeitemid) {
+        global $DB;
+
         $gradetypes = \local_gugrades\gradetype::get_menu($gradeitemid, LOCAL_GUGRADES_FORMENU);
+
+        // If converted then we can't change existing points columns
+        $converted = \local_gugrades\conversion::is_conversion_applied($courseid, $gradeitemid);
+        if ($converted) {
+            foreach ($gradetypes as $gradetype => $description) {
+                if ($column = $DB->get_record('local_gugrades_column', ['gradeitemid' => $gradeitemid, 'gradetype' => $gradetype])) {
+                    if ($column->points) {
+                        unset($gradetypes[$gradetype]);
+                    }
+                }
+            }
+        }
         $wsgradetypes = self::formkit_menu($gradetypes);
 
         // Administrative grades.
@@ -794,7 +835,8 @@ class api {
             $reason,
             $other,
             true,
-            $notes
+            $notes,
+            !$conversion->is_scale(),
         );
     }
 
@@ -808,7 +850,17 @@ class api {
      * @param string $notes
      */
     public static function write_column(int $courseid, int $gradeitemid, string $reason, string $other, string $notes) {
-        $column = \local_gugrades\grades::get_column($courseid, $gradeitemid, $reason, $other);
+
+        // Need column points or scale.
+        // If it's converted then it must be scale, otherwise it's whatever the conversion factory thinks.
+        $converted = \local_gugrades\conversion::is_conversion_applied($courseid, $gradeitemid);
+        if ($converted) {
+            $points = false;
+        } else {
+            $conversion = \local_gugrades\grades::conversion_factory($courseid, $gradeitemid);
+            $points = !$conversion->is_scale();
+        }
+        $column = \local_gugrades\grades::get_column($courseid, $gradeitemid, $reason, $other, $points);
 
         return $column->id;
     }
@@ -1034,7 +1086,8 @@ class api {
                     $released->gradetype,
                     '',
                     true,
-                    'Release grades'
+                    'Release grades',
+                    $released->points,
                 );
             }
         }

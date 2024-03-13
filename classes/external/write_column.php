@@ -82,7 +82,7 @@ class write_column extends \external_api {
             $gradeitemid,
             $reason,
             $other,
-            $notes
+            $notes,
         );
 
         return ['columnid' => $columnid];

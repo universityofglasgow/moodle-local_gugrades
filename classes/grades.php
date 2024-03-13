@@ -228,9 +228,10 @@ class grades {
      * @param int $gradeitemid
      * @param string $gradetype
      * @param string $other
+     * @param bool $points
      * @return object
      */
-    public static function get_column(int $courseid, int $gradeitemid, string $gradetype, string $other = '') {
+    public static function get_column(int $courseid, int $gradeitemid, string $gradetype, string $other, bool $points) {
         global $DB;
 
         // Check 'other' text is valid.
@@ -267,6 +268,7 @@ class grades {
         $column->gradeitemid = $gradeitemid;
         $column->gradetype = $gradetype;
         $column->other = $other;
+        $column->points = $points;
         $column->id = $DB->insert_record('local_gugrades_column', $column);
 
         return $column;
@@ -287,6 +289,7 @@ class grades {
      * @param string $other
      * @param bool $iscurrent
      * @param string $auditcomment
+     * @parm bool $points
      */
     public static function write_grade(
         int $courseid,
@@ -300,12 +303,13 @@ class grades {
         string $gradetype,
         string $other,
         bool $iscurrent,
-        string $auditcomment = ''
+        string $auditcomment,
+        bool $points
     ) {
         global $DB, $USER;
 
         // Get/create the column entry.
-        $column = self::get_column($courseid, $gradeitemid, $gradetype, $other);
+        $column = self::get_column($courseid, $gradeitemid, $gradetype, $other, $points);
 
         // Does this already exist.
         $gradetypecompare = $DB->sql_compare_text('gradetype');
@@ -348,6 +352,7 @@ class grades {
         $gugrade->auditby = $USER->id;
         $gugrade->audittimecreated = time();
         $gugrade->auditcomment = $auditcomment;
+        $gugrade->points = $points;
         $DB->insert_record('local_gugrades_grade', $gugrade);
     }
 
@@ -529,7 +534,7 @@ class grades {
 
             // As there is at least one column then there must be a provisional
             // But it has to go at the end.
-            $provisionalcolumn = self::get_column($courseid, $gradeitemid, 'PROVISIONAL');
+            $provisionalcolumn = self::get_column($courseid, $gradeitemid, 'PROVISIONAL', '', false);
             if (isset($columns[$provisionalcolumn->id])) {
                 unset($columns[$provisionalcolumn->id]);
             }
@@ -550,12 +555,14 @@ class grades {
         }
 
         // There has to be a first column.
+        $conversion = \local_gugrades\grades::conversion_factory($courseid, $gradeitemid);
         if (!in_array('FIRST', array_column($columns, 'gradetype'))) {
             $firstcolumn = (object)[
                 'id' => 0,
                 'gradetype' => 'FIRST',
                 'description' => gradetype::get_description('FIRST'),
                 'other' => '',
+                'points' => !$conversion->is_scale(),
             ];
             array_unshift($columns, $firstcolumn);
         }
@@ -568,7 +575,11 @@ class grades {
         // Columns in the original points cannot.
         $converted = \local_gugrades\conversion::is_conversion_applied($courseid, $gradeitemid);
         foreach ($columns as $column) {
-            $column->editable = \local_gugrades\gradetype::can_gradetype_be_edited($column->gradetype);
+            if ($converted && $column->points) {
+                $column->editable = false;
+            } else {
+                $column->editable = \local_gugrades\gradetype::can_gradetype_be_edited($column->gradetype);
+            }
         }
 
         return $columns;
