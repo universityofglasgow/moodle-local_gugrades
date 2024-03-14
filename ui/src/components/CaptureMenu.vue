@@ -6,7 +6,7 @@
             <ImportUserGradeButton v-if="props.awaitingcapture" :itemid="props.itemid" :userid="props.userid" @imported="grade_added()"></ImportUserGradeButton>
             <AddGradeButton :itemid="props.itemid" :userid="props.userid" :name="props.name" :itemname="props.itemname" @gradeadded = "grade_added()"></AddGradeButton>
             <HistoryButton :userid="props.userid" :itemid="props.itemid" :name="props.name" :itemname="props.itemname"></HistoryButton>
-            <HideShowButton :gradehidden="props.gradehidden" :gradeitemid="props.itemid" :userid="props.userid"></HideShowButton>
+            <HideShowButton :gradehidden="props.gradehidden" :itemid="props.itemid" :userid="props.userid" @changed="grade_added()"></HideShowButton>
         </div>
     </div>
 </template>

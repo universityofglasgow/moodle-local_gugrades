@@ -58,6 +58,7 @@
                     alternating
                     :items="users"
                     :headers="headers"
+                    :body-row-class-name="table_row_class"
                     >
 
                     <!-- add header text and edit cog next to cell if required -->
@@ -196,6 +197,18 @@
         editcolumn.value = '';
         editcolumnslot.value = '';
     });
+
+    /**
+     * Get class name for table row depending on criteria
+     * Used to show hidden rows
+     */
+    function table_row_class(item) {
+        if (item.gradehidden) {
+            return 'hidden-row';
+        } else {
+            return '';
+        }
+    }
 
     /**
      * Collapse selection area
@@ -483,3 +496,9 @@
     });
 
 </script>
+
+<style>
+    .hidden-row td {
+        background-color: #ffff66  !important;
+    }
+</style>

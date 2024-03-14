@@ -1230,4 +1230,27 @@ class api {
     public static function get_selected_conversion(int $courseid, int $gradeitemid) {
         return \local_gugrades\conversion::get_selected_conversion($courseid, $gradeitemid);
     }
+
+    /**
+     * Show/hide grade
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param int $userid
+     * @param bool $hide
+     */
+    public static function show_hide_grade(int $courseid, int $gradeitemid, int $userid, bool $hide) {
+        global $DB;
+
+        if (!$hide) {
+            $DB->delete_records('local_gugrades_hidden', ['gradeitemid' => $gradeitemid, 'userid' => $userid]);
+        } else {
+            if (!$DB->record_exists('local_gugrades_hidden', ['gradeitemid' => $gradeitemid, 'userid' => $userid])) {
+                $hidden = new \stdClass();
+                $hidden->courseid = $courseid;
+                $hidden->gradeitemid = $gradeitemid;
+                $hidden->userid = $userid;
+                $DB->insert_record('local_gugrades_hidden', $hidden);
+            }
+        }
+    }
 }
