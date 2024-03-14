@@ -102,8 +102,8 @@ class scheduleb extends base {
     /**
      * Handle imported grade
      * Create both converted grade (actual value) and display grade
-     * @param float $grade
-     * @return [float, string]
+     * @param float $floatgrade
+     * @return array [float, string]
      */
     public function import(float $floatgrade) {
         global $DB;

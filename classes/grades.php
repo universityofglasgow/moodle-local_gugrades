@@ -289,7 +289,7 @@ class grades {
      * @param string $other
      * @param bool $iscurrent
      * @param string $auditcomment
-     * @parm bool $points
+     * @param bool $points
      */
     public static function write_grade(
         int $courseid,
