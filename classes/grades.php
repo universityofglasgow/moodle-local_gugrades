@@ -555,7 +555,7 @@ class grades {
         }
 
         // There has to be a first column.
-        $conversion = \local_gugrades\grades::conversion_factory($courseid, $gradeitemid);
+        $conversion = self::conversion_factory($courseid, $gradeitemid);
         if (!in_array('FIRST', array_column($columns, 'gradetype'))) {
             $firstcolumn = (object)[
                 'id' => 0,

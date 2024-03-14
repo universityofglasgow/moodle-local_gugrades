@@ -655,10 +655,11 @@ class api {
         // Get gradetype.
         $gradetypes = \local_gugrades\gradetype::get_menu($gradeitemid, LOCAL_GUGRADES_FORMENU);
 
-        // If converted then we can't change existing points columns
+        // If converted then we can't change existing points columns.
         if ($converted) {
             foreach ($gradetypes as $gradetype => $description) {
-                if ($column = $DB->get_record('local_gugrades_column', ['gradeitemid' => $gradeitemid, 'gradetype' => $gradetype])) {
+                if ($column = $DB->get_record('local_gugrades_column',
+                    ['gradeitemid' => $gradeitemid, 'gradetype' => $gradetype])) {
                     if ($column->points) {
                         unset($gradetypes[$gradetype]);
                     }
@@ -717,11 +718,12 @@ class api {
 
         $gradetypes = \local_gugrades\gradetype::get_menu($gradeitemid, LOCAL_GUGRADES_FORMENU);
 
-        // If converted then we can't change existing points columns
+        // If converted then we can't change existing points columns.
         $converted = \local_gugrades\conversion::is_conversion_applied($courseid, $gradeitemid);
         if ($converted) {
             foreach ($gradetypes as $gradetype => $description) {
-                if ($column = $DB->get_record('local_gugrades_column', ['gradeitemid' => $gradeitemid, 'gradetype' => $gradetype])) {
+                if ($column = $DB->get_record('local_gugrades_column',
+                    ['gradeitemid' => $gradeitemid, 'gradetype' => $gradetype])) {
                     if ($column->points) {
                         unset($gradetypes[$gradetype]);
                     }

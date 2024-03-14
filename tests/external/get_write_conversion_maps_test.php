@@ -460,7 +460,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         $this->assertEquals('A5', $fredgrades[2]['displaygrade']);
         $this->assertEquals('SECOND', $fredgrades[2]['gradetype']);
 
-        // Check columns
+        // Check columns.
         $columns = $page['columns'];
         $this->assertCount(4, $columns);
         $this->assertEquals('FIRST', $columns[0]['gradetype']);
