@@ -141,4 +141,20 @@ class users {
 
         return $users;
     }
+
+    /**
+     * Add gradehidden flag to user records
+     * @param array $users
+     * @param int $gradeitemid
+     * @return array
+     */
+    public static function add_gradehidden_to_user_records(array $users, int $gradeitemid) {
+        global $DB;
+
+        foreach ($users as $user) {
+            $user->gradehidden = $DB->record_exists('local_gugrades_hidden', ['gradeitemid' => $gradeitemid, 'userid' => $user->id]);
+        }
+
+        return $users;
+    }
 }

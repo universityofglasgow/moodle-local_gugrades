@@ -6,6 +6,7 @@
             <ImportUserGradeButton v-if="props.awaitingcapture" :itemid="props.itemid" :userid="props.userid" @imported="grade_added()"></ImportUserGradeButton>
             <AddGradeButton :itemid="props.itemid" :userid="props.userid" :name="props.name" :itemname="props.itemname" @gradeadded = "grade_added()"></AddGradeButton>
             <HistoryButton :userid="props.userid" :itemid="props.itemid" :name="props.name" :itemname="props.itemname"></HistoryButton>
+            <HideShowButton :gradehidden="props.gradehidden" :gradeitemid="props.itemid" :userid="props.userid"></HideShowButton>
         </div>
     </div>
 </template>
@@ -15,6 +16,7 @@
     import HistoryButton from '@/components/Capture/HistoryButton.vue';
     import ImportUserGradeButton from '@/components/Capture/ImportUserGradeButton.vue';
     import AddGradeButton from '@/components/Capture/AddGradeButton.vue';
+    import HideShowButton from '@/components/Capture/HideShowButton.vue';
 
     //const mstrings = inject('mstrings');
 
@@ -24,6 +26,7 @@
             itemname: String,
             name: String,
             awaitingcapture: Boolean,
+            gradehidden: Boolean,
         });
 
     const emit = defineEmits([

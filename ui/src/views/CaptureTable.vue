@@ -109,6 +109,7 @@
                             :itemname="itemname"
                             :gradesimported="gradesimported"
                             :awaitingcapture="item.awaitingcapture"
+                            :gradehidden="item.gradehidden"
                             @gradeadded = "get_page_data(itemid, firstname, lastname, groupid)"
                             >
                         </CaptureMenu>
