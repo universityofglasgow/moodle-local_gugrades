@@ -322,10 +322,12 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
         // Add some assignments.
         $assign1 = $this->getDataGenerator()->create_module('assign', ['course' => $course->id]);
         $assign2 = $this->getDataGenerator()->create_module('assign', ['course' => $course->id]);
+        $assign3 = $this->getDataGenerator()->create_module('assign', ['course' => $course->id]);
 
         // Get gradeitemids.
         $this->gradeitemidassign1 = $this->get_grade_item('', 'assign', $assign1->id);
         $this->gradeitemidassign2 = $this->get_grade_item('', 'assign', $assign2->id);
+        $this->gradeitemidassign3 = $this->get_grade_item('', 'assign', $assign3->id);
 
         // Modify assignment 2 to use scale.
         $gradeitem2 = $DB->get_record('grade_items', ['id' => $this->gradeitemidassign2], '*', MUST_EXIST);
@@ -335,11 +337,19 @@ class gugrades_advanced_testcase extends externallib_advanced_testcase {
         $gradeitem2->scaleid = $scale->id;
         $DB->update_record('grade_items', $gradeitem2);
 
+        // Modify assignment 3 to grade out of 23.
+        $gradeitem3 = $DB->get_record('grade_items', ['id' => $this->gradeitemidassign3], '*', MUST_EXIST);
+        $gradeitem3->grademax = 23.0;
+        $gradeitem3->grademin = 0.0;
+        $DB->update_record('grade_items', $gradeitem3);
+
         // Add assignment grades.
         $this->add_assignment_grade($assign1->id, $student->id, 95.5);
         $this->add_assignment_grade($assign1->id, $student2->id, 33);
         $this->add_assignment_grade($assign2->id, $student->id, 21);
         $this->add_assignment_grade($assign2->id, $student2->id, 11);
+        $this->add_assignment_grade($assign3->id, $student->id, 0);
+        $this->add_assignment_grade($assign3->id, $student2->id, 23.0);
 
         // Move the assignments to summative grade category (we only have one course).
         $items = $DB->get_records('grade_items', ['courseid' => $course->id, 'itemmodule' => 'assign']);

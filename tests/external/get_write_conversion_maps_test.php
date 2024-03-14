@@ -478,4 +478,51 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         );
 
     }
+
+    /**
+     * Test conversion at limits
+     */
+    public function test_conversion_limits() {
+
+        // First step - just create a default map
+        // Read map with id 0 (new map) for Schedule A.
+        $mapstuff = get_conversion_map::execute($this->course->id, 0, 'schedulea');
+        $mapstuff = \external_api::clean_returnvalue(
+            get_conversion_map::execute_returns(),
+            $mapstuff
+        );
+
+        // Write map back.
+        $name = 'Test conversion map';
+        $schedule = 'schedulea';
+        $maxgrade = 100.0;
+        $map = $mapstuff['map'];
+        $mapida = write_conversion_map::execute($this->course->id, 0, $name, $schedule, $maxgrade, $map);
+        $mapida = \external_api::clean_returnvalue(
+            write_conversion_map::execute_returns(),
+            $mapida
+        );
+        $mapida = $mapida['mapid'];
+
+        // Next step is to import some grades for some test students.
+        $userlist = [
+            $this->student->id,
+            $this->student2->id,
+        ];
+
+        // Assign3 (which is useing points from 0 to 23).
+        $status = import_grades_users::execute($this->course->id, $this->gradeitemidassign3, false, $userlist);
+        $status = \external_api::clean_returnvalue(
+            import_grades_users::execute_returns(),
+            $status
+        );
+
+        // Apply the test conversion map to Assign3.
+        $nothing = select_conversion::execute($this->course->id, $this->gradeitemidassign3, $mapida);
+        $nothing = \external_api::clean_returnvalue(
+            select_conversion::execute_returns(),
+            $nothing
+        );
+
+    }
 }

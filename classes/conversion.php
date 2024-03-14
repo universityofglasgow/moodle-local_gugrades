@@ -382,7 +382,15 @@ class conversion {
      * @return object
      */
     protected static function convert_grade(float $rawgrade, float $maxgrade, array $mapvalues) {
+
         $values = array_values($mapvalues);
+
+        // rawgrade == maxgrade is an "edge" condition
+        if ($rawgrade == $maxgrade) {
+            return end($values);
+        }
+
+        // Otherwise, loop over values
         for ($i = 0; $i < count($values); $i++) {
             $lower = $values[$i]->percentage * $maxgrade / 100;
 
