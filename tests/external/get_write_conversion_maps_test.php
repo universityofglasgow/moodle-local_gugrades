@@ -481,8 +481,12 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
     /**
      * Test conversion at limits
+     * @covers \local_gugrades\external\get_conversion_map::execute
+     * @covers \local_gugrades\external\write_conversion_map::execute
+     * @covers \local_gugrades\external\select_conversion::execute
      */
     public function test_conversion_limits() {
+        global $DB;
 
         // First step - just create a default map
         // Read map with id 0 (new map) for Schedule A.
@@ -524,5 +528,19 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
             $nothing
         );
 
+        // Get capture page.
+        $page = get_capture_page::execute($this->course->id, $this->gradeitemidassign3, '', '', 0, false);
+        $page = \external_api::clean_returnvalue(
+            get_capture_page::execute_returns(),
+            $page
+        );
+
+        // Check grades.
+        $grades1 = $page['users'][0]['grades'];
+        $this->assertEquals('H', $grades1[1]['displaygrade']);
+        $this->assertEquals('CONVERTED', $grades1[1]['gradetype']);
+        $grades2 = $page['users'][1]['grades'];
+        $this->assertEquals('A1', $grades2[1]['displaygrade']);
+        $this->assertEquals('CONVERTED', $grades2[1]['gradetype']);
     }
 }
