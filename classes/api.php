@@ -1253,4 +1253,36 @@ class api {
             }
         }
     }
+
+    /**
+     * Get aggregation page
+     * @param int $courseid
+     * @param int $gradecategoryid
+     * @param string $firstname
+     * @param string $lastname
+     * @param int $groupid
+     * @param bool $viewfullnames
+     * @return array
+     */
+    public static function get_aggregation_page(
+        int $courseid,
+        int $gradecategoryid,
+        string $firstname,
+        string $lastname,
+        int $groupid,
+        bool $viewfullname
+        ) {
+
+        // Get categories and items at this level
+        list($gradecategories, $gradeitems) = \local_gugrades\aggregation::get_level($courseid, $gradecategoryid);
+
+        // Get all the students
+        $users = \local_gugrades\aggregation::get_usersstudents($courseid, $firstname, $lastname, $groupid);
+
+        return [
+            'categories' => $gradecategories,
+            'items' => $gradeitems,
+            'users' => $users,
+        ];
+    }
 }

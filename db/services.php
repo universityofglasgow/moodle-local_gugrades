@@ -64,6 +64,7 @@ $services = [
             'local_gugrades_select_conversion',
             'local_gugrades_get_selected_conversion',
             'local_gugrades_show_hide_grade',
+            'local_gugrades_get_aggregation_page',
         ],
         'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,
@@ -292,6 +293,12 @@ $functions = [
         'classname' => 'local_gugrades\external\show_hide_grade',
         'description' => 'Show hide single grade item for user.',
         'type' => 'write',
+        'ajax' => true,
+    ],
+    'local_gugrades_get_aggregation_page' => [
+        'classname' => 'local_gugrades\external\get_aggregation_page',
+        'description' => 'get the data for the aggregation page.',
+        'type' => 'read',
         'ajax' => true,
     ],
 ];

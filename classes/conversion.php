@@ -286,12 +286,28 @@ class conversion {
             throw new \moodle_exception('Invalid JSON');
         }
 
+        $map = $mapinfo['map'];
+
         // Sanity checks.
         if (!array_key_exists('map', $mapinfo) || !array_key_exists('name', $mapinfo) || !array_key_exists('schedule', $mapinfo)) {
             throw new \moodle_exception('Required fields missing in JSON');
         }
 
-        $map = $mapinfo['map'];
+        $schedule = $mapinfo['schedule'];
+        if (($schedule != 'schedulea') && ($schedule != 'scheduleb')) {
+            throw new \moodle_exception('Schedule must be "schedulea" or "scheduleb"');
+        }
+
+        if (($schedule == 'schedulea') && (count($map) != 23)) {
+            throw new \moodle_exception('Schedule A map must have exacly 23 items');
+        }
+        if (($schedule == 'scheduleb') && (count($map) != 8)) {
+            throw new \moodle_exception('Schedule A map must have exacly 8 items');
+        }
+
+        if (($map[0]['band'] != 'H') || ($map[0]['bound'] != 0)) {
+            throw new \moodle_exception('The first item must be H and must have a bound of 0');
+        }
 
         $mapid = self::write_conversion_map($courseid, 0, $mapinfo['name'], $mapinfo['schedule'], $mapinfo['maxgrade'], $map);
 

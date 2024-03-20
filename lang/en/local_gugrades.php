@@ -137,6 +137,7 @@ $string['maxgrade'] = "Maximum grade";
 $string['mapdefaultinfo'] = 'Comma separated list of boundary values for conversion maps (H=0 is assumed).';
 $string['mapdefaultschedulea'] = 'Default mappings for Schedule A';
 $string['mapdefaultscheduleb'] = 'Default mappings for Schedule B';
+$string['mapnotinorder'] = 'Map values are not in ascending order';
 $string['moodlegrade'] = 'Moodle grade';
 $string['name'] = 'Name';
 $string['no'] = 'No';

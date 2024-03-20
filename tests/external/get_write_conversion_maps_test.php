@@ -259,6 +259,144 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         $this->assertEquals('Test import map', $mapstuff['name']);
     }
 
+   /**
+     * Test invalid import json
+     * H value must be 0
+     * @covers \local_gugrades\external\get_conversion_map::execute
+     * @covers \local_gugrades\external\write_conversion_map::execute
+     */
+    public function test_incorrectH_json() {
+
+        // Incorrect bound for H (must be zero).
+        $jsonmap = '{
+            "name": "Test import map",
+            "schedule": "scheduleb",
+            "maxgrade": 100,
+            "inuse": false,
+            "map": [
+                {
+                    "band": "H",
+                    "bound": 7,
+                    "grade": 0
+                },
+                {
+                    "band": "G0",
+                    "bound": 9,
+                    "grade": 2
+                },
+                {
+                    "band": "F0",
+                    "bound": 19,
+                    "grade": 5
+                },
+                {
+                    "band": "E0",
+                    "bound": 29,
+                    "grade": 8
+                },
+                {
+                    "band": "D0",
+                    "bound": 39,
+                    "grade": 11
+                },
+                {
+                    "band": "C0",
+                    "bound": 53,
+                    "grade": 14
+                },
+                {
+                    "band": "B0",
+                    "bound": 59,
+                    "grade": 17
+                },
+                {
+                    "band": "A0",
+                    "bound": 69,
+                    "grade": 22
+                }
+            ]
+        }';
+
+        $this->expectException('moodle_exception');
+        $mapid = import_conversion_map::execute($this->course->id, $jsonmap);
+    }
+
+    /**
+     * Test invalid import json
+     * schedule field must be 'schedulea' or 'scheduleb'
+     * @covers \local_gugrades\external\get_conversion_map::execute
+     * @covers \local_gugrades\external\write_conversion_map::execute
+     */
+    public function test_incorrect_schedule_json() {
+        $jsonmap = '{
+            "name": "Test import map",
+            "schedule": "notaschedule",
+            "maxgrade": 100,
+            "inuse": false,
+            "map": [
+
+            ]
+        }';
+
+        $this->expectException('moodle_exception');
+        $mapid = import_conversion_map::execute($this->course->id, $jsonmap);
+    }
+
+    /**
+     * Test invalid import json
+     * Not enough items in the map
+     * @covers \local_gugrades\external\get_conversion_map::execute
+     * @covers \local_gugrades\external\write_conversion_map::execute
+     */
+    public function test_incorrect_count_json() {
+        $jsonmap = '{
+            "name": "Test import map",
+            "schedule": "scheduleb",
+            "maxgrade": 100,
+            "inuse": false,
+            "map": [
+                {
+                    "band": "H",
+                    "bound": 0,
+                    "grade": 0
+                },
+                {
+                    "band": "G0",
+                    "bound": 9,
+                    "grade": 2
+                },
+                {
+                    "band": "F0",
+                    "bound": 19,
+                    "grade": 5
+                },
+                {
+                    "band": "E0",
+                    "bound": 29,
+                    "grade": 8
+                },
+                {
+                    "band": "D0",
+                    "bound": 39,
+                    "grade": 11
+                },
+                {
+                    "band": "C0",
+                    "bound": 53,
+                    "grade": 14
+                },
+                {
+                    "band": "A0",
+                    "bound": 69,
+                    "grade": 22
+                }
+            ]
+        }';
+
+        $this->expectException('moodle_exception');
+        $mapid = import_conversion_map::execute($this->course->id, $jsonmap);
+    }
+
     /**
      * Check selecting a default map
      * @covers \local_gugrades\external\get_conversion_map::execute

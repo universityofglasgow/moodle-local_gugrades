@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Language EN
+ * Gradebook functions
  *
  * @package    local_gugrades
  * @copyright  2023

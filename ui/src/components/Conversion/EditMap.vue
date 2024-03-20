@@ -4,6 +4,7 @@
             type="text"
             outer-class="mb-3"
             :label="mstrings.conversionmapname"
+            :actions="ordervalidated"
             validation-visibility="live"
             validation="required"
             name="mapname"
@@ -35,7 +36,7 @@
             :options="entrytypeoptions"
         ></FormKit>
         <div class="row mt-3">
-            <div class="col-2"><h3>{{  mstrings.band }}</h3></div>
+            <div class="col-2"><h3>{{ mstrings.band }}</h3></div>
             <div class="col-5"><h3>{{ mstrings.percentage}}</h3></div>
             <div class="col-5"><h3>{{ mstrings.points }}</h3></div>
         </div>
@@ -47,11 +48,12 @@
             <div class="col-5">
                 <FormKit
                     type="text"
+                    numer="float"
                     outer-class="mb-3"
-                    :disabled="entrytype != 'percentage'"
+                    :disabled="(entrytype != 'percentage') || (item.band == 'H')"
                     :validation-rules="{ validate_order }"
                     validation="required|validate_order|between:0,100"
-                    validation-visibility="live"
+                    validation-visibility="blur"
                     :validation-messages="{
                         between: 'Percentage must be between 0 and 100',
                         validate_order: 'Values must be in ascending sequence',
@@ -64,10 +66,10 @@
                     type="text"
                     number="float"
                     outer-class="mb-3"
-                    :disabled="entrytype != 'points'"
+                    :disabled="(entrytype != 'points') || (item.band == 'H')"
                     :validation-rules="{ validate_points, validate_order }"
                     validation="required|validate_points|validate_order"
-                    validation-visibility="live"
+                    validation-visibility="blur"
                     :validation-messages="{
                         validate_points: 'Number must be between 0 and ' + maxgrade,
                         validate_order: 'Values must be in ascending sequence',
@@ -76,13 +78,18 @@
                 ></FormKit>
             </div>
         </div>
+
+        <div v-if="!ordervalidated" class="alert alert-danger my-3">
+            {{ mstrings.mapnotinorder }}
+        </div>
+
         <button class="btn btn-warning float-right" @click="cancel_button">{{ mstrings.cancel }}</button>
     </FormKit>
 
 </template>
 
 <script setup>
-    import {ref, inject, defineProps, defineEmits, onMounted, watch} from '@vue/runtime-core';
+    import {ref, inject, defineProps, defineEmits, onMounted, watch, computed} from '@vue/runtime-core';
     import { useToast } from "vue-toastification";
     import { watchDebounced } from '@vueuse/core';
 
@@ -112,11 +119,11 @@
     const emits = defineEmits(['close']);
 
     /**
-     * Round values to 2 decimal place
+     * Round values to 5 decimal place
      * TODO: This might change
      */
-    function precision(n) {
-        return Math.floor(n * 100) / 100;
+    function precision(num, decimals) {
+        return +(Math.round(num + "e" + decimals) + "e-" + decimals);
     }
 
     /**
@@ -130,7 +137,7 @@
                 band: item.band,
                 grade: item.grade,
                 boundpc: item.bound,
-                boundpoints: precision(item.bound * maxgrade.value / 100),
+                boundpoints: precision(item.bound * maxgrade.value / 100, 5),
             });
         });
     }
@@ -145,12 +152,12 @@
 
             // If percent selected then recalc points
             if (entrytype.value == 'percentage') {
-                item.boundpoints = precision(item.boundpc * maxgrade.value / 100);
+                item.boundpoints = precision(item.boundpc * maxgrade.value / 100, 5);
             }
 
             // If points selected then recalc percent
             if (entrytype.value == 'points') {
-                item.boundpc = precision(item.boundpoints * 100 / maxgrade.value);
+                item.boundpc = precision(item.boundpoints * 100 / maxgrade.value, 5);
             }
         })
     }
@@ -199,9 +206,9 @@
     }
 
     /**
-     * Custom rule to check that points/percentages are in order
+     * computed to check that points/percentages are in order
      */
-    function validate_order() {
+    const ordervalidated = computed(() => {
         let currentpercent = 0;
         let currentpoints = 0;
         let inorder = true;
@@ -219,12 +226,16 @@
         });
 
         return inorder;
-    }
+    });
 
     /**
      * Form submitted
      */
     function submit_form() {
+        if (!ordervalidated.value) {
+            return;
+        }
+
         const GU = window.GU;
         const courseid = GU.courseid;
         const fetchMany = GU.fetchMany;
@@ -233,7 +244,7 @@
         items.value.forEach((item) => {
             map.push({
                 band: item.band,
-                bound: item.boundpc,
+                bound: precision(item.boundpc, 5),
                 grade: item.grade,
             });
         });

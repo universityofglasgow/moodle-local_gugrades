@@ -14,7 +14,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link btn btn-secondary" :class="{active: activetab == 'aggregate'}" @click="clickTab('aggregate')">
+                <a class="nav-link btn btn-secondary" :class="{active: activetab == 'aggregation'}" @click="clickTab('aggregation')">
                     <i class="fa fa-compress" aria-hidden="true"></i>&nbsp;
                     {{ mstrings.coursegradeaggregation }}
                 </a>
@@ -52,6 +52,7 @@
      * @param {} item
      */
     function clickTab(item) {
+        window.console.log(item);
         activetab.value = item;
         emit('tabchange', item);
     }
