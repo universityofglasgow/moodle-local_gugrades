@@ -1274,14 +1274,15 @@ class api {
         ) {
 
         // Get categories and items at this level
-        list($gradecategories, $gradeitems) = \local_gugrades\aggregation::get_level($courseid, $gradecategoryid);
+        list($gradecategories, $gradeitems, $columns) = \local_gugrades\aggregation::get_level($courseid, $gradecategoryid);
 
         // Get all the students
-        $users = \local_gugrades\aggregation::get_usersstudents($courseid, $firstname, $lastname, $groupid);
+        $users = \local_gugrades\aggregation::get_users($courseid, $firstname, $lastname, $groupid);
 
         return [
             'categories' => $gradecategories,
             'items' => $gradeitems,
+            'columns' => $columns,
             'users' => $users,
         ];
     }

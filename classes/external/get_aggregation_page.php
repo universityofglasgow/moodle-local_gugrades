@@ -124,7 +124,15 @@ class get_aggregation_page extends \external_api {
                     'itemname' => new external_value(PARAM_TEXT, 'Full name of grade category'),
                     'weight' => new external_value(PARAM_FLOAT, 'Weighting of category'),
                 ])
-            )
+            ),
+            'columns' => new external_multiple_structure(
+                new external_single_structure([
+                    'gradeitemid' => new external_value(PARAM_INT, 'Grade item id (even for categories'),
+                    'categoryid' => new external_value(PARAM_INT, 'Category ID, or 0'),
+                    'shortname' => new external_value(PARAM_TEXT, 'Short name'),
+                    'fullname' => new external_value(PARAM_TEXT, 'Full name'),
+                ])
+            ),
         ]);
     }
 

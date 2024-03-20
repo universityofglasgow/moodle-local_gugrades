@@ -49,7 +49,7 @@ class aggregation {
     public static function get_level(int $courseid, int $gradecategoryid) {
         global $DB;
 
-        $sql = "SELECT * FROM {grade_categories} gc
+        $sql = "SELECT *, gi.id AS gradeitemid FROM {grade_categories} gc
             JOIN {grade_items} gi ON gi.iteminstance = gc.id
             WHERE gi.itemtype = 'category'
             AND gc.courseid = :courseid
@@ -81,10 +81,30 @@ class aggregation {
         $gradeitems = array_map(function($gi) {
             $gi->shortname = shorten_text($gi->itemname, SHORTNAME_LENGTH);
             $gi->weight = $gi->aggregationcoef;
+            $gi->gradeitemid = $gi->id;
             return $gi;
         }, $gradeitems);
 
-        return [$gradecategories, $gradeitems];
+        // Columns are a mix of grade categories and items.
+        $columns = [];
+        foreach ($gradecategories as $gradecategory) {
+            $columns[] = (object)[
+                'gradeitemid' => $gradecategory->gradeitemid,
+                'categoryid' => $gradecategory->id,
+                'shortname' => $gradecategory->shortname,
+                'fullname' => $gradecategory->fullname
+            ];
+        }
+        foreach ($gradeitems as $gradeitem) {
+            $columns[] = (object)[
+                'gradeitemid' => $gradeitem->gradeitemid,
+                'categoryid' => 0,
+                'shortname' => $gradeitem->shortname,
+                'fullname' => $gradeitem->itemname,
+            ];
+        }
+
+        return [$gradecategories, $gradeitems, $columns];
     }
 
     /**
@@ -99,7 +119,7 @@ class aggregation {
     public static function get_users(int $courseid, string $firstname, string $lastname, int $groupid) {
         $context = \context_course::instance($courseid);
         $users = \local_gugrades\users::get_gradeable_users($context, $firstname,
-            $lastname, $group);
+            $lastname, $groupid);
 
         // Displayname.
         foreach ($users as $user) {
@@ -107,7 +127,7 @@ class aggregation {
         }
 
         // Pictures.
-        $users = \local_gugrades\userd::add_pictures_to_user_records($users);
+        $users = \local_gugrades\users::add_pictures_to_user_records($users);
 
         return array_values($users);
     }

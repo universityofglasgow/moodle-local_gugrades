@@ -52,7 +52,6 @@
      * @param {} item
      */
     function clickTab(item) {
-        window.console.log(item);
         activetab.value = item;
         emit('tabchange', item);
     }
