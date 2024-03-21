@@ -89,6 +89,7 @@ class aggregation {
         $columns = [];
         foreach ($gradecategories as $gradecategory) {
             $columns[] = (object)[
+                'fieldname' => 'AGG_' . $gradecategory->gradeitemid,
                 'gradeitemid' => $gradecategory->gradeitemid,
                 'categoryid' => $gradecategory->id,
                 'shortname' => $gradecategory->shortname,
@@ -97,6 +98,7 @@ class aggregation {
         }
         foreach ($gradeitems as $gradeitem) {
             $columns[] = (object)[
+                'fieldname' => 'AGG_' . $gradeitem->gradeitemid,
                 'gradeitemid' => $gradeitem->gradeitemid,
                 'categoryid' => 0,
                 'shortname' => $gradeitem->shortname,
@@ -130,6 +132,33 @@ class aggregation {
         $users = \local_gugrades\users::add_pictures_to_user_records($users);
 
         return array_values($users);
+    }
+
+    /**
+     * Add aggregation data to users.
+     * Each user record contains list based on columns
+     * Formatted to survive web services (will need reformatted for EasyDataTable)
+     * @param array $users
+     * @param array $columns
+     * @return array
+     */
+    public static function add_aggregation_fields_to_users(array $users, array $columns) {
+        foreach ($users as $user) {
+            $fields = [];
+            foreach ($columns as $column) {
+
+                // Field identifier based on gradeitemid (which is unique even for categories)
+                $fieldname = 'AGG_' . $column->gradeitemid;
+                $data = [
+                    'fieldname' => $fieldname,
+                    'display' => 'No data'
+                ];
+                $fields[] = $data;
+            }
+            $user->fields = $fields;
+        }
+
+        return $users;
     }
 
 }

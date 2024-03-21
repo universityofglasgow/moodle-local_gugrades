@@ -90,25 +90,20 @@ class get_aggregation_page extends \external_api {
      */
     public static function execute_returns() {
         return new external_single_structure([
-            /*
             'users' => new external_multiple_structure(
                 new external_single_structure([
                     'id' => new external_value(PARAM_INT, 'User ID'),
                     'displayname' => new external_value(PARAM_TEXT, 'Name to display for this user'),
                     'pictureurl' => new external_value(PARAM_URL, 'URL of user avatar'),
                     'idnumber' => new external_value(PARAM_TEXT, 'User ID number'),
-                    'alert' => new external_value(PARAM_BOOL, 'Show discrepancy alert'),
-                    'gradehidden' => new external_value(PARAM_BOOL, 'User grades hidden for this grade item'),
-                    'grades' => new external_multiple_structure(
+                    'fields' => new external_multiple_structure(
                         new external_single_structure([
-                            'displaygrade' => new external_value(PARAM_TEXT, 'Grade for display'),
-                            'gradetype' => new external_value(PARAM_TEXT, 'FIRST, SECOND and so on'),
-                            'columnid' => new external_value(PARAM_INT, 'ID in column table'),
+                            'fieldname' => new external_value(PARAM_TEXT, 'Identifier for column'),
+                            'display' => new external_value(PARAM_TEXT, 'Grade for display'),
                         ])
                     ),
                 ])
-                ),
-                */
+            ),
             'categories' => new external_multiple_structure(
                 new external_single_structure([
                     'id' => new external_value(PARAM_INT, 'Grade category ID'),
@@ -127,6 +122,7 @@ class get_aggregation_page extends \external_api {
             ),
             'columns' => new external_multiple_structure(
                 new external_single_structure([
+                    'fieldname' => new external_value(PARAM_TEXT, 'Identifier for column'),
                     'gradeitemid' => new external_value(PARAM_INT, 'Grade item id (even for categories'),
                     'categoryid' => new external_value(PARAM_INT, 'Category ID, or 0'),
                     'shortname' => new external_value(PARAM_TEXT, 'Short name'),

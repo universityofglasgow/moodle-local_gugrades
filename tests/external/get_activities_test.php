@@ -70,7 +70,7 @@ class get_activities_test extends \local_gugrades\external\gugrades_advanced_tes
         $this->assertObjectHasAttribute('items', $data);
         $items = $data->items;
         $this->assertIsArray($items);
-        $this->assertCount(2, $items);
+        $this->assertCount(3, $items);
         $readassign1 = $items[0];
         $this->assertIsObject($readassign1);
         $this->assertObjectHasAttribute('itemname', $readassign1);
