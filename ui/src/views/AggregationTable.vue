@@ -6,6 +6,14 @@
         </div>
     </div>
 
+    <div v-if="level1category" class="border rounded my-3 p-2">
+        <ul class="list-inline">
+            <li v-for="item in breadcrumb" :key="item.id" class="list-inline-item">
+                <a href="#" @click="expand_clicked(item.id)">{{ item.shortname }}</a>
+            </li>
+        </ul>
+    </div>
+
     <div v-if="level1category" class="mt-2">
         <NameFilter @selected="filter_selected" ref="namefilterref"></NameFilter>
         <EasyDataTable
@@ -60,6 +68,7 @@
     const users = ref([]);
     const columns = ref([]);
     const categories = ref([]);
+    const breadcrumb = ref([]);
 
     let firstname = '';
     let lastname = '';
@@ -115,7 +124,6 @@
             });
         })
 
-        window.console.log(heads);
         return heads;
     });
 
@@ -163,6 +171,7 @@
             categories.value = result.categories;
             users.value = result.users;
             columns.value = result.columns;
+            breadcrumb.value = result.breadcrumb;
 
             users.value = process_users(users.value);
         })

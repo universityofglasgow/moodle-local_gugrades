@@ -167,4 +167,33 @@ class aggregation {
         return $users;
     }
 
+    /**
+     * Get "breadcrumb" trail for given gradecategoryid
+     * Return array of ['id' => ..., 'shortname' => ...]
+     * @param int $gradecategoryid
+     * @return array
+     */
+    public static function get_breadcrumb(int $gradecategoryid) {
+        global $DB;
+
+        $category = $DB->get_record('grade_categories', ['id' => $gradecategoryid], '*', MUST_EXIST);
+        $path = explode('/', trim($category->path, '/'));
+        array_shift($path);
+
+        if ($path) {
+            $breadcrumb = [];
+            foreach ($path as $id) {
+                $pathcat = $DB->get_record('grade_categories', ['id' => $id], '*', MUST_EXIST);
+                $breadcrumb[] = [
+                    'id' => $id,
+                    'shortname' => shorten_text($pathcat->fullname, SHORTNAME_LENGTH),
+                ];
+            }
+
+            return $breadcrumb;
+        } else {
+            return [];
+        }
+    }
+
 }

@@ -130,6 +130,12 @@ class get_aggregation_page extends \external_api {
                     'weight' => new external_value(PARAM_INT, 'Weighting as percentage'),
                 ])
             ),
+            'breadcrumb' => new external_multiple_structure(
+                new external_single_structure([
+                    'id' => new external_value(PARAM_INT, 'Grade category id'),
+                    'shortname' => new external_value(PARAM_TEXT, 'Grade category shortname'),
+                ])
+            ),
         ]);
     }
 

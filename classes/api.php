@@ -1273,23 +1273,27 @@ class api {
         bool $viewfullname
         ) {
 
-        // Get categories and items at this level
+        // Get categories and items at this level.
         list($gradecategories, $gradeitems, $columns) = \local_gugrades\aggregation::get_level($courseid, $gradecategoryid);
 
-        // Get all the students
+        // Get all the students.
         $users = \local_gugrades\aggregation::get_users($courseid, $firstname, $lastname, $groupid);
 
-        // Add the columns to the user fields
+        // Add the columns to the user fields.
         $users = \local_gugrades\aggregation::add_aggregation_fields_to_users($users, $columns);
 
-        // Add pictures to user fields
+        // Add pictures to user fields.
         $users = \local_gugrades\users::add_pictures_to_user_records($users);
+
+        // Get breadcrumb trail.
+        $breadcrumb = \local_gugrades\aggregation::get_breadcrumb($gradecategoryid);
 
         return [
             'categories' => $gradecategories,
             'items' => $gradeitems,
             'columns' => $columns,
             'users' => $users,
+            'breadcrumb' => $breadcrumb,
         ];
     }
 }
