@@ -49,7 +49,7 @@ class aggregation {
     public static function get_level(int $courseid, int $gradecategoryid) {
         global $DB;
 
-        $sql = "SELECT *, gi.id AS gradeitemid FROM {grade_categories} gc
+        $sql = "SELECT *, gi.id AS gradeitemid, gc.id AS gradecategoryid FROM {grade_categories} gc
             JOIN {grade_items} gi ON gi.iteminstance = gc.id
             WHERE gi.itemtype = 'category'
             AND gc.courseid = :courseid
@@ -91,7 +91,7 @@ class aggregation {
             $columns[] = (object)[
                 'fieldname' => 'AGG_' . $gradecategory->gradeitemid,
                 'gradeitemid' => $gradecategory->gradeitemid,
-                'categoryid' => $gradecategory->id,
+                'categoryid' => $gradecategory->gradecategoryid,
                 'shortname' => $gradecategory->shortname,
                 'fullname' => $gradecategory->fullname,
 

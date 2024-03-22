@@ -18,9 +18,18 @@
 
             <!-- additional information in header cells -->
             <template #header="header">
-                <div class="aggregation-header">
+                <div class="aggregation-header" data-toggle="tooltip" :title="header.fullname">
                     <div>{{ header.text }}</div>
                     <div v-if="header.weight">{{ header.weight }}%</div>
+                    <div v-if="header.categoryid">
+                        <a href="#" @click="expand_clicked(header.categoryid)">
+                            <span class="badge badge-light mt-2" >
+                                <i class="fa fa-caret-left" aria-hidden="true"></i>
+                                {{ mstrings.expand }}
+                                <i class="fa fa-caret-right" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </div>
                 </div>
             </template>
 
@@ -45,6 +54,7 @@
     const mstrings = inject('mstrings');
 
     const level1category = ref(0);
+    const categoryid = ref(0);
     const groupid = ref(0);
     const items = ref([]);
     const users = ref([]);
@@ -60,6 +70,7 @@
      */
     function levelOneChange(level) {
         level1category.value = parseInt(level);
+        categoryid.value = level1category.value;
         table_update();
     }
 
@@ -100,6 +111,7 @@
                 value: column.fieldname,
                 weight: column.weight,
                 fullname: column.fullname,
+                categoryid: column.categoryid,
             });
         })
 
@@ -139,7 +151,7 @@
             methodname: 'local_gugrades_get_aggregation_page',
             args: {
                 courseid: courseid,
-                gradecategoryid: level1category.value,
+                gradecategoryid: categoryid.value,
                 firstname: firstname,
                 lastname: lastname,
                 groupid: groupid.value,
@@ -158,6 +170,14 @@
             window.console.error(error);
             toast.error('Error communicating with server (see console)');
         });
+    }
+
+    /**
+     * Expand button was clicked in header
+     */
+    function expand_clicked(id) {
+        categoryid.value = id;
+        table_update();
     }
 </script>
 

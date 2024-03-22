@@ -83,6 +83,7 @@ $string['eventselectconversion'] = 'Select conversion';
 $string['eventsettingsupdate'] = 'Settings updated';
 $string['eventuploadcsv'] = 'Upload from CSV';
 $string['eventviewgugrades'] = 'View grading tool';
+$string['expand'] = 'Expand';
 $string['exportworksheet'] = 'Export worksheet';
 $string['firstname'] = 'First name';
 $string['firstnamelastname'] = 'Firstname / lastname';
