@@ -16,6 +16,14 @@
             :headers="headers"
         >
 
+            <!-- additional information in header cells -->
+            <template #header="header">
+                <div class="aggregation-header">
+                    <div>{{ header.text }}</div>
+                    <div v-if="header.weight">{{ header.weight }}%</div>
+                </div>
+            </template>
+
             <!-- User picture column -->
             <template #item-slotuserpicture="item">
                 <img :src="item.pictureurl" :alt="item.displayname" class="userpicture defaultuserpic" width="35" height="35"/>
@@ -90,9 +98,12 @@
             heads.push({
                 text: column.shortname,
                 value: column.fieldname,
+                weight: column.weight,
+                fullname: column.fullname,
             });
         })
 
+        window.console.log(heads);
         return heads;
     });
 
@@ -158,5 +169,11 @@
         --easy-table-header-background-color: #005c8a;
 
         --easy-table-header-item-padding: 10px 15px;
+    }
+
+    .aggregation-header {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
     }
 </style>

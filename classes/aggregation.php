@@ -93,7 +93,10 @@ class aggregation {
                 'gradeitemid' => $gradecategory->gradeitemid,
                 'categoryid' => $gradecategory->id,
                 'shortname' => $gradecategory->shortname,
-                'fullname' => $gradecategory->fullname
+                'fullname' => $gradecategory->fullname,
+
+                // TODO - may not be so simple
+                'weight' => round($gradecategory->weight * 100),
             ];
         }
         foreach ($gradeitems as $gradeitem) {
@@ -103,6 +106,9 @@ class aggregation {
                 'categoryid' => 0,
                 'shortname' => $gradeitem->shortname,
                 'fullname' => $gradeitem->itemname,
+
+                // TODO - may not be so simple
+                'weight' => round($gradeitem->weight * 100),
             ];
         }
 
