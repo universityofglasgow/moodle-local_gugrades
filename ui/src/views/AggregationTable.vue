@@ -29,6 +29,7 @@
                 <div class="aggregation-header" data-toggle="tooltip" :title="header.fullname">
                     <div>{{ header.text }}</div>
                     <div v-if="header.weight">{{ header.weight }}%</div>
+                    <div v-if="header.gradetype">{{ header.gradetype }} <span v-if="!header.isscale">({{ header.grademax }})</span></div>
                     <div v-if="header.categoryid">
                         <a href="#" @click="expand_clicked(header.categoryid)">
                             <span class="badge badge-light mt-2" >
@@ -121,6 +122,9 @@
                 weight: column.weight,
                 fullname: column.fullname,
                 categoryid: column.categoryid,
+                gradetype: column.gradetype,
+                grademax: column.grademax,
+                isscale: column.isscale,
             });
         })
 

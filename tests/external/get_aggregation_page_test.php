@@ -61,7 +61,7 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_advanc
      *
      * @covers \local_gugrades\external\get_aggregation_page::execute
      */
-    public function test_basic_capture_page() {
+    public function test_basic_aggregation_page() {
         global $DB;
 
         // Make sure that we're a teacher.

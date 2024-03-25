@@ -96,6 +96,15 @@ abstract class base {
     }
 
     /**
+     * Maximum grade.
+     * @return int
+     */
+    public function get_maximum_grade() {
+        return (int)$this->gradeitem->grademax;
+    }
+
+
+    /**
      * Define scale mapping (if it's a scale)
      * Define array of (e.g.) 10 => 'E3' and so on
      * (Static so we can call it outside of the normal use)

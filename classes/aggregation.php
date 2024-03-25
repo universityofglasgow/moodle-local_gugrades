@@ -112,6 +112,14 @@ class aggregation {
             ];
         }
 
+        // Add gradetypes and maximum points to columns
+        foreach ($columns as $column) {
+            $conversion = \local_gugrades\grades::conversion_factory($courseid, $column->gradeitemid);
+            $column->gradetype = $conversion->name();
+            $column->grademax = $conversion->get_maximum_grade();
+            $column->isscale = $conversion->is_scale();
+        }
+
         return [$gradecategories, $gradeitems, $columns];
     }
 
