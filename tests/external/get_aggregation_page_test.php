@@ -87,7 +87,17 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_advanc
             $page
         );
 
-        var_dump($page);
+        $this->assertArrayHasKey('breadcrumb', $page);
+        $breadcrumb = $page['breadcrumb'];
+        $this->assertEquals('Summative', $breadcrumb[0]['shortname']);
+
+        $this->assertArrayHasKey('columns', $page);
+        $columns = $page['columns'];
+        $this->assertCount(4, $columns);
+        $this->assertEquals('Assignment 3', $columns[3]['shortname']);
+        $this->assertEquals(false, $columns[3]['isscale']);
+        $this->assertEquals(23, $columns[3]['grademax']);
+
     }
 
 }

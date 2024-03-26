@@ -6,16 +6,23 @@
         </div>
     </div>
 
-    <div v-if="level1category" class="border rounded my-3 p-2">
-        <ul class="list-inline">
-            <li v-for="item in breadcrumb" :key="item.id" class="list-inline-item">
-                <a href="#" @click="expand_clicked(item.id)">{{ item.shortname }}</a>
-            </li>
-        </ul>
-    </div>
+
 
     <div v-if="level1category" class="mt-2">
+
+        <!-- Filter on initials -->
         <NameFilter @selected="filter_selected" ref="namefilterref"></NameFilter>
+
+        <!-- Breadcrumb trail -->
+        <div v-if="breadcrumb.length > 1" class="gug_breadcrumb border rounded my-3 p-2 text-white">
+            <ul class="list-inline mb-0">
+                <li v-for="(item, index) in breadcrumb" :key="item.id" class="list-inline-item">
+                    <span v-if="index != 0"> > </span>
+                    <a class="text-white" href="#" @click="expand_clicked(item.id)">{{ item.shortname }}</a>
+                </li>
+            </ul>
+        </div>
+
         <EasyDataTable
             buttons-pagination
             alternating
@@ -26,10 +33,12 @@
 
             <!-- additional information in header cells -->
             <template #header="header">
-                <div class="aggregation-header" data-toggle="tooltip" :title="header.fullname">
-                    <div>{{ header.text }}</div>
-                    <div v-if="header.weight">{{ header.weight }}%</div>
-                    <div v-if="header.gradetype">{{ header.gradetype }} <span v-if="!header.isscale">({{ header.grademax }})</span></div>
+                <div class="aggregation-header">
+                    <div data-toggle="tooltip" :title="header.fullname" :data-original-title="header.fullname">
+                        <div>{{ header.text }}</div>
+                        <div v-if="header.weight">{{ header.weight }}%</div>
+                        <div v-if="header.gradetype">{{ header.gradetype }} <span v-if="!header.isscale">({{ header.grademax }})</span></div>
+                    </div>
                     <div v-if="header.categoryid">
                         <a href="#" @click="expand_clicked(header.categoryid)">
                             <span class="badge badge-light mt-2" >
@@ -114,6 +123,8 @@
         heads.push({text: mstrings.userpicture, value: "slotuserpicture"});
         heads.push({text: mstrings.firstnamelastname, value: "displayname", sortable: true})
         heads.push({text: mstrings.idnumber, value: "idnumber", sortable: true});
+
+        window.console.log(columns.value);
 
         columns.value.forEach(column => {
             heads.push({
@@ -208,5 +219,9 @@
         display: flex;
         flex-direction: column;
         text-align: center;
+    }
+
+    .gug_breadcrumb {
+        background-color: #005c8a;
     }
 </style>
