@@ -56,6 +56,14 @@
                 <img :src="item.pictureurl" :alt="item.displayname" class="userpicture defaultuserpic" width="35" height="35"/>
             </template>
 
+            <!-- Resit required -->
+            <template #item-resitrequired="item">
+                <a href="#" @click="resit_clicked(item.id)">
+                    <span v-if="item.resitrequired" class="gug_pill badge badge-pill badge-danger">{{ mstrings.yes }}</span>
+                    <span v-else class="gug_pill badge badge-pill badge-secondary">{{ mstrings.no }}</span>
+                </a>
+            </template>
+
         </EasyDataTable>
     </div>
 </template>
@@ -102,6 +110,13 @@
     }
 
     /**
+     * Resit required 'pill' clicked
+     */
+    function resit_clicked(userid) {
+        window.console.log(userid);
+    }
+
+    /**
      * Add columns to user array
      */
     function process_users(users) {
@@ -124,8 +139,6 @@
         heads.push({text: mstrings.firstnamelastname, value: "displayname", sortable: true})
         heads.push({text: mstrings.idnumber, value: "idnumber", sortable: true});
 
-        window.console.log(columns.value);
-
         columns.value.forEach(column => {
             heads.push({
                 text: column.shortname,
@@ -137,7 +150,9 @@
                 grademax: column.grademax,
                 isscale: column.isscale,
             });
-        })
+        });
+
+        heads.push({text: mstrings.resitrequired, value: "resitrequired"});
 
         return heads;
     });
@@ -223,5 +238,9 @@
 
     .gug_breadcrumb {
         background-color: #005c8a;
+    }
+
+    .gug_pill {
+        font-size: 125%;
     }
 </style>

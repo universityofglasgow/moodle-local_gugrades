@@ -96,6 +96,7 @@ class get_aggregation_page extends \external_api {
                     'displayname' => new external_value(PARAM_TEXT, 'Name to display for this user'),
                     'pictureurl' => new external_value(PARAM_URL, 'URL of user avatar'),
                     'idnumber' => new external_value(PARAM_TEXT, 'User ID number'),
+                    'resitrequired' => new external_value(PARAM_BOOL, 'Is resit required?'),
                     'fields' => new external_multiple_structure(
                         new external_single_structure([
                             'fieldname' => new external_value(PARAM_TEXT, 'Identifier for column'),

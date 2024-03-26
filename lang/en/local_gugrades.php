@@ -174,6 +174,7 @@ $string['resetcourse'] = 'Reset course';
 $string['resetcourseconfirm'] = 'This will delete all MyGrades data for this course and cannot be reversed.';
 $string['resetfilter'] = 'Reset filter';
 $string['resetsuccess'] = 'MyGrades has been reset for this course.';
+$string['resitrequired'] = 'Resit required';
 $string['rulesdefault'] = 'Standard rules';
 $string['save'] = 'Save changes';
 $string['scale'] = 'Scale...';

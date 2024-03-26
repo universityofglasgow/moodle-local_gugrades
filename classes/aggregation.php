@@ -124,6 +124,16 @@ class aggregation {
     }
 
     /**
+     * Is resit required?
+     * TODO: Placeholder only
+     * @param int $courseid
+     * @param int $userid
+     */
+    protected static function is_resit_required(int $courseid, int $userid) {
+        return false;
+    }
+
+    /**
      * Get students - with some filtering
      * $firstname and $lastname are single initial character only.
      * @param int $courseid
@@ -137,9 +147,10 @@ class aggregation {
         $users = \local_gugrades\users::get_gradeable_users($context, $firstname,
             $lastname, $groupid);
 
-        // Displayname.
+        // Add aditional fields.
         foreach ($users as $user) {
             $user->displayname = fullname($user);
+            $user->resitrequired = self::is_resit_required($courseid, $user->id);
         }
 
         // Pictures.
@@ -169,6 +180,7 @@ class aggregation {
                 ];
                 $fields[] = $data;
             }
+
             $user->fields = $fields;
         }
 
