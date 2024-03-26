@@ -1255,6 +1255,18 @@ class api {
     }
 
     /**
+     * Check if grade is hidden
+     * @param int $gradeitemid
+     * @param int $userid
+     * @return boolean
+     */
+    public static function is_grade_hidden(int $gradeitemid, int $userid) {
+        global $DB;
+
+        return $DB->record_exists('local_gugrades_hidden', ['gradeitemid' => $gradeitemid, 'userid' => $userid]);
+    }
+
+    /**
      * Get aggregation page
      * @param int $courseid
      * @param int $gradecategoryid
