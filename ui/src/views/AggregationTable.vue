@@ -58,8 +58,8 @@
 
             <!-- Resit required -->
             <template #item-resitrequired="item">
-                <a href="#" @click="resit_clicked(item.id)">
-                    <span v-if="item.resitrequired" class="gug_pill badge badge-pill badge-danger">{{ mstrings.yes }}</span>
+                <a href="#" @click="resit_clicked(item.id, !item.resitrequired)">
+                    <span v-if="item.resitrequired" class="gug_pill badge badge-pill badge-success">{{ mstrings.yes }}</span>
                     <span v-else class="gug_pill badge badge-pill badge-secondary">{{ mstrings.no }}</span>
                 </a>
             </template>
@@ -112,8 +112,26 @@
     /**
      * Resit required 'pill' clicked
      */
-    function resit_clicked(userid) {
-        window.console.log(userid);
+    function resit_clicked(userid, required) {
+        const GU = window.GU;
+        const courseid = GU.courseid;
+        const fetchMany = GU.fetchMany;
+
+        fetchMany([{
+            methodname: 'local_gugrades_resit_required',
+            args: {
+                courseid: courseid,
+                userid: userid,
+                required: required,
+            }
+        }])[0]
+        .then(() => {
+            table_update();
+        })
+        .catch((error) => {
+            window.console.error(error);
+            toast.error('Error communicating with server (see console)');
+        });
     }
 
     /**

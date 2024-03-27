@@ -130,7 +130,9 @@ class aggregation {
      * @param int $userid
      */
     protected static function is_resit_required(int $courseid, int $userid) {
-        return false;
+        global $DB;
+
+        return $DB->record_exists('local_gugrades_resitrequired', ['courseid' => $courseid, 'userid' => $userid]);
     }
 
     /**

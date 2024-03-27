@@ -65,6 +65,7 @@ $services = [
             'local_gugrades_get_selected_conversion',
             'local_gugrades_show_hide_grade',
             'local_gugrades_get_aggregation_page',
+            'local_gugrades_resit_required',
         ],
         'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,
@@ -299,6 +300,12 @@ $functions = [
         'classname' => 'local_gugrades\external\get_aggregation_page',
         'description' => 'get the data for the aggregation page.',
         'type' => 'read',
+        'ajax' => true,
+    ],
+    'local_gugrades_resit_required' => [
+        'classname' => 'local_gugrades\external\resit_required',
+        'description' => 'Set/reset resit required flag.',
+        'type' => 'write',
         'ajax' => true,
     ],
 ];

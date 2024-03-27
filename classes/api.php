@@ -1308,4 +1308,26 @@ class api {
             'breadcrumb' => $breadcrumb,
         ];
     }
+
+
+    /**
+     * Resit required
+     * @param int $courseid
+     * @param int $userid
+     * @param bool $resit
+     */
+    public static function resit_required(int $courseid, int $userid, bool $resit) {
+        global $DB;
+
+        if (!$resit) {
+            $DB->delete_records('local_gugrades_resitrequired', ['courseid' => $courseid, 'userid' => $userid]);
+        } else {
+            if (!$DB->record_exists('local_gugrades_resitrequired', ['courseid' => $courseid, 'userid' => $userid])) {
+                $resitrequired = new \stdClass();
+                $resitrequired->courseid = $courseid;
+                $resitrequired->userid = $userid;
+                $DB->insert_record('local_gugrades_resitrequired', $resitrequired);
+            }
+        }
+    }
 }
