@@ -1282,7 +1282,7 @@ class api {
         string $firstname,
         string $lastname,
         int $groupid,
-        bool $viewfullname
+        bool $viewfullnames
         ) {
 
         // Get categories and items at this level.

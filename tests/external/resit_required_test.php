@@ -75,7 +75,6 @@ class resit_required_test extends \local_gugrades\external\gugrades_advanced_tes
         $users = $page['users'];
         $this->assertEquals(true, $users[0]['resitrequired']);
 
-
         // Clear the resit required flag.
         $nothing = resit_required::execute($this->course->id, $this->student->id, false);
         $nothing = \external_api::clean_returnvalue(
