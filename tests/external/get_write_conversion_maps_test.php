@@ -259,13 +259,13 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         $this->assertEquals('Test import map', $mapstuff['name']);
     }
 
-   /**
+    /**
      * Test invalid import json
      * H value must be 0
      * @covers \local_gugrades\external\get_conversion_map::execute
      * @covers \local_gugrades\external\write_conversion_map::execute
      */
-    public function test_incorrectH_json() {
+    public function test_incorrect_json() {
 
         // Incorrect bound for H (must be zero).
         $jsonmap = '{

@@ -152,7 +152,8 @@ class users {
         global $DB;
 
         foreach ($users as $user) {
-            $user->gradehidden = $DB->record_exists('local_gugrades_hidden', ['gradeitemid' => $gradeitemid, 'userid' => $user->id]);
+            $user->gradehidden = $DB->record_exists('local_gugrades_hidden',
+                ['gradeitemid' => $gradeitemid, 'userid' => $user->id]);
         }
 
         return $users;

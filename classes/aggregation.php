@@ -95,7 +95,7 @@ class aggregation {
                 'shortname' => $gradecategory->shortname,
                 'fullname' => $gradecategory->fullname,
 
-                // TODO - may not be so simple
+                // TODO - may not be so simple.
                 'weight' => round($gradecategory->weight * 100),
             ];
         }
@@ -107,12 +107,12 @@ class aggregation {
                 'shortname' => $gradeitem->shortname,
                 'fullname' => $gradeitem->itemname,
 
-                // TODO - may not be so simple
+                // TODO - may not be so simple.
                 'weight' => round($gradeitem->weight * 100),
             ];
         }
 
-        // Add gradetypes and maximum points to columns
+        // Add gradetypes and maximum points to columns.
         foreach ($columns as $column) {
             $conversion = \local_gugrades\grades::conversion_factory($courseid, $column->gradeitemid);
             $column->gradetype = $conversion->name();
@@ -174,11 +174,11 @@ class aggregation {
             $fields = [];
             foreach ($columns as $column) {
 
-                // Field identifier based on gradeitemid (which is unique even for categories)
+                // Field identifier based on gradeitemid (which is unique even for categories).
                 $fieldname = 'AGG_' . $column->gradeitemid;
                 $data = [
                     'fieldname' => $fieldname,
-                    'display' => 'No data'
+                    'display' => 'No data',
                 ];
                 $fields[] = $data;
             }

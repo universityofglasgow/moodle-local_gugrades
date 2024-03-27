@@ -72,13 +72,6 @@ class resit_required extends \external_api {
 
         \local_gugrades\api::resit_required($courseid, $userid, $required);
 
-        // Log.
-        //$event = \local_gugrades\event\settings_updated::create([
-        //    'objectid' => $gradeitemid,
-        //    'context' => \context_course::instance($courseid),
-        //]);
-        //$event->trigger();
-
         return [];
     }
 

@@ -75,13 +75,6 @@ class show_hide_grade extends \external_api {
 
         \local_gugrades\api::show_hide_grade($courseid, $gradeitemid, $userid, $hide);
 
-        // Log.
-        //$event = \local_gugrades\event\settings_updated::create([
-        //    'objectid' => $gradeitemid,
-        //    'context' => \context_course::instance($courseid),
-        //]);
-        //$event->trigger();
-
         return [];
     }
 

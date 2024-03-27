@@ -64,7 +64,7 @@ class show_hide_grade_test extends \local_gugrades\external\gugrades_advanced_te
         $fred = $page['users'][0];
         $this->assertTrue($fred['gradehidden']);
 
-        // Mark as shown
+        // Mark as shown.
         $nullreturn = show_hide_grade::execute($this->course->id, $this->gradeitemidassign1, $this->student->id, false);
         $nullreturn = \external_api::clean_returnvalue(
             show_hide_grade::execute_returns(),

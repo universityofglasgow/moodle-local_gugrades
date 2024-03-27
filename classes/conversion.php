@@ -401,12 +401,12 @@ class conversion {
 
         $values = array_values($mapvalues);
 
-        // rawgrade == maxgrade is an "edge" condition
+        // ...rawgrade == maxgrade is an "edge" condition.
         if ($rawgrade == $maxgrade) {
             return end($values);
         }
 
-        // Otherwise, loop over values
+        // Otherwise, loop over values.
         for ($i = 0; $i < count($values); $i++) {
             $lower = $values[$i]->percentage * $maxgrade / 100;
 

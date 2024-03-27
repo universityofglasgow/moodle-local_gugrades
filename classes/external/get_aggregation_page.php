@@ -79,7 +79,8 @@ class get_aggregation_page extends \external_api {
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        $page = \local_gugrades\api::get_aggregation_page($courseid, $gradecategoryid, $firstname, $lastname, $groupid, $viewfullnames);
+        $page = \local_gugrades\api::get_aggregation_page(
+            $courseid, $gradecategoryid, $firstname, $lastname, $groupid, $viewfullnames);
 
         return $page;
     }
