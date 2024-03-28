@@ -1301,6 +1301,7 @@ class api {
         $breadcrumb = \local_gugrades\aggregation::get_breadcrumb($gradecategoryid);
 
         return [
+            'toplevel' => \local_gugrades\aggregation::is_top_level($gradecategoryid),
             'categories' => $gradecategories,
             'items' => $gradeitems,
             'columns' => $columns,
@@ -1308,7 +1309,6 @@ class api {
             'breadcrumb' => $breadcrumb,
         ];
     }
-
 
     /**
      * Resit required

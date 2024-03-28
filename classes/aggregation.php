@@ -136,6 +136,17 @@ class aggregation {
     }
 
     /**
+     * Calculate course completion %age for user
+     * TODO - just a placeholder. Needs funcionality.
+     * @param int $courseid
+     * @param int $userid
+     * @return int
+     */
+    protected static function completed(int $courseid, int $userid) {
+        return 100;
+    }
+
+    /**
      * Get students - with some filtering
      * $firstname and $lastname are single initial character only.
      * @param int $courseid
@@ -153,6 +164,12 @@ class aggregation {
         foreach ($users as $user) {
             $user->displayname = fullname($user);
             $user->resitrequired = self::is_resit_required($courseid, $user->id);
+
+            // TODO - just a placeholder at the moment
+            $user->coursetotal = 'Missing grades';
+
+            // TODO - just a placeholder at the moment
+            $user->completed = self::completed($courseid, $user->id);
         }
 
         // Pictures.
@@ -216,6 +233,20 @@ class aggregation {
         } else {
             return [];
         }
+    }
+
+    /**
+     * Is this a "top level" category?
+     * Table layout is slightly different at the toppermost level
+     * @param int $gradecategoryid
+     * @return bool
+     */
+    public static function is_top_level(int $gradecategoryid) {
+        global $DB;
+
+        $gradecategory = $DB->get_record('grade_categories', ['id' => $gradecategoryid], '*', MUST_EXIST);
+
+        return $gradecategory->depth == 2;
     }
 
 }

@@ -64,6 +64,11 @@
                 </a>
             </template>
 
+            <!-- Completion -->
+            <template #item-completed="item">
+                {{ item.completed }}%
+            </template>
+
         </EasyDataTable>
     </div>
 </template>
@@ -87,6 +92,8 @@
     const columns = ref([]);
     const categories = ref([]);
     const breadcrumb = ref([]);
+    const toplevel = ref(false);
+    const completed = ref(0);
 
     let firstname = '';
     let lastname = '';
@@ -153,10 +160,13 @@
      */
     const headers = computed(() => {
         let heads = [];
+
+        // User identification.
         heads.push({text: mstrings.userpicture, value: "slotuserpicture"});
         heads.push({text: mstrings.firstnamelastname, value: "displayname", sortable: true})
         heads.push({text: mstrings.idnumber, value: "idnumber", sortable: true});
 
+        // Grade categories and items.
         columns.value.forEach(column => {
             heads.push({
                 text: column.shortname,
@@ -170,8 +180,18 @@
             });
         });
 
-        heads.push({text: mstrings.resitrequired, value: "resitrequired"});
+        // Items that only display on "top level" page.
+        if (toplevel.value) {
 
+            // Resit required?
+            heads.push({text: mstrings.resitrequired, value: "resitrequired"});
+
+            // Completion %age
+            heads.push({text: mstrings.completed, value: "completed"});
+
+            // Course total.
+            heads.push({text: mstrings.coursetotal, value: "coursetotal"});
+        }
         return heads;
     });
 
@@ -220,6 +240,7 @@
             users.value = result.users;
             columns.value = result.columns;
             breadcrumb.value = result.breadcrumb;
+            toplevel.value = result.toplevel;
 
             users.value = process_users(users.value);
         })
