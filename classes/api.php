@@ -1292,7 +1292,7 @@ class api {
         $users = \local_gugrades\aggregation::get_users($courseid, $firstname, $lastname, $groupid);
 
         // Add the columns to the user fields.
-        $users = \local_gugrades\aggregation::add_aggregation_fields_to_users($users, $columns);
+        $users = \local_gugrades\aggregation::add_aggregation_fields_to_users($courseid, $users, $columns);
 
         // Add pictures to user fields.
         $users = \local_gugrades\users::add_pictures_to_user_records($users);

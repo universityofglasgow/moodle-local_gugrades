@@ -263,8 +263,8 @@
     .aggregation-table {
         --easy-table-header-font-size: 14px;
         --easy-table-header-height: 50px;
-        --easy-table-header-font-color: #c1cad4;
-        --easy-table-header-background-color: #005c8a;
+        --easy-table-header-font-color: white;
+        --easy-table-header-background-color: #5B4D94;
 
         --easy-table-header-item-padding: 10px 15px;
     }
@@ -281,5 +281,9 @@
 
     .gug_pill {
         font-size: 125%;
+    }
+
+    .vue3-easy-data-table__main table {
+        border-radius: 25px;
     }
 </style>
