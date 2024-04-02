@@ -87,6 +87,8 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_advanc
             $page
         );
 
+        $this->assertEquals(true, $page['toplevel']);
+
         $this->assertArrayHasKey('breadcrumb', $page);
         $breadcrumb = $page['breadcrumb'];
         $this->assertEquals('Summative', $breadcrumb[0]['shortname']);

@@ -41,6 +41,19 @@ require_once($CFG->dirroot . '/grade/lib.php');
 class aggregation {
 
     /**
+     * Factory for aggregation rule set
+     * @param int $courseid
+     * @return \local_gugrades\aggregation\base
+     */
+    public static function aggregation_factory(int $courseid) {
+
+        // Just base at the moment, but other variations could exist
+        $aggregation = new \local_gugrades\aggregation\base($courseid);
+
+        return $aggregation;
+    }
+
+    /**
      * Get grade items and grade categories for supplied gradecategoryid
      * @param int $courseid
      * @param int $gradecategoryid
@@ -136,6 +149,17 @@ class aggregation {
     }
 
     /**
+     * Calculate course completion %age for user
+     * TODO - just a placeholder. Needs funcionality.
+     * @param int $courseid
+     * @param int $userid
+     * @return int
+     */
+    protected static function completed(int $courseid, int $userid) {
+        return 100;
+    }
+
+    /**
      * Get students - with some filtering
      * $firstname and $lastname are single initial character only.
      * @param int $courseid
@@ -153,6 +177,12 @@ class aggregation {
         foreach ($users as $user) {
             $user->displayname = fullname($user);
             $user->resitrequired = self::is_resit_required($courseid, $user->id);
+
+            // TODO - just a placeholder at the moment
+            $user->coursetotal = 'Missing grades';
+
+            // TODO - just a placeholder at the moment
+            $user->completed = self::completed($courseid, $user->id);
         }
 
         // Pictures.
@@ -162,23 +192,44 @@ class aggregation {
     }
 
     /**
+     * Get aggregation grade
+     * Current provisional/released grade for grade item
+     * TODO: Or aggregagated grade for sub-category
+     * @param int $gradeitemid
+     * @param int $userid
+     * @return float
+     */
+    protected static function get_aggregation_grade(int $gradeitemid, int $userid) {
+        global $DB;
+
+    }
+
+    /**
      * Add aggregation data to users.
      * Each user record contains list based on columns
      * Formatted to survive web services (will need reformatted for EasyDataTable)
+     * @param int $courseid
      * @param array $users
      * @param array $columns
      * @return array
      */
-    public static function add_aggregation_fields_to_users(array $users, array $columns) {
+    public static function add_aggregation_fields_to_users(int $courseid, array $users, array $columns) {
+        $aggregation = self::aggregation_factory($courseid);
         foreach ($users as $user) {
             $fields = [];
             foreach ($columns as $column) {
 
                 // Field identifier based on gradeitemid (which is unique even for categories).
+                $provisional = $aggregation->get_provisional($column->gradeitemid, $user->id);
+                if ($provisional) {
+                    list($grade, $displaygrade) = $provisional;
+                } else {
+                    $displaygrade = 'No data';
+                }
                 $fieldname = 'AGG_' . $column->gradeitemid;
                 $data = [
                     'fieldname' => $fieldname,
-                    'display' => 'No data',
+                    'display' => $displaygrade,
                 ];
                 $fields[] = $data;
             }
@@ -216,6 +267,20 @@ class aggregation {
         } else {
             return [];
         }
+    }
+
+    /**
+     * Is this a "top level" category?
+     * Table layout is slightly different at the toppermost level
+     * @param int $gradecategoryid
+     * @return bool
+     */
+    public static function is_top_level(int $gradecategoryid) {
+        global $DB;
+
+        $gradecategory = $DB->get_record('grade_categories', ['id' => $gradecategoryid], '*', MUST_EXIST);
+
+        return $gradecategory->depth == 2;
     }
 
 }
