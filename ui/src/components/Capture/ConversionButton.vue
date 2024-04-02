@@ -15,7 +15,7 @@
             </template>
         </EasyDataTable>
 
-        <div class="mt-1 mb-4">
+        <div class="mt-1 mb-4" v-if="selection">
             <button class="btn btn-danger btn-sm rounded" @click="remove_clicked">{{ mstrings.remove }}</button>
         </div>
 
