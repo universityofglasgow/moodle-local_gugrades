@@ -65,11 +65,6 @@ class usercapture {
     protected $gradesbygradetype;
 
     /**
-     * @var \local_gugrades\rules\base $rules
-     */
-    protected $rules;
-
-    /**
      * @var bool $alert
      */
     protected bool $alert;
@@ -84,8 +79,6 @@ class usercapture {
         $this->courseid = $courseid;
         $this->gradeitemid = $gradeitemid;
         $this->userid = $userid;
-
-        $this->rules = new \local_gugrades\rules\base($this);
 
         $this->read_grades();
         $this->get_gradesbygradetype();
@@ -107,6 +100,78 @@ class usercapture {
     }
 
     /**
+     * Get the provisional grade given the array of active grades
+     * Default is just to return the most recent one
+     * TODO: Figure out what to do with admin grades
+     * (Grades array is required as object field hasn't been assigned yet)
+     * @param array $grades
+     * @return mixed
+     */
+    protected function get_provisional_from_grades(array $grades) {
+
+        // We're just going to assume that the grades are in ascending date order.
+        if ($grades) {
+            $provisional = clone end($grades);
+            $provisional->gradetype = 'PROVISIONAL';
+
+            return $provisional;
+        } else {
+
+            return null;
+        }
+    }
+
+    /**
+     * Determine if we need to place an alert on the capture row
+     * For example, 1st and 2nd grade not matching plus no agreed grade
+     * @return boolean
+     */
+    protected function is_alert() {
+        $gradesbygt = $this->get_gradesbygradetype();
+
+        // 1st, 2nd and 3rd grade have to agree
+        // unless there is an agreed grade
+        if (array_key_exists('AGREED', $gradesbygt)) {
+            return false;
+        }
+
+        // The -1 if they don't exist (not existing is proxy for equal).
+        $first = array_key_exists('FIRST', $gradesbygt) ? $gradesbygt['FIRST']->rawgrade : -1;
+        $second = array_key_exists('SECOND', $gradesbygt) ? $gradesbygt['SECOND']->rawgrade : -1;
+        $third = array_key_exists('THIRD', $gradesbygt) ? $gradesbygt['THIRD']->rawgrade : -1;
+
+        // Only 1st grade is acceptable.
+        if (($second == -1) && ($third == -1)) {
+            return false;
+        }
+
+        // If no third then first and second must agree.
+        if ($third == -1) {
+            return ($first != $second);
+        }
+
+        // Failing all of above, must agree.
+        if (($first == $second) && ($second == $third)) {
+            return false; // All equal.
+        } else {
+            return true; // Not all equal.
+        }
+    }
+
+    /**
+     * Get the released grade. For base this is exactly the same as provisional
+     * @return object
+     */
+    public function get_released() {
+        $released = $this->provisional;
+        if ($released) {
+            $released->gradetype = 'RELEASED';
+        }
+
+        return $released;
+    }
+
+    /**
      * Acquire and check grades in database
      *
      */
@@ -123,7 +188,7 @@ class usercapture {
 
         // Work out / add provisional grade.
         if ($grades) {
-            $provisional = $this->rules->get_provisional($grades);
+            $provisional = $this->get_provisional_from_grades($grades);
             $provisionalcolumn = \local_gugrades\grades::get_column($this->courseid, $this->gradeitemid, 'PROVISIONAL', '',
                 $provisional->points);
 
@@ -136,22 +201,9 @@ class usercapture {
         $this->find_gradesbygradetype($grades);
 
         // Check if there should be an alert.
-        $this->alert = $this->rules->is_alert();
+        $this->alert = $this->is_alert();
 
         $this->grades = $grades;
-    }
-
-    /**
-     * Get released grade
-     *
-     */
-    public function get_released() {
-
-        // Released grade is probably just the provisional grade,
-        // but just in case there's something different...
-        $released = $this->rules->get_released();
-
-        return $released;
     }
 
     /**
