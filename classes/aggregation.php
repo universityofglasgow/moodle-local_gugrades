@@ -47,7 +47,7 @@ class aggregation {
      */
     public static function aggregation_factory(int $courseid) {
 
-        // Just base at the moment, but other variations could exist
+        // Just base at the moment, but other variations could exist.
         $aggregation = new \local_gugrades\aggregation\base($courseid);
 
         return $aggregation;
@@ -178,10 +178,10 @@ class aggregation {
             $user->displayname = fullname($user);
             $user->resitrequired = self::is_resit_required($courseid, $user->id);
 
-            // TODO - just a placeholder at the moment
+            // TODO - just a placeholder at the moment.
             $user->coursetotal = 'Missing grades';
 
-            // TODO - just a placeholder at the moment
+            // TODO - just a placeholder at the moment.
             $user->completed = self::completed($courseid, $user->id);
         }
 
