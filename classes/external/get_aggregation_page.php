@@ -49,7 +49,7 @@ class get_aggregation_page extends \external_api {
             'firstname' => new external_value(PARAM_ALPHA, 'Firstname filter - first letter or empty for all'),
             'lastname' => new external_value(PARAM_ALPHA, 'Lastname filter - first letter or empty for all'),
             'groupid' => new external_value(PARAM_INT, 'Group ID to filter - 0 means everybody'),
-            'viewfullnames' => new external_value(PARAM_BOOL, 'Show full names of students (with capability)'),
+            'aggregate' => new external_value(PARAM_BOOL, '(force) aggregation calculations'),
         ]);
     }
 
@@ -60,10 +60,10 @@ class get_aggregation_page extends \external_api {
      * @param string $firstname
      * @param string $lastname
      * @param int $groupid
-     * @param bool $viewfullnames
+     * @param bool $aggregate
      * @return array
      */
-    public static function execute($courseid, $gradecategoryid, $firstname, $lastname, $groupid, $viewfullnames) {
+    public static function execute($courseid, $gradecategoryid, $firstname, $lastname, $groupid, $aggregate) {
 
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
@@ -72,7 +72,7 @@ class get_aggregation_page extends \external_api {
             'firstname' => $firstname,
             'lastname' => $lastname,
             'groupid' => $groupid,
-            'viewfullnames' => $viewfullnames,
+            'aggregate' => $aggregate,
         ]);
 
         // Security.
@@ -80,7 +80,7 @@ class get_aggregation_page extends \external_api {
         self::validate_context($context);
 
         $page = \local_gugrades\api::get_aggregation_page(
-            $courseid, $gradecategoryid, $firstname, $lastname, $groupid, $viewfullnames);
+            $courseid, $gradecategoryid, $firstname, $lastname, $groupid, $aggregate);
 
         return $page;
     }

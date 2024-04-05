@@ -1273,7 +1273,7 @@ class api {
      * @param string $firstname
      * @param string $lastname
      * @param int $groupid
-     * @param bool $viewfullnames
+     * @param bool $aggregate
      * @return array
      */
     public static function get_aggregation_page(
@@ -1282,7 +1282,7 @@ class api {
         string $firstname,
         string $lastname,
         int $groupid,
-        bool $viewfullnames
+        bool $aggregate
         ) {
 
         // Get categories and items at this level.
@@ -1290,6 +1290,11 @@ class api {
 
         // Get all the students.
         $users = \local_gugrades\aggregation::get_users($courseid, $firstname, $lastname, $groupid);
+
+        // Recalculate?
+        if ($aggregate) {
+            \local_gugrades\aggregation::aggregate($courseid, $gradecategoryid, $users);
+        }
 
         // Add the columns to the user fields.
         $users = \local_gugrades\aggregation::add_aggregation_fields_to_users($courseid, $users, $columns);

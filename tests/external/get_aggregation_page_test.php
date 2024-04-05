@@ -81,7 +81,7 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_advanc
         );
 
         // Get first csv test string.
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsumm->id, '', '', 0, false);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsumm->id, '', '', 0, true);
         $page = \external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page

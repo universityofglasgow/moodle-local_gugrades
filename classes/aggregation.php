@@ -283,4 +283,166 @@ class aggregation {
         return $gradecategory->depth == 2;
     }
 
+    /**
+     * Recursive helper to build grade-item tree
+     * @param int $courseid
+     * @param int $gradecategoryid
+     * @return object
+     */
+    protected static function recurse_tree(int $courseid, int $gradecategoryid) {
+        global $DB;
+
+        // Get the category
+        $gcat = $DB->get_record('grade_categories', ['id' => $gradecategoryid], '*', MUST_EXIST);
+        $categorynode = (object)[
+            'iscategory' => true,
+            'categoryid' => $gradecategoryid,
+            'name' => $gcat->fullname,
+            'keephigh' => $gcat->keephigh,
+            'droplow' => $gcat->droplow,
+            'aggregation' => $gcat->aggregation,
+            'children' => [],
+        ];
+
+        // Get grade items in this grade category.
+        $items = $DB->get_records('grade_items', ['categoryid' => $gradecategoryid]);
+        foreach ($items as $item) {
+            if ($item->itemtype == 'category') {
+                $node = self::recurse_tree($item->instance);
+                $node->weight = $item->aggregationcoef;
+            } else {
+
+                // Get the conversion object, so we can tell what sort of grade we're dealing with.
+                $conversion = \local_gugrades\grades::conversion_factory($courseid, $item->id);
+                $node = (object)[
+                    'itemid' => $item->id,
+                    'name' => $item->itemname,
+                    'iscategory' => false,
+                    'isscale' => $conversion->is_scale(),
+                    'weight' => $item->aggregationcoef,
+                ];
+            }
+
+            $categorynode->children[] = $node;
+        }
+
+        return $categorynode;
+    }
+
+    /**
+     * Use the array of items for a given gradecategory and produce
+     * an aggregated grade (or not).
+     * The category object is provided to identify aggregation settings
+     * and so on
+     * Note that this will be for one gradecategory for one user, only.
+     * @param oject $category
+     * @param array $items
+     *
+     */
+    protected static function aggregate_user_category(object $category, array $items) {
+
+        $keephigh = $category->keephigh;
+        $droplow = $category->droplow;
+        $aggregation = $category->aggregation;
+
+        // Quick check - all items must have a grade
+        foreach ($items as $item) {
+            if ($item->grademissing) {
+                return null;
+            }
+        }
+    }
+
+    /**
+     * Aggregate user data recursively
+     * (starting with current category)
+     * Returning array of category totals for that user
+     * $allitems 'collects' the various totals to display on the aggregation table
+     * Returns aggregated total or null if data is incomplete
+     * @param int $courseid
+     * @param object $category
+     * @param object $user
+     * @param array $allitems
+     * @return float or null
+     */
+    protected static function aggregate_user(int $courseid, object $category, object $user, array &$allitems) {
+
+        // Information about the category is in the param
+        // The field 'children' holds all the sub-items and sub-categories that
+        // we need to 'add up'.
+        // Get array of data to aggregate for this 'level' and then send off to
+        // the aggregation function
+        $children = $category->children;
+        $items = [];
+        foreach ($children as $child) {
+
+            // If this is itself a grade category then we need to recurse to get the details
+            // of this.
+            if ($child->iscategory) {
+                echo "CATEGORY\n";
+                $childcategorytotal = self::aggregate_user($child, $user);
+                $item = (object)[
+                    'itemid' => $child->itemid,
+                    'categoryid' => $child->categoryid,
+                    'iscategory' => true,
+                    'isscale' => $child->isscale,
+                    'grademissing' => $childcategorytotal == null,
+                    'grade' => $childcategorytotal,
+                ];
+                //var_dump($childcategory);
+            } else {
+
+                // Is there a grade (in MyGrades) for this user?
+                // Provisional will be null if nothing has been imported.
+                $usercapture = new \local_gugrades\usercapture($courseid, $child->itemid, $user->id);
+                $provisional = $usercapture->get_provisional();
+                if ($provisional) {
+                    $item = (object)[
+                        'itemid' => $child->itemid,
+                        'iscategory' => false,
+                        'grademissing' => false,
+                        'grade' => $provisional->convertedgrade,
+                        'displaygrade' => $provisional->displaygrade,
+                        'isscale' => $child->isscale,
+                    ];
+                } else {
+                    $item = (object)[
+                        'itemid' => $child->itemid,
+                        'iscategory' => false,
+                        'grademissing' => true,
+                    ];
+                }
+                //var_dump($provisional);
+            }
+            $items[$child->itemid] = $item;
+            $allitems[$child->itemid] = $item;
+        }
+
+        // List of items should hold list for this gradecategory only, ready
+        // to aggregate.
+        $total = self::aggregate_user_category($category, $items);
+
+        return $total;
+
+    }
+
+    /**
+     * Entry point for calculating aggregations
+     * @param int $courseid
+     * @param int $gradecategoryid
+     * @param array $users
+     */
+    public static function aggregate(int $courseid, int $gradecategoryid, array $users) {
+
+        // First get category structure
+        $toplevel = self::recurse_tree($courseid, $gradecategoryid);
+
+        // Run through each user and aggregate their grades
+        foreach ($users as $user) {
+            $userallitems = [];
+            $usertotal = self::aggregate_user($courseid, $toplevel, $user, $userallitems);
+            var_dump($user->id); var_dump($userallitems);
+        }
+    }
+
 }

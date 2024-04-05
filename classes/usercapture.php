@@ -224,7 +224,7 @@ class usercapture {
 
     /**
      * Get provisional grade
-     * @return object
+     * @return object or null
      */
     public function get_provisional() {
         return $this->provisional;
