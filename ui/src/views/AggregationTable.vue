@@ -231,7 +231,7 @@
                 firstname: firstname,
                 lastname: lastname,
                 groupid: groupid.value,
-                viewfullnames: false,
+                aggregate: true,
             }
         }])[0]
         .then((result) => {

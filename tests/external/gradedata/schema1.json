@@ -1,0 +1,39 @@
+[
+
+    {
+        "name": "Summative",
+        "category": true,
+        "children": [
+            {
+                "name": "Item 1",
+                "category": false
+            },
+            {
+                "name": "Item 2",
+                "category": false
+            },
+            {
+                "name": "Item 3",
+                "category": false
+            },
+            {
+                "name": "Summer exam",
+                "category": true,
+                "children": [
+                    {
+                        "name": "Question 1",
+                        "category": false
+                    },
+                    {
+                        "name": "Question 2",
+                        "category": false
+                    },
+                    {
+                        "name": "Question 3",
+                        "category": false
+                    }
+                ]
+            }
+        ]
+    }
+]

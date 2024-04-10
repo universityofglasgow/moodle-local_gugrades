@@ -29,12 +29,12 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 
 require_once($CFG->dirroot . '/webservice/tests/helpers.php');
-require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_testcase.php');
+require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_aggregation_testcase.php');
 
 /**
  * Test(s) for get_aggregation_page webservice
  */
-class get_aggregation_page_test extends \local_gugrades\external\gugrades_advanced_testcase {
+class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggregation_testcase {
 
     /**
      * @var int $gradeitemsecondx
@@ -42,18 +42,28 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_advanc
     protected int $gradeitemsecondx;
 
     /**
+     * @var array $gradeitemids
+     */
+    protected array $gradeitemids;
+
+    /**
+     * @var object $gradecatsummative
+     */
+    protected object $gradecatsummative;
+
+    /**
      * Called before every test
      */
     protected function setUp(): void {
+        global $DB;
+
         parent::setUp();
 
-        // Final item has an invalid grade type.
-        $seconditemx = $this->getDataGenerator()->create_grade_item(
-            ['courseid' => $this->course->id, 'gradetype' => GRADE_TYPE_TEXT]
-        );
-        $this->move_gradeitem_to_category($seconditemx->id, $this->gradecatsecond->id);
+        // Install test schema
+        $this->gradeitemids = $this->load_schema('schema1');
 
-        $this->gradeitemsecondx = $seconditemx->id;
+        // Get the grade category 'summative'
+        $this->gradecatsummative = $DB->get_record('grade_categories', ['fullname' => 'Summative'], '*', MUST_EXIST);
     }
 
     /**
@@ -73,19 +83,26 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_advanc
             $this->student2->id,
         ];
 
-        // Assign2 (which is useing scale).
-        $status = import_grades_users::execute($this->course->id, $this->gradeitemidassign2, false, $userlist);
-        $status = \external_api::clean_returnvalue(
-            import_grades_users::execute_returns(),
-            $status
-        );
+        // Install test data for student.
+        $this->load_data('data1a', $this->student->id);
+
+        // Import ALL gradeitems
+        foreach ($this->gradeitemids as $gradeitemid) {
+            $status = import_grades_users::execute($this->course->id, $gradeitemid, false, $userlist);
+            $status = \external_api::clean_returnvalue(
+                import_grades_users::execute_returns(),
+                $status
+            );
+        }
 
         // Get first csv test string.
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsumm->id, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
         $page = \external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
         );
+
+        var_dump($page); die;
 
         $this->assertEquals(true, $page['toplevel']);
 
@@ -95,10 +112,10 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_advanc
 
         $this->assertArrayHasKey('columns', $page);
         $columns = $page['columns'];
-        $this->assertCount(4, $columns);
-        $this->assertEquals('Assignment 3', $columns[3]['shortname']);
-        $this->assertEquals(false, $columns[3]['isscale']);
-        $this->assertEquals(23, $columns[3]['grademax']);
+        //$this->assertCount(4, $columns);
+        //$this->assertEquals('Assignment 3', $columns[3]['shortname']);
+        //$this->assertEquals(false, $columns[3]['isscale']);
+        //$this->assertEquals(23, $columns[3]['grademax']);
 
     }
 

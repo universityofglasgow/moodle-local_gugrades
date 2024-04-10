@@ -441,7 +441,7 @@ class aggregation {
         foreach ($users as $user) {
             $userallitems = [];
             $usertotal = self::aggregate_user($courseid, $toplevel, $user, $userallitems);
-            var_dump($user->id); var_dump($userallitems);
+            //var_dump($user->id); var_dump($userallitems); var_dump($usertotal);
         }
     }
 
