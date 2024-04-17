@@ -77,10 +77,9 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
         // Make sure that we're a teacher.
         $this->setUser($this->teacher);
 
-        // Import grades.
+        // Import grades only for one student (so far).
         $userlist = [
             $this->student->id,
-            $this->student2->id,
         ];
 
         // Install test data for student.
@@ -103,19 +102,6 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
         );
 
         var_dump($page); die;
-
-        $this->assertEquals(true, $page['toplevel']);
-
-        $this->assertArrayHasKey('breadcrumb', $page);
-        $breadcrumb = $page['breadcrumb'];
-        $this->assertEquals('Summative', $breadcrumb[0]['shortname']);
-
-        $this->assertArrayHasKey('columns', $page);
-        $columns = $page['columns'];
-        //$this->assertCount(4, $columns);
-        //$this->assertEquals('Assignment 3', $columns[3]['shortname']);
-        //$this->assertEquals(false, $columns[3]['isscale']);
-        //$this->assertEquals(23, $columns[3]['grademax']);
 
     }
 

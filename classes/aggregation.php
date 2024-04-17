@@ -292,36 +292,43 @@ class aggregation {
     protected static function recurse_tree(int $courseid, int $gradecategoryid) {
         global $DB;
 
-        // Get the category
+        // Get the category and corresponding instance.
         $gcat = $DB->get_record('grade_categories', ['id' => $gradecategoryid], '*', MUST_EXIST);
+        $gradeitem = $DB->get_record('grade_items', ['iteminstance' => $gradecategoryid, 'itemtype' => 'category'], '*', MUST_EXIST);
         $categorynode = (object)[
             'iscategory' => true,
             'categoryid' => $gradecategoryid,
+            'itemid' => $gradeitem->id,
             'name' => $gcat->fullname,
             'keephigh' => $gcat->keephigh,
             'droplow' => $gcat->droplow,
             'aggregation' => $gcat->aggregation,
+            'weight' => $gradeitem->aggregationcoef,
+            'isscale' => false,  // TODO - need to figure this out properly.
             'children' => [],
         ];
+
+        // Get any categories at this level (and recurse into them).
+        // Categories are stored in the grade_items table but (for some reason)
+        // the (parent) categoryid field is null. So...
+        $childcategories = $DB->get_records('grade_categories', ['parent' => $gradecategoryid]);
+        foreach ($childcategories as $childcategory) {
+            $categorynode->children[] = self::recurse_tree($courseid, $childcategory->id);
+        }
 
         // Get grade items in this grade category.
         $items = $DB->get_records('grade_items', ['categoryid' => $gradecategoryid]);
         foreach ($items as $item) {
-            if ($item->itemtype == 'category') {
-                $node = self::recurse_tree($item->instance);
-                $node->weight = $item->aggregationcoef;
-            } else {
 
-                // Get the conversion object, so we can tell what sort of grade we're dealing with.
-                $conversion = \local_gugrades\grades::conversion_factory($courseid, $item->id);
-                $node = (object)[
-                    'itemid' => $item->id,
-                    'name' => $item->itemname,
-                    'iscategory' => false,
-                    'isscale' => $conversion->is_scale(),
-                    'weight' => $item->aggregationcoef,
-                ];
-            }
+            // Get the conversion object, so we can tell what sort of grade we're dealing with.
+            $conversion = \local_gugrades\grades::conversion_factory($courseid, $item->id);
+            $node = (object)[
+                'itemid' => $item->id,
+                'name' => $item->itemname,
+                'iscategory' => false,
+                'isscale' => $conversion->is_scale(),
+                'weight' => $item->aggregationcoef,
+            ];
 
             $categorynode->children[] = $node;
         }
@@ -379,8 +386,7 @@ class aggregation {
             // If this is itself a grade category then we need to recurse to get the details
             // of this.
             if ($child->iscategory) {
-                echo "CATEGORY\n";
-                $childcategorytotal = self::aggregate_user($child, $user);
+                $childcategorytotal = self::aggregate_user($courseid, $child, $user, $allitems);
                 $item = (object)[
                     'itemid' => $child->itemid,
                     'categoryid' => $child->categoryid,
