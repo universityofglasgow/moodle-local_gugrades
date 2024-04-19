@@ -33,16 +33,31 @@ namespace local_gugrades\aggregation;
 class base {
 
     /**
-     * @var int $courseid
-     */
-    protected int $courseid;
-
-    /**
      * Constructor
      * @param int $courseid
      */
-    public function __construct(int $courseid) {
-        $this->courseid = $courseid;
+    public function __construct(public int $courseid) {
+    }
+
+    /**
+     * Pre-process grades for aggregation.
+     * Allows grades to be 'normalised' prior to aggregation.
+     * @param array $items
+     * @return array
+     */
+    public function pre_process_items(array $items) {
+
+        return $items;
+    }
+
+    /**
+     * Round to a specific number of decimal places.
+     * Spec says 5, but giving the opportunity to change.
+     * @param float $value
+     * @return float
+     */
+    public function round_float(float $value) {
+        return round($value, 5);
     }
 
     /**
@@ -70,6 +85,72 @@ class base {
         } else {
             return null;
         }
+    }
+
+    //
+    // Following are functions for all the basic aggregation strategies. These mostly
+    // replicate what core Moodle Gradebook does and are as specified in the Moodle docs.
+    //
+
+    /**
+     * Choose aggregation strategy method
+     * @param int $aggregationid
+     * @return string
+     */
+    public function strategy_factory(int $aggregationid) {
+        switch ($aggregationid) {
+            case GRADE_AGGREGATE_MEAN:
+                $agf = 'mean';
+                break;
+            case GRADE_AGGREGATE_MEDIAN:
+                $agf = 'median';
+                break;
+            case GRADE_AGGREGATE_MIN:
+                $agf = 'min';
+                break;
+            case GRADE_AGGREGATE_MAX:
+                $agf = 'max';
+                break;
+            case GRADE_AGGREGATE_MODE:
+                $agf = 'mode';
+                break;
+            case GRADE_AGGREGATE_WEIGHTED_MEAN:
+                $agf = 'weighted_mean';
+                break;
+            case GRADE_AGGREGATE_WEIGHTED_MEAN2:
+                $agf = 'weighted_mean2';
+                break;
+            case GRADE_AGGREGATE_EXTRACREDIT_MEAN:
+                $agf = 'extracredit_mean';
+                break;
+            case GRADE_AGGREGATE_SUM:
+                $agf = 'sum';
+                break;
+            default:
+                throw new \moodle_exception('Unknown aggregation strategy');
+                break;
+        }
+
+        // TODO - force everything to me mean for testing, for now.
+        $agf = 'mean';
+
+        return "strategy_" .$agf;
+    }
+
+    /**
+     * Strategy - mean of grades
+     * @param array $items
+     * @param return float
+     */
+    public function strategy_mean(array $items) {
+        $sum = 0.0;
+        $count = 0;
+        foreach ($items as $item) {
+            $sum += $item->grade / $item->grademax;
+            $count++;
+        }
+
+        return $this->round_float($sum * 100 / $count);
     }
 
 }
