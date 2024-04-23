@@ -392,12 +392,16 @@ class aggregation {
 
     /**
      * Write aggregated category into gugrades_grades table
+     * ONLY write if it hasn't changed (otherwise table just fills up)
      * TODO - need to handle errors
      * @param int $courseid
      * @param object $category
      * @param object $user
      */
     protected static function write_aggregated_category(int $courseid, object $category, object $user) {
+        global $DB;
+
+
 
         // Aggregation function returns null in error condition but write_grade expects a float
         if ($category->grade == null) {
@@ -405,8 +409,24 @@ class aggregation {
             if (!$category->error) {
                 throw new \moodle_exception('No error text when grade=null');
             }
+            $iserror = true;
+            $displaygrade = $category->error;
         } else {
+            $iserror = false;
+            $displaygrade = $category->grade; // TODO ?
             $grade = $category->grade;
+        }
+
+        // Does this category grade already exist?
+        // Give up, if not
+        if ($DB->record_exists('local_gugrades_grade', [
+            'gradetype' => 'CATEGORY',
+            'gradeitemid' => $category->itemid,
+            'userid' => $user->id,
+            'rawgrade' => $grade,
+            'iserror' => $iserror,
+        ])) {
+            return;
         }
 
         \local_gugrades\grades::write_grade(
@@ -416,11 +436,12 @@ class aggregation {
             '',                             // Admin grade.
             $grade,                         // Raw grade.
             $grade,                         // Converted grade. TODO?
-            $grade,                         // Display grade. TODO?
+            $displaygrade,                  // Display grade. TODO?
             0,                              // Weighted grade.
             'CATEGORY',                     // Gradetype.
             '',                             // Other.
             true,                           // Iscurrent.
+            $iserror,                       // IsError.
             '',                             // Audit comments. TODO?
             !$category->isscale,            // Points.
         );
@@ -514,6 +535,7 @@ class aggregation {
      * @param array $users
      */
     public static function aggregate(int $courseid, int $gradecategoryid, array $users) {
+        global $DB;
 
         // Get aggregation object which will contain all the methods that might change.
         // This allows it to be overridden, if required.
@@ -530,7 +552,10 @@ class aggregation {
             // 1 = level 1 (we need to know what level we're at). Level is incremented
             // as call recurses.
             list($usertotal, $error) = self::aggregate_user($aggregation, $courseid, $toplevel, $user, $userallitems, 1);
+
             //var_dump($user->id); var_dump($userallitems); var_dump($usertotal);
+            $grades = $DB->get_records('local_gugrades_grade');
+            //var_dump($grades);
         }
     }
 

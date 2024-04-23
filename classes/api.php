@@ -265,6 +265,7 @@ class api {
                     $reason,
                     $other,
                     true,
+                    false,
                     '',
                     !$conversion->is_scale(),
                 );
@@ -353,6 +354,7 @@ class api {
                 'FIRST',
                 '',
                 1,
+                false,
                 get_string('import', 'local_gugrades'),
                 !$conversion->is_scale(),
             );
@@ -838,6 +840,7 @@ class api {
             $reason,
             $other,
             true,
+            false,
             $notes,
             !$conversion->is_scale(),
         );
@@ -1089,6 +1092,7 @@ class api {
                     $released->gradetype,
                     '',
                     true,
+                    false,
                     'Release grades',
                     $released->points,
                 );

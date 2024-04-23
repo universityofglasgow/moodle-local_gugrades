@@ -288,6 +288,7 @@ class grades {
      * @param string $gradetype
      * @param string $other
      * @param bool $iscurrent
+     * @param bool $iserror
      * @param string $auditcomment
      * @param bool $points
      */
@@ -303,6 +304,7 @@ class grades {
         string $gradetype,
         string $other,
         bool $iscurrent,
+        bool $iserror,
         string $auditcomment,
         bool $points
     ) {
@@ -348,6 +350,7 @@ class grades {
         $gugrade->gradetype = $gradetype;
         $gugrade->other = $other;
         $gugrade->iscurrent = true;
+        $gugrade->iserror = $iserror;
         $gugrade->columnid = $column->id;
         $gugrade->auditby = $USER->id;
         $gugrade->audittimecreated = time();
