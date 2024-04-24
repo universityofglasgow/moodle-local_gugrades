@@ -51,6 +51,43 @@ class base {
     }
 
     /**
+     * Calculate completion %age for items
+     * Need to be "sympathetic" with rounding on this as
+     * stuff will be blocked if completion != 100%
+     *
+     * Completion is...
+     * (sum of weights of completed items) * 100 / (sum of all weights)
+     * @param array $items
+     * @return int
+     */
+    public function completion($items) {
+        $totalweights = 0.0;
+        $countall = 0;
+        $totalcompleted = 0.0;
+        $countcompleted = 0;
+
+        foreach ($items as $item) {
+            $totalweights += $item->weight;
+            $countall++;
+            if (!$item->grademissing) {
+                $totalcompleted += $item->weight;
+                $countcompleted++;
+            }
+        }
+
+        // Calculation and rounding.
+        // If $totalweights == 0 then there are no weights, then use
+        // counts instead
+        if ($totalweights == 0) {
+            $raw = $countcompleted * 100 / $countall;
+        } else {
+            $raw = $totalcompleted * 100 / $totalweights;
+        }
+
+        return round($raw, 0, PHP_ROUND_HALF_UP);
+    }
+
+    /**
      * Round to a specific number of decimal places.
      * Spec says 5, but giving the opportunity to change.
      * @param float $value
