@@ -108,9 +108,45 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
         $this->assertEquals('No data', $juan['fields'][1]['display']);
         $fred = $users[0];
         $this->assertEquals("47.23333", $fred['fields'][0]['display']);
-
-        var_dump($page);
-
     }
 
+    /**
+     * Incomplete data to check completion percentage
+     */
+    public function test_completion_score() {
+        global $DB;
+
+        // Make sure that we're a teacher.
+        $this->setUser($this->teacher);
+
+        // Import grades only for one student (so far).
+        $userlist = [
+            $this->student->id,
+        ];
+
+        // Install test data for student.
+        $this->load_data('data1b', $this->student->id);
+
+        // Import ALL gradeitems
+        foreach ($this->gradeitemids as $gradeitemid) {
+            $status = import_grades_users::execute($this->course->id, $gradeitemid, false, $userlist);
+            $status = \external_api::clean_returnvalue(
+                import_grades_users::execute_returns(),
+                $status
+            );
+        }
+
+        // Get first csv test string.
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = \external_api::clean_returnvalue(
+            get_aggregation_page::execute_returns(),
+            $page
+        );
+
+        $fred = $page['users'][0];
+        $this->assertEquals("75", $fred['completed']);
+        $this->assertEquals("Grades missing", $fred['coursetotal']);
+
+//var_dump($fred);
+    }
 }

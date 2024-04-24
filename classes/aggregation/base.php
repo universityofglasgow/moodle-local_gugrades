@@ -57,6 +57,8 @@ class base {
      *
      * Completion is...
      * (sum of weights of completed items) * 100 / (sum of all weights)
+     *
+     * NOTE: Points grades do NOT count
      * @param array $items
      * @return int
      */
@@ -69,7 +71,7 @@ class base {
         foreach ($items as $item) {
             $totalweights += $item->weight;
             $countall++;
-            if (!$item->grademissing) {
+            if (!$item->grademissing && $item->isscale) {
                 $totalcompleted += $item->weight;
                 $countcompleted++;
             }
