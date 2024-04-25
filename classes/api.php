@@ -1290,7 +1290,7 @@ class api {
         ) {
 
         // Get categories and items at this level.
-        list($gradecategories, $gradeitems, $columns) = \local_gugrades\aggregation::get_level($courseid, $gradecategoryid);
+        [$gradecategories, $gradeitems, $columns] = \local_gugrades\aggregation::get_level($courseid, $gradecategoryid);
 
         // Get all the students.
         $users = \local_gugrades\aggregation::get_users($courseid, $firstname, $lastname, $groupid);
@@ -1298,6 +1298,14 @@ class api {
         // Recalculate?
         if ($aggregate) {
             \local_gugrades\aggregation::aggregate($courseid, $gradecategoryid, $users);
+        }
+
+        // Warning message(s)?
+        $istoplevel = \local_gugrades\aggregation::is_top_level($gradecategoryid);
+        if ($istoplevel) {
+            $allscales = \local_gugrades\aggregation::is_all_scales($courseid, $columns);
+        } else {
+            $allscales = false;
         }
 
         // Add the columns to the user fields.
@@ -1310,7 +1318,8 @@ class api {
         $breadcrumb = \local_gugrades\aggregation::get_breadcrumb($gradecategoryid);
 
         return [
-            'toplevel' => \local_gugrades\aggregation::is_top_level($gradecategoryid),
+            'toplevel' => $istoplevel,
+            'allscales' => $allscales,
             'categories' => $gradecategories,
             'items' => $gradeitems,
             'columns' => $columns,

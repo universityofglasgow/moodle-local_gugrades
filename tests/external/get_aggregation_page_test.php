@@ -108,6 +108,8 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
         $this->assertEquals('No data', $juan['fields'][1]['display']);
         $fred = $users[0];
         $this->assertEquals("47.23333", $fred['fields'][0]['display']);
+
+        var_dump($page);
     }
 
     /**

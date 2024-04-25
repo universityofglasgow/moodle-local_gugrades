@@ -10,6 +10,14 @@
 
     <div v-if="level1category" class="mt-2">
 
+        <!-- warning if not all scales -->
+            <div v-if="!allscales && toplevel" class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ mstrings.notallscales }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
         <!-- Filter on initials -->
         <NameFilter @selected="filter_selected" ref="namefilterref"></NameFilter>
 
@@ -93,6 +101,7 @@
     const categories = ref([]);
     const breadcrumb = ref([]);
     const toplevel = ref(false);
+    const allscales = ref(false);
     const completed = ref(0);
 
     let firstname = '';
@@ -241,6 +250,9 @@
             columns.value = result.columns;
             breadcrumb.value = result.breadcrumb;
             toplevel.value = result.toplevel;
+            allscales.value = result.allscales;
+
+            window.console.log(allscales.value);
 
             users.value = process_users(users.value);
         })

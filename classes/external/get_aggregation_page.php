@@ -92,6 +92,7 @@ class get_aggregation_page extends \external_api {
     public static function execute_returns() {
         return new external_single_structure([
             'toplevel' => new external_value(PARAM_BOOL, 'Is this the topmost level?'),
+            'allscales' => new external_value(PARAM_BOOL, '(Top level only) are all grades (converted to) scales?'),
             'users' => new external_multiple_structure(
                 new external_single_structure([
                     'id' => new external_value(PARAM_INT, 'User ID'),

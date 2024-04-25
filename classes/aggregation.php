@@ -137,6 +137,23 @@ class aggregation {
     }
 
     /**
+     * Check if all columns represent a scale
+     * Warning will be displayed to user if not (and aggregation is not possible)
+     * @param int $courseid
+     * @param array $columns
+     */
+    public static function is_all_scales(int $courseid, array $columns) {
+        $allscales = true;
+        foreach ($columns as $column) {
+            if (!$column->isscale) {
+                $allscales = false;
+            }
+        }
+
+        return $allscales;
+    }
+
+    /**
      * Is resit required?
      * TODO: Placeholder only
      * @param int $courseid
