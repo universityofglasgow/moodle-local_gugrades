@@ -68,11 +68,12 @@ class api {
                 'gradehidden' => false,
                 'gradelocked' => false,
                 'showconversion' => false,
+                'converted' => false,
             ];
         }
 
         // Hidden or locked in gradebook?
-        list($gradehidden, $gradelocked) = \local_gugrades\grades::is_grade_hidden_locked($gradeitemid);
+        [$gradehidden, $gradelocked] = \local_gugrades\grades::is_grade_hidden_locked($gradeitemid);
 
         // Instantiate object for this activity type.
         $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid, $groupid);
@@ -90,6 +91,7 @@ class api {
         $users = \local_gugrades\users::add_gradehidden_to_user_records($users, $gradeitemid);
         $columns = \local_gugrades\grades::get_grade_capture_columns($courseid, $gradeitemid);
         $gradesimported = \local_gugrades\grades::is_grades_imported($courseid, $gradeitemid);
+        $converted = \local_gugrades\conversion::is_conversion_applied($courseid, $gradeitemid);
 
         return [
             'users' => $users,
@@ -102,6 +104,7 @@ class api {
             'gradehidden' => $gradehidden ? true : false,
             'gradelocked' => $gradelocked ? true : false,
             'showconversion' => $showconversion && $gradesimported,
+            'converted' => $converted,
         ];
     }
 

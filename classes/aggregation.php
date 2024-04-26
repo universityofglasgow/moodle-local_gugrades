@@ -186,6 +186,7 @@ class aggregation {
 
             // TODO - just a placeholder at the moment.
             $user->coursetotal = get_string('gradesmissing', 'local_gugrades');
+            $user->completed = 0;
         }
 
         // Pictures.

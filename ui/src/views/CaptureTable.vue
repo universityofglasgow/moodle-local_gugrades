@@ -30,6 +30,7 @@
                         :usershidden="usershidden"
                         :gradesimported="gradesimported"
                         :showconversion="showconversion"
+                        :converted="converted"
                         @refreshtable="refresh"
                         @viewfullnames="viewfullnames"
                         @editcolumn="editcog_clicked"
@@ -164,6 +165,7 @@
     const gradesimported = ref(false);
     const gradehidden = ref(false);
     const gradelocked = ref(false);
+    const converted = ref(false);
     const columns = ref([]);
     const loaded = ref(false);
     const showalert = ref(false);
@@ -451,6 +453,7 @@
             userids.value = users.value.map(u => u.id);
             totalrows.value = users.value.length;
             showconversion.value = result.showconversion;
+            converted.value = result.converted;
 
             users.value = add_grades(users.value, columns.value);
 
