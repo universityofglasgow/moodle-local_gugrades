@@ -3,7 +3,7 @@
         <button class="btn btn-outline-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <ImportUserGradeButton v-if="props.awaitingcapture" :itemid="props.itemid" :userid="props.userid" @imported="grade_added()"></ImportUserGradeButton>
+            <ImportUserGradeButton v-if="props.awaitingcapture && !converted" :itemid="props.itemid" :userid="props.userid" @imported="grade_added()"></ImportUserGradeButton>
             <AddGradeButton :itemid="props.itemid" :userid="props.userid" :name="props.name" :itemname="props.itemname" @gradeadded = "grade_added()"></AddGradeButton>
             <HistoryButton :userid="props.userid" :itemid="props.itemid" :name="props.name" :itemname="props.itemname"></HistoryButton>
             <HideShowButton :gradehidden="props.gradehidden" :itemid="props.itemid" :userid="props.userid" @changed="grade_added()"></HideShowButton>
@@ -27,6 +27,7 @@
             name: String,
             awaitingcapture: Boolean,
             gradehidden: Boolean,
+            converted: Boolean,
         });
 
     const emit = defineEmits([

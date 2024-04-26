@@ -72,7 +72,12 @@ class import_grades_recursive extends \external_api {
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        list($itemcount, $gradecount) = \local_gugrades\api::import_grades_recursive($courseid,
+        // If already converted then import is not permitted
+        if (\local_gugrades\conversion::is_conversion_applied($courseid, $gradeitemid)) {
+            throw new \moodle_exception('Import is not permitted after conversion applied.');
+        }
+
+        [$itemcount, $gradecount] = \local_gugrades\api::import_grades_recursive($courseid,
             $gradeitemid, $groupid, $additional);
 
         // Log.
