@@ -1303,7 +1303,7 @@ class api {
             \local_gugrades\aggregation::aggregate($courseid, $gradecategoryid, $users);
         }
 
-        // Warning message(s)?
+        // Warning message?
         $istoplevel = \local_gugrades\aggregation::is_top_level($gradecategoryid);
         if ($istoplevel) {
             $allscales = \local_gugrades\aggregation::is_all_scales($courseid, $columns);

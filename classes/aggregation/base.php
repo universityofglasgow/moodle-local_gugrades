@@ -33,6 +33,10 @@ namespace local_gugrades\aggregation;
 class base {
 
     /**
+     * @var public int $courseid
+     */
+
+    /**
      * Constructor
      * @param int $courseid
      */
@@ -79,7 +83,7 @@ class base {
 
         // Calculation and rounding.
         // If $totalweights == 0 then there are no weights, then use
-        // counts instead
+        // counts instead.
         if ($totalweights == 0) {
             $raw = $countcompleted * 100 / $countall;
         } else {
@@ -179,7 +183,7 @@ class base {
     /**
      * Strategy - mean of grades
      * @param array $items
-     * @param return float
+     * @return float
      */
     public function strategy_mean(array $items) {
         $sum = 0.0;

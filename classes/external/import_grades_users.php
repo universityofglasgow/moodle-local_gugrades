@@ -74,7 +74,7 @@ class import_grades_users extends \external_api {
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        // If already converted then import is not permitted
+        // If already converted then import is not permitted.
         if (\local_gugrades\conversion::is_conversion_applied($courseid, $gradeitemid)) {
             throw new \moodle_exception('Import is not permitted after conversion applied.');
         }
