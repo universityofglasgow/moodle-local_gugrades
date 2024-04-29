@@ -341,28 +341,33 @@ class api {
         $rawgrade = $activity->get_first_grade($userid);
 
         // Ask conversion object for converted grade and display grade.
-        if (($rawgrade !== false) && $conversion->validate($rawgrade)) {
+        if ($rawgrade !== false) {
 
-            list($convertedgrade, $displaygrade) = $conversion->import($rawgrade);
+            // Can (sometimes) come back as string, for some reason.
+            $rawgrade = floatval($rawgrade);
 
-            \local_gugrades\grades::write_grade(
-                $courseid,
-                $gradeitemid,
-                $userid,
-                '',
-                $rawgrade,
-                $convertedgrade,
-                $displaygrade,
-                0,
-                'FIRST',
-                '',
-                1,
-                false,
-                get_string('import', 'local_gugrades'),
-                !$conversion->is_scale(),
-            );
+            if ($conversion->validate($rawgrade)) {
+                [$convertedgrade, $displaygrade] = $conversion->import($rawgrade);
 
-            return true;
+                \local_gugrades\grades::write_grade(
+                    $courseid,
+                    $gradeitemid,
+                    $userid,
+                    '',
+                    $rawgrade,
+                    $convertedgrade,
+                    $displaygrade,
+                    0,
+                    'FIRST',
+                    '',
+                    1,
+                    false,
+                    get_string('import', 'local_gugrades'),
+                    !$conversion->is_scale(),
+                );
+
+                return true;
+            }
         }
 
         return false;
