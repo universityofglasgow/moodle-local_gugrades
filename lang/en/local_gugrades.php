@@ -150,6 +150,7 @@ $string['noaudit'] = 'No audit logs for this course';
 $string['noconversionmaps'] = 'No conversion maps have been defined. Click \'Add map...\' to create the first one.';
 $string['nodata'] = 'No data';
 $string['nogradestoimport'] = 'There were no grades to import.';
+$string['noimportafterconversion'] = 'WARNING: You can no longer import or add points grades after conversion is applied. Complete all grading in points first.';
 $string['nomaps'] = 'No conversion maps have been defined for this course. Click the \'Conversion\' tab to create one.';
 $string['nohistory'] = 'No history';
 $string['notallscales'] = 'Cannot aggregate. All grades must first be (converted to) Schedule A or B.';

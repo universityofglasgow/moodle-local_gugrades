@@ -9,6 +9,10 @@
             {{ mstrings.nomaps }}
         </div>
 
+        <div v-else class="alert alert-warning">
+            {{ mstrings.noimportafterconversion }}
+        </div>
+
         <EasyDataTable v-if="!nomaps && loaded" :items="maps" :headers="headers" :hide-footer="true">
             <template #item-select="item">
                 <input type="radio" :value="item.id" v-model="selection"/>
