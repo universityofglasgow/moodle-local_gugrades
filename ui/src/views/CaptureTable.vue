@@ -43,7 +43,9 @@
         <div v-if="itemid && gradesupported" class="mt-2">
             <NameFilter v-if="!usershidden" @selected="filter_selected" ref="namefilterref"></NameFilter>
 
-            <PreLoader v-if="!loaded"></PreLoader>
+            <div v-if="!loaded" class="d-flex justify-content-center">
+                <VueSpinnerHourglass size="50" color="red"></VueSpinnerHourglass>
+            </div>
 
             <div v-if="showtable && loaded">
 
@@ -150,6 +152,7 @@
     import CaptureColumnEditCog from '@/components/CaptureColumnEditCog.vue';
     import EditCaptureCell from '@/components/Capture/EditCaptureCell.vue';
     import { watchDebounced } from '@vueuse/core';
+    import { VueSpinnerHourglass } from 'vue3-spinners';
 
     const users = ref([]);
     const userids = ref([]);

@@ -31,7 +31,12 @@
             </ul>
         </div>
 
+        <div v-if="loading" class="d-flex justify-content-center">
+            <VueSpinnerHourglass size="50" color="red"></VueSpinnerHourglass>
+        </div>
+
         <EasyDataTable
+            v-if="!loading"
             buttons-pagination
             alternating
             table-class-name="aggregation-table"
@@ -87,12 +92,14 @@
     import NameFilter from '@/components/NameFilter.vue';
     import GroupSelect from '@/components/GroupSelect.vue';
     import { useToast } from "vue-toastification";
+    import { VueSpinnerHourglass } from 'vue3-spinners';
 
     const toast = useToast();
 
     const mstrings = inject('mstrings');
 
     const level1category = ref(0);
+    const loading = ref(true);
     const categoryid = ref(0);
     const groupid = ref(0);
     const items = ref([]);
@@ -232,6 +239,8 @@
         const courseid = GU.courseid;
         const fetchMany = GU.fetchMany;
 
+        loading.value = true;
+
         fetchMany([{
             methodname: 'local_gugrades_get_aggregation_page',
             args: {
@@ -255,6 +264,7 @@
             window.console.log(allscales.value);
 
             users.value = process_users(users.value);
+            loading.value = false;
         })
         .catch((error) => {
             window.console.error(error);
