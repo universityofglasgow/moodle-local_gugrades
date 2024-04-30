@@ -96,7 +96,7 @@ class get_add_grade_form_test extends \local_gugrades\external\gugrades_advanced
         // Check adminmenu.
         $this->assertArrayHasKey('adminmenu', $form);
         $adminmenu = $form['adminmenu'];
-        $this->assertCount(16, $adminmenu);
+        $this->assertCount(17, $adminmenu);
         $this->assertEquals('UNS', $adminmenu[0]['value']);
         $this->assertEquals('UNS - Unsatisfactory', $adminmenu[0]['label']);
         $this->assertEquals('CR', $adminmenu[10]['value']);
@@ -159,7 +159,7 @@ class get_add_grade_form_test extends \local_gugrades\external\gugrades_advanced
         // Check adminmenu.
         $this->assertArrayHasKey('adminmenu', $form);
         $adminmenu = $form['adminmenu'];
-        $this->assertCount(16, $adminmenu);
+        $this->assertCount(17, $adminmenu);
         $this->assertEquals('UNS', $adminmenu[0]['value']);
         $this->assertEquals('UNS - Unsatisfactory', $adminmenu[0]['label']);
         $this->assertEquals('CR', $adminmenu[10]['value']);

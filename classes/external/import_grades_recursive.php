@@ -49,6 +49,7 @@ class import_grades_recursive extends \external_api {
             'gradeitemid' => new external_value(PARAM_INT, 'Grade item id number - import peers and children'),
             'groupid' => new external_value(PARAM_INT, 'Group to import for'),
             'additional' => new external_value(PARAM_BOOL, 'Only import where no grades currently exist for that user'),
+            'fillns' => new external_value(PARAM_BOOL, 'Users with no submission given NS admin grade'),
         ]);
     }
 
@@ -58,9 +59,10 @@ class import_grades_recursive extends \external_api {
      * @param int $gradeitemid
      * @param int $groupid
      * @param bool $additional
+     * @param bool $fillns
      * @return array
      */
-    public static function execute(int $courseid, int $gradeitemid, int $groupid, bool $additional) {
+    public static function execute(int $courseid, int $gradeitemid, int $groupid, bool $additional, bool $fillns) {
 
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
@@ -68,6 +70,7 @@ class import_grades_recursive extends \external_api {
             'gradeitemid' => $gradeitemid,
             'groupid' => $groupid,
             'additional' => $additional,
+            'fillns' => $fillns,
         ]);
         $context = \context_course::instance($courseid);
         self::validate_context($context);
@@ -78,7 +81,7 @@ class import_grades_recursive extends \external_api {
         }
 
         [$itemcount, $gradecount] = \local_gugrades\api::import_grades_recursive($courseid,
-            $gradeitemid, $groupid, $additional);
+            $gradeitemid, $groupid, $additional, $fillns);
 
         // Log.
         $event = \local_gugrades\event\import_grades_recursive::create([

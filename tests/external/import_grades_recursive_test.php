@@ -43,7 +43,7 @@ class import_grades_recursive_test extends \local_gugrades\external\gugrades_adv
      */
     public function test_wrong_item_exception() {
         $this->expectException('moodle_exception');
-        import_grades_recursive::execute($this->course->id, $this->gradeitemidassign1, 0, false);
+        import_grades_recursive::execute($this->course->id, $this->gradeitemidassign1, 0, false, false);
     }
 
     /**
@@ -55,7 +55,7 @@ class import_grades_recursive_test extends \local_gugrades\external\gugrades_adv
         global $DB;
 
         // Check gradeitemsecond1 (no grades assigned so shouldn't return anything).
-        $counts = import_grades_recursive::execute($this->course->id, $this->gradeitemsecond1, 0, false);
+        $counts = import_grades_recursive::execute($this->course->id, $this->gradeitemsecond1, 0, false, false);
         $counts = \external_api::clean_returnvalue(
             import_grades_recursive::execute_returns(),
             $counts
@@ -83,7 +83,7 @@ class import_grades_recursive_test extends \local_gugrades\external\gugrades_adv
         $gradeitem->update_final_grade($this->student->id, 48.5);
 
         // This time we should get those two grades.
-        $counts = import_grades_recursive::execute($this->course->id, $this->gradeitemsecond1, 0, false);
+        $counts = import_grades_recursive::execute($this->course->id, $this->gradeitemsecond1, 0, false, false);
         $counts = \external_api::clean_returnvalue(
             import_grades_recursive::execute_returns(),
             $counts

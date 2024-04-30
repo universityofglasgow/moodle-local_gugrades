@@ -60,7 +60,7 @@ class get_gradetypes_test extends \local_gugrades\external\gugrades_advanced_tes
         $this->assertEquals('OTHER', $gradetypes[8]['value']);
         $this->assertEquals('Late penalty', $gradetypes[4]['label']);
 
-        $this->assertCount(16, $admingrades);
-        $this->assertEquals('MV', $admingrades[15]['value']);
+        $this->assertCount(17, $admingrades);
+        $this->assertEquals('MV', $admingrades[16]['value']);
     }
 }

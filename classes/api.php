@@ -257,20 +257,20 @@ class api {
             // If we get to here and not a testrun, we can actually save the data.
             if (!$testrun) {
                 \local_gugrades\grades::write_grade(
-                    $courseid,
-                    $gradeitemid,
-                    $user->id,
-                    '',
-                    $gradevalue,
-                    $gradevalue,
-                    $grade,
-                    0.0,
-                    $reason,
-                    $other,
-                    true,
-                    false,
-                    '',
-                    !$conversion->is_scale(),
+                    courseid:       $courseid,
+                    gradeitemid:    $gradeitemid,
+                    userid:         $user->id,
+                    admingrade:     '',
+                    rawgrade:       $gradevalue,
+                    convertedgrade: $gradevalue,
+                    displaygrade:   $grade,
+                    weightedgrade:  0.0,
+                    gradetype:      $reason,
+                    other:          $other,
+                    iscurrent:      true,
+                    iserror:      false,
+                    auditcomment:   'CSV import',
+                    ispoints:       !$conversion->is_scale(),
                 );
                 $addcount++;
             }
@@ -327,10 +327,17 @@ class api {
      * @param \local_gugrades\activities\base $activity
      * @param int $userid
      * @param bool $additional
+     * @param bool $fillns
      * @return bool - was a grade imported
      */
-    public static function import_grade(int $courseid, int $gradeitemid,
-        \local_gugrades\conversion\base $conversion, \local_gugrades\activities\base $activity, int $userid, bool $additional) {
+    public static function import_grade(
+        int $courseid,
+        int $gradeitemid,
+        \local_gugrades\conversion\base $conversion,
+        \local_gugrades\activities\base $activity,
+        int $userid,
+        bool $additional,
+        bool $fillns) {
 
         // If additional selected then skip users who already have data.
         if ($additional && \local_gugrades\grades::user_has_grades($gradeitemid, $userid)) {
@@ -350,20 +357,43 @@ class api {
                 [$convertedgrade, $displaygrade] = $conversion->import($rawgrade);
 
                 \local_gugrades\grades::write_grade(
-                    $courseid,
-                    $gradeitemid,
-                    $userid,
-                    '',
-                    $rawgrade,
-                    $convertedgrade,
-                    $displaygrade,
-                    0,
-                    'FIRST',
-                    '',
-                    1,
-                    false,
-                    get_string('import', 'local_gugrades'),
-                    !$conversion->is_scale(),
+                    courseid:       $courseid,
+                    gradeitemid:    $gradeitemid,
+                    userid:         $userid,
+                    admingrade:     '',
+                    rawgrade:       $rawgrade,
+                    convertedgrade: $convertedgrade,
+                    displaygrade:   $displaygrade,
+                    weightedgrade:  0,
+                    gradetype:      'FIRST',
+                    other:          '',
+                    iscurrent:      true,
+                    iserror:        false,
+                    auditcomment:   get_string('import', 'local_gugrades'),
+                    ispoints:       !$conversion->is_scale(),
+                );
+
+                return true;
+            } else if ($fillns) {
+
+                // If there's no grade and fillns is enabled, write
+                // an NS grade, instead.
+
+                \local_gugrades\grades::write_grade(
+                    courseid:       $courseid,
+                    gradeitemid:    $gradeitemid,
+                    userid:         $userid,
+                    admingrade:     'NC',
+                    rawgrade:       0,
+                    convertedgrade: 0,
+                    displaygrade:   0,
+                    weightedgrade:  0,
+                    gradetype:      'FIRST',
+                    other:          '',
+                    iscurrent:      true,
+                    iserror:        false,
+                    auditcomment:   get_string('import', 'local_gugrades'),
+                    ispoints:       false,
                 );
 
                 return true;
@@ -521,9 +551,10 @@ class api {
      * @param int $gradeitemid
      * @param int $groupid
      * @param bool $additional
+     * @param bool $fillns
      * @return array [itemcount, gradecount]
      */
-    public static function import_grades_recursive(int $courseid, int $gradeitemid, int $groupid, bool $additional) {
+    public static function import_grades_recursive(int $courseid, int $gradeitemid, int $groupid, bool $additional, bool $fillns) {
         global $DB;
 
         // Check!
@@ -551,7 +582,7 @@ class api {
 
             // Iterate over these users importing grade.
             foreach ($users as $user) {
-                if (self::import_grade($courseid, $item->id, $conversion, $activity, $user->id, $additional)) {
+                if (self::import_grade($courseid, $item->id, $conversion, $activity, $user->id, $additional, $fillns)) {
                     $gradecount++;
                 }
             }
@@ -837,20 +868,20 @@ class api {
 
         // Happy as we're going to get, so write the new data.
         \local_gugrades\grades::write_grade(
-            $courseid,
-            $gradeitemid,
-            $userid,
-            $admingrade,
-            $rawgrade,
-            $convertedgrade,
-            $displaygrade,
-            0,
-            $reason,
-            $other,
-            true,
-            false,
-            $notes,
-            !$conversion->is_scale(),
+            courseid:       $courseid,
+            gradeitemid:    $gradeitemid,
+            userid:         $userid,
+            admingrade:     $admingrade,
+            rawgrade:       $rawgrade,
+            convertedgrade: $convertedgrade,
+            displaygrade:   $displaygrade,
+            weightedgrade:  0,
+            gradetype:      $reason,
+            other:          $other,
+            iscurrent:      true,
+            iserror:        false,
+            auditcomment:   $notes,
+            ispoints:       !$conversion->is_scale(),
         );
     }
 

@@ -40,6 +40,7 @@ class admin_grades {
     private static function define() {
         $admingrades = [
             'MV' => get_string('adminmv', 'local_gugrades'),
+            'NS' => get_string('adminns', 'local_gugrades'),
             'X7'  => get_string('admin7', 'local_gugrades'),
             'AU' => get_string('adminau', 'local_gugrades'),
             'FC' => get_string('adminfc', 'local_gugrades'),

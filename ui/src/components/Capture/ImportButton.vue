@@ -47,6 +47,20 @@
             </div>
         </div>
 
+        <div class="alert alert-success">
+            <FormKit
+                type="checkbox"
+                :label="mstrings.importfillns"
+                :help="mstrings.importfillnshelp"
+                name="importfillns"
+                v-model="importfillns"
+                >
+                <template #help>
+                    <p><i class="fa fa-info-circle" aria-hidden="true"></i> {{ mstrings.importfillnshelp }}</p>
+                </template>
+            </FormKit>
+        </div>
+
         <div v-if="recursiveavailable && recursiveselect && !recursivematch" class="alert alert-warning">
             {{ mstrings.importnomatch }}
         </div>
@@ -89,6 +103,7 @@
     const recursivematch = ref(false);
     const recursiveselect = ref(false);
     const importadditional = ref(false);
+    const importfillns = ref(false);
     const allgradesvalid = ref(false);
     const mstrings = inject('mstrings');
 
@@ -119,6 +134,7 @@
                 courseid: courseid,
                 gradeitemid: props.itemid,
                 additional: importadditional.value,
+                fillns: importfillns.value,
                 userlist: props.userids,
             }
         }])[0]
@@ -152,6 +168,7 @@
                 gradeitemid: props.itemid,
                 groupid: props.groupid,
                 additional: importadditional.value,
+                fillns: importfillns,
             }
         }])[0]
         .then((result) => {

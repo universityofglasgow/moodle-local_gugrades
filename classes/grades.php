@@ -306,12 +306,12 @@ class grades {
         bool $iscurrent,
         bool $iserror,
         string $auditcomment,
-        bool $points
+        bool $ispoints
     ) {
         global $DB, $USER;
 
         // Get/create the column entry.
-        $column = self::get_column($courseid, $gradeitemid, $gradetype, $other, $points);
+        $column = self::get_column($courseid, $gradeitemid, $gradetype, $other, $ispoints);
 
         // Does this already exist.
         $gradetypecompare = $DB->sql_compare_text('gradetype');
@@ -355,7 +355,7 @@ class grades {
         $gugrade->auditby = $USER->id;
         $gugrade->audittimecreated = time();
         $gugrade->auditcomment = $auditcomment;
-        $gugrade->points = $points;
+        $gugrade->points = $ispoints;
         $DB->insert_record('local_gugrades_grade', $gugrade);
     }
 

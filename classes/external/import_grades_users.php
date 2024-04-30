@@ -48,6 +48,7 @@ class import_grades_users extends \external_api {
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
             'gradeitemid' => new external_value(PARAM_INT, 'Grade item id number'),
             'additional' => new external_value(PARAM_BOOL, 'Only import where no grades currently exist for that user'),
+            'fillns' => new external_value(PARAM_BOOL, 'Users with no submission given NS admin grade'),
             'userlist' => new external_multiple_structure(
                 new external_value(PARAM_INT)
             ),
@@ -59,16 +60,18 @@ class import_grades_users extends \external_api {
      * @param int $courseid
      * @param int $gradeitemid
      * @param bool $additional
+     * @param bool $fillns
      * @param array $userlist
      * @return array
      */
-    public static function execute(int $courseid, int $gradeitemid, bool $additional, array $userlist) {
+    public static function execute(int $courseid, int $gradeitemid, bool $additional, bool $fillns, array $userlist) {
 
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
             'courseid' => $courseid,
             'gradeitemid' => $gradeitemid,
             'additional' => $additional,
+            'fillns' => $fillns,
             'userlist' => $userlist,
         ]);
         $context = \context_course::instance($courseid);
@@ -91,7 +94,7 @@ class import_grades_users extends \external_api {
             if ($additional && \local_gugrades\grades::user_has_grades($gradeitemid, $userid)) {
                 continue;
             }
-            if (\local_gugrades\api::import_grade($courseid, $gradeitemid, $conversion, $activity, intval($userid), $additional)) {
+            if (\local_gugrades\api::import_grade($courseid, $gradeitemid, $conversion, $activity, intval($userid), $additional, $fillns)) {
                 $importcount++;
             }
         }
