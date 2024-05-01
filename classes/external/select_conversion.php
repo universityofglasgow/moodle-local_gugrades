@@ -46,7 +46,7 @@ class select_conversion extends \external_api {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
             'gradeitemid' => new external_value(PARAM_INT, 'Grade item id'),
-            'mapid' => new external_value(PARAM_INT, 'Conversion map ID'),
+            'mapid' => new external_value(PARAM_INT, 'Conversion map ID. 0 means remove existing.'),
         ]);
     }
 

@@ -523,6 +523,23 @@ class grades {
     }
 
     /**
+     * Cleanup empty columns
+     * If a column no longer has active grades it can be removed
+     * @param int $gradeitemid
+     */
+    public static function cleanup_empty_columns(int $gradeitemid) {
+        global $DB;
+
+        $columns = $DB->get_records('local_gugrades_column', ['gradeitemid' => $gradeitemid]);
+        foreach ($columns as $column) {
+            if (!$DB->record_exists('local_gugrades_grade',
+                ['gradeitemid' => $gradeitemid, 'gradetype' => $column->gradetype, 'iscurrent' => 1])) {
+                $DB->delete_records('local_gugrades_column', ['id' => $column->id]);
+            }
+        }
+    }
+
+    /**
      * Get grade capture columns
      * Get the different grade types used for this capture
      * Each gradetype == OTHER with distinct 'other' text is considered a different column

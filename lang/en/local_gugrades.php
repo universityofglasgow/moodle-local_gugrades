@@ -47,6 +47,7 @@ $string['conversioninfo'] = 'Default values for conversion maps';
 $string['conversionmapname'] = 'Conversion map name';
 $string['conversionmaps'] = 'Conversion Maps';
 $string['conversionmapsaved'] = 'Conversion map saved';
+$string['conversionremovewarning'] = "WARNING: Removing conversion will remove any Schedule A/B grades added after the previous conversion";
 $string['conversionselect'] = 'Conversion selection';
 $string['converted'] = 'Converted';
 $string['coursegradeaggregation'] = 'Course grade aggregation';

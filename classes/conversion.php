@@ -325,8 +325,16 @@ class conversion {
         global $DB, $USER;
 
         // The $mapid==0 means delete the mappings for this item.
+        // Also set any grades that have been added since (i.e. any grades
+        // with points == 1) to not current.
         if ($mapid == 0) {
             $DB->delete_records('local_gugrades_map_item', ['gradeitemid' => $gradeitemid]);
+            $sql = 'UPDATE {local_gugrades_grade}
+                SET iscurrent = 0
+                WHERE points = 0
+                AND gradeitemid = :gradeitemid';
+            $DB->execute($sql, ['gradeitemid' => $gradeitemid]);
+            \local_gugrades\grades::cleanup_empty_columns($gradeitemid);
             return;
         }
 
