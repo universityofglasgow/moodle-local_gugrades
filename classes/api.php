@@ -374,30 +374,30 @@ class api {
                 );
 
                 return true;
-            } else if ($fillns) {
-
-                // If there's no grade and fillns is enabled, write
-                // an NS grade, instead.
-
-                \local_gugrades\grades::write_grade(
-                    courseid:       $courseid,
-                    gradeitemid:    $gradeitemid,
-                    userid:         $userid,
-                    admingrade:     'NC',
-                    rawgrade:       0,
-                    convertedgrade: 0,
-                    displaygrade:   0,
-                    weightedgrade:  0,
-                    gradetype:      'FIRST',
-                    other:          '',
-                    iscurrent:      true,
-                    iserror:        false,
-                    auditcomment:   get_string('import', 'local_gugrades'),
-                    ispoints:       false,
-                );
-
-                return true;
             }
+        } else if ($fillns) {
+
+            // If there's no grade and fillns is enabled, write
+            // an NS grade, instead.
+
+            \local_gugrades\grades::write_grade(
+                courseid:       $courseid,
+                gradeitemid:    $gradeitemid,
+                userid:         $userid,
+                admingrade:     'NS',
+                rawgrade:       0,
+                convertedgrade: 0,
+                displaygrade:   'NS',
+                weightedgrade:  0,
+                gradetype:      'FIRST',
+                other:          '',
+                iscurrent:      true,
+                iserror:        false,
+                auditcomment:   get_string('import', 'local_gugrades'),
+                ispoints:       false,
+            );
+
+            return true;
         }
 
         return false;
