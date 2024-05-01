@@ -150,7 +150,9 @@ class assign_activity extends base {
         // This is the grade object from mdl_assign_grades (check negative values).
         $assigngrade = $this->assign->get_user_grade($userid, false);
 
-        if (($assigngrade !== false) && ($assigngrade->grade != -1)) {
+        // Valid possibilities are NULL (grade deleted) or -1 (never graded)
+        // Either of these represent no grade for our purposes
+        if (($assigngrade !== false) && ($assigngrade->grade != -1) && ($assigngrade->grade != null)) {
 
             return $assigngrade->grade;
         }
