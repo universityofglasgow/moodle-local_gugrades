@@ -1306,7 +1306,17 @@ class api {
     public static function is_grade_hidden(int $gradeitemid, int $userid) {
         global $DB;
 
-        return $DB->record_exists('local_gugrades_hidden', ['gradeitemid' => $gradeitemid, 'userid' => $userid]);
+        // Check (internal) MyGrades hidden flag
+        $mygradeshidden = $DB->record_exists('local_gugrades_hidden', ['gradeitemid' => $gradeitemid, 'userid' => $userid]);
+
+        // Check grade item hidden in Gradebook
+        $gradeitemhidden = $DB->record_exists('grade_items', ['id' => $gradeitemid, 'hidden' => 1]);
+
+        // Check user grade hidden
+        $gradegradehidden = $DB->record_exists('grade_grades', ['itemid' => $gradeitemid, 'userid' => $userid, 'hidden' => 1]);
+
+        // Any being hidden counts
+        return $mygradeshidden || $gradeitemhidden || $gradegradehidden;
     }
 
     /**
