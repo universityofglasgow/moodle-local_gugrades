@@ -92,7 +92,7 @@ $string['firstname'] = 'First name';
 $string['firstnamelastname'] = 'Firstname / lastname';
 $string['grade'] = 'Grade';
 $string['gradeadded'] = 'Grade added';
-$string['gradehidden'] = '<b>Grade is hidden</b><br />This grade item is hidden in the Gradebook settings. It is not visible to students';
+$string['gradehidden'] = '<b>Grade is hidden</b><br />This grade item is hidden in the Gradebook. It is not visible to students';
 $string['gradehistory'] = 'Grade history';
 $string['gradeimporteduser'] = 'Grade was imported for this user';
 $string['gradelocked'] = '<b><i class="fa fa-radiation"></i>Grade is locked</b><br />This grade item is locked in the Gradebook settings. Grades cannot be changed';

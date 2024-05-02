@@ -96,7 +96,7 @@ class api {
         return [
             'users' => $users,
             'columns' => $columns,
-            'hidden' => $activity->is_names_hidden(),
+            'hidden' => $activity->is_names_hidden() || self::is_gradeitem_hidden($gradeitemid),
             'itemtype' => $activity->get_itemtype(),
             'itemname' => $activity->get_itemname(),
             'gradesupported' => true,
@@ -1298,6 +1298,17 @@ class api {
     }
 
     /**
+     * Is grade item hidden in Gradebook
+     * @param int $gradeitemid
+     * @return bool
+     */
+    protected static function is_gradeitem_hidden(int $gradeitemid) {
+        global $DB;
+
+        return $DB->record_exists('grade_items', ['id' => $gradeitemid, 'hidden' => 1]);
+    }
+
+    /**
      * Check if grade is hidden
      * @param int $gradeitemid
      * @param int $userid
@@ -1310,7 +1321,7 @@ class api {
         $mygradeshidden = $DB->record_exists('local_gugrades_hidden', ['gradeitemid' => $gradeitemid, 'userid' => $userid]);
 
         // Check grade item hidden in Gradebook
-        $gradeitemhidden = $DB->record_exists('grade_items', ['id' => $gradeitemid, 'hidden' => 1]);
+        $gradeitemhidden = self::is_gradeitem_hidden($gradeitemid);
 
         // Check user grade hidden
         $gradegradehidden = $DB->record_exists('grade_grades', ['itemid' => $gradeitemid, 'userid' => $userid, 'hidden' => 1]);

@@ -1,21 +1,16 @@
 <template>
     <div class="col-12 mt-2">
-        <div v-if="!props.gradesupported" class="alert alert-danger">
-            <span v-html="mstrings.gradenotsupported"></span>
-        </div>
+        <DismissableAlert v-if="!props.gradesupported" alertstyle="danger" :message="mstrings.gradenotsupported"></DismissableAlert>
 
-        <div v-if="props.gradehidden" class="alert alert-warning">
-            <span v-html="mstrings.gradehidden"></span>
-        </div>
+        <DismissableAlert v-if="props.gradehidden" alertstyle="warning" :message="mstrings.gradehidden"></DismissableAlert>
 
-        <div v-if="props.gradelocked" class="alert alert-warning">
-            <span v-html="mstrings.gradelocked"></span>
-        </div>
+        <DismissableAlert v-if="props.gradelocked" alertstyle="warning" :message="mstrings.gradelocked"></DismissableAlert>
     </div>
 </template>
 
 <script setup>
     import {inject, defineProps} from '@vue/runtime-core';
+    import DismissableAlert from '@/components/DismissableAlert.vue';
 
     const mstrings = inject('mstrings');
 
