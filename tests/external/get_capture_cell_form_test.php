@@ -61,8 +61,8 @@ class get_capture_cell_form_test extends \local_gugrades\external\gugrades_advan
         $this->assertFalse($usescale);
         $this->assertEquals(100, $grademax);
         $this->assertCount(0, $scalemenu);
-        $this->assertCOunt(17, $admingrades);
-        $this->assertEquals('MV', $admingrades[16]['value']);
+        $this->assertCOunt(4, $admingrades);
+        $this->assertEquals('MV', $admingrades[3]['value']);
     }
 
     /**
@@ -90,8 +90,8 @@ class get_capture_cell_form_test extends \local_gugrades\external\gugrades_advan
         $this->assertTrue($usescale);
         $this->assertEquals(0, $grademax);
         $this->assertCount(23, $scalemenu);
-        $this->assertCOunt(17, $admingrades);
+        $this->assertCOunt(4, $admingrades);
         $this->assertEquals('H:0', $scalemenu[22]['label']);
-        $this->assertEquals('MV', $admingrades[16]['value']);
+        $this->assertEquals('MV', $admingrades[3]['value']);
     }
 }

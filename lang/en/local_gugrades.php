@@ -233,22 +233,9 @@ $string['gugrades:view'] = 'View gugrades tool';
 $string['gugrades:viewhiddennames'] = 'Reveal hidden names';
 
 // Admin grades.
-$string['admin7'] = 'Deferred result';
-$string['adminau'] = 'Audit only';
-$string['adminca'] = 'Credit awarded';
-$string['admincp'] = 'Complete';
-$string['admincr'] = 'Credit refused';
 $string['admincw'] = 'Credit withheld';
-$string['admindd'] = 'Distinction';
-$string['adminfc'] = 'Foreign credit';
-$string['adminfn'] = 'Fail - no resit';
-$string['adminfr'] = 'Fail - resit ok';
+$string['adminis'] = 'Interruption of Studies';
 $string['adminmv'] = 'Good cause';
-$string['adminnc'] = 'Not complete';
-$string['adminnp'] = 'Not pass';
 $string['adminns'] = 'No submission';
-$string['adminp'] = 'Pass';
-$string['adminsat'] = 'Satisfactory';
-$string['adminuns'] = 'Unsatisfactory';
 
 

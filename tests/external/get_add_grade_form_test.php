@@ -96,11 +96,11 @@ class get_add_grade_form_test extends \local_gugrades\external\gugrades_advanced
         // Check adminmenu.
         $this->assertArrayHasKey('adminmenu', $form);
         $adminmenu = $form['adminmenu'];
-        $this->assertCount(17, $adminmenu);
-        $this->assertEquals('UNS', $adminmenu[0]['value']);
-        $this->assertEquals('UNS - Unsatisfactory', $adminmenu[0]['label']);
-        $this->assertEquals('CR', $adminmenu[10]['value']);
-        $this->assertEquals('CR - Credit refused', $adminmenu[10]['label']);
+        $this->assertCount(4, $adminmenu);
+        $this->assertEquals('IS', $adminmenu[0]['value']);
+        $this->assertEquals('IS - Interruption of Studies', $adminmenu[0]['label']);
+        $this->assertEquals('MV', $adminmenu[3]['value']);
+        $this->assertEquals('MV - Good cause', $adminmenu[3]['label']);
     }
 
     /**
@@ -159,11 +159,11 @@ class get_add_grade_form_test extends \local_gugrades\external\gugrades_advanced
         // Check adminmenu.
         $this->assertArrayHasKey('adminmenu', $form);
         $adminmenu = $form['adminmenu'];
-        $this->assertCount(17, $adminmenu);
-        $this->assertEquals('UNS', $adminmenu[0]['value']);
-        $this->assertEquals('UNS - Unsatisfactory', $adminmenu[0]['label']);
-        $this->assertEquals('CR', $adminmenu[10]['value']);
-        $this->assertEquals('CR - Credit refused', $adminmenu[10]['label']);
+        $this->assertCount(4, $adminmenu);
+        $this->assertEquals('IS', $adminmenu[0]['value']);
+        $this->assertEquals('IS - Interruption of Studies', $adminmenu[0]['label']);
+        $this->assertEquals('MV', $adminmenu[3]['value']);
+        $this->assertEquals('MV - Good cause', $adminmenu[3]['label']);
     }
 
     /**

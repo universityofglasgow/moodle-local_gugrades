@@ -41,21 +41,8 @@ class admin_grades {
         $admingrades = [
             'MV' => get_string('adminmv', 'local_gugrades'),
             'NS' => get_string('adminns', 'local_gugrades'),
-            'X7'  => get_string('admin7', 'local_gugrades'),
-            'AU' => get_string('adminau', 'local_gugrades'),
-            'FC' => get_string('adminfc', 'local_gugrades'),
-            'CA' => get_string('adminca', 'local_gugrades'),
-            'CR' => get_string('admincr', 'local_gugrades'),
             'CW' => get_string('admincw', 'local_gugrades'),
-            'DD' => get_string('admindd', 'local_gugrades'),
-            'CP' => get_string('admincp', 'local_gugrades'),
-            'NC' => get_string('adminnc', 'local_gugrades'),
-            'P'  => get_string('adminp', 'local_gugrades'),
-            'NP' => get_string('adminnp', 'local_gugrades'),
-            'FN' => get_string('adminfn', 'local_gugrades'),
-            'FR' => get_string('adminfr', 'local_gugrades'),
-            'SAT' => get_string('adminsat', 'local_gugrades'),
-            'UNS' => get_string('adminuns', 'local_gugrades'),
+            'IS' => get_string('adminis', 'local_gugrades'),
         ];
 
         foreach ($admingrades as $code => $admingrade) {
