@@ -5,15 +5,36 @@
     </button>
 
     <VueModal v-model="showreleasemodal" modalClass="col-11 col-lg-5 rounded" :title="mstrings.releasegrades">
-        <div class="alert alert-warning">
-            {{ mstrings.releaseconfirm }}
-            <p v-if="grouprelease" class="mt-1"><b>{{ mstrings.releaseconfirmgroup }}</b></p>
-        </div>
-        <div class="mt-2 pt-2 border-top">
+
+        <div class="p-2 border rounded">
+            <h4>{{ mstrings.releasegrades }}</h4>
+            <div class="alert alert-warning">
+                {{ mstrings.releaseconfirm }}
+                <p v-if="grouprelease" class="mt-1"><b>{{ mstrings.releaseconfirmgroup }}</b></p>
+            </div>
             <button
                 class="btn btn-primary mr-1"
                 @click="release_grades()"
                 >{{ mstrings.yesrelease }}
+            </button>
+            <button
+                class="btn btn-warning"
+                @click="showreleasemodal = false"
+                >{{ mstrings.cancel }}
+            </button>
+        </div>
+
+        <!-- display if already released -->
+        <div v-if="props.released" class="border rounded mt-4 p-2">
+            <h4>Revert release of grades</h4>
+            <div class="alert alert-danger">
+                {{ mstrings.removerelease }}
+                <p v-if="grouprelease" class="mt-1"><b>{{ mstrings.removereleasegroup }}</b></p>
+            </div>
+            <button
+                class="btn btn-danger mr-1"
+                @click="revert_release()"
+                >{{ mstrings.yesunrelease }}
             </button>
             <button
                 class="btn btn-warning"
@@ -38,6 +59,7 @@
     const props = defineProps({
         gradeitemid: Number,
         groupid: Number,
+        released: Boolean,
     });
 
     const grouprelease = computed(() => {
@@ -58,6 +80,37 @@
                 courseid: courseid,
                 gradeitemid: props.gradeitemid,
                 groupid: props.groupid,
+                revert: false,
+            }
+        }])[0]
+        .then(() => {
+            emit('released');
+            showreleasemodal.value = false;
+            toast.success(mstrings.gradesreleased);
+        })
+        .catch((error) => {
+            window.console.error(error);
+            toast.error('Error communicating with server (see console)');
+        });
+
+        showreleasemodal.value = true;
+    }
+
+    /**
+     * Revert release grades on button click
+     */
+     function revert_release() {
+        const GU = window.GU;
+        const courseid = GU.courseid;
+        const fetchMany = GU.fetchMany;
+
+        fetchMany([{
+            methodname: 'local_gugrades_release_grades',
+            args: {
+                courseid: courseid,
+                gradeitemid: props.gradeitemid,
+                groupid: props.groupid,
+                revert: true,
             }
         }])[0]
         .then(() => {

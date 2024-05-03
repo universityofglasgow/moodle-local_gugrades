@@ -69,6 +69,7 @@ class api {
                 'gradelocked' => false,
                 'showconversion' => false,
                 'converted' => false,
+                'released' => false,
             ];
         }
 
@@ -92,6 +93,7 @@ class api {
         $columns = \local_gugrades\grades::get_grade_capture_columns($courseid, $gradeitemid);
         $gradesimported = \local_gugrades\grades::is_grades_imported($courseid, $gradeitemid);
         $converted = \local_gugrades\conversion::is_conversion_applied($courseid, $gradeitemid);
+        $released = \local_gugrades\grades::is_grades_released($courseid, $gradeitemid);
 
         return [
             'users' => $users,
@@ -105,6 +107,7 @@ class api {
             'gradelocked' => $gradelocked ? true : false,
             'showconversion' => $showconversion && $gradesimported,
             'converted' => $converted,
+            'released' => $released,
         ];
     }
 
@@ -1105,36 +1108,52 @@ class api {
      * @param int $courseid
      * @param int $gradeitemid
      * @param int $groupid
+     * @param bool $revert
      */
-    public static function release_grades(int $courseid, int $gradeitemid, int $groupid) {
+    public static function release_grades(int $courseid, int $gradeitemid, int $groupid, bool $revert) {
         global $DB;
 
         // Get list of users.
         $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid, $groupid);
         $users = $activity->get_users();
 
-        // Iterate over users releasing grades.
+        // Iterate over users releasing/reverting grades.
         foreach ($users as $user) {
-            $usercapture = new usercapture($courseid, $gradeitemid, $user->id);
-            $released = $usercapture->get_released();
+            if ($revert) {
 
-            if ($released) {
-                \local_gugrades\grades::write_grade(
-                    $courseid,
-                    $gradeitemid,
-                    $user->id,
-                    $released->admingrade,
-                    $released->rawgrade,
-                    $released->convertedgrade,
-                    $released->displaygrade,
-                    $released->weightedgrade,
-                    $released->gradetype,
-                    '',
-                    true,
-                    false,
-                    'Release grades',
-                    $released->points,
-                );
+                // If reverting, mark any grades marked RELEASED for this
+                // gradeitemid / user as not current.
+                $sql = 'UPDATE {local_gugrades_grade}
+                    SET iscurrent = 0
+                    WHERE gradetype = "RELEASED"
+                    AND gradeitemid = :gradeitemid
+                    AND userid = :userid';
+                $DB->execute($sql, ['gradeitemid' => $gradeitemid, 'userid' => $user->id]);
+
+                // Remove any columns that this has orphaned.
+                \local_gugrades\grades::cleanup_empty_columns($gradeitemid);
+            } else {
+                $usercapture = new usercapture($courseid, $gradeitemid, $user->id);
+                $released = $usercapture->get_released();
+
+                if ($released) {
+                    \local_gugrades\grades::write_grade(
+                        courseid: $courseid,
+                        gradeitemid: $gradeitemid,
+                        userid: $user->id,
+                        admingrade: $released->admingrade,
+                        rawgrade: $released->rawgrade,
+                        convertedgrade: $released->convertedgrade,
+                        displaygrade: $released->displaygrade,
+                        weightedgrade: $released->weightedgrade,
+                        gradetype: $released->gradetype,
+                        other: '',
+                        iscurrent: true,
+                        iserror: false,
+                        auditcomment: 'Release grades',
+                        ispoints: $released->points,
+                    );
+                }
             }
         }
     }

@@ -3,7 +3,7 @@
         <ImportButton v-if="!converted" :itemid="props.itemid" :groupid="props.groupid" :userids="props.userids" @imported="emit('refreshtable')"></ImportButton>
         <CSVImportButton :itemid="props.itemid" :groupid="props.groupid" :itemname="props.itemname" @uploaded="emit('refreshtable')"></CSVImportButton>
         <AddMultipleButton :itemid="props.itemid"  @editcolumn="multipleclicked"></AddMultipleButton>
-        <ReleaseButton v-if="props.gradesimported" :gradeitemid="props.itemid" :groupid="props.groupid" @released="emit('refreshtable')"></ReleaseButton>
+        <ReleaseButton v-if="props.gradesimported" :gradeitemid="props.itemid" :groupid="props.groupid" :released="props.released" @released="emit('refreshtable')"></ReleaseButton>
         <ExportWorksheetButton v-if="itemtype=='assign'" :users="props.users" :itemtype="props.itemtype" :itemname="props.itemname"></ExportWorksheetButton>
         <ViewFullNamesButton v-if="props.usershidden"  @viewfullnames="viewfullnames"></ViewFullNamesButton>
         <ConversionButton v-if="showconversion" :itemid="props.itemid" @converted="emit('refreshtable')"></ConversionButton>
@@ -31,6 +31,7 @@
         gradesimported: Boolean,
         showconversion: Boolean,
         converted: Boolean,
+        released: Boolean,
     });
 
     const emit = defineEmits(['viewfullnames', 'refreshtable', 'editcolumn']);

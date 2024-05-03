@@ -88,7 +88,7 @@ class get_capture_page_test extends \local_gugrades\external\gugrades_advanced_t
         );
 
         $this->assertIsArray($page);
-        $this->assertCount(11, $page);
+        $this->assertCount(12, $page);
         $this->assertEquals('assign', $page['itemtype']);
         $this->assertEquals('Assignment 2', $page['itemname']);
         $users = $page['users'];
@@ -115,7 +115,7 @@ class get_capture_page_test extends \local_gugrades\external\gugrades_advanced_t
         );
 
         $this->assertIsArray($page);
-        $this->assertCount(11, $page);
+        $this->assertCount(12, $page);
         $this->assertFalse($page['gradesupported']);
         $users = $page['users'];
         $this->assertCount(0, $users);

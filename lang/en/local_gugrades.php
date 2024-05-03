@@ -180,6 +180,8 @@ $string['released'] = 'Released';
 $string['releasegrades'] = 'Release grades';
 $string['releasegradesgroup'] = 'Release grades for group';
 $string['remove'] = 'Remove';
+$string['removerelease'] = 'Click the button below to revert release of grades. Students will no longer see these grades.';
+$string['removereleasegroup'] = 'NOTE: Released grades will only be reverted for the selected group';
 $string['resetcourse'] = 'Reset course';
 $string['resetcourseconfirm'] = 'This will delete all MyGrades data for this course and cannot be reversed.';
 $string['resetfilter'] = 'Reset filter';
@@ -215,6 +217,7 @@ $string['viewfullnames'] = 'View full names';
 $string['yes'] = 'Yes';
 $string['yesimport'] = 'Yes, import grades';
 $string['yesrelease'] = 'Yes, release grades';
+$string['yesunrelease'] = 'Yes, revert release';
 
 // Capabilities.
 $string['gugrades:editconversionmaps'] = 'Edit grade conversion maps';

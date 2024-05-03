@@ -194,7 +194,7 @@
     function import_button_click() {
         showimportmodal.value = true;
         importadditional.value = false;
-        recursiveimport.value = false;
+        recursiveselect.value = false;
         importfillns.value = false;
 
         const GU = window.GU;

@@ -47,6 +47,7 @@ class release_grades extends \external_api {
             'courseid' => new external_value(PARAM_INT, 'Course id'),
             'gradeitemid' => new external_value(PARAM_INT, 'Grade item id number'),
             'groupid' => new external_value(PARAM_INT, 'Group ID. 0 means everybody'),
+            'revert' => new external_value(PARAM_BOOL, 'Revert release of grades if true'),
         ]);
     }
 
@@ -55,19 +56,21 @@ class release_grades extends \external_api {
      * @param int $courseid
      * @param int $gradeitemid
      * @param int $groupid
+     * @param int $revert
      */
-    public static function execute($courseid, $gradeitemid, $groupid) {
+    public static function execute($courseid, $gradeitemid, $groupid, $revert) {
 
         // Security.
         $params = self::validate_parameters(self::execute_parameters(), [
             'courseid' => $courseid,
             'gradeitemid' => $gradeitemid,
             'groupid' => $groupid,
+            'revert' => $revert,
         ]);
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        \local_gugrades\api::release_grades($courseid, $gradeitemid, $groupid);
+        \local_gugrades\api::release_grades($courseid, $gradeitemid, $groupid, $revert);
 
         // Log.
         $event = \local_gugrades\event\release_grades::create([

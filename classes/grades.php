@@ -290,7 +290,7 @@ class grades {
      * @param bool $iscurrent
      * @param bool $iserror
      * @param string $auditcomment
-     * @param bool $points
+     * @param bool $ispoints
      */
     public static function write_grade(
         int $courseid,
@@ -725,5 +725,18 @@ class grades {
         $gradetype = $gradeitem->gradetype;
 
         return $gradetype == GRADE_TYPE_VALUE;
+    }
+
+    /**
+     * Have grades been released?
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @return boolead
+     */
+    public static function is_grades_released(int $courseid, int $gradeitemid) {
+        global $DB;
+
+        return $DB->record_exists('local_gugrades_grade',
+            ['courseid' => $courseid, 'gradeitemid' => $gradeitemid, 'gradetype' => 'RELEASED', 'iscurrent' => 1]);
     }
 }

@@ -31,6 +31,7 @@
                         :gradesimported="gradesimported"
                         :showconversion="showconversion"
                         :converted="converted"
+                        :released="released"
                         @refreshtable="refresh"
                         @viewfullnames="viewfullnames"
                         @editcolumn="editcog_clicked"
@@ -170,6 +171,7 @@
     const gradehidden = ref(false);
     const gradelocked = ref(false);
     const converted = ref(false);
+    const released = ref(false);
     const columns = ref([]);
     const loaded = ref(false);
     const showalert = ref(false);
@@ -445,23 +447,25 @@
             }
         }])[0]
         .then((result) => {
-            usershidden.value = result['hidden'];
-            users.value = result['users'];
-            itemtype.value = result['itemtype'];
-            itemname.value = result['itemname'];
-            gradesupported.value = result['gradesupported'];
-            gradesimported.value = result['gradesimported'];
-            gradehidden.value = result['gradehidden'];
-            gradelocked.value = result['gradelocked'];
-            columns.value = result['columns'];
+            usershidden.value = result.hidden;
+            users.value = result.users;
+            itemtype.value = result.itemtype;
+            itemname.value = result.itemname;
+            gradesupported.value = result.gradesupported;
+            gradesimported.value = result.gradesimported;
+            gradehidden.value = result.gradehidden;
+            gradelocked.value = result.gradelocked;
+            columns.value = result.columns;
             userids.value = users.value.map(u => u.id);
             totalrows.value = users.value.length;
             showconversion.value = result.showconversion;
             converted.value = result.converted;
+            released.value = result.released;
 
             users.value = add_grades(users.value, columns.value);
 
             loaded.value = true;
+            window.console.log(released.value);
         })
         .catch((error) => {
             window.console.error(error);
