@@ -290,8 +290,16 @@ class api {
     public static function get_grade_item(int $itemid) {
         global $DB;
 
-        // Get item (if it exists).
+        // Get item.
         $item = $DB->get_record('grade_items', ['id' => $itemid], '*', MUST_EXIST);
+
+        // Get the scale name
+        if ($item->scaleid) {
+            $scale = $DB->get_record('scale', ['id' => $item->scaleid], '*', MUST_EXIST);
+            $scalename = $scale->name;
+        } else {
+            $scalename = '';
+        }
 
         return [
             'id' => $item->id,
@@ -301,6 +309,10 @@ class api {
             'itemtype' => $item->itemtype,
             'itemmodule' => $item->itemmodule,
             'iteminstance' => $item->iteminstance,
+            'isscale' => !empty($item->scaleid),
+            'scalename' => $scalename,
+            'grademax' => $item->grademax,
+            'weight' => round($item->aggregationcoef * 100),
         ];
     }
 

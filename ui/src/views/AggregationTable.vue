@@ -48,7 +48,10 @@
             <template #header="header">
                 <div class="aggregation-header">
                     <div data-toggle="tooltip" :title="header.fullname" :data-original-title="header.fullname">
-                        <div>{{ header.text }}</div>
+                        <div>
+                            {{ header.text }}
+                            <InfoButton v-if="header.gradeitemid" :itemid="header.gradeitemid" size="0"></InfoButton>
+                        </div>
                         <div v-if="header.weight">{{ header.weight }}%</div>
                         <div v-if="header.gradetype">{{ header.gradetype }} <span v-if="!header.isscale">({{ header.grademax }})</span></div>
                     </div>
@@ -93,6 +96,7 @@
     import GroupSelect from '@/components/GroupSelect.vue';
     import { useToast } from "vue-toastification";
     import { VueSpinnerHourglass } from 'vue3-spinners';
+    import InfoButton from '@/components/InfoButton.vue';
 
     const toast = useToast();
 
@@ -185,6 +189,7 @@
         // Grade categories and items.
         columns.value.forEach(column => {
             heads.push({
+                gradeitemid: column.gradeitemid,
                 text: column.shortname,
                 value: column.fieldname,
                 weight: column.weight,

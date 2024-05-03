@@ -7,6 +7,7 @@
         <ExportWorksheetButton v-if="itemtype=='assign'" :users="props.users" :itemtype="props.itemtype" :itemname="props.itemname"></ExportWorksheetButton>
         <ViewFullNamesButton v-if="props.usershidden"  @viewfullnames="viewfullnames"></ViewFullNamesButton>
         <ConversionButton v-if="showconversion" :itemid="props.itemid" @converted="emit('refreshtable')"></ConversionButton>
+        <InfoButton :itemid="props.itemid" size="2"></InfoButton>
     </div>
 </template>
 
@@ -19,6 +20,7 @@
     import ViewFullNamesButton from '@/components/Capture/ViewFullNamesButton.vue';
     import AddMultipleButton from '@/components/Capture/AddMultipleButton.vue';
     import ConversionButton from '@/components/Capture/ConversionButton.vue';
+    import InfoButton from '@/components/InfoButton.vue';
 
     const props = defineProps({
         itemid: Number,

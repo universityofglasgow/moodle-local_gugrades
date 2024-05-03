@@ -82,6 +82,10 @@ class get_grade_item extends \external_api {
             'itemtype' => new external_value(PARAM_ALPHA, 'course / mod / category / manual'),
             'itemmodule' => new external_value(PARAM_ALPHA, 'Module type (if module)'),
             'iteminstance' => new external_value(PARAM_INT, 'Module instance ID'),
+            'isscale' => new external_value(PARAM_BOOL, 'True if grade item is a scale'),
+            'scalename' => new external_value(PARAM_TEXT, 'Name of scale (if it is a scale'),
+            'grademax' => new external_value(PARAM_FLOAT, 'Maximum grade'),
+            'weight' => new external_value(PARAM_INT, 'Weight%'),
         ]);
     }
 
