@@ -45,7 +45,7 @@
             <NameFilter v-if="!usershidden" @selected="filter_selected" ref="namefilterref"></NameFilter>
 
             <div v-if="!loaded" class="d-flex justify-content-center">
-                <VueSpinnerHourglass size="50" color="red"></VueSpinnerHourglass>
+                <VueSpinner size="50" color="#005c8a"></VueSpinner>
             </div>
 
             <div v-if="showtable && loaded">
@@ -153,7 +153,7 @@
     import CaptureColumnEditCog from '@/components/CaptureColumnEditCog.vue';
     import EditCaptureCell from '@/components/Capture/EditCaptureCell.vue';
     import { watchDebounced } from '@vueuse/core';
-    import { VueSpinnerHourglass } from 'vue3-spinners';
+    import { VueSpinner } from 'vue3-spinners';
 
     const users = ref([]);
     const userids = ref([]);

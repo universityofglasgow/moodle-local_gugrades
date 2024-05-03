@@ -54,13 +54,15 @@ class dashboard_get_grades_test extends \local_gugrades\external\gugrades_advanc
         // Need to release grades for this grade item -assignment1.
         $conversion = \local_gugrades\grades::conversion_factory($this->course->id, $this->gradeitemidassign1);
         $activity = \local_gugrades\users::activity_factory($this->gradeitemidassign1, $this->course->id, 0);
-        \local_gugrades\api::import_grade($this->course->id, $this->gradeitemidassign1, $conversion, $activity, $studentid, false, false);
+        \local_gugrades\api::import_grade($this->course->id,
+            $this->gradeitemidassign1, $conversion, $activity, $studentid, false, false);
         \local_gugrades\api::release_grades($this->course->id, $this->gradeitemidassign1, 0, false);
 
         // Need to release grades for this grade item - assignment2.
         $conversion = \local_gugrades\grades::conversion_factory($this->course->id, $this->gradeitemidassign2);
         $activity = \local_gugrades\users::activity_factory($this->gradeitemidassign2, $this->course->id, 0);
-        \local_gugrades\api::import_grade($this->course->id, $this->gradeitemidassign2, $conversion, $activity, $studentid, false, false);
+        \local_gugrades\api::import_grade($this->course->id,
+            $this->gradeitemidassign2, $conversion, $activity, $studentid, false, false);
         \local_gugrades\api::release_grades($this->course->id, $this->gradeitemidassign2, 0, false);
 
         // Get/check grades.

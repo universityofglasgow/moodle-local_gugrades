@@ -32,7 +32,7 @@
         </div>
 
         <div v-if="loading" class="d-flex justify-content-center">
-            <VueSpinnerHourglass size="50" color="red"></VueSpinnerHourglass>
+            <VueSpinner size="50" color="#005c8a"></VueSpinner>
         </div>
 
         <EasyDataTable
@@ -95,7 +95,7 @@
     import NameFilter from '@/components/NameFilter.vue';
     import GroupSelect from '@/components/GroupSelect.vue';
     import { useToast } from "vue-toastification";
-    import { VueSpinnerHourglass } from 'vue3-spinners';
+    import { VueSpinner } from 'vue3-spinners';
     import InfoButton from '@/components/InfoButton.vue';
 
     const toast = useToast();
