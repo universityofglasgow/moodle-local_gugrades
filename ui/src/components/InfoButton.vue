@@ -1,7 +1,7 @@
 <template>
     <!-- info button -->
     <a href="#" class="ml-2" @click="info_clicked">
-        <i class="fa fa-info-circle fa-2x align-middle" :class="[fasizeclass]" aria-hidden="true"></i>
+        <i class="fa fa-info-circle align-middle" :class="[fasizeclass]" aria-hidden="true"></i>
     </a>
 
     <!-- modal to show info-->
@@ -67,7 +67,7 @@
 
     const fasizeclass = computed(() => {
         if (props.size == 0) {
-            return 'fa-lg';
+            return 'fa-sm';
         } else {
             return 'fa-' + props.size + 'x';
         }
