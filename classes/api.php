@@ -293,6 +293,14 @@ class api {
         // Get item.
         $item = $DB->get_record('grade_items', ['id' => $itemid], '*', MUST_EXIST);
 
+        // If the type is a category, get that as well
+        if ($item->itemtype == 'category') {
+            $category = $DB->get_record('grade_categories', ['id' => $item->iteminstance], '*', MUST_EXIST);
+            $itemname = $category->fullname;
+        } else {
+            $itemname = $item->itemname;
+        }
+
         // Get the scale name
         if ($item->scaleid) {
             $scale = $DB->get_record('scale', ['id' => $item->scaleid], '*', MUST_EXIST);
@@ -305,8 +313,8 @@ class api {
             'id' => $item->id,
             'courseid' => $item->courseid,
             'categoryid' => $item->categoryid,
-            'itemname' => $item->itemname,
-            'itemtype' => $item->itemtype,
+            'itemname' => $itemname,
+            'itemtype' => get_string($item->itemtype, 'local_gugrades'),
             'itemmodule' => $item->itemmodule,
             'iteminstance' => $item->iteminstance,
             'isscale' => !empty($item->scaleid),
