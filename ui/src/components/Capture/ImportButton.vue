@@ -168,7 +168,7 @@
                 gradeitemid: props.itemid,
                 groupid: props.groupid,
                 additional: importadditional.value,
-                fillns: importfillns,
+                fillns: importfillns.value,
             }
         }])[0]
         .then((result) => {
