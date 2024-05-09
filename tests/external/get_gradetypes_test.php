@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -48,7 +50,7 @@ class get_gradetypes_test extends \local_gugrades\external\gugrades_advanced_tes
         $this->setUser($this->teacher->id);
 
         $data = get_gradetypes::execute($this->course->id, $this->gradeitemidassign1);
-        $data = \external_api::clean_returnvalue(
+        $data = external_api::clean_returnvalue(
             get_gradetypes::execute_returns(),
             $data
         );

@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -46,7 +48,7 @@ class get_activities_test extends \local_gugrades\external\gugrades_advanced_tes
 
         // Test ws function.
         $tree = get_activities::execute($this->course->id, $this->gradecatsumm->id);
-        $tree = \external_api::clean_returnvalue(
+        $tree = external_api::clean_returnvalue(
             get_activities::execute_returns(),
             $tree
         );
@@ -60,20 +62,20 @@ class get_activities_test extends \local_gugrades\external\gugrades_advanced_tes
 
         // Should be an object - check category.
         $this->assertIsObject($data);
-        $this->assertObjectHasAttribute('category', $data);
+        $this->assertObjectHasProperty('category', $data);
         $category = $data->category;
-        $this->assertObjectHasAttribute('fullname', $category);
+        $this->assertObjectHasProperty('fullname', $category);
         $fullname = $category->fullname;
         $this->assertEquals('Summative', $fullname);
 
         // Check items.
-        $this->assertObjectHasAttribute('items', $data);
+        $this->assertObjectHasProperty('items', $data);
         $items = $data->items;
         $this->assertIsArray($items);
         $this->assertCount(4, $items);
         $readassign1 = $items[0];
         $this->assertIsObject($readassign1);
-        $this->assertObjectHasAttribute('itemname', $readassign1);
+        $this->assertObjectHasProperty('itemname', $readassign1);
         $this->assertEquals('Assignment 1', $readassign1->itemname);
     }
 }

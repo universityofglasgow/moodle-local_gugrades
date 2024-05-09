@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -46,7 +48,7 @@ class has_capability_test extends \local_gugrades\external\gugrades_advanced_tes
         // Logged in user is teacher.
         // Check that they have local/gugrades:view capability.
         $hascapability = has_capability::execute($this->course->id, 'local/gugrades:view');
-        $hascapability = \external_api::clean_returnvalue(
+        $hascapability = external_api::clean_returnvalue(
             has_capability::execute_returns(),
             $hascapability
         );
@@ -68,7 +70,7 @@ class has_capability_test extends \local_gugrades\external\gugrades_advanced_tes
 
         // Check that they do not have local/gugrades:view capability.
         $hascapability = has_capability::execute($this->course->id, 'local/gugrades:view');
-        $hascapability = \external_api::clean_returnvalue(
+        $hascapability = external_api::clean_returnvalue(
             has_capability::execute_returns(),
             $hascapability
         );

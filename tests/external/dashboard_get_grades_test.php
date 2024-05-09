@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -67,7 +69,7 @@ class dashboard_get_grades_test extends \local_gugrades\external\gugrades_advanc
 
         // Get/check grades.
         $grades = dashboard_get_grades::execute($studentid, $gradecategoryid);
-        $grades = \external_api::clean_returnvalue(
+        $grades = external_api::clean_returnvalue(
             dashboard_get_grades::execute_returns(),
             $grades
         );

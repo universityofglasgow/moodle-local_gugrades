@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 use externallib_advanced_testcase;
 
 defined('MOODLE_INTERNAL') || die();
@@ -54,7 +56,7 @@ class get_all_strings_test extends externallib_advanced_testcase {
         $mstrings = get_all_strings::execute();
 
         // Clean up return values.
-        $mstrings = \external_api::clean_returnvalue(
+        $mstrings = external_api::clean_returnvalue(
             get_all_strings::execute_returns(),
             $mstrings
         );

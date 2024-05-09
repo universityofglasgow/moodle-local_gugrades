@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -48,7 +50,7 @@ class get_capture_cell_form_test extends \local_gugrades\external\gugrades_advan
         $this->setUser($this->teacher->id);
 
         $data = get_capture_cell_form::execute($this->course->id, $this->gradeitemidassign1);
-        $data = \external_api::clean_returnvalue(
+        $data = external_api::clean_returnvalue(
             get_capture_cell_form::execute_returns(),
             $data
         );
@@ -77,7 +79,7 @@ class get_capture_cell_form_test extends \local_gugrades\external\gugrades_advan
         $this->setUser($this->teacher->id);
 
         $data = get_capture_cell_form::execute($this->course->id, $this->gradeitemidassign2);
-        $data = \external_api::clean_returnvalue(
+        $data = external_api::clean_returnvalue(
             get_capture_cell_form::execute_returns(),
             $data
         );

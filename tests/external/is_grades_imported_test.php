@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -47,7 +49,7 @@ class is_grades_imported_test extends \local_gugrades\external\gugrades_advanced
         $this->setUser($this->teacher);
 
         $gradesimported = is_grades_imported::execute($this->course->id, $this->gradeitemidassign1, 0);
-        $gradesimported = \external_api::clean_returnvalue(
+        $gradesimported = external_api::clean_returnvalue(
             is_grades_imported::execute_returns(),
             $gradesimported
         );
@@ -72,7 +74,7 @@ class is_grades_imported_test extends \local_gugrades\external\gugrades_advanced
         $this->setUser($this->teacher);
 
         $gradesimported = is_grades_imported::execute($this->course->id, $this->gradeitemsecond1, 0);
-        $gradesimported = \external_api::clean_returnvalue(
+        $gradesimported = external_api::clean_returnvalue(
             is_grades_imported::execute_returns(),
             $gradesimported
         );
@@ -110,7 +112,7 @@ class is_grades_imported_test extends \local_gugrades\external\gugrades_advanced
         $this->move_gradeitem_to_category($seconditemx->id, $this->gradecatsecond->id);
 
         $gradesimported = is_grades_imported::execute($this->course->id, $this->gradeitemsecond2, 0);
-        $gradesimported = \external_api::clean_returnvalue(
+        $gradesimported = external_api::clean_returnvalue(
             is_grades_imported::execute_returns(),
             $gradesimported
         );

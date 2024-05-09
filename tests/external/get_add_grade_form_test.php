@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -47,7 +49,7 @@ class get_add_grade_form_test extends \local_gugrades\external\gugrades_advanced
         // Test ws function.
         // Check for Assignment2 which uses a scale.
         $form = get_add_grade_form::execute($this->course->id, $this->gradeitemidassign2, $this->student->id);
-        $form = \external_api::clean_returnvalue(
+        $form = external_api::clean_returnvalue(
             get_add_grade_form::execute_returns(),
             $form
         );
@@ -114,7 +116,7 @@ class get_add_grade_form_test extends \local_gugrades\external\gugrades_advanced
         // Test ws function.
         // Check for Assignment1 which uses a 100% points.
         $form = get_add_grade_form::execute($this->course->id, $this->gradeitemidassign1, $this->student->id);
-        $form = \external_api::clean_returnvalue(
+        $form = external_api::clean_returnvalue(
             get_add_grade_form::execute_returns(),
             $form
         );
@@ -196,7 +198,7 @@ class get_add_grade_form_test extends \local_gugrades\external\gugrades_advanced
 
         // Test ws function.
         $form = get_add_grade_form::execute($courseid, $gradeitemid, $this->student->id);
-        $form = \external_api::clean_returnvalue(
+        $form = external_api::clean_returnvalue(
             get_add_grade_form::execute_returns(),
             $form
         );

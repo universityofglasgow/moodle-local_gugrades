@@ -24,6 +24,9 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+use local_gugrades\external\import_grades_recursive;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -56,7 +59,7 @@ class import_grades_recursive_test extends \local_gugrades\external\gugrades_adv
 
         // Check gradeitemsecond1 (no grades assigned so shouldn't return anything).
         $counts = import_grades_recursive::execute($this->course->id, $this->gradeitemsecond1, 0, false, false);
-        $counts = \external_api::clean_returnvalue(
+        $counts = external_api::clean_returnvalue(
             import_grades_recursive::execute_returns(),
             $counts
         );
@@ -84,7 +87,7 @@ class import_grades_recursive_test extends \local_gugrades\external\gugrades_adv
 
         // This time we should get those two grades.
         $counts = import_grades_recursive::execute($this->course->id, $this->gradeitemsecond1, 0, false, false);
-        $counts = \external_api::clean_returnvalue(
+        $counts = external_api::clean_returnvalue(
             import_grades_recursive::execute_returns(),
             $counts
         );

@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -48,7 +50,7 @@ class get_grade_item_test extends \local_gugrades\external\gugrades_advanced_tes
         $this->setUser($this->teacher->id);
 
         $item = get_grade_item::execute($this->gradeitemidassign1);
-        $item = \external_api::clean_returnvalue(
+        $item = external_api::clean_returnvalue(
             get_grade_item::execute_returns(),
             $item
         );
@@ -58,7 +60,7 @@ class get_grade_item_test extends \local_gugrades\external\gugrades_advanced_tes
         $this->assertEquals(100, $item['grademax']);
 
         $item = get_grade_item::execute($this->gradeitemidassign2);
-        $item = \external_api::clean_returnvalue(
+        $item = external_api::clean_returnvalue(
             get_grade_item::execute_returns(),
             $item
         );

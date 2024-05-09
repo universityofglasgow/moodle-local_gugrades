@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -48,7 +50,7 @@ class write_column_test extends \local_gugrades\external\gugrades_advanced_testc
         $this->setUser($this->teacher);
 
         $nullreturn = write_column::execute($this->course->id, $this->gradeitemidassign1, 'AGREED', '', '', true);
-        $nullreturn = \external_api::clean_returnvalue(
+        $nullreturn = external_api::clean_returnvalue(
             write_column::execute_returns(),
             $nullreturn
         );
@@ -59,7 +61,7 @@ class write_column_test extends \local_gugrades\external\gugrades_advanced_testc
 
         // Check that trying to add it again doesn't create a new column.
         $nullreturn = write_column::execute($this->course->id, $this->gradeitemidassign1, 'AGREED', '', '', true);
-        $nullreturn = \external_api::clean_returnvalue(
+        $nullreturn = external_api::clean_returnvalue(
             write_column::execute_returns(),
             $nullreturn
         );

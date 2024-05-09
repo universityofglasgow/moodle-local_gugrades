@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -72,7 +74,7 @@ class reset_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
         // Perform reset.
         $nullreturn = reset::execute($courseid);
-        $nullreturn = \external_api::clean_returnvalue(
+        $nullreturn = external_api::clean_returnvalue(
             reset::execute_returns(),
             $nullreturn
         );

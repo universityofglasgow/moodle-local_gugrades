@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -48,14 +50,14 @@ class show_hide_grade_test extends \local_gugrades\external\gugrades_advanced_te
 
         // Mark as hidden.
         $nullreturn = show_hide_grade::execute($this->course->id, $this->gradeitemidassign1, $this->student->id, true);
-        $nullreturn = \external_api::clean_returnvalue(
+        $nullreturn = external_api::clean_returnvalue(
             show_hide_grade::execute_returns(),
             $nullreturn
         );
 
         // Get capture page.
         $page = get_capture_page::execute($this->course->id, $this->gradeitemidassign1, '', '', 0, false);
-        $page = \external_api::clean_returnvalue(
+        $page = external_api::clean_returnvalue(
             get_capture_page::execute_returns(),
             $page
         );
@@ -66,14 +68,14 @@ class show_hide_grade_test extends \local_gugrades\external\gugrades_advanced_te
 
         // Mark as shown.
         $nullreturn = show_hide_grade::execute($this->course->id, $this->gradeitemidassign1, $this->student->id, false);
-        $nullreturn = \external_api::clean_returnvalue(
+        $nullreturn = external_api::clean_returnvalue(
             show_hide_grade::execute_returns(),
             $nullreturn
         );
 
         // Get capture page.
         $page = get_capture_page::execute($this->course->id, $this->gradeitemidassign1, '', '', 0, false);
-        $page = \external_api::clean_returnvalue(
+        $page = external_api::clean_returnvalue(
             get_capture_page::execute_returns(),
             $page
         );

@@ -24,19 +24,18 @@
 
 namespace local_gugrades\external;
 
-use external_function_parameters;
-use external_multiple_structure;
-use external_single_structure;
-use external_value;
+use core_external\external_api;
+use core_external\external_function_parameters;
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
+use core_external\external_value;
 
 defined('MOODLE_INTERNAL') || die();
-
-require_once($CFG->libdir . '/externallib.php');
 
 /**
  * Define function get_audit
  */
-class get_csv_download extends \external_api {
+class get_csv_download extends external_api {
 
     /**
      * Define function parameters

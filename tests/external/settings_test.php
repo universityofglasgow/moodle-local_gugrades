@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 use externallib_advanced_testcase;
 
 defined('MOODLE_INTERNAL') || die();
@@ -72,7 +74,7 @@ class settings_test extends \local_gugrades\external\gugrades_advanced_testcase 
 
         // Check again reading back using WS.
         $wssettings = get_settings::execute($this->course->id, 0);
-        $wssettings = \external_api::clean_returnvalue(
+        $wssettings = external_api::clean_returnvalue(
             get_settings::execute_returns(),
             $wssettings
         );

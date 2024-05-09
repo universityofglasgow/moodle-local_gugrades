@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -104,7 +106,7 @@ class csv_capture_test extends \local_gugrades\external\gugrades_advanced_testca
 
         // Check for one of the assignments.
         $csv = get_csv_download::execute($this->course->id, $this->gradeitemidassign1, 0);
-        $csv = \external_api::clean_returnvalue(
+        $csv = external_api::clean_returnvalue(
             get_csv_download::execute_returns(),
             $csv
         );
@@ -132,7 +134,7 @@ class csv_capture_test extends \local_gugrades\external\gugrades_advanced_testca
         // Get first csv test string.
         $csv = $this->make_csv($this->uploaddata1);
         $data = upload_csv::execute($this->course->id, $this->gradeitemidassign2, 0, true, 'SECOND', '', $csv);
-        $data = \external_api::clean_returnvalue(
+        $data = external_api::clean_returnvalue(
             upload_csv::execute_returns(),
             $data
         );
@@ -149,7 +151,7 @@ class csv_capture_test extends \local_gugrades\external\gugrades_advanced_testca
         // Get second (with errors) csv test string.
         $csv = $this->make_csv($this->uploaddata2);
         $data = upload_csv::execute($this->course->id, $this->gradeitemidassign2, 0, true, 'SECOND', '', $csv);
-        $data = \external_api::clean_returnvalue(
+        $data = external_api::clean_returnvalue(
             upload_csv::execute_returns(),
             $data
         );
@@ -166,7 +168,7 @@ class csv_capture_test extends \local_gugrades\external\gugrades_advanced_testca
         // Run first again, but this time save the grades (not testrun).
         $csv = $this->make_csv($this->uploaddata1);
         $data = upload_csv::execute($this->course->id, $this->gradeitemidassign2, 0, false, 'SECOND', '', $csv);
-        $data = \external_api::clean_returnvalue(
+        $data = external_api::clean_returnvalue(
             upload_csv::execute_returns(),
             $data
         );

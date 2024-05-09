@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -46,7 +48,7 @@ class get_groups_test extends \local_gugrades\external\gugrades_advanced_testcas
 
         // There should not be any groups (yet).
         $groups = get_groups::execute($this->course->id);
-        $groups = \external_api::clean_returnvalue(
+        $groups = external_api::clean_returnvalue(
             get_groups::execute_returns(),
             $groups
         );
@@ -62,7 +64,7 @@ class get_groups_test extends \local_gugrades\external\gugrades_advanced_testcas
 
         // Check we can 'see' the groups we just created.
         $groups = get_groups::execute($this->course->id);
-        $groups = \external_api::clean_returnvalue(
+        $groups = external_api::clean_returnvalue(
             get_groups::execute_returns(),
             $groups
         );

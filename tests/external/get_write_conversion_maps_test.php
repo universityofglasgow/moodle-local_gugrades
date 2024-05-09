@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -44,7 +46,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         // Read maps for course (should be none).
         $maps = get_conversion_maps::execute($this->course->id);
-        $maps = \external_api::clean_returnvalue(
+        $maps = external_api::clean_returnvalue(
             get_conversion_maps::execute_returns(),
             $maps
         );
@@ -61,7 +63,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         // Read map with id 0 (new map) for Schedule A.
         $mapstuff = get_conversion_map::execute($this->course->id, 0, 'schedulea');
-        $mapstuff = \external_api::clean_returnvalue(
+        $mapstuff = external_api::clean_returnvalue(
             get_conversion_map::execute_returns(),
             $mapstuff
         );
@@ -77,7 +79,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         // Read map with id 0 (new map) for Schedule B.
         $mapstuff = get_conversion_map::execute($this->course->id, 0, 'scheduleb');
-        $mapstuff = \external_api::clean_returnvalue(
+        $mapstuff = external_api::clean_returnvalue(
             get_conversion_map::execute_returns(),
             $mapstuff
         );
@@ -102,7 +104,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         // Read map with id 0 (new map) for Schedule A.
         $mapstuff = get_conversion_map::execute($this->course->id, 0, 'schedulea');
-        $mapstuff = \external_api::clean_returnvalue(
+        $mapstuff = external_api::clean_returnvalue(
             get_conversion_map::execute_returns(),
             $mapstuff
         );
@@ -113,7 +115,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         $maxgrade = 100.0;
         $map = $mapstuff['map'];
         $mapid = write_conversion_map::execute($this->course->id, 0, $name, $schedule, $maxgrade, $map);
-        $mapid = \external_api::clean_returnvalue(
+        $mapid = external_api::clean_returnvalue(
             write_conversion_map::execute_returns(),
             $mapid
         );
@@ -130,14 +132,14 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         // Read back uploaded map.
         $mapstuff = get_conversion_map::execute($this->course->id, $mapid, 'schedulea');
-        $mapstuff = \external_api::clean_returnvalue(
+        $mapstuff = external_api::clean_returnvalue(
             get_conversion_map::execute_returns(),
             $mapstuff
         );
 
         // Delete map.
         $success = delete_conversion_map::execute($this->course->id, $mapid);
-        $success = \external_api::clean_returnvalue(
+        $success = external_api::clean_returnvalue(
             delete_conversion_map::execute_returns(),
             $success
         );
@@ -158,7 +160,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         // Read map with id 0 (new map) for Schedule B.
         $mapstuff = get_conversion_map::execute($this->course->id, 0, 'scheduleb');
-        $mapstuff = \external_api::clean_returnvalue(
+        $mapstuff = external_api::clean_returnvalue(
             get_conversion_map::execute_returns(),
             $mapstuff
         );
@@ -169,7 +171,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         $maxgrade = 100.0;
         $map = $mapstuff['map'];
         $mapid = write_conversion_map::execute($this->course->id, 0, $name, $schedule, $maxgrade, $map);
-        $mapid = \external_api::clean_returnvalue(
+        $mapid = external_api::clean_returnvalue(
             write_conversion_map::execute_returns(),
             $mapid
         );
@@ -177,7 +179,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         // Read back uploaded map.
         $mapstuff = get_conversion_map::execute($this->course->id, $mapid, 'scheduleb');
-        $mapstuff = \external_api::clean_returnvalue(
+        $mapstuff = external_api::clean_returnvalue(
             get_conversion_map::execute_returns(),
             $mapstuff
         );
@@ -243,7 +245,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         }';
 
         $mapid = import_conversion_map::execute($this->course->id, $jsonmap);
-        $mapid = \external_api::clean_returnvalue(
+        $mapid = external_api::clean_returnvalue(
             import_conversion_map::execute_returns(),
             $mapid
         );
@@ -251,7 +253,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         // Read back uploaded map.
         $mapstuff = get_conversion_map::execute($this->course->id, $mapid, '');
-        $mapstuff = \external_api::clean_returnvalue(
+        $mapstuff = external_api::clean_returnvalue(
             get_conversion_map::execute_returns(),
             $mapstuff
         );
@@ -408,7 +410,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         // Read map with id 0 (new map) for Schedule A.
         $mapstuff = get_conversion_map::execute($this->course->id, 0, 'schedulea');
-        $mapstuff = \external_api::clean_returnvalue(
+        $mapstuff = external_api::clean_returnvalue(
             get_conversion_map::execute_returns(),
             $mapstuff
         );
@@ -419,7 +421,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         $maxgrade = 100.0;
         $map = $mapstuff['map'];
         $mapida = write_conversion_map::execute($this->course->id, 0, $name, $schedule, $maxgrade, $map);
-        $mapida = \external_api::clean_returnvalue(
+        $mapida = external_api::clean_returnvalue(
             write_conversion_map::execute_returns(),
             $mapida
         );
@@ -427,7 +429,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         // Read map with id 0 (new map) for Schedule B.
         $mapstuff = get_conversion_map::execute($this->course->id, 0, 'scheduleb');
-        $mapstuff = \external_api::clean_returnvalue(
+        $mapstuff = external_api::clean_returnvalue(
             get_conversion_map::execute_returns(),
             $mapstuff
         );
@@ -438,7 +440,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         $maxgrade = 100.0;
         $map = $mapstuff['map'];
         $mapidb = write_conversion_map::execute($this->course->id, 0, $name, $schedule, $maxgrade, $map);
-        $mapidb = \external_api::clean_returnvalue(
+        $mapidb = external_api::clean_returnvalue(
             write_conversion_map::execute_returns(),
             $mapidb
         );
@@ -446,7 +448,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         // Select this map.
         $nothing = select_conversion::execute($this->course->id, $this->gradeitemidassign1, $mapida);
-        $nothing = \external_api::clean_returnvalue(
+        $nothing = external_api::clean_returnvalue(
             select_conversion::execute_returns(),
             $nothing
         );
@@ -458,7 +460,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         // Check it's set through the API.
         $mapstuff = get_selected_conversion::execute($this->course->id, $this->gradeitemidassign1);
-        $mapstuff = \external_api::clean_returnvalue(
+        $mapstuff = external_api::clean_returnvalue(
             get_selected_conversion::execute_returns(),
             $mapstuff
         );
@@ -468,7 +470,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         // Select the other map.
         $nothing = select_conversion::execute($this->course->id, $this->gradeitemidassign1, $mapidb);
-        $nothing = \external_api::clean_returnvalue(
+        $nothing = external_api::clean_returnvalue(
             select_conversion::execute_returns(),
             $nothing
         );
@@ -480,7 +482,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         // Remove maps.
         $nothing = select_conversion::execute($this->course->id, $this->gradeitemidassign1, 0);
-        $nothing = \external_api::clean_returnvalue(
+        $nothing = external_api::clean_returnvalue(
             select_conversion::execute_returns(),
             $nothing
         );
@@ -503,7 +505,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         // First step - just create a default map
         // Read map with id 0 (new map) for Schedule A.
         $mapstuff = get_conversion_map::execute($this->course->id, 0, 'schedulea');
-        $mapstuff = \external_api::clean_returnvalue(
+        $mapstuff = external_api::clean_returnvalue(
             get_conversion_map::execute_returns(),
             $mapstuff
         );
@@ -514,7 +516,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         $maxgrade = 100.0;
         $map = $mapstuff['map'];
         $mapida = write_conversion_map::execute($this->course->id, 0, $name, $schedule, $maxgrade, $map);
-        $mapida = \external_api::clean_returnvalue(
+        $mapida = external_api::clean_returnvalue(
             write_conversion_map::execute_returns(),
             $mapida
         );
@@ -528,14 +530,14 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         // Assign1 (which is useing points).
         $status = import_grades_users::execute($this->course->id, $this->gradeitemidassign1, false, false, $userlist);
-        $status = \external_api::clean_returnvalue(
+        $status = external_api::clean_returnvalue(
             import_grades_users::execute_returns(),
             $status
         );
 
         // Apply the test conversion map to Assign1.
         $nothing = select_conversion::execute($this->course->id, $this->gradeitemidassign1, $mapida);
-        $nothing = \external_api::clean_returnvalue(
+        $nothing = external_api::clean_returnvalue(
             select_conversion::execute_returns(),
             $nothing
         );
@@ -553,7 +555,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         // Get the add grade form and make sure it reflects the converted grade.
         $form = get_add_grade_form::execute($this->course->id, $this->gradeitemidassign1, $this->student->id);
-        $form = \external_api::clean_returnvalue(
+        $form = external_api::clean_returnvalue(
             get_add_grade_form::execute_returns(),
             $form
         );
@@ -576,14 +578,14 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
             0,
             'Test notes'
         );
-        $nothing = \external_api::clean_returnvalue(
+        $nothing = external_api::clean_returnvalue(
             write_additional_grade::execute_returns(),
             $nothing
         );
 
         // Get capture page.
         $page = get_capture_page::execute($this->course->id, $this->gradeitemidassign1, '', '', 0, false);
-        $page = \external_api::clean_returnvalue(
+        $page = external_api::clean_returnvalue(
             get_capture_page::execute_returns(),
             $page
         );
@@ -610,7 +612,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         // Get the add grade form and make sure unconverted columns have been removed from list of gradetypes.
         $form = get_add_grade_form::execute($this->course->id, $this->gradeitemidassign1, $this->student->id);
-        $form = \external_api::clean_returnvalue(
+        $form = external_api::clean_returnvalue(
             get_add_grade_form::execute_returns(),
             $form
         );
@@ -629,7 +631,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         // First step - just create a default map
         // Read map with id 0 (new map) for Schedule A.
         $mapstuff = get_conversion_map::execute($this->course->id, 0, 'schedulea');
-        $mapstuff = \external_api::clean_returnvalue(
+        $mapstuff = external_api::clean_returnvalue(
             get_conversion_map::execute_returns(),
             $mapstuff
         );
@@ -640,7 +642,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         $maxgrade = 100.0;
         $map = $mapstuff['map'];
         $mapida = write_conversion_map::execute($this->course->id, 0, $name, $schedule, $maxgrade, $map);
-        $mapida = \external_api::clean_returnvalue(
+        $mapida = external_api::clean_returnvalue(
             write_conversion_map::execute_returns(),
             $mapida
         );
@@ -654,21 +656,21 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
 
         // Assign3 (which is useing points from 0 to 23).
         $status = import_grades_users::execute($this->course->id, $this->gradeitemidassign3, false, false, $userlist);
-        $status = \external_api::clean_returnvalue(
+        $status = external_api::clean_returnvalue(
             import_grades_users::execute_returns(),
             $status
         );
 
         // Apply the test conversion map to Assign3.
         $nothing = select_conversion::execute($this->course->id, $this->gradeitemidassign3, $mapida);
-        $nothing = \external_api::clean_returnvalue(
+        $nothing = external_api::clean_returnvalue(
             select_conversion::execute_returns(),
             $nothing
         );
 
         // Get capture page.
         $page = get_capture_page::execute($this->course->id, $this->gradeitemidassign3, '', '', 0, false);
-        $page = \external_api::clean_returnvalue(
+        $page = external_api::clean_returnvalue(
             get_capture_page::execute_returns(),
             $page
         );

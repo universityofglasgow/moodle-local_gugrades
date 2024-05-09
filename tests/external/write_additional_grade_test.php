@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -54,7 +56,7 @@ class write_additional_grade_test extends \local_gugrades\external\gugrades_adva
 
         // Assign2 (which is using scale).
         $status = import_grades_users::execute($this->course->id, $this->gradeitemidassign2, false, false, $userlist);
-        $status = \external_api::clean_returnvalue(
+        $status = external_api::clean_returnvalue(
             import_grades_users::execute_returns(),
             $status
         );
@@ -71,14 +73,14 @@ class write_additional_grade_test extends \local_gugrades\external\gugrades_adva
             0,
             'Test notes'
         );
-        $nothing = \external_api::clean_returnvalue(
+        $nothing = external_api::clean_returnvalue(
             write_additional_grade::execute_returns(),
             $nothing
         );
 
         // Get capture page.
         $page = get_capture_page::execute($this->course->id, $this->gradeitemidassign2, '', '', 0, false);
-        $page = \external_api::clean_returnvalue(
+        $page = external_api::clean_returnvalue(
             get_capture_page::execute_returns(),
             $page
         );
@@ -106,14 +108,14 @@ class write_additional_grade_test extends \local_gugrades\external\gugrades_adva
             0,
             'Agreed grade'
         );
-        $nothing = \external_api::clean_returnvalue(
+        $nothing = external_api::clean_returnvalue(
             write_additional_grade::execute_returns(),
             $nothing
         );
 
         // Get capture page.
         $page = get_capture_page::execute($this->course->id, $this->gradeitemidassign2, '', '', 0, false);
-        $page = \external_api::clean_returnvalue(
+        $page = external_api::clean_returnvalue(
             get_capture_page::execute_returns(),
             $page
         );
@@ -143,7 +145,7 @@ class write_additional_grade_test extends \local_gugrades\external\gugrades_adva
 
         // Assign2 (which is using scale).
         $status = import_grades_users::execute($this->course->id, $this->gradeitemidassign2, false, false, $userlist);
-        $status = \external_api::clean_returnvalue(
+        $status = external_api::clean_returnvalue(
             import_grades_users::execute_returns(),
             $status
         );
@@ -160,14 +162,14 @@ class write_additional_grade_test extends \local_gugrades\external\gugrades_adva
             0,
             'Test notes'
         );
-        $nothing = \external_api::clean_returnvalue(
+        $nothing = external_api::clean_returnvalue(
             write_additional_grade::execute_returns(),
             $nothing
         );
 
         // Get capture page.
         $page = get_capture_page::execute($this->course->id, $this->gradeitemidassign2, '', '', 0, false);
-        $page = \external_api::clean_returnvalue(
+        $page = external_api::clean_returnvalue(
             get_capture_page::execute_returns(),
             $page
         );

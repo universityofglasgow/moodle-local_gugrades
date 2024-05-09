@@ -15,16 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Test get_levelonecategories web service
+ * Test import_grades_recursive web service
  * @package    local_gugrades
- * @copyright  2023
+ * @copyright  2024
  * @author     Howard Miller
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_gugrades\external;
-
-use core_external\external_api;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -33,28 +31,17 @@ global $CFG;
 require_once($CFG->dirroot . '/webservice/tests/helpers.php');
 require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_testcase.php');
 
-/**
- * Test get_levelonecategories web service.
- */
-class get_levelonecategories_test extends \local_gugrades\external\gugrades_advanced_testcase {
+class autoload_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
-     * Check correct categories are returned
+     * Add some grades and see if they import
      *
-     * @covers \local_gugrades\external\get_levelonecategories::execute
+     * @covers \local_gugrades\external\import_grades_recursive::execute
      */
-    public function test_categories_returned() {
+    public function test_autoload() {
+        global $DB;
 
-        $categories = get_levelonecategories::execute($this->course->id);
-        $categories = external_api::clean_returnvalue(
-            get_levelonecategories::execute_returns(),
-            $categories
-        );
-
-        // Check data is correct.
-        $this->assertIsArray($categories);
-        $this->assertCount(2, $categories);
-        $this->assertEquals('Summative', $categories[0]['fullname']);
-        $this->assertEquals('Formative', $categories[1]['fullname']);
+        $gradeitem = \grade_item::fetch(['id' => $this->gradeitemsecond1]);
+        $counts = import_grades_recursive::execute($this->course->id, $this->gradeitemsecond1, 0, false, false);
     }
 }

@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -88,7 +90,7 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
         // Import ALL gradeitems
         foreach ($this->gradeitemids as $gradeitemid) {
             $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
-            $status = \external_api::clean_returnvalue(
+            $status = external_api::clean_returnvalue(
                 import_grades_users::execute_returns(),
                 $status
             );
@@ -96,7 +98,7 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
 
         // Get first csv test string.
         $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
-        $page = \external_api::clean_returnvalue(
+        $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
         );
@@ -132,7 +134,7 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
         // Import ALL gradeitems
         foreach ($this->gradeitemids as $gradeitemid) {
             $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
-            $status = \external_api::clean_returnvalue(
+            $status = external_api::clean_returnvalue(
                 import_grades_users::execute_returns(),
                 $status
             );
@@ -140,7 +142,7 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
 
         // Get first csv test string.
         $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
-        $page = \external_api::clean_returnvalue(
+        $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
         );

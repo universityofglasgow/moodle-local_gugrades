@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -49,7 +51,7 @@ class resit_required_test extends \local_gugrades\external\gugrades_advanced_tes
         // Get aggregation page.
         // No resits should be marked.
         $page = get_aggregation_page::execute($this->course->id, $this->gradecatsumm->id, '', '', 0, false);
-        $page = \external_api::clean_returnvalue(
+        $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
         );
@@ -59,7 +61,7 @@ class resit_required_test extends \local_gugrades\external\gugrades_advanced_tes
 
         // Set the resit required flag.
         $nothing = resit_required::execute($this->course->id, $this->student->id, true);
-        $nothing = \external_api::clean_returnvalue(
+        $nothing = external_api::clean_returnvalue(
             resit_required::execute_returns(),
             $nothing
         );
@@ -67,7 +69,7 @@ class resit_required_test extends \local_gugrades\external\gugrades_advanced_tes
         // Get aggregation page.
         // Resitresits should now be marked.
         $page = get_aggregation_page::execute($this->course->id, $this->gradecatsumm->id, '', '', 0, false);
-        $page = \external_api::clean_returnvalue(
+        $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
         );
@@ -77,7 +79,7 @@ class resit_required_test extends \local_gugrades\external\gugrades_advanced_tes
 
         // Clear the resit required flag.
         $nothing = resit_required::execute($this->course->id, $this->student->id, false);
-        $nothing = \external_api::clean_returnvalue(
+        $nothing = external_api::clean_returnvalue(
             resit_required::execute_returns(),
             $nothing
         );
@@ -85,7 +87,7 @@ class resit_required_test extends \local_gugrades\external\gugrades_advanced_tes
         // Get aggregation page.
         // No resits should be marked.
         $page = get_aggregation_page::execute($this->course->id, $this->gradecatsumm->id, '', '', 0, false);
-        $page = \external_api::clean_returnvalue(
+        $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
         );

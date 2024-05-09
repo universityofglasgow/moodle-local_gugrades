@@ -24,6 +24,8 @@
 
 namespace local_gugrades\external;
 
+use core_external\external_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -93,7 +95,7 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
 
         // Check that all courses are returned if no past/current.
         $courses = dashboard_get_courses::execute($studentid, false, false, '');
-        $courses = \external_api::clean_returnvalue(
+        $courses = external_api::clean_returnvalue(
             dashboard_get_courses::execute_returns(),
             $courses
         );
@@ -114,7 +116,7 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
         // Get only 'current' courses
         // Default course should be included as enddate is disabled (= 0).
         $courses = dashboard_get_courses::execute($studentid, true, false, '');
-        $courses = \external_api::clean_returnvalue(
+        $courses = external_api::clean_returnvalue(
             dashboard_get_courses::execute_returns(),
             $courses
         );
@@ -124,7 +126,7 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
 
         // Get only 'past' courses.
         $courses = dashboard_get_courses::execute($studentid, false, true, '');
-        $courses = \external_api::clean_returnvalue(
+        $courses = external_api::clean_returnvalue(
             dashboard_get_courses::execute_returns(),
             $courses
         );
@@ -137,7 +139,7 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
 
         // Check sorting.
         $courses = dashboard_get_courses::execute($studentid, true, false, 'enddate');
-        $courses = \external_api::clean_returnvalue(
+        $courses = external_api::clean_returnvalue(
             dashboard_get_courses::execute_returns(),
             $courses
         );
