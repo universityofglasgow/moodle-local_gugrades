@@ -463,28 +463,49 @@ class conversion {
                 continue;
             }
 
-            $convertedgrade = self::convert_grade($provisional->rawgrade, $gradeitem->grademax, $mapvalues);
-            if (!$convertedgrade) {
-                throw new \moodle_exception('Unable to convert grade - ' .
-                    $provisional->rawgrade . ' (max: ' . $gradeitem->grademax . ')');
-            }
+            // If the grade is an admin grade, then the converted grade is still an admin grade
+            if ($provisional->admingrade) {
+                \local_gugrades\grades::write_grade(
+                    courseid:           $courseid,
+                    gradeitemid:        $gradeitemid,
+                    userid:             $user->id,
+                    admingrade:         $provisional->admingrade,
+                    rawgrade:           $provisional->rawgrade,
+                    convertedgrade:     $provisional->convertedgrade,
+                    displaygrade:       $provisional->displaygrade,
+                    weightedgrade:      0,
+                    gradetype:          'CONVERTED',
+                    other:              '',
+                    iscurrent:          true,
+                    iserror:            false,
+                    auditcomment:       '',
+                    ispoints:           false,
+                );
+            } else {
 
-            \local_gugrades\grades::write_grade(
-                $courseid,
-                $gradeitemid,
-                $user->id,
-                '',
-                $provisional->rawgrade,
-                $convertedgrade->scalevalue,  // TODO: Is this correct?
-                $convertedgrade->band,
-                0,
-                'CONVERTED',
-                '',
-                true,
-                false,
-                '',
-                false,
-            );
+                $convertedgrade = self::convert_grade($provisional->rawgrade, $gradeitem->grademax, $mapvalues);
+                if (!$convertedgrade) {
+                    throw new \moodle_exception('Unable to convert grade - ' .
+                        $provisional->rawgrade . ' (max: ' . $gradeitem->grademax . ')');
+                }
+
+                \local_gugrades\grades::write_grade(
+                    courseid:           $courseid,
+                    gradeitemid:        $gradeitemid,
+                    userid:             $user->id,
+                    admingrade:         '',
+                    rawgrade:           $provisional->rawgrade,
+                    convertedgrade:     $convertedgrade->scalevalue,  // TODO: Is this correct?
+                    displaygrade:       $convertedgrade->band,
+                    weightedgrade:      0,
+                    gradetype:          'CONVERTED',
+                    other:              '',
+                    iscurrent:          true,
+                    iserror:            false,
+                    auditcomment:       '',
+                    ispoints:           false,
+                );
+            }
         }
 
         // Provisional column will now represent a scale.

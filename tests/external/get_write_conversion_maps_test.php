@@ -683,4 +683,88 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
         $this->assertEquals('A1', $grades2[1]['displaygrade']);
         $this->assertEquals('CONVERTED', $grades2[1]['gradetype']);
     }
+
+    /**
+     * Test conversion of admin grades
+     * Conversion should 'skip' admin grades
+     * @covers \local_gugrades\external\get_conversion_map::execute
+     * @covers \local_gugrades\external\write_conversion_map::execute
+     * @covers \local_gugrades\external\select_conversion::execute
+     */
+    public function test_conversion_admin_grades() {
+        global $DB;
+
+        // First step - just create a default map
+        // Read map with id 0 (new map) for Schedule A.
+        $mapstuff = get_conversion_map::execute($this->course->id, 0, 'schedulea');
+        $mapstuff = external_api::clean_returnvalue(
+            get_conversion_map::execute_returns(),
+            $mapstuff
+        );
+
+        // Write map back.
+        $name = 'Test conversion map';
+        $schedule = 'schedulea';
+        $maxgrade = 100.0;
+        $map = $mapstuff['map'];
+        $mapida = write_conversion_map::execute($this->course->id, 0, $name, $schedule, $maxgrade, $map);
+        $mapida = external_api::clean_returnvalue(
+            write_conversion_map::execute_returns(),
+            $mapida
+        );
+        $mapida = $mapida['mapid'];
+
+        // Next step is to import some grades for some test students.
+        $userlist = [
+            $this->student->id,
+            $this->student2->id,
+        ];
+
+        // Assign1 (which is useing points).
+        $status = import_grades_users::execute($this->course->id, $this->gradeitemidassign1, false, false, $userlist);
+        $status = external_api::clean_returnvalue(
+            import_grades_users::execute_returns(),
+            $status
+        );
+
+
+        // Add additional grade.
+        $nothing = write_additional_grade::execute(
+            $this->course->id,
+            $this->gradeitemidassign1,
+            $this->student->id,
+            'SECOND',
+            '',
+            'IS',
+            0,
+            0,
+            'Test admin grade'
+        );
+        $nothing = external_api::clean_returnvalue(
+            write_additional_grade::execute_returns(),
+            $nothing
+        );
+
+        // Apply the test conversion map to Assign1.
+        $nothing = select_conversion::execute($this->course->id, $this->gradeitemidassign1, $mapida);
+        $nothing = external_api::clean_returnvalue(
+            select_conversion::execute_returns(),
+            $nothing
+        );
+
+        // Get capture page.
+        $page = get_capture_page::execute($this->course->id, $this->gradeitemidassign1, '', '', 0, false);
+        $page = external_api::clean_returnvalue(
+            get_capture_page::execute_returns(),
+            $page
+        );
+
+        $fred = $page['users'][0];
+        $grades = $fred['grades'];
+        $this->assertCount(4, $grades);
+        $this->assertEquals('IS', $grades[2]['displaygrade']);
+        $this->assertEquals('CONVERTED', $grades[2]['gradetype']);
+        $this->assertEquals('IS', $grades[3]['displaygrade']);
+        $this->assertEquals('PROVISIONAL', $grades[3]['gradetype']);
+    }
 }
