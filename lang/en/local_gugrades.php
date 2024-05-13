@@ -78,6 +78,7 @@ $string['eventadditionalgrade'] = 'Add additional grade';
 $string['export'] = 'Export';
 $string['importconversionmap'] = 'Import map...';
 $string['importgradesrecursive'] = 'Import grades recursive';
+$string['disabledashboard'] = 'Hide MyGrades on student dashboard for this course. Moodle Gradebook will be used, instead.';
 $string['eventdeleteconversionmap'] = 'Delete conversion map';
 $string['eventeditconversionmap'] = 'Edit/create conversion map';
 $string['eventimportgradesusers'] = 'Import grades for user list';

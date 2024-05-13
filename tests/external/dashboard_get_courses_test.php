@@ -78,8 +78,8 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
         ]);
 
         // Enable gugrades in some of the courses.
-        $this->enable_dashboard($currentcourse1->id, true);
-        $this->enable_dashboard($pastcourse2->id, true);
+        //$this->enable_dashboard($currentcourse1->id, true);
+        //$this->enable_dashboard($pastcourse2->id, true);
 
         // Enable GUGCAT in some of the courses.
         $this->enable_gugcat_dashboard($currentcourse1->id, true);
@@ -133,9 +133,9 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
         $this->assertIsArray($courses);
         $this->assertEquals('Past Course Two', $courses[0]['fullname']);
 
-        // Check the courses that should be enabled for MyGrades.
-        $this->assertTrue($courses[0]['gugradesenabled']);
-        $this->assertNotTrue($courses[1]['gugradesenabled']);
+        // Check the courses that should be not enabled for MyGrades.
+        $this->assertFalse($courses[0]['gugradesenabled']);
+        $this->assertFalse($courses[1]['gugradesenabled']);
 
         // Check sorting.
         $courses = dashboard_get_courses::execute($studentid, true, false, 'enddate');
@@ -146,6 +146,43 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
         $this->assertIsArray($courses);
         $this->assertCount(3, $courses);
         $this->assertEquals('Current Course Two', $courses[1]['fullname']);
+
+        // MyGrades is enabled by releasing grades for a course.
+        $userlist = [
+            $this->student->id,
+            $this->student2->id,
+        ];
+        $status = import_grades_users::execute($this->course->id, $this->gradeitemidassign2, false, false, $userlist);
+        $status = external_api::clean_returnvalue(
+            import_grades_users::execute_returns(),
+            $status
+        );
+        $status = release_grades::execute($this->course->id, $this->gradeitemidassign2, 0, false);
+        $status = external_api::clean_returnvalue(
+            release_grades::execute_returns(),
+            $status
+        );
+
+        // Check again for mygrades.
+        $courses = dashboard_get_courses::execute($studentid, true, false, '');
+        $courses = external_api::clean_returnvalue(
+            dashboard_get_courses::execute_returns(),
+            $courses
+        );
+        $this->assertCount(3, $courses);
+        $this->assertTrue($courses[2]['gugradesenabled']);
+
+        // Switch off the course.
+        $this->disable_dashboard($this->course->id, true);
+
+        // Check again for mygrades (above should have switched it off, despite release).
+        $courses = dashboard_get_courses::execute($studentid, true, false, '');
+        $courses = external_api::clean_returnvalue(
+            dashboard_get_courses::execute_returns(),
+            $courses
+        );
+        $this->assertCount(3, $courses);
+        $this->assertFalse($courses[2]['gugradesenabled']);
     }
 
 }

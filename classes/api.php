@@ -985,6 +985,34 @@ class api {
     }
 
     /**
+     * Is MyGrades "enabled" for this course
+     * Are there any released grades and/or is MyGrades
+     * disabled for this course.
+     * @param int $courseid
+     * @return bool
+     */
+    public static function is_mygrades_enabled_for_course(int $courseid) {
+        global $DB;
+
+        // Get setting. If that's set to disabled then nothing else to do.
+        $sqlname = $DB->sql_compare_text('name');
+        $sql = "SELECT * FROM {local_gugrades_config}
+            WHERE courseid = :courseid
+            AND $sqlname = :name
+            AND value = :value";
+        if ($DB->record_exists_sql($sql, ['courseid' => $courseid, 'name' => 'disabledashboard', 'value' => 1])) {
+            return false;
+        }
+
+        // If that passes, then check if there are any 'released' grades.
+        if ($DB->record_exists('local_gugrades_grade', ['courseid' => $courseid, 'gradetype' => 'RELEASED', 'iscurrent' => 1])) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Get list of user's courses
      * (and first level categories)
      * @param int $userid UserID of student
@@ -1047,21 +1075,7 @@ class api {
             $course->firstlevel = [];
 
             // Check if MyGrades is enabled for this course?
-            $sqlname = $DB->sql_compare_text('name');
-            $sql = "SELECT * FROM {local_gugrades_config}
-                WHERE courseid = :courseid
-                AND $sqlname = :name
-                AND value = :value";
-            if ($DB->record_exists_sql($sql, ['courseid' => $id, 'name' => 'enabledashboard', 'value' => 1])) {
-
-                // If we're here, MyGrades is enabled so do we have caps to view this data?
-                if ($USER->id != $userid) {
-                    $hascap = has_capability('local/gugrades:readotherdashboard', $context);
-                } else {
-                    $hascap = has_capability('local/gugrades:readdashboard', $context);
-                }
-                $course->gugradesenabled = $hascap;
-            }
+            $course->gugradesenabled = self::is_mygrades_enabled_for_course($id);
 
             // Check if (old) GCAT is enabled for this course?
             $sqlshortname = $DB->sql_compare_text('shortname');

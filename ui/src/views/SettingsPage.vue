@@ -5,8 +5,8 @@
         <FormKit type="form" @submit="submit_form">
             <FormKit
                 type="checkbox"
-                :label="mstrings.enabledashboard"
-                v-model="enabledashboard"
+                :label="mstrings.disabledashboard"
+                v-model="disabledashboard"
                 >
             </FormKit>
 
@@ -24,7 +24,7 @@
     import ResetButton from '@/components/ResetButton.vue';
 
     const mstrings = inject('mstrings');
-    const enabledashboard = ref(false);
+    const disabledashboard = ref(false);
 
     const toast = useToast();
 
@@ -36,7 +36,7 @@
         // Bodge to get jQuery needed for Bootstrap JS.
         const $ = window.jQuery;
 
-        if (enabledashboard.value) {
+        if (!disabledashboard.value) {
             $('#mygradeslogo').css('filter', 'grayscale(0)');
         } else {
             $('#mygradeslogo').css('filter', 'grayscale(1)');
@@ -60,8 +60,8 @@
                 gradeitemid: 0,
                 settings: [
                     {
-                        name: 'enabledashboard',
-                        value: enabledashboard.value,
+                        name: 'disabledashboard',
+                        value: disabledashboard.value,
                     },
                 ]
             }
@@ -96,8 +96,8 @@
             settings.forEach((setting) => {
 
                 // TODO: Something a bit cleverer than this
-                if (setting.name == 'enabledashboard') {
-                    enabledashboard.value = setting.value ? true : false;
+                if (setting.name == 'disabledashboard') {
+                    disabledashboard.value = setting.value ? true : false;
                 }
             })
         })

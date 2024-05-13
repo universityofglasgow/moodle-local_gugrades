@@ -149,20 +149,20 @@ class gugrades_base_testcase extends externallib_advanced_testcase {
     /**
      * Enable/disable dashboard for MyGrades
      * @param int $courseid
-     * @param bool $enable
+     * @param bool $disable
      */
-    protected function enable_dashboard(int $courseid, bool $enable) {
+    protected function disable_dashboard(int $courseid, bool $disable) {
         global $DB;
 
-        $value = $enable ? 1 : 0;
-        if ($config = $DB->get_record('local_gugrades_config', ['courseid' => $courseid, 'name' => 'enabledashboard'])) {
+        $value = $disable ? 1 : 0;
+        if ($config = $DB->get_record('local_gugrades_config', ['courseid' => $courseid, 'name' => 'disabledashboard'])) {
             $config->value = $value;
             $DB->update_record('local_gugrades_config', $config);
         } else {
             $config = new \stdClass();
             $config->courseid = $courseid;
             $config->gradeitemid = 0;
-            $config->name = 'enabledashboard';
+            $config->name = 'disabledashboard';
             $config->value = $value;
             $DB->insert_record('local_gugrades_config', $config);
         }
