@@ -1,7 +1,13 @@
 <template>
     <button type="button" class="btn btn-outline-success mr-1" @click="showreleasemodal=true">
-        <span v-if="grouprelease">{{ mstrings.releasegradesgroup }}</span>
-        <span v-else>{{ mstrings.releasegrades }}</span>
+        <span v-if="props.released">
+            <span v-if="grouprelease">{{ mstrings.unreleasegradesgroup }}</span>
+            <span v-else>{{ mstrings.unreleasegrades }}</span>
+        </span>
+        <span v-if="!props.released">
+            <span v-if="grouprelease">{{ mstrings.releasegradesgroup }}</span>
+            <span v-else>{{ mstrings.releasegrades }}</span>
+        </span>
     </button>
 
     <VueModal v-model="showreleasemodal" modalClass="col-11 col-lg-5 rounded" :title="mstrings.releasegrades">
