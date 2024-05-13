@@ -66,6 +66,7 @@ $services = [
             'local_gugrades_show_hide_grade',
             'local_gugrades_get_aggregation_page',
             'local_gugrades_resit_required',
+            'local_gugrades_get_dashboard_enabled',
         ],
         'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,
@@ -306,6 +307,12 @@ $functions = [
         'classname' => 'local_gugrades\external\resit_required',
         'description' => 'Set/reset resit required flag.',
         'type' => 'write',
+        'ajax' => true,
+    ],
+    'local_gugrades_get_dashboard_enabled' => [
+        'classname' => 'local_gugrades\external\get_dashboard_enabled',
+        'description' => 'Is MyGrades enabled for the dashboard in this course.',
+        'type' => 'read',
         'ajax' => true,
     ],
 ];
