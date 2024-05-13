@@ -122,7 +122,7 @@
         .then(() => {
             emit('released');
             showreleasemodal.value = false;
-            toast.success(mstrings.gradesreleased);
+            toast.success(mstrings.gradesunreleased);
         })
         .catch((error) => {
             window.console.error(error);

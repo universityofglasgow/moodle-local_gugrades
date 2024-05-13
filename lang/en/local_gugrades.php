@@ -105,6 +105,7 @@ $string['gradenoun'] = 'Grade';
 $string['gradesmissing'] = 'Grades missing';
 $string['gradesnotmatching'] = 'Grades not matching';
 $string['gradesreleased'] = 'Grades successfully released';
+$string['gradesunreleased'] = 'Grades successfully un-released';
 $string['gradetype'] = 'Grade type';
 $string['gradetypefirst'] = '1st grade';
 $string['gradetypesecond'] = '2nd grade';
