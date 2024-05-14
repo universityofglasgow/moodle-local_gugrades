@@ -125,7 +125,8 @@
 
                     <!-- show warning if grades do not agree -->
                     <template #item-alert="item">
-                        <span v-if="item.alert" class="badge badge-danger">{{ mstrings.discrepancy }}</span>
+                        <span v-if="item.alert" class="badge badge-danger mb-1">{{ mstrings.discrepancy }}</span><br />
+                        <span v-if="item.gradebookhidden" class="badge badge-success">{{ mstrings.hiddengradebook }}</span>
                     </template>
                 </EasyDataTable>
 
@@ -153,7 +154,7 @@
     import CaptureAlerts from '@/components/CaptureAlerts.vue';
     import CaptureColumnEditCog from '@/components/CaptureColumnEditCog.vue';
     import EditCaptureCell from '@/components/Capture/EditCaptureCell.vue';
-    import { watchDebounced } from '@vueuse/core';
+    import { useWindowScroll, watchDebounced } from '@vueuse/core';
     import { VueSpinner } from 'vue3-spinners';
 
     const users = ref([]);
@@ -215,6 +216,8 @@
     function table_row_class(item) {
         if (item.gradehidden) {
             return 'hidden-row';
+        } else if (item.gradebookhidden) {
+            return 'gradebookhidden-row';
         } else {
             return 'non-hidden-row';
         }
@@ -335,7 +338,7 @@
         }
         heads.push({text: mstrings.idnumber, value: "idnumber", sortable: true});
         if (showalert.value) {
-            heads.push({text: mstrings.discrepancy, value: "alert"});
+            heads.push({text: mstrings.warnings, value: "alert"});
         }
 
         // Add the grades columns
@@ -380,7 +383,7 @@
         users.forEach(user => {
 
             // Only show alert/discrepancy column if there are any
-            if (user.alert) {
+            if (user.alert || user.gradebookhidden) {
                 showalert.value = true;
             }
 
@@ -512,6 +515,11 @@
 <style>
     .hidden-row td {
         background-color: #ffff66  !important;
+        overflow: visible;
+    }
+
+    .gradebookhidden-row td {
+        background-color: #fabbec!important;
         overflow: visible;
     }
 

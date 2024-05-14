@@ -159,6 +159,17 @@ class usercapture {
     }
 
     /**
+     * Will the grade be hidden due to gradebook settings
+     * @return boolean
+     */
+    public function is_gradebookhidden() {
+        $gradegrade = new \grade_grade(array('itemid' => $this->gradeitemid, 'userid' => $this->userid), true);
+        $hidden = $gradegrade->get_hidden();
+
+        return $hidden;
+    }
+
+    /**
      * Get the released grade. For base this is exactly the same as provisional
      * @return object
      */

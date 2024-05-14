@@ -96,6 +96,7 @@ class get_capture_page_test extends \local_gugrades\external\gugrades_advanced_t
         $users = $page['users'];
         $this->assertCount(2, $users);
         $this->assertEquals('Juan Perez', $users[1]['displayname']);
+
     }
 
     /**

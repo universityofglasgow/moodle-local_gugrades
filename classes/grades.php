@@ -399,6 +399,7 @@ class grades {
             $usercapture = new usercapture($courseid, $gradeitemid, $user->id);
             $user->grades = $usercapture->get_grades();
             $user->alert = $usercapture->alert();
+            $user->gradebookhidden = $usercapture->is_gradebookhidden();
         }
 
         return $users;
