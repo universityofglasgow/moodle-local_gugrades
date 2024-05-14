@@ -54,33 +54,26 @@
     }
 
     /**
-     * get enable dashboard and set logo
+     * Get current state of dashboard enabled/disabled
      */
-     onMounted(() => {
+     function get_dashboard_enabled() {
         const GU = window.GU;
         const courseid = GU.courseid;
         const fetchMany = GU.fetchMany;
 
         fetchMany([{
-            methodname: 'local_gugrades_get_settings',
+            methodname: 'local_gugrades_get_dashboard_enabled',
             args: {
                 courseid: courseid,
-                gradeitemid: 0,
             }
         }])[0]
-        .then((settings) => {
-            settings.forEach((setting) => {
-
-                // TODO: Something a bit cleverer than this
-                if (setting.name == 'enabledashboard') {
-                    enabledashboard.value = setting.value ? true : false;
-                }
-            });
+        .then((result) => {
+            const enabled = result.enabled;
 
             // Bodge to get jQuery needed for Bootstrap JS.
             const $ = window.jQuery;
 
-            if (enabledashboard.value) {
+            if (enabled) {
                 $('#mygradeslogo').css('filter', 'grayscale(0)');
             } else {
                 $('#mygradeslogo').css('filter', 'grayscale(1)');
@@ -90,5 +83,16 @@
             window.console.error(error);
             toast.error('Error communicating with server (see console)');
         });
+    }
+
+    /**
+     * get enable dashboard and set logo
+     */
+     onMounted(() => {
+        const GU = window.GU;
+        const courseid = GU.courseid;
+        const fetchMany = GU.fetchMany;
+
+        get_dashboard_enabled();
     })
 </script>
