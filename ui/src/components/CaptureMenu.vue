@@ -1,5 +1,5 @@
 <template>
-    <div class="dropdown">
+    <div class="tn-group dropright">
         <button class="btn btn-outline-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-    import {defineProps, defineEmits} from '@vue/runtime-core';
+    import {defineProps, defineEmits, onMounted} from '@vue/runtime-core';
     import HistoryButton from '@/components/Capture/HistoryButton.vue';
     import ImportUserGradeButton from '@/components/Capture/ImportUserGradeButton.vue';
     import AddGradeButton from '@/components/Capture/AddGradeButton.vue';
@@ -22,6 +22,7 @@
 
     const props = defineProps({
             userid: Number,
+            item: Object,
             itemid: Number,
             itemname: String,
             name: String,
@@ -37,4 +38,12 @@
     function grade_added() {
         emit('gradeadded');
     }
+
 </script>
+
+<style>
+    .dropdown-menu.show {
+        overflow: visible;
+        z-index: 9999;
+    }
+</style>

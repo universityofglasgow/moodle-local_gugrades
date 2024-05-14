@@ -109,6 +109,7 @@
                     <template #item-actions="item">
                         <CaptureMenu
                             v-if="!ineditcellmode"
+                            :item="item"
                             :itemid="itemid"
                             :userid="parseInt(item.id)"
                             :name="item.displayname"
@@ -215,7 +216,7 @@
         if (item.gradehidden) {
             return 'hidden-row';
         } else {
-            return '';
+            return 'non-hidden-row';
         }
     }
 
@@ -511,6 +512,11 @@
 <style>
     .hidden-row td {
         background-color: #ffff66  !important;
+        overflow: visible;
+    }
+
+    .non-hidden-row td {
+        overflow: visible;
     }
 
     .capture-table {
