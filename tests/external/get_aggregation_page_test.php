@@ -54,6 +54,11 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
     protected object $gradecatsummative;
 
     /**
+     * @var int $mapid
+     */
+    protected int $mapid;
+
+    /**
      * Called before every test
      */
     protected function setUp(): void {
@@ -66,6 +71,37 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
 
         // Get the grade category 'summative'
         $this->gradecatsummative = $DB->get_record('grade_categories', ['fullname' => 'Summative'], '*', MUST_EXIST);
+
+        // Make a conversion map
+        $this->mapid = $this->make_conversion_map();
+    }
+
+    /**
+     * Create default conversion map
+     * @return int
+     */
+    protected function make_conversion_map() {
+
+        // Read map with id 0 (new map) for Schedule A.
+        $mapstuff = get_conversion_map::execute($this->course->id, 0, 'schedulea');
+        $mapstuff = external_api::clean_returnvalue(
+            get_conversion_map::execute_returns(),
+            $mapstuff
+        );
+
+        // Write map back.
+        $name = 'Test conversion map';
+        $schedule = 'schedulea';
+        $maxgrade = 100.0;
+        $map = $mapstuff['map'];
+        $mapida = write_conversion_map::execute($this->course->id, 0, $name, $schedule, $maxgrade, $map);
+        $mapida = external_api::clean_returnvalue(
+            write_conversion_map::execute_returns(),
+            $mapida
+        );
+        $mapida = $mapida['mapid'];
+
+        return $mapida;
     }
 
     /**
@@ -151,6 +187,53 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
         $this->assertEquals("0", $fred['completed']);
         $this->assertEquals("Grades missing", $fred['coursetotal']);
 
-//var_dump($fred);
+        // Convert
+        // Apply the test conversion map to all items
+        foreach ($this->gradeitemids as $gradeitemid) {
+            $nothing = select_conversion::execute($this->course->id, $gradeitemid, $this->mapid);
+            $nothing = external_api::clean_returnvalue(
+                select_conversion::execute_returns(),
+                $nothing
+            );
+        }
+
+        // Get aggregated page, now it should all be Schedule A.
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = external_api::clean_returnvalue(
+            get_aggregation_page::execute_returns(),
+            $page
+        );
+
+        $fred = $page['users'][0];
+        $this->assertEquals("50", $fred['completed']);
+        $this->assertEquals('C2', $fred['fields'][1]['display']);
+
+        // Add an admin grade.
+        $nothing = write_additional_grade::execute(
+            $this->course->id,
+            $this->gradeitemids[0],
+            $this->student->id,
+            'SECOND',
+            '',
+            'MV',
+            0,
+            0,
+            'Test notes'
+        );
+        $nothing = external_api::clean_returnvalue(
+            write_additional_grade::execute_returns(),
+            $nothing
+        );
+
+        // Get aggregated page, now it should now reflect admin grade.
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = external_api::clean_returnvalue(
+            get_aggregation_page::execute_returns(),
+            $page
+        );
+
+        $fred = $page['users'][0];
+        $this->assertEquals("25", $fred['completed']);
+        $this->assertEquals('MV', $fred['fields'][1]['display']);
     }
 }

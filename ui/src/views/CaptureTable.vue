@@ -56,7 +56,7 @@
                     <button class="btn btn-primary float-right mr-1" @click="edit_cell_saved">{{ mstrings.save }}</button>
                 </div>
 
-                <!-- Note. The array 'users' contains he lines of data. One record for each user -->
+                <!-- Note. The array 'users' contains the lines of data. One record for each user -->
                 <EasyDataTable
                     buttons-pagination
                     alternating

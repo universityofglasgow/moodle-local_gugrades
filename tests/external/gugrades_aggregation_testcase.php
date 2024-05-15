@@ -40,6 +40,11 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_base_testc
 class gugrades_aggregation_testcase extends gugrades_base_testcase {
 
     /**
+     * @var array $gradeitems
+     */
+    protected array $gradeitems;
+
+    /**
      * Process schema json (recursive)
      * $gradeitemid specifies where to put new grade items
      * @param array $items
@@ -47,6 +52,8 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
      */
     protected function build_schema(array $items, int $gradeitemid = null) {
         global $DB;
+
+        $this->gradeitems = [];
 
         foreach ($items as $item) {
 
@@ -56,6 +63,7 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
                     ['courseid' => $this->course->id, 'itemname' => $item->name]
                 );
                 $this->move_gradeitem_to_category($gradeitem->id, $gradeitemid);
+                $this->gradeitems[] = $gradeitem;
             } else {
 
                 // In which case it must be a grade category.
@@ -159,7 +167,5 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
         $student = $this->student;
         $student2 = $this->student2;
         $teacher = $this->teacher;
-
-
     }
 }

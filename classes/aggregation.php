@@ -503,6 +503,7 @@ class aggregation {
                     'isscale' => $child->isscale,
                     'grademissing' => $childcategorytotal == null,
                     'grade' => $childcategorytotal,
+                    'admingrade' => '',
                     'grademax' => $child->grademax,
                     'weight' => $child->weight,
                     'error' => $error,
