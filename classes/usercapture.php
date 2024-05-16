@@ -191,6 +191,9 @@ class usercapture {
 
         $this->provisional = null;
 
+        // id is a proxy for time added.
+        // Cannot use the timestamp as the unit tests write the test grades all in the
+        // same second (potentially).
         $grades = $DB->get_records('local_gugrades_grade', [
             'gradeitemid' => $this->gradeitemid,
             'userid' => $this->userid,
