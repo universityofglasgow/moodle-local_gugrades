@@ -209,9 +209,10 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
         $this->assertEquals('C2', $fred['fields'][1]['display']);
 
         // Add an admin grade.
+        $item3 = $DB->get_record('grade_items', ['courseid' => $this->course->id, 'itemname' => 'Item 3'], '*', MUST_EXIST);
         $nothing = write_additional_grade::execute(
             $this->course->id,
-            $this->gradeitemids[0],
+            $item3->id,
             $this->student->id,
             'SECOND',
             '',
@@ -234,6 +235,6 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
 
         $fred = $page['users'][0];
         $this->assertEquals("25", $fred['completed']);
-        $this->assertEquals('MV', $fred['fields'][1]['display']);
+        $this->assertEquals('MV', $fred['fields'][3]['display']);
     }
 }

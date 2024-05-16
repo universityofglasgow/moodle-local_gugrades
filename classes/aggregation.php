@@ -226,13 +226,14 @@ class aggregation {
                 // Field identifier based on gradeitemid (which is unique even for categories).
                 $provisional = $aggregation->get_provisional($column->gradeitemid, $user->id);
                 if ($provisional) {
-                    list($grade, $displaygrade) = $provisional;
+                    [$grade, $displaygrade] = $provisional;
                 } else {
                     $displaygrade = get_string('nodata', 'local_gugrades');
                 }
                 $fieldname = 'AGG_' . $column->gradeitemid;
                 $data = [
                     'fieldname' => $fieldname,
+                    'itemname' => $column->shortname,
                     'display' => $displaygrade,
                 ];
                 $fields[] = $data;
@@ -436,6 +437,7 @@ class aggregation {
             'userid' => $user->id,
             'rawgrade' => $grade,
             'iserror' => $iserror,
+            'iscurrent' => 1,
         ])) {
             return;
         }

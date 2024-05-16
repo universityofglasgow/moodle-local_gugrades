@@ -195,7 +195,7 @@ class usercapture {
             'gradeitemid' => $this->gradeitemid,
             'userid' => $this->userid,
             'iscurrent' => 1,
-        ], 'audittimecreated ASC');
+        ], 'id ASC');
 
         // Work out / add provisional grade.
         if ($grades) {

@@ -104,6 +104,7 @@ class get_aggregation_page extends external_api {
                     'fields' => new external_multiple_structure(
                         new external_single_structure([
                             'fieldname' => new external_value(PARAM_TEXT, 'Identifier for column'),
+                            'itemname' => new external_value(PARAM_TEXT, 'Shortened item name (for debugging, mostly)'),
                             'display' => new external_value(PARAM_TEXT, 'Grade for display'),
                         ])
                     ),

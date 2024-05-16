@@ -116,7 +116,7 @@ class base {
             'gradeitemid' => $gradeitemid,
             'userid' => $userid,
             'iscurrent' => 1,
-        ], 'audittimecreated ASC');
+        ], 'id ASC');
 
         // Work out / add provisional grade.
         if ($grades) {
