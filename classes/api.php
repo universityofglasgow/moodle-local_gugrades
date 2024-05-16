@@ -25,6 +25,8 @@
 
 namespace local_gugrades;
 
+use block_xp\local\rule\instance;
+
 /**
  * Actual implementation of all the external functions
  */
@@ -537,7 +539,7 @@ class api {
     public static function get_audit(int $courseid) {
         global $USER, $DB;
 
-        $context = \context_course::instance($courseid);
+        $context = \context_course::instance($courseid, true);
         if (has_capability('local/gugrades:readotheraudit', $context)) {
             $audit = \local_gugrades\audit::read($courseid);
         } else {
@@ -1040,7 +1042,7 @@ class api {
         // Run through courses to establish which have gugrades/GCAT enabled
         // and also add TL grade category data.
         foreach ($courses as $id => $course) {
-            $context = \context_course::instance($id);
+            $context = \context_course::instance($id, true);
 
             // Skip courses with showgrades == 0.
             if (!$course->showgrades) {
@@ -1116,7 +1118,7 @@ class api {
         // Get grade category and make some basic checks.
         $gradecategory = $DB->get_record('grade_categories', ['id' => $gradecategoryid], '*', MUST_EXIST);
         $courseid = $gradecategory->courseid;
-        $context = \context_course::instance($courseid);
+        $context = \context_course::instance($courseid, true);
 
         // If this isn't current user, do they have the rights to look at other users.
         if ($USER->id != $userid) {
