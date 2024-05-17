@@ -416,10 +416,9 @@ class aggregation {
         global $DB;
 
         // Aggregation function returns null in error condition but write_grade expects a float.
-        if ($category->grade == null) {
+        if (is_null($category->grade)) {
             $grade = 0.0;
             if (!$category->error) {
-                var_dump($category);
                 throw new \moodle_exception('No error text when grade=null');
             }
             $iserror = true;
