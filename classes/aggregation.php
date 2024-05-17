@@ -419,6 +419,7 @@ class aggregation {
         if ($category->grade == null) {
             $grade = 0.0;
             if (!$category->error) {
+                var_dump($category);
                 throw new \moodle_exception('No error text when grade=null');
             }
             $iserror = true;
