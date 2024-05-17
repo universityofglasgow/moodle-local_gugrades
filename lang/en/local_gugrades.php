@@ -71,6 +71,7 @@ $string['delete'] = 'Delete';
 $string['deletemapconfirm'] = 'Do you really want to delete the conversion map (this cannot be undone)?';
 $string['description'] = 'Description';
 $string['discrepancy'] = 'Discrepancy';
+$string['downloadtocsv'] = 'Download to CSV';
 $string['edit'] = 'Edit';
 $string['enabledashboard'] = 'Enable MyGrades in student dashboard for this course';
 $string['entrytype'] = 'Entry type';

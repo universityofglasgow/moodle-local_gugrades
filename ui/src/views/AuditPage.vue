@@ -2,17 +2,45 @@
     <div>
         <EasyDataTable :headers="headers" :items="items"></EasyDataTable>
     </div>
+    <div>
+        <button class="mt-2 btn btn-success" @click="download_clicked">{{ mstrings.downloadtocsv }}</button>
+    </div>
 </template>
 
 <script setup>
     import {ref, onMounted, inject} from '@vue/runtime-core';
     import { useToast } from "vue-toastification";
+    import { saveAs } from 'file-saver';
 
     const mstrings = inject('mstrings');
     const items = ref([]);
     const headers = ref([]);
 
     const toast = useToast();
+
+    /**
+     * Download button clicked
+     */
+    function download_clicked() {
+        let csv =
+            mstrings.time + ', ' +
+            mstrings.gradeitem + ', ' +
+            mstrings.by + ', ' +
+            mstrings.relateduser + ', ' +
+            mstrings.message + '\n';
+        items.value.forEach((item) => {
+            csv +=
+                '"' + item.time + '", ' +
+                '"' + item.gradeitem + '", ' +
+                '"' + item.username + '", ' +
+                '"' + item.relatedusername + '", ' +
+                '"' + item.message.replaceAll('"', '') + '"\n';
+        });
+        const d = new Date();
+        const filename = 'Audit_' + d.toLocaleString() + '.csv';
+        const blob = new Blob([csv], {type: 'text/csv;charset=utf-8'});
+        saveAs(blob, filename);
+    }
 
     onMounted(() => {
         const GU = window.GU;
