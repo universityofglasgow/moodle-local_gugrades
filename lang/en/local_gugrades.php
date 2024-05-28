@@ -217,6 +217,7 @@ $string['specifyadmingrade'] = 'Specify admin grade';
 $string['specifyscale'] = 'Specify scale value';
 $string['specifygrade'] = 'Specify grade';
 $string['status'] = 'Status';
+$string['subcattotal'] = 'Cat total';
 $string['time'] = 'Time';
 $string['type'] = 'Type';
 $string['unreleasegrades'] = '(Un)release grades';

@@ -210,8 +210,12 @@
             // Completion %age
             heads.push({text: mstrings.completed, value: "completed"});
 
-            // Course total.
-            heads.push({text: mstrings.coursetotal, value: "coursetotal"});
+            // Total.
+            heads.push({text: mstrings.coursetotal, value: "total"});
+        } else {
+
+            // Sub-category total
+            heads.push({text: mstrings.subcattotal, value: "total"});
         }
         return heads;
     });

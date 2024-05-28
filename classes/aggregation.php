@@ -185,7 +185,7 @@ class aggregation {
             $user->resitrequired = self::is_resit_required($courseid, $user->id);
 
             // TODO - just a placeholder at the moment.
-            $user->coursetotal = get_string('gradesmissing', 'local_gugrades');
+            $user->total = get_string('gradesmissing', 'local_gugrades');
             $user->completed = 0;
         }
 

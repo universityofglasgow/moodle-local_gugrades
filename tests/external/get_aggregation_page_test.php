@@ -142,7 +142,7 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
         $users = $page['users'];
         $this->assertCount(2, $users);
         $juan = $users[1];
-        $this->assertEquals('Grades missing', $juan['coursetotal']);
+        $this->assertEquals('Grades missing', $juan['total']);
         $this->assertEquals('No data', $juan['fields'][1]['display']);
         $fred = $users[0];
         $this->assertEquals("47.23333", $fred['fields'][0]['display']);
@@ -185,7 +185,7 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
 
         $fred = $page['users'][0];
         $this->assertEquals("0", $fred['completed']);
-        $this->assertEquals("Grades missing", $fred['coursetotal']);
+        $this->assertEquals("Grades missing", $fred['total']);
 
         // Convert
         // Apply the test conversion map to all items
@@ -236,5 +236,43 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
         $fred = $page['users'][0];
         $this->assertEquals("25", $fred['completed']);
         $this->assertEquals('MV', $fred['fields'][3]['display']);
+    }
+
+    /**
+     * Test sub-category aggregated data
+     */
+    public function test_sub_category() {
+
+        // Make sure that we're a teacher.
+        $this->setUser($this->teacher);
+
+        // Import grades only for one student (so far).
+        $userlist = [
+            $this->student->id,
+        ];
+
+        // Install test data for student.
+        $this->load_data('data1b', $this->student->id);
+
+        // Import ALL gradeitems
+        foreach ($this->gradeitemids as $gradeitemid) {
+            $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
+            $status = external_api::clean_returnvalue(
+                import_grades_users::execute_returns(),
+                $status
+            );
+        }
+
+        // Get category id for grade category 'Summer exam'
+        $summerexamid = $this->get_grade_category('Summer exam');
+
+        // Get aggregation page for above
+        $page = get_aggregation_page::execute($this->course->id, $summerexamid, '', '', 0, true);
+        $page = external_api::clean_returnvalue(
+            get_aggregation_page::execute_returns(),
+            $page
+        );
+
+        var_dump($page);
     }
 }
