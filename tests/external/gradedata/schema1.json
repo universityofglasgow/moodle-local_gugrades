@@ -33,6 +33,27 @@
                         "category": false
                     }
                 ]
+            },
+            {
+                "name": "Scale exam",
+                "category": true,
+                "children": [
+                    {
+                        "name": "Question A",
+                        "category": false,
+                        "type": "schedulea"
+                    },
+                    {
+                        "name": "Question B",
+                        "category": false,
+                        "type": "schedulea"
+                    },
+                    {
+                        "name": "Question C",
+                        "category": false,
+                        "type": "schedulea"
+                    }
+                ]
             }
         ]
     }

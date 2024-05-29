@@ -62,6 +62,26 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
                 $gradeitem = $this->getDataGenerator()->create_grade_item(
                     ['courseid' => $this->course->id, 'itemname' => $item->name]
                 );
+
+                // Is it a scale (default is points)?
+                if (!empty($item->type)) {
+                    $type = $item->type;
+                    if ($type == 'schedulea') {
+                        $gradeitem->gradetype = GRADE_TYPE_SCALE;
+                        $gradeitem->grademax = 23.0;
+                        $gradeitem->grademin = 1.0;
+                        $gradeitem->scaleid = $this->scale->id;
+                        $DB->update_record('grade_items', $gradeitem);
+                    } else if ($type == 'scheduleb') {
+                        $gradeitem->gradetype = GRADE_TYPE_SCALE;
+                        $gradeitem->grademax = 8.0;
+                        $gradeitem->grademin = 1.0;
+                        $gradeitem->scaleid = $this->scaleb->id;
+                        $DB->update_record('grade_items', $gradeitem);
+                    } else {
+                        throw new moodle_exception('JSON contains invalid grade type - ' . $type);
+                    }
+                }
                 $this->move_gradeitem_to_category($gradeitem->id, $gradeitemid);
                 $this->gradeitems[] = $gradeitem;
             } else {
@@ -107,8 +127,22 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
      * @param int $userid
      * @param float $rawgrade
      */
-    protected function write_grade_grades(object $gradeitem, int $userid, float $rawgrade) {
+    protected function write_grade_grades(object $gradeitem, int $userid, float|string $rawgrade) {
         global $DB;
+
+        // If gradeitem is a scale...
+        if ($gradeitem->gradetype == GRADE_TYPE_SCALE) {
+            if (!$scale = $DB->get_record('scale', ['id' => $gradeitem->scaleid])) {
+                throw new \moodle_exception('Scale not found for id = ' . $gradeitem->scaleid);
+            }
+            $items = array_map('trim', explode(',', $scale->scale));
+            if (($key = array_search($rawgrade, $items)) === false) {
+                throw new \exception('Scale item ' . $rawgrade . ' not found in scale');
+            }
+
+            // New rawgrade is array key + 1 (scales start at 1, not 0)
+            $rawgrade = $key + 1;
+        }
 
         $grade = new \stdClass();
         $grade->itemid = $gradeitem->id;

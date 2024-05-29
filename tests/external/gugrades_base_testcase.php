@@ -261,6 +261,7 @@ class gugrades_base_testcase extends externallib_advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
 
         // Add a scale.
+        // Range 1 to 23
         $scaleitems = 'H:0, G2:1, G1:2, F3:3, F2:4, F1:5, E3:6, E2:7, E1:8, D3:9, D2:10, D1:11,
             C3:12, C2:13, C1:14, B3:15, B2:16, B1:17, A5:18, A4:19, A3:20, A2:21, A1:22';
         $scale = $this->getDataGenerator()->create_scale([
@@ -272,6 +273,7 @@ class gugrades_base_testcase extends externallib_advanced_testcase {
         $this->scale = $scale;
 
         // Add another scale.
+        // Range 1 to 8
         $scaleitemsb = 'H, G0, F0, E0, D0, C0, B0, A0';
         $scaleb = $this->getDataGenerator()->create_scale([
             'name' => 'UofG Schedule B',

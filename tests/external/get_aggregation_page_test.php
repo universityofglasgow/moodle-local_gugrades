@@ -143,7 +143,7 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
         $this->assertCount(2, $users);
         $juan = $users[1];
         $this->assertEquals('Grades missing', $juan['error']);
-        $this->assertEquals('No data', $juan['fields'][1]['display']);
+        $this->assertEquals('No data', $juan['fields'][2]['display']);
         $fred = $users[0];
         $this->assertEquals("47.23333", $fred['fields'][0]['display']);
 
@@ -205,8 +205,8 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
         );
 
         $fred = $page['users'][0];
-        $this->assertEquals("50", $fred['completed']);
-        $this->assertEquals('C2', $fred['fields'][1]['display']);
+        $this->assertEquals("40", $fred['completed']);
+        $this->assertEquals('C2', $fred['fields'][2]['display']);
 
         // Add an admin grade.
         $item3 = $DB->get_record('grade_items', ['courseid' => $this->course->id, 'itemname' => 'Item 3'], '*', MUST_EXIST);
@@ -234,8 +234,8 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
         );
 
         $fred = $page['users'][0];
-        $this->assertEquals("25", $fred['completed']);
-        $this->assertEquals('MV', $fred['fields'][3]['display']);
+        $this->assertEquals("20", $fred['completed']);
+        $this->assertEquals('MV', $fred['fields'][4]['display']);
     }
 
     /**
@@ -273,6 +273,48 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
             $page
         );
 
-        //var_dump($page);
+        $this->assertFalse($page['toplevel']);
+        $this->assertFalse($page['allscales']);
+        $fred = $page['users'][0];
+        $this->assertEquals(47.23333, $fred['total']);
+        $this->assertEquals('', $fred['error']);
+    }
+
+    /**
+     * Test sub-category aggregated data with Schedule A
+     */
+    public function test_schedulea_sub_category() {
+
+        // Make sure that we're a teacher.
+        $this->setUser($this->teacher);
+
+        // Import grades only for one student (so far).
+        $userlist = [
+            $this->student->id,
+        ];
+
+        // Install test data for student.
+        $this->load_data('data1a', $this->student->id);
+
+        // Import ALL gradeitems
+        foreach ($this->gradeitemids as $gradeitemid) {
+            $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
+            $status = external_api::clean_returnvalue(
+                import_grades_users::execute_returns(),
+                $status
+            );
+        }
+
+        // Get category id for grade category 'Summer exam'
+        $scaleexamid = $this->get_grade_category('Scale exam');
+
+        // Get aggregation page for above
+        $page = get_aggregation_page::execute($this->course->id, $scaleexamid, '', '', 0, true);
+        $page = external_api::clean_returnvalue(
+            get_aggregation_page::execute_returns(),
+            $page
+        );
+
+        var_dump($page);
     }
 }
