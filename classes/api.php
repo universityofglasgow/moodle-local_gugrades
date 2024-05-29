@@ -1412,7 +1412,7 @@ class api {
 
         // Recalculate?
         if ($aggregate) {
-            \local_gugrades\aggregation::aggregate($courseid, $gradecategoryid, $users);
+            $users = \local_gugrades\aggregation::aggregate($courseid, $gradecategoryid, $users);
         }
 
         // Warning message?

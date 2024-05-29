@@ -101,6 +101,7 @@ class get_aggregation_page extends external_api {
                     'resitrequired' => new external_value(PARAM_BOOL, 'Is resit required?'),
                     'completed' => new external_value(PARAM_INT, '%age of course completed'),
                     'total' => new external_value(PARAM_TEXT, 'Content for total column'),
+                    'error' => new external_value(PARAM_TEXT, 'Error condition'),
                     'fields' => new external_multiple_structure(
                         new external_single_structure([
                             'fieldname' => new external_value(PARAM_TEXT, 'Identifier for column'),

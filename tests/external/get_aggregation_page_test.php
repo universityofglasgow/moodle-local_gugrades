@@ -142,7 +142,7 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
         $users = $page['users'];
         $this->assertCount(2, $users);
         $juan = $users[1];
-        $this->assertEquals('Grades missing', $juan['total']);
+        $this->assertEquals('Grades missing', $juan['error']);
         $this->assertEquals('No data', $juan['fields'][1]['display']);
         $fred = $users[0];
         $this->assertEquals("47.23333", $fred['fields'][0]['display']);
@@ -185,7 +185,7 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
 
         $fred = $page['users'][0];
         $this->assertEquals("0", $fred['completed']);
-        $this->assertEquals("Grades missing", $fred['total']);
+        $this->assertEquals("Grades missing", $fred['error']);
 
         // Convert
         // Apply the test conversion map to all items
@@ -273,6 +273,6 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
             $page
         );
 
-        var_dump($page);
+        //var_dump($page);
     }
 }

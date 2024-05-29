@@ -559,6 +559,7 @@ class aggregation {
      * @param int $courseid
      * @param int $gradecategoryid
      * @param array $users
+     * @return array
      */
     public static function aggregate(int $courseid, int $gradecategoryid, array $users) {
         global $DB;
@@ -578,10 +579,12 @@ class aggregation {
             // 1 = level 1 (we need to know what level we're at). Level is incremented
             // as call recurses.
             [$usertotal, $completion, $error] = self::aggregate_user($aggregation, $courseid, $toplevel, $user, $userallitems, 1);
+            $user->total = $usertotal;
             $user->completed = $completion;
-
-            $grades = $DB->get_records('local_gugrades_grade');
+            $user->error = $error;
         }
+
+        return $users;
     }
 
 }

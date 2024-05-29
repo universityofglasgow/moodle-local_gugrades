@@ -85,6 +85,12 @@
                 {{ item.completed }}%
             </template>
 
+            <!-- Total -->
+            <template #item-total="item">
+                <span v-if="item.error">{{ item.error }}</span>
+                <span v-else>{{ item.total }}</span>
+            </template>
+
         </EasyDataTable>
     </div>
 </template>
