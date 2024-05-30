@@ -187,6 +187,7 @@ class aggregation {
             // TODO - just a placeholder at the moment.
             $user->total = get_string('gradesmissing', 'local_gugrades');
             $user->completed = 0;
+            $user->error = '';
         }
 
         // Pictures.
@@ -443,20 +444,20 @@ class aggregation {
         }
 
         \local_gugrades\grades::write_grade(
-            $courseid,                      // CourseID.
-            $category->itemid,              // Gradeitemid.
-            $user->id,                      // UserID.
-            '',                             // Admin grade.
-            $grade,                         // Raw grade.
-            $grade,                         // Converted grade. TODO?
-            $displaygrade,                  // Display grade. TODO?
-            0,                              // Weighted grade.
-            'CATEGORY',                     // Gradetype.
-            '',                             // Other.
-            true,                           // Iscurrent.
-            $iserror,                       // IsError.
-            '',                             // Audit comments. TODO?
-            !$category->isscale,            // Points.
+            courseid:       $courseid,
+            gradeitemid:    $category->itemid,
+            userid:         $user->id,
+            admingrade:     '',
+            rawgrade:       $grade,
+            convertedgrade: $grade, // TODO?
+            displaygrade:   $displaygrade, // TODO?
+            weightedgrade:  0,
+            gradetype:      'CATEGORY',
+            other:          '',
+            iscurrent:      true,
+            iserror:        $iserror,
+            auditcomment:   '',  // TODO?
+            ispoints:       !$category->isscale,
         );
     }
 
