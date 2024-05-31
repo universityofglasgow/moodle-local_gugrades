@@ -1415,13 +1415,9 @@ class api {
             $users = \local_gugrades\aggregation::aggregate($courseid, $gradecategoryid, $users);
         }
 
-        // Warning message?
+        // Warning message on top level
         $istoplevel = \local_gugrades\aggregation::is_top_level($gradecategoryid);
-        if ($istoplevel) {
-            $allscales = \local_gugrades\aggregation::is_all_scales($courseid, $columns);
-        } else {
-            $allscales = false;
-        }
+        $allscales = \local_gugrades\aggregation::is_all_scales($courseid, $columns);
 
         // Add the columns to the user fields.
         $users = \local_gugrades\aggregation::add_aggregation_fields_to_users($courseid, $users, $columns);
