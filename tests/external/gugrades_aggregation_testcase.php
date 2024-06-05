@@ -63,6 +63,13 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
                     ['courseid' => $this->course->id, 'itemname' => $item->name]
                 );
 
+                // Get weight ('aggregationcoef' in the grade_items table)
+                if (!empty($item->weight)) {
+                    $weight = $item->weight;
+                } else {
+                    $weight = 1;
+                }
+
                 // Is it a scale (default is points)?
                 if (!empty($item->type)) {
                     $type = $item->type;
@@ -71,12 +78,14 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
                         $gradeitem->grademax = 23.0;
                         $gradeitem->grademin = 1.0;
                         $gradeitem->scaleid = $this->scale->id;
+                        $gradeitem->aggregationcoef = $weight;
                         $DB->update_record('grade_items', $gradeitem);
                     } else if ($type == 'scheduleb') {
                         $gradeitem->gradetype = GRADE_TYPE_SCALE;
                         $gradeitem->grademax = 8.0;
                         $gradeitem->grademin = 1.0;
                         $gradeitem->scaleid = $this->scaleb->id;
+                        $gradeitem->aggregationcoef = $weight;
                         $DB->update_record('grade_items', $gradeitem);
                     } else {
                         throw new moodle_exception('JSON contains invalid grade type - ' . $type);

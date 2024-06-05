@@ -25,8 +25,6 @@
 
 namespace local_gugrades;
 
-use block_xp\local\rule\instance;
-
 /**
  * Actual implementation of all the external functions
  */
@@ -1417,7 +1415,7 @@ class api {
 
         // Warning message on top level
         $istoplevel = \local_gugrades\aggregation::is_top_level($gradecategoryid);
-        $allscales = \local_gugrades\aggregation::is_all_scales($courseid, $columns);
+        $atype = \local_gugrades\aggregation::get_aggregation_result_type($columns);
 
         // Add the columns to the user fields.
         $users = \local_gugrades\aggregation::add_aggregation_fields_to_users($courseid, $users, $columns);
@@ -1430,7 +1428,7 @@ class api {
 
         return [
             'toplevel' => $istoplevel,
-            'allscales' => $allscales,
+            'atype' => $atype,
             'categories' => $gradecategories,
             'items' => $gradeitems,
             'columns' => $columns,

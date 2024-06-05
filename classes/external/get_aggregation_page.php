@@ -91,7 +91,7 @@ class get_aggregation_page extends external_api {
     public static function execute_returns() {
         return new external_single_structure([
             'toplevel' => new external_value(PARAM_BOOL, 'Is this the topmost level?'),
-            'allscales' => new external_value(PARAM_BOOL, '(Top level only) are all grades (converted to) scales?'),
+            'atype' => new external_value(PARAM_TEXT, 'Aggregated grade type (A, B, POINTS, ERROR - if mixed'),
             'users' => new external_multiple_structure(
                 new external_single_structure([
                     'id' => new external_value(PARAM_INT, 'User ID'),
@@ -138,6 +138,7 @@ class get_aggregation_page extends external_api {
                     'gradetype' => new external_value(PARAM_TEXT, 'Name of scale or points'),
                     'grademax' => new external_value(PARAM_INT, 'Maximum grade'),
                     'isscale' => new external_value(PARAM_BOOL, 'True if a scale, otherwise points'),
+                    'schedule' => new external_value(PARAM_TEXT, 'A, B or empty string'),
                 ])
             ),
             'breadcrumb' => new external_multiple_structure(

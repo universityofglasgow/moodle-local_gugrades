@@ -274,7 +274,7 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
         );
 
         $this->assertFalse($page['toplevel']);
-        $this->assertFalse($page['allscales']);
+        $this->assertEquals('POINTS', $page['atype']);
         $fred = $page['users'][0];
         $this->assertEquals(47.23333, $fred['total']);
         $this->assertEquals('', $fred['error']);

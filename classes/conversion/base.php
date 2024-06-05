@@ -96,6 +96,14 @@ abstract class base {
     }
 
     /**
+     * Does this represent Schedule A/B or neither
+     * Return A, B or empty string
+     */
+    public function get_schedule() {
+        return '';
+    }
+
+    /**
      * Maximum grade.
      * @return int
      */

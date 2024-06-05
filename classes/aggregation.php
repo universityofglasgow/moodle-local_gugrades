@@ -131,26 +131,50 @@ class aggregation {
             $column->gradetype = $conversion->name();
             $column->grademax = $conversion->get_maximum_grade();
             $column->isscale = $conversion->is_scale();
+            $column->schedule = $conversion->get_schedule();
         }
 
         return [$gradecategories, $gradeitems, $columns];
     }
 
     /**
-     * Check if all columns represent a scale
-     * Warning will be displayed to user if not (and aggregation is not possible)
-     * @param int $courseid
+     * Determine type of aggregated result. Possibilities
+     * 1. If all columns are points then result is points
+     * 2. If there are a mix of points and scales then it's an error
+     * 3. If all Schedule A then result is Schedule A
+     * 4. If all Schedule B then result is Schedule B
+     * 5. If mix of Schedule A/B then Schedule A if >=50% by weight is Sched A, otherwise Sched B (see MGU-812)
      * @param array $columns
+     * @return string ('A', 'B', 'POINTS', 'ERROR')
      */
-    public static function is_all_scales(int $courseid, array $columns) {
-        $allscales = true;
+    public static function get_aggregation_result_type(array $columns) {
+        $sumofweights = 0;
+        $sumscheduleaweights = 0;
+        $sumschedulebweights = 0;
+        $countpoints = 0;
         foreach ($columns as $column) {
-            if (!$column->isscale) {
-                $allscales = false;
+            $sumofweights += $column->weight;
+            if ($column->schedule == 'A') {
+                $sumscheduleaweights += $column->weight;
+            } else if ($column->schedule == 'B') {
+                $sumschedulebweights += $column->weight;
+            } else {
+                $countpoints++;
             }
         }
 
-        return $allscales;
+        // Now work out what we have
+        if ($countpoints == count($columns)) {
+            $atype = 'POINTS';
+        } else if ($countpoints != 0) {
+            $atype = 'ERROR';
+        } else if ($sumscheduleaweights >= ($sumofweights / 2)) {
+            $atype = 'A';
+        } else {
+            $atype = 'B';
+        }
+
+        return $atype;
     }
 
     /**

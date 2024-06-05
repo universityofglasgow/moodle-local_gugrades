@@ -11,7 +11,7 @@
     <div v-if="level1category" class="mt-2">
 
         <!-- warning if not all scales -->
-            <div v-if="!allscales && toplevel" class="alert alert-warning alert-dismissible fade show" role="alert">
+            <div v-if="(atype = 'POINTS') && toplevel" class="alert alert-warning alert-dismissible fade show" role="alert">
                 {{ mstrings.notallscales }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -63,6 +63,9 @@
                                 <i class="fa fa-caret-right" aria-hidden="true"></i>
                             </span>
                         </a>
+                    </div>
+                    <div v-if="header.atype">
+                        {{ formatted_atype }}
                     </div>
                 </div>
             </template>
@@ -118,8 +121,8 @@
     const categories = ref([]);
     const breadcrumb = ref([]);
     const toplevel = ref(false);
-    const allscales = ref(false);
     const completed = ref(0);
+    const atype = ref('');
 
     let firstname = '';
     let lastname = '';
@@ -181,6 +184,23 @@
     }
 
     /**
+     * Show the correct string for the aggregation type (atype)
+     */
+    const formatted_atype = computed(() => {
+        if (atype.value == 'A') {
+            return 'Schedule A';
+        } else if (atype.value == 'B') {
+            return 'Schedule B';
+        } else if (atype.value == 'POINTS') {
+            return mstrings.points;
+        } else if (atype.value == 'CONVERTED') {
+            return mstrings.converted;
+        } else {
+            return '[[' + atype.value + ']]';
+        }
+    });
+
+    /**
      * Create list of headers for EasyDataTable
      *
      */
@@ -221,7 +241,11 @@
         } else {
 
             // Sub-category total
-            heads.push({text: mstrings.subcattotal, value: "total"});
+            heads.push({
+                text: mstrings.subcattotal,
+                atype: atype.value,
+                value: "total"
+            });
         }
         return heads;
     });
@@ -274,9 +298,7 @@
             columns.value = result.columns;
             breadcrumb.value = result.breadcrumb;
             toplevel.value = result.toplevel;
-            allscales.value = result.allscales;
-
-            window.console.log(allscales.value);
+            atype.value = result.atype;
 
             users.value = process_users(users.value);
             loading.value = false;

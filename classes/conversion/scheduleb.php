@@ -78,6 +78,14 @@ class scheduleb extends base {
     }
 
     /**
+     * Does this represent Schedule A/B or neither
+     * Return A, B or empty string
+     */
+    public function get_schedule() {
+        return 'B';
+    }
+
+    /**
      * Define scale mapping
      * @return array
      */
