@@ -50,9 +50,8 @@
                     <div data-toggle="tooltip" :title="header.fullname" :data-original-title="header.fullname">
                         <div>
                             {{ header.text }}
-                            <InfoButton v-if="header.gradeitemid" :itemid="header.gradeitemid" size="0"></InfoButton>
                         </div>
-                        <div v-if="header.weight">{{ header.weight }}%</div>
+                        <div v-if="!header.infocol">{{ header.weight }}%</div>
                         <div v-if="header.gradetype">{{ header.gradetype }} <span v-if="!header.isscale">({{ header.grademax }})</span></div>
                     </div>
                     <div v-if="header.categoryid">
@@ -65,8 +64,9 @@
                         </a>
                     </div>
                     <div v-if="header.atype">
-                        {{ formatted_atype }}
+                        ({{ formattedatype }})
                     </div>
+                    <div class="mt-1"><InfoButton v-if="header.gradeitemid" :itemid="header.gradeitemid" size="1"></InfoButton></div>
                 </div>
             </template>
 
@@ -123,6 +123,7 @@
     const toplevel = ref(false);
     const completed = ref(0);
     const atype = ref('');
+    const formattedatype = ref('');
 
     let firstname = '';
     let lastname = '';
@@ -186,7 +187,7 @@
     /**
      * Show the correct string for the aggregation type (atype)
      */
-    const formatted_atype = computed(() => {
+    function get_formattedatype() {
         if (atype.value == 'A') {
             return 'Schedule A';
         } else if (atype.value == 'B') {
@@ -198,19 +199,19 @@
         } else {
             return '[[' + atype.value + ']]';
         }
-    });
+    };
 
     /**
      * Create list of headers for EasyDataTable
-     *
+     * (infocol = true, means that the column has no grade data)
      */
     const headers = computed(() => {
         let heads = [];
 
         // User identification.
-        heads.push({text: mstrings.userpicture, value: "slotuserpicture"});
-        heads.push({text: mstrings.firstnamelastname, value: "displayname", sortable: true})
-        heads.push({text: mstrings.idnumber, value: "idnumber", sortable: true});
+        heads.push({text: mstrings.userpicture, value: "slotuserpicture", infocol: true});
+        heads.push({text: mstrings.firstnamelastname, value: "displayname", sortable: true, infocol: true})
+        heads.push({text: mstrings.idnumber, value: "idnumber", sortable: true, infocol: true});
 
         // Grade categories and items.
         columns.value.forEach(column => {
@@ -231,20 +232,33 @@
         if (toplevel.value) {
 
             // Resit required?
-            heads.push({text: mstrings.resitrequired, value: "resitrequired"});
+            heads.push({
+                text: mstrings.resitrequired,
+                value: "resitrequired",
+                infocol: true,
+            });
 
             // Completion %age
-            heads.push({text: mstrings.completed, value: "completed"});
+            heads.push({
+                text: mstrings.completed,
+                value: "completed",
+                infocol: true,
+            });
 
             // Total.
-            heads.push({text: mstrings.coursetotal, value: "total"});
+            heads.push({
+                text: mstrings.coursetotal,
+                value: "total",
+                infocol: true,
+            });
         } else {
 
             // Sub-category total
             heads.push({
                 text: mstrings.subcattotal,
                 atype: atype.value,
-                value: "total"
+                value: "total",
+                infocol: true,
             });
         }
         return heads;
@@ -301,6 +315,7 @@
             atype.value = result.atype;
 
             users.value = process_users(users.value);
+            formattedatype.value = get_formattedatype();
             loading.value = false;
         })
         .catch((error) => {
