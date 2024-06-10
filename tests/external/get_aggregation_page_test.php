@@ -147,7 +147,6 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
         $fred = $users[0];
         $this->assertEquals("47.23333", $fred['fields'][0]['display']);
 
-        //var_dump($page);
     }
 
     /**
@@ -315,6 +314,6 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
             $page
         );
 
-        var_dump($page);
+        //var_dump($page);
     }
 }

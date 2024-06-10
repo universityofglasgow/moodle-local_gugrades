@@ -47,6 +47,14 @@ class points extends base {
     }
 
     /**
+     * Does this represent Schedule A/B or neither
+     * Return A, B or empty string
+     */
+    public function get_schedule() {
+        return \local_gugrades\GRADETYPE_POINTS;
+    }
+
+    /**
      * Handle imported grade
      * Create both converted grade (actual value) and display grade
      * @param float $grade

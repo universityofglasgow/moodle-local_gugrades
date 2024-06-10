@@ -306,8 +306,8 @@
             }
         }])[0]
         .then((result) => {
-            items.value = result.items;
-            categories.value = result.categories;
+            //items.value = result.items;
+            //categories.value = result.categories;
             users.value = result.users;
             columns.value = result.columns;
             breadcrumb.value = result.breadcrumb;

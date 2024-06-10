@@ -43,23 +43,24 @@ class aggregation {
     /**
      * Factory for aggregation rule set
      * @param int $courseid
+     * @param string $atype
      * @return \local_gugrades\aggregation\base
      */
-    public static function aggregation_factory(int $courseid) {
+    public static function aggregation_factory(int $courseid, string $atype) {
 
         // Just base at the moment, but other variations could exist.
-        $aggregation = new \local_gugrades\aggregation\base($courseid);
+        $aggregation = new \local_gugrades\aggregation\base($courseid, $atype);
 
         return $aggregation;
     }
 
     /**
-     * Get grade items and grade categories for supplied gradecategoryid
+     * Get aggregation tale columns for supplied gradecategoryid
      * @param int $courseid
      * @param int $gradecategoryid
      * @return array
      */
-    public static function get_level(int $courseid, int $gradecategoryid) {
+    public static function get_columns(int $courseid, int $gradecategoryid) {
         global $DB;
 
         $sql = "SELECT *, gi.id AS gradeitemid, gc.id AS gradecategoryid FROM {grade_categories} gc
@@ -134,7 +135,7 @@ class aggregation {
             $column->schedule = $conversion->get_schedule();
         }
 
-        return [$gradecategories, $gradeitems, $columns];
+        return $columns;
     }
 
     /**
@@ -163,6 +164,13 @@ class aggregation {
             }
         }
 
+        // If sumofweights is zero, we're going to get divide-by-zero
+        // errors down the line.
+        if ($sumofweights == 0) {
+            $atype = "ERROR";
+            return $atype;
+        }
+
         // Now work out what we have
         if ($countpoints == count($columns)) {
             $atype = 'POINTS';
@@ -179,9 +187,9 @@ class aggregation {
 
     /**
      * Is resit required?
-     * TODO: Placeholder only
      * @param int $courseid
      * @param int $userid
+     * @return boolean
      */
     protected static function is_resit_required(int $courseid, int $userid) {
         global $DB;
@@ -211,7 +219,7 @@ class aggregation {
             // TODO - just a placeholder at the moment.
             $user->total = get_string('gradesmissing', 'local_gugrades');
             $user->completed = 0;
-            $user->error = '';
+            $user->error = get_string('gradesmissing', 'local_gugrades');
         }
 
         // Pictures.
@@ -237,13 +245,12 @@ class aggregation {
      * Add aggregation data to users.
      * Each user record contains list based on columns
      * Formatted to survive web services (will need reformatted for EasyDataTable)
-     * @param int $courseid
+     * @param \local_gugrades\aggregation\base $aggregation
      * @param array $users
      * @param array $columns
      * @return array
      */
-    public static function add_aggregation_fields_to_users(int $courseid, array $users, array $columns) {
-        $aggregation = self::aggregation_factory($courseid);
+    public static function add_aggregation_fields_to_users(\local_gugrades\aggregation\base $aggregation, array $users, array $columns) {
         foreach ($users as $user) {
             $fields = [];
             foreach ($columns as $column) {
@@ -314,6 +321,64 @@ class aggregation {
     }
 
     /**
+     * Determine type of aggregated result for a given grade category. Possibilities
+     * 1. If all columns are points then result is points
+     * 2. If there are a mix of points and scales then it's an error
+     * 3. If all Schedule A then result is Schedule A
+     * 4. If all Schedule B then result is Schedule B
+     * 5. If mix of Schedule A/B then Schedule A if >=50% by weight is Sched A, otherwise Sched B (see MGU-812)
+     * @param array $items
+     * @return array(string ('A', 'B', 'POINTS', 'ERROR'), string)
+     */
+    public static function get_aggregation_type(array $items) {
+        $sumofweights = 0;
+        $sumscheduleaweights = 0;
+        $sumschedulebweights = 0;
+        $countpoints = 0;
+        foreach ($items as $item) {
+
+            // If any item schedule is an error, then the result is as well.
+            if ($item->schedule == 'E') {
+                $atype = \local_gugrades\GRADETYPE_ERROR;
+                return $atype;
+            }
+            $sumofweights += $item->weight;
+            if ($item->schedule == 'A') {
+                $sumscheduleaweights += $item->weight;
+            } else if ($item->schedule == 'B') {
+                $sumschedulebweights += $item->weight;
+            } else {
+                $countpoints++;
+            }
+        }
+
+        // Schedule to label category for further aggregation
+        // A, B or empty
+        $atype = \local_gugrades\GRADETYPE_POINTS;
+
+        // If sumofweights is zero, we're going to get divide-by-zero
+        // errors down the line.
+        if ($sumofweights == 0) {
+            $atype = \local_gugrades\GRADETYPE_ERROR;
+            return $atype;
+        }
+
+        // Now work out what we have
+        if ($countpoints == count($items)) {
+            $atype = \local_gugrades\GRADETYPE_POINTS;
+        } else if ($countpoints != 0) {
+            $atype = \local_gugrades\GRADETYPE_ERROR;
+            $schedule = 'E';
+        } else if ($sumscheduleaweights >= ($sumofweights / 2)) {
+            $atype = \local_gugrades\GRADETYPE_SCHEDULEA;
+        } else {
+            $atype = \local_gugrades\GRADETYPE_SCHEDULEB;
+        }
+
+        return $atype;
+    }
+
+    /**
      * Recursive helper to build grade-item tree
      * @param int $courseid
      * @param int $gradecategoryid
@@ -359,12 +424,19 @@ class aggregation {
                 'name' => $item->itemname,
                 'iscategory' => false,
                 'isscale' => $conversion->is_scale(),
+                'schedule' => $conversion->get_schedule(),
                 'weight' => $item->aggregationcoef,
                 'grademax' => $item->grademax,
             ];
 
             $categorynode->children[] = $node;
         }
+
+        // Process $categorynode->children such that we know what the category's
+        // aggregation type is (Schedule A, B, POINTS).
+        $atype = self::get_aggregation_type($categorynode->children);
+        $categorynode->atype = $atype;
+        $categorynode->schedule = $atype;
 
         return $categorynode;
     }
@@ -582,20 +654,19 @@ class aggregation {
      * Entry point for calculating aggregations
      * Returns completion
      * @param int $courseid
+     * @param \local_gugrades\aggregation\base $aggregation
      * @param int $gradecategoryid
+     * @param int $atype
      * @param array $users
      * @return array
      */
-    public static function aggregate(int $courseid, int $gradecategoryid, array $users) {
+    public static function aggregate(int $courseid, \local_gugrades\aggregation\base $aggregation, int $gradecategoryid, string $atype, array $users) {
         global $DB;
-
-        // Get aggregation object which will contain all the methods that might change.
-        // This allows it to be overridden, if required.
-        $aggregation = self::aggregation_factory($courseid);
 
         // First get category tree structure, including all required
         // weighting drop high/low and so on. So we only have to do it once.
         $toplevel = self::recurse_tree($courseid, $gradecategoryid);
+        //var_dump($toplevel); die;
 
         // Run through each user and aggregate their grades.
         foreach ($users as $user) {

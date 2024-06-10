@@ -33,14 +33,12 @@ namespace local_gugrades\aggregation;
 class base {
 
     /**
-     * @var public int $courseid
-     */
-
-    /**
      * Constructor
      * @param int $courseid
+     * @param string $atype
      */
-    public function __construct(public int $courseid) {
+    public function __construct(public int $courseid, public string $atype) {
+
     }
 
     /**
@@ -184,6 +182,22 @@ class base {
     }
 
     /**
+     * Establish the maximum grade according to $atype (the aggregated type)
+     */
+    protected function get_max_grade() {
+        if (($this->atype == 'A') or ($this->atype == 'B')) {
+            return 22;
+        }
+        if ($this->atype == 'POINTS') {
+            return 100;
+        }
+
+        // If we get here, $atype was presumably ERROR (or something we don't know about).
+        //throw new \moodle_exception('Unhandled aggregation type - ' . $this->atype);
+        return 100;
+    }
+
+    /**
      * Strategy - mean of grades
      * @param array $items
      * @return float
@@ -191,12 +205,13 @@ class base {
     public function strategy_mean(array $items) {
         $sum = 0.0;
         $count = 0;
+        $maxgrade = $this->get_max_grade();
         foreach ($items as $item) {
             $sum += $item->grade / $item->grademax;
             $count++;
         }
 
-        return $this->round_float($sum * 100 / $count);
+        return $this->round_float($sum * $maxgrade / $count);
     }
 
 }

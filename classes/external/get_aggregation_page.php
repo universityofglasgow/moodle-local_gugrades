@@ -111,22 +111,6 @@ class get_aggregation_page extends external_api {
                     ),
                 ])
             ),
-            'categories' => new external_multiple_structure(
-                new external_single_structure([
-                    'id' => new external_value(PARAM_INT, 'Grade category ID'),
-                    'shortname' => new external_value(PARAM_TEXT, 'Shortened version of fullname'),
-                    'fullname' => new external_value(PARAM_TEXT, 'Full name of grade category'),
-                    'weight' => new external_value(PARAM_FLOAT, 'Weighting of category'),
-                ])
-            ),
-            'items' => new external_multiple_structure(
-                new external_single_structure([
-                    'id' => new external_value(PARAM_INT, 'Grade item ID'),
-                    'shortname' => new external_value(PARAM_TEXT, 'Shortened version of itemname'),
-                    'itemname' => new external_value(PARAM_TEXT, 'Full name of grade category'),
-                    'weight' => new external_value(PARAM_FLOAT, 'Weighting of category'),
-                ])
-            ),
             'columns' => new external_multiple_structure(
                 new external_single_structure([
                     'fieldname' => new external_value(PARAM_TEXT, 'Identifier for column'),

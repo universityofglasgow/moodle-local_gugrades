@@ -6,15 +6,18 @@
         "children": [
             {
                 "name": "Item 1",
-                "category": false
+                "category": false,
+                "weight": 0.5
             },
             {
                 "name": "Item 2",
-                "category": false
+                "category": false,
+                "weight": 0.5
             },
             {
                 "name": "Item 3",
-                "category": false
+                "category": false,
+                "weight": 0.5
             },
             {
                 "name": "Summer exam",
@@ -22,15 +25,18 @@
                 "children": [
                     {
                         "name": "Question 1",
-                        "category": false
+                        "category": false,
+                        "weight": 1
                     },
                     {
                         "name": "Question 2",
-                        "category": false
+                        "category": false,
+                        "weight": 1
                     },
                     {
                         "name": "Question 3",
-                        "category": false
+                        "category": false,
+                        "weight": 1
                     }
                 ]
             },
