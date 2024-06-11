@@ -50,7 +50,7 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
      * @param array $items
      * @param int $gradeitemid
      */
-    protected function build_schema(array $items, int $gradeitemid = null) {
+    protected function build_schema(array $items, int $gradeitemid) {
         global $DB;
 
         $this->gradeitems = [];
@@ -63,7 +63,7 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
                     ['courseid' => $this->course->id, 'itemname' => $item->name]
                 );
 
-                // Get weight ('aggregationcoef' in the grade_items table)
+                // Get weight ('aggregationcoef' in the grade_items table).
                 if (!empty($item->weight)) {
                     $weight = $item->weight;
                 } else {
@@ -127,7 +127,7 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
         $filecontents = file_get_contents($path);
 
         $json = json_decode($filecontents);
-        $this->build_schema($json);
+        $this->build_schema($json, null);
 
         // Get gradeitems.
         $gradeitems = $DB->get_records('grade_items', ['itemtype' => 'manual']);
@@ -155,7 +155,7 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
                 throw new \exception('Scale item ' . $rawgrade . ' not found in scale');
             }
 
-            // New rawgrade is array key + 1 (scales start at 1, not 0)
+            // New rawgrade is array key + 1 (scales start at 1, not 0).
             $rawgrade = $key + 1;
         }
 

@@ -31,6 +31,9 @@ global $CFG;
 require_once($CFG->dirroot . '/webservice/tests/helpers.php');
 require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_testcase.php');
 
+/**
+ * Test for autoload?
+ */
 final class autoload_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**

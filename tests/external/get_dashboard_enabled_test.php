@@ -43,7 +43,7 @@ final class get_dashboard_enabled_test extends \local_gugrades\external\gugrades
      *
      * @covers \local_gugrades\external\get_dashboard_enabled::execute
      */
-    public function test_get_dashboard_enabled_states():void  {
+    public function test_get_dashboard_enabled_states(): void  {
         global $DB;
 
         // Use the test teacher.
@@ -74,7 +74,7 @@ final class get_dashboard_enabled_test extends \local_gugrades\external\gugrades
             $status
         );
 
-        // Check current courses. MyGrades should now be enabled
+        // Check current courses. MyGrades should now be enabled.
         $enabled = get_dashboard_enabled::execute($this->course->id);
         $enabled = external_api::clean_returnvalue(
             get_dashboard_enabled::execute_returns(),

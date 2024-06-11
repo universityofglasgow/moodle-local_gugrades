@@ -36,14 +36,14 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test import_grades_users web service.
  */
-class get_grade_item_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class get_grade_item_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Get the types and check
      *
      * @covers \local_gugrades\external\import_grades_users::execute
      */
-    public function test_get_grade_item() {
+    public function test_get_grade_item(): void {
         global $DB;
 
         // Use the test teacher.

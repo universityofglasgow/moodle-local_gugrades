@@ -86,6 +86,8 @@ final class import_grades_users_test extends \local_gugrades\external\gugrades_a
 
     /**
      * Test $fillns parameter when importing
+     *
+     * @covers \local_gugrades\external\import_grades_users::execute
      */
     public function test_fillns_import(): void {
         global $DB;

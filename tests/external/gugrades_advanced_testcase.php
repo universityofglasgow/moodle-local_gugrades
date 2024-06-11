@@ -69,9 +69,9 @@ class gugrades_advanced_testcase extends gugrades_base_testcase {
     protected int $gradeitemidassign3;
 
     /**
-    * @var int $gradeitemidassign4
-    */
-   protected int $gradeitemidassign4;
+     * @var int $gradeitemidassign4
+     */
+    protected int $gradeitemidassign4;
 
     /**
      * @var int $gradeitemsecond1
@@ -147,7 +147,7 @@ class gugrades_advanced_testcase extends gugrades_base_testcase {
         $this->add_assignment_grade($assign3->id, $student->id, 0);
         $this->add_assignment_grade($assign3->id, $student2->id, 23.0);
 
-        // Item 4 only has one - other student is (deliberately) not graded
+        // Item 4 only has one - other student is (deliberately) not graded.
         $this->add_assignment_grade($assign4->id, $student->id, 18);
 
         // Move the assignments to summative grade category (we only have one course).

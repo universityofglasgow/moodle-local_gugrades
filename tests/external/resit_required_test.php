@@ -36,7 +36,7 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test reset_required web service.
  */
-Final class resit_required_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class resit_required_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Test that setting and clearing condition works

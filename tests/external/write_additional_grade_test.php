@@ -36,14 +36,14 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test has_capability web service.
  */
-class write_additional_grade_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class write_additional_grade_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Add some grades and check capture page data is correct
      *
      * @covers \local_gugrades\external\write_additional_grade::execute
      */
-    public function test_new_column() {
+    public function test_new_column(): void {
 
         // Make sure that we're a teacher.
         $this->setUser($this->teacher);
@@ -132,7 +132,7 @@ class write_additional_grade_test extends \local_gugrades\external\gugrades_adva
      *
      * @covers \local_gugrades\external\write_additional_grade::execute
      */
-    public function test_alert_is_off() {
+    public function test_alert_is_off(): void {
 
         // Make sure that we're a teacher.
         $this->setUser($this->teacher);

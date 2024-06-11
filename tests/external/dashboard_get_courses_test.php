@@ -77,10 +77,6 @@ final class dashboard_get_courses_test extends \local_gugrades\external\gugrades
             'enddate' => time() - (30 * 86400), // Last possible day!
         ]);
 
-        // Enable gugrades in some of the courses.
-        //$this->enable_dashboard($currentcourse1->id, true);
-        //$this->enable_dashboard($pastcourse2->id, true);
-
         // Enable GUGCAT in some of the courses.
         $this->enable_gugcat_dashboard($currentcourse1->id, true);
         $this->enable_gugcat_dashboard($pastcourse1->id, true);

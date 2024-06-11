@@ -727,7 +727,6 @@ final class get_write_conversion_maps_test extends \local_gugrades\external\gugr
             $status
         );
 
-
         // Add additional grade.
         $nothing = write_additional_grade::execute(
             $this->course->id,
