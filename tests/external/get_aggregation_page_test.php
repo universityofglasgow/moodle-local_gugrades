@@ -269,7 +269,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         // Get category id for grade category 'Summer exam'.
         $summerexamid = $this->get_grade_category('Summer exam');
 
-        // Get aggregation page for above
+        // Get aggregation page for above.
         $page = get_aggregation_page::execute($this->course->id, $summerexamid, '', '', 0, true);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),

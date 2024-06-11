@@ -36,7 +36,7 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test get_activities web service.
  */
-class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Check that weird current/past filter works properly
@@ -44,7 +44,7 @@ class dashboard_get_courses_test extends \local_gugrades\external\gugrades_advan
      *
      * @covers \local_gugrades\external\dashboard_get_courses::execute
      */
-    public function test_filter_courses_by_date() {
+    public function test_filter_courses_by_date(): void {
         global $DB;
 
         // We're the test student.

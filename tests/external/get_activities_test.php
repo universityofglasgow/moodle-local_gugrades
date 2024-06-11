@@ -36,14 +36,14 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test get_activities web service.
  */
-class get_activities_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class get_activities_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Just check that strings are returned
      *
      * @covers \local_gugrades\external\get_activities::execute
      */
-    public function test_get_activities() {
+    public function test_get_activities(): void {
         global $DB;
 
         // Test ws function.

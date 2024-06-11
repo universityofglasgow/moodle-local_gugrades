@@ -36,7 +36,7 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test(s) for get_all_strings webservice
  */
-class csv_capture_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class csv_capture_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * @var array $uploaddata1
@@ -99,7 +99,7 @@ class csv_capture_test extends \local_gugrades\external\gugrades_advanced_testca
      *
      * @covers \local_gugrades\external\get_csv_download::execute
      */
-    public function test_return_csv() {
+    public function test_return_csv(): void {
 
         // Make sure that we're a teacher.
         $this->setUser($this->teacher);
@@ -125,7 +125,7 @@ class csv_capture_test extends \local_gugrades\external\gugrades_advanced_testca
      *
      * @covers \local_gugrades\external\upload_csv::execute
      */
-    public function test_upload_csv() {
+    public function test_upload_csv(): void {
         global $DB;
 
         // Make sure that we're a teacher.

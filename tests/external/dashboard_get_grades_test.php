@@ -36,14 +36,14 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test get_activities web service.
  */
-class dashboard_get_grades_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class dashboard_get_grades_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Set up some grades for a student and check that they can be read
      *
      * @covers \local_gugrades\external\dashboard_get_grades::execute
      */
-    public function test_get_grades() {
+    public function test_get_grades(): void {
         global $DB;
 
         // Use the test student.

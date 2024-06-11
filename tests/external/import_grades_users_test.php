@@ -36,14 +36,14 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test import_grades_users web service.
  */
-class import_grades_users_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class import_grades_users_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Import first grades.
      *
      * @covers \local_gugrades\external\import_grades_users::execute
      */
-    public function test_categories_returned() {
+    public function test_categories_returned(): void {
         global $DB;
 
         $userlist = [
@@ -87,7 +87,7 @@ class import_grades_users_test extends \local_gugrades\external\gugrades_advance
     /**
      * Test $fillns parameter when importing
      */
-    public function test_fillns_import() {
+    public function test_fillns_import(): void {
         global $DB;
 
         $userlist = [

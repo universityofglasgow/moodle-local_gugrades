@@ -37,14 +37,14 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test import_grades_recursive web service.
  */
-class import_grades_recursive_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class import_grades_recursive_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Check importing upper level item throws exception
      *
      * @covers \local_gugrades\external\import_grades_recursive::execute
      */
-    public function test_wrong_item_exception() {
+    public function test_wrong_item_exception(): void {
         $this->expectException('moodle_exception');
         import_grades_recursive::execute($this->course->id, $this->gradeitemidassign1, 0, false, false);
     }
@@ -54,7 +54,7 @@ class import_grades_recursive_test extends \local_gugrades\external\gugrades_adv
      *
      * @covers \local_gugrades\external\import_grades_recursive::execute
      */
-    public function test_import_no_grades() {
+    public function test_import_no_grades(): void {
         global $DB;
 
         // Check gradeitemsecond1 (no grades assigned so shouldn't return anything).
@@ -73,7 +73,7 @@ class import_grades_recursive_test extends \local_gugrades\external\gugrades_adv
      *
      * @covers \local_gugrades\external\import_grades_recursive::execute
      */
-    public function test_import_with_grades() {
+    public function test_import_with_grades(): void {
         global $DB;
 
         // Note to self:

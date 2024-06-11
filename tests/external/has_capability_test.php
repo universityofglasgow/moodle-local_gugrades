@@ -36,14 +36,14 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test has_capability web service.
  */
-class has_capability_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class has_capability_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Check that a teacher has the capability that they should have
      *
      * @covers \local_gugrades\external\has_capability::execute
      */
-    public function test_teacher_has_capability() {
+    public function test_teacher_has_capability(): void {
 
         // Logged in user is teacher.
         // Check that they have local/gugrades:view capability.
@@ -63,7 +63,7 @@ class has_capability_test extends \local_gugrades\external\gugrades_advanced_tes
      *
      * @covers \local_gugrades\external\has_capability::execute
      */
-    public function test_student_has_not_capability() {
+    public function test_student_has_not_capability(): void {
 
         // Log in as student.
         $this->setUser($this->student);

@@ -38,7 +38,7 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test(s) for (both) save_settings and get_settings webservices
  */
-class settings_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class settings_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Just check that strings are returned
@@ -46,7 +46,7 @@ class settings_test extends \local_gugrades\external\gugrades_advanced_testcase 
      * @covers \local_gugrades\external\save_settings::execute
      * @covers \local_gugrades\external\get_settings::execute
      */
-    public function test_write_and_read_settings() {
+    public function test_write_and_read_settings(): void {
         global $DB;
 
         // Test settings to apply.
@@ -90,7 +90,7 @@ class settings_test extends \local_gugrades\external\gugrades_advanced_testcase 
      *
      * @covers \local_gugrades\external\save_settings::execute
      */
-    public function test_non_teacher() {
+    public function test_non_teacher(): void {
 
         $this->setUser($this->student);
 

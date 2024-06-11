@@ -36,14 +36,14 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test has_capability web service.
  */
-class is_grades_imported_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class is_grades_imported_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Check that a top=level activiy shows recursiveavailable = false
      *
      * @covers \local_gugrades\external\is_grades_imported::execute
      */
-    public function test_recursiveavailable_false() {
+    public function test_recursiveavailable_false(): void {
 
         // Log in as teacher.
         $this->setUser($this->teacher);
@@ -68,7 +68,7 @@ class is_grades_imported_test extends \local_gugrades\external\gugrades_advanced
      *
      * @covers \local_gugrades\external\is_grades_imported::execute
      */
-    public function test_recursiveavailable_true() {
+    public function test_recursiveavailable_true(): void {
 
         // Log in as teacher.
         $this->setUser($this->teacher);
@@ -98,7 +98,7 @@ class is_grades_imported_test extends \local_gugrades\external\gugrades_advanced
      *
      * @covers \local_gugrades\external\is_grades_imported::execute
      */
-    public function test_recursiveavailable_bad_gradetype() {
+    public function test_recursiveavailable_bad_gradetype(): void {
         global $DB;
 
         // Log in as teacher.

@@ -36,13 +36,13 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test get_activities web service.
  */
-class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Check writing and reading data
      * @covers \local_gugrades\external\get_conversion_maps::execute
      */
-    public function test_conversion_maps() {
+    public function test_conversion_maps(): void {
 
         // Read maps for course (should be none).
         $maps = get_conversion_maps::execute($this->course->id);
@@ -59,7 +59,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
      * Check reading default map
      * @covers \local_gugrades\external\get_conversion_map::execute
      */
-    public function test_get_default_map() {
+    public function test_get_default_map(): void {
 
         // Read map with id 0 (new map) for Schedule A.
         $mapstuff = get_conversion_map::execute($this->course->id, 0, 'schedulea');
@@ -99,7 +99,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
      * @covers \local_gugrades\external\get_conversion_map::execute
      * @covers \local_gugrades\external\write_conversion_map::execute
      */
-    public function test_read_write_default_map() {
+    public function test_read_write_default_map(): void {
         global $DB;
 
         // Read map with id 0 (new map) for Schedule A.
@@ -155,7 +155,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
      * @covers \local_gugrades\external\get_conversion_map::execute
      * @covers \local_gugrades\external\write_conversion_map::execute
      */
-    public function test_read_write_scheduleb() {
+    public function test_read_write_scheduleb(): void {
         global $DB;
 
         // Read map with id 0 (new map) for Schedule B.
@@ -192,7 +192,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
      * @covers \local_gugrades\external\get_conversion_map::execute
      * @covers \local_gugrades\external\write_conversion_map::execute
      */
-    public function test_import_json() {
+    public function test_import_json(): void {
         global $DB;
 
         $jsonmap = '{
@@ -267,7 +267,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
      * @covers \local_gugrades\external\get_conversion_map::execute
      * @covers \local_gugrades\external\write_conversion_map::execute
      */
-    public function test_incorrect_json() {
+    public function test_incorrect_json(): void {
 
         // Incorrect bound for H (must be zero).
         $jsonmap = '{
@@ -329,7 +329,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
      * @covers \local_gugrades\external\get_conversion_map::execute
      * @covers \local_gugrades\external\write_conversion_map::execute
      */
-    public function test_incorrect_schedule_json() {
+    public function test_incorrect_schedule_json(): void {
         $jsonmap = '{
             "name": "Test import map",
             "schedule": "notaschedule",
@@ -350,7 +350,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
      * @covers \local_gugrades\external\get_conversion_map::execute
      * @covers \local_gugrades\external\write_conversion_map::execute
      */
-    public function test_incorrect_count_json() {
+    public function test_incorrect_count_json(): void {
         $jsonmap = '{
             "name": "Test import map",
             "schedule": "scheduleb",
@@ -405,7 +405,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
      * @covers \local_gugrades\external\write_conversion_map::execute
      * @covers \local_gugrades\external\select_conversion::execute
      */
-    public function test_select_map() {
+    public function test_select_map(): void {
         global $DB;
 
         // Read map with id 0 (new map) for Schedule A.
@@ -499,7 +499,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
      * @covers \local_gugrades\external\write_conversion_map::execute
      * @covers \local_gugrades\external\select_conversion::execute
      */
-    public function test_do_conversion() {
+    public function test_do_conversion(): void {
         global $DB;
 
         // First step - just create a default map
@@ -625,7 +625,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
      * @covers \local_gugrades\external\write_conversion_map::execute
      * @covers \local_gugrades\external\select_conversion::execute
      */
-    public function test_conversion_limits() {
+    public function test_conversion_limits(): void {
         global $DB;
 
         // First step - just create a default map
@@ -691,7 +691,7 @@ class get_write_conversion_maps_test extends \local_gugrades\external\gugrades_a
      * @covers \local_gugrades\external\write_conversion_map::execute
      * @covers \local_gugrades\external\select_conversion::execute
      */
-    public function test_conversion_admin_grades() {
+    public function test_conversion_admin_grades(): void {
         global $DB;
 
         // First step - just create a default map

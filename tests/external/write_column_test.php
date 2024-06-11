@@ -36,14 +36,14 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test has_capability web service.
  */
-class write_column_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class write_column_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Test that a new column appears in the database
      *
      * @covers \local_gugrades\external\write_column::execute
      */
-    public function test_new_column() {
+    public function test_new_column(): void {
         global $DB;
 
         // Log in as teacher.

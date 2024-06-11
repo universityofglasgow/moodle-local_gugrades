@@ -31,14 +31,14 @@ global $CFG;
 require_once($CFG->dirroot . '/webservice/tests/helpers.php');
 require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_testcase.php');
 
-class autoload_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class autoload_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Add some grades and see if they import
      *
      * @covers \local_gugrades\external\import_grades_recursive::execute
      */
-    public function test_autoload() {
+    public function test_autoload(): void {
         global $DB;
 
         $gradeitem = \grade_item::fetch(['id' => $this->gradeitemsecond1]);

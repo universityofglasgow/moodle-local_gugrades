@@ -36,20 +36,20 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test get_dashboard_enabled web service.
  */
-class get_dashboard_enabled_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class get_dashboard_enabled_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Check the enabled state under different circumstances
      *
      * @covers \local_gugrades\external\get_dashboard_enabled::execute
      */
-    public function test_get_dashboard_enabled_states() {
+    public function test_get_dashboard_enabled_states():void  {
         global $DB;
 
         // Use the test teacher.
         $this->setUser($this->teacher->id);
 
-        // Check current courses. MyGrades should not be enabled
+        // Check current courses. MyGrades should not be enabled.
         $enabled = get_dashboard_enabled::execute($this->course->id);
         $enabled = external_api::clean_returnvalue(
             get_dashboard_enabled::execute_returns(),
@@ -86,7 +86,7 @@ class get_dashboard_enabled_test extends \local_gugrades\external\gugrades_advan
         // Switch off the course.
         $this->disable_dashboard($this->course->id, true);
 
-        // Check once more. MyGrades should not be enabled
+        // Check once more. MyGrades should not be enabled.
         $enabled = get_dashboard_enabled::execute($this->course->id);
         $enabled = external_api::clean_returnvalue(
             get_dashboard_enabled::execute_returns(),

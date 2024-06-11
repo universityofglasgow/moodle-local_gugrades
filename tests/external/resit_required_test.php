@@ -36,14 +36,14 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test reset_required web service.
  */
-class resit_required_test extends \local_gugrades\external\gugrades_advanced_testcase {
+Final class resit_required_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Test that setting and clearing condition works
      *
      * @covers \local_gugrades\external\resit_required::execute
      */
-    public function test_resit_required() {
+    public function test_resit_required(): void {
 
         // Log in as teacher.
         $this->setUser($this->teacher);

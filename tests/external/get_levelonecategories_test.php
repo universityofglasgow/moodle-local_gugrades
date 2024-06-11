@@ -36,14 +36,14 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test get_levelonecategories web service.
  */
-class get_levelonecategories_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class get_levelonecategories_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Check correct categories are returned
      *
      * @covers \local_gugrades\external\get_levelonecategories::execute
      */
-    public function test_categories_returned() {
+    public function test_categories_returned(): void {
 
         $categories = get_levelonecategories::execute($this->course->id);
         $categories = external_api::clean_returnvalue(

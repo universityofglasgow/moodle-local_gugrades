@@ -36,14 +36,14 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test import_grades_users web service.
  */
-class reset_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class reset_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Import first grades.
      *
      * @covers \local_gugrades\external\import_grades_users::execute
      */
-    public function test_reset() {
+    public function test_reset(): void {
         global $DB;
 
         // Use the test student.

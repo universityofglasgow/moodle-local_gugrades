@@ -36,14 +36,14 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test import_grades_users web service.
  */
-class get_capture_cell_form_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class get_capture_cell_form_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Grade item with points
      *
      * @covers \local_gugrades\external\get_capture_cell_form::execute
      */
-    public function test_points() {
+    public function test_points(): void {
         global $DB;
 
         // Use the test teacher.
@@ -72,7 +72,7 @@ class get_capture_cell_form_test extends \local_gugrades\external\gugrades_advan
      *
      * @covers \local_gugrades\external\get_capture_cell_form::execute
      */
-    public function test_scale() {
+    public function test_scale(): void {
         global $DB;
 
         // Use the test teacher.

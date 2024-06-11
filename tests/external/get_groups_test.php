@@ -36,14 +36,14 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test get_activities web service.
  */
-class get_groups_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class get_groups_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Check for no groups and some groups
      *
      * @covers \local_gugrades\external\get_groups::execute
      */
-    public function test_get_groups() {
+    public function test_get_groups(): void {
         global $DB;
 
         // There should not be any groups (yet).
