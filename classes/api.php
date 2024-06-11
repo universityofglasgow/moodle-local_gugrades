@@ -1405,27 +1405,21 @@ class api {
         ) {
 
         // Get categories and items at this level.
-        $columns = \local_gugrades\aggregation::get_columns($courseid, $gradecategoryid);
-
-        // Determine total aggregation type (Points, Schedule A and so on...)
-        $atype = \local_gugrades\aggregation::get_aggregation_result_type($columns);
+        [$columns, $atype] = \local_gugrades\aggregation::get_columns($courseid, $gradecategoryid);
 
         // Get all the students.
         $users = \local_gugrades\aggregation::get_users($courseid, $firstname, $lastname, $groupid);
 
-        // Get aggregation "rules" class
-        $aggregation = \local_gugrades\aggregation::aggregation_factory($courseid, $atype);
-
         // Recalculate?
         if ($aggregate) {
-            $users = \local_gugrades\aggregation::aggregate($courseid, $aggregation, $gradecategoryid, $atype, $users);
+            $users = \local_gugrades\aggregation::aggregate($courseid, $gradecategoryid, $users);
         }
 
         // Warning message on top level
         $istoplevel = \local_gugrades\aggregation::is_top_level($gradecategoryid);
 
         // Add the columns to the user fields.
-        $users = \local_gugrades\aggregation::add_aggregation_fields_to_users($aggregation, $users, $columns);
+        $users = \local_gugrades\aggregation::add_aggregation_fields_to_users($users, $columns);
 
         // Add pictures to user fields.
         $users = \local_gugrades\users::add_pictures_to_user_records($users);

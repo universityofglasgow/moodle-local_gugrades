@@ -32,3 +32,4 @@ define('local_gugrades\GRADETYPE_SCHEDULEA', 'A');
 define('local_gugrades\GRADETYPE_SCHEDULEB', 'B');
 define('local_gugrades\GRADETYPE_POINTS', 'P');
 define('local_gugrades\GRADETYPE_ERROR', 'E');
+define('local_gugrades\GRADETYPE_CONVERTED', 'C');

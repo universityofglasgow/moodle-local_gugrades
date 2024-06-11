@@ -82,7 +82,7 @@ class schedulea extends base {
      * Return A, B or empty string
      */
     public function get_schedule() {
-        return \local_gugrades\GRADETYPE_POINTS;
+        return \local_gugrades\GRADETYPE_SCHEDULEA;
     }
 
     /**

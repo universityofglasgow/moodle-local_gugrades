@@ -388,6 +388,37 @@ class grades {
     }
 
     /**
+     * Get the provisional/released grade from the
+     * gradeitemid / userid
+     * @param int $gradeitemid
+     * @param int $userid
+     * @return float, string
+     */
+    public static function get_provisional_from_id(int $gradeitemid, int $userid) {
+        global $DB;
+
+        // id is a proxy for time added.
+        // Cannot use the timestamp as the unit tests write the test grades all in the
+        // same second (potentially).
+        $grades = $DB->get_records('local_gugrades_grade', [
+            'gradeitemid' => $gradeitemid,
+            'userid' => $userid,
+            'iscurrent' => 1,
+        ], 'id ASC');
+
+        // Work out / add provisional grade.
+        if ($grades) {
+            $lastgrade = end($grades);
+            $grade = $lastgrade->convertedgrade;
+            $display = $lastgrade->displaygrade;
+
+            return [$grade, $display];
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Add grades to user records for capture page
      * @param int $courseid
      * @param int $gradeitemid

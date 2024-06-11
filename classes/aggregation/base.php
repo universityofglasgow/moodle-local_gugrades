@@ -101,36 +101,6 @@ class base {
         return round($value, 5);
     }
 
-    /**
-     * Get the provisional/released grade
-     * @param int $gradeitemid
-     * @param int $userid
-     * @return float, string
-     */
-    public function get_provisional(int $gradeitemid, int $userid) {
-        global $DB;
-
-        // id is a proxy for time added.
-        // Cannot use the timestamp as the unit tests write the test grades all in the
-        // same second (potentially).
-        $grades = $DB->get_records('local_gugrades_grade', [
-            'gradeitemid' => $gradeitemid,
-            'userid' => $userid,
-            'iscurrent' => 1,
-        ], 'id ASC');
-
-        // Work out / add provisional grade.
-        if ($grades) {
-            $lastgrade = end($grades);
-            $grade = $lastgrade->convertedgrade;
-            $display = $lastgrade->displaygrade;
-
-            return [$grade, $display];
-        } else {
-            return null;
-        }
-    }
-
     //
     // Following are functions for all the basic aggregation strategies. These mostly
     // replicate what core Moodle Gradebook does and are as specified in the Moodle docs.
@@ -185,10 +155,10 @@ class base {
      * Establish the maximum grade according to $atype (the aggregated type)
      */
     protected function get_max_grade() {
-        if (($this->atype == 'A') or ($this->atype == 'B')) {
+        if (($this->atype == \local_gugrades\GRADETYPE_SCHEDULEA) or ($this->atype == \local_gugrades\GRADETYPE_SCHEDULEB)) {
             return 22;
         }
-        if ($this->atype == 'POINTS') {
+        if ($this->atype == \local_gugrades\GRADETYPE_POINTS) {
             return 100;
         }
 
