@@ -112,37 +112,23 @@ class base {
      * @return string
      */
     public function strategy_factory(int $aggregationid) {
-        switch ($aggregationid) {
-            case GRADE_AGGREGATE_MEAN:
-                $agf = 'mean';
-                break;
-            case GRADE_AGGREGATE_MEDIAN:
-                $agf = 'median';
-                break;
-            case GRADE_AGGREGATE_MIN:
-                $agf = 'min';
-                break;
-            case GRADE_AGGREGATE_MAX:
-                $agf = 'max';
-                break;
-            case GRADE_AGGREGATE_MODE:
-                $agf = 'mode';
-                break;
-            case GRADE_AGGREGATE_WEIGHTED_MEAN:
-                $agf = 'weighted_mean';
-                break;
-            case GRADE_AGGREGATE_WEIGHTED_MEAN2:
-                $agf = 'weighted_mean2';
-                break;
-            case GRADE_AGGREGATE_EXTRACREDIT_MEAN:
-                $agf = 'extracredit_mean';
-                break;
-            case GRADE_AGGREGATE_SUM:
-                $agf = 'sum';
-                break;
-            default:
-                throw new \moodle_exception('Unknown aggregation strategy');
-                break;
+
+        // Array defines which aggregation type calls which function.
+        $lookup = [
+            \GRADE_AGGREGATE_MEAN => 'mean',
+            \GRADE_AGGREGATE_MEDIAN => 'median',
+            \GRADE_AGGREGATE_MIN => 'min',
+            \GRADE_AGGREGATE_MAX => 'max',
+            \GRADE_AGGREGATE_MODE => 'mode',
+            \GRADE_AGGREGATE_WEIGHTED_MEAN => 'weighted_mean',
+            \GRADE_AGGREGATE_WEIGHTED_MEAN2 => 'weighted_mean2',
+            \GRADE_AGGREGATE_EXTRACREDIT_MEAN => 'extracredit_mean',
+            \GRADE_AGGREGATE_SUM => 'sum',
+        ];
+        if (array_key_exists($aggregationid, $lookup)) {
+            $agf = $lookup[$aggregationid];
+        } else {
+            throw new \moodle_exception('Unknown aggregation strategy');
         }
 
         // TODO - force everything to me mean for testing, for now.

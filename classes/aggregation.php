@@ -185,19 +185,6 @@ class aggregation {
     }
 
     /**
-     * Get aggregation grade
-     * Current provisional/released grade for grade item
-     * TODO: Or aggregagated grade for sub-category
-     * @param int $gradeitemid
-     * @param int $userid
-     * @return float
-     */
-    protected static function get_aggregation_grade(int $gradeitemid, int $userid) {
-        global $DB;
-
-    }
-
-    /**
      * Add aggregation data to users.
      * Each user record contains list based on columns
      * Formatted to survive web services (will need reformatted for EasyDataTable)
