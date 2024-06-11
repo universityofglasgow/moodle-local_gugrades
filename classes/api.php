@@ -25,6 +25,8 @@
 
 namespace local_gugrades;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(dirname(__FILE__) . '/constants.php');
 
 /**
@@ -1372,16 +1374,16 @@ class api {
     public static function is_grade_hidden(int $gradeitemid, int $userid) {
         global $DB;
 
-        // Check (internal) MyGrades hidden flag
+        // Check (internal) MyGrades hidden flag.
         $mygradeshidden = $DB->record_exists('local_gugrades_hidden', ['gradeitemid' => $gradeitemid, 'userid' => $userid]);
 
-        // Check grade item hidden in Gradebook
+        // Check grade item hidden in Gradebook.
         $gradeitemhidden = self::is_gradeitem_hidden($gradeitemid);
 
-        // Check user grade hidden
+        // Check user grade hidden.
         $gradegradehidden = $DB->record_exists('grade_grades', ['itemid' => $gradeitemid, 'userid' => $userid, 'hidden' => 1]);
 
-        // Any being hidden counts
+        // Any being hidden counts.
         return $mygradeshidden || $gradeitemhidden || $gradegradehidden;
     }
 
@@ -1415,7 +1417,7 @@ class api {
             $users = \local_gugrades\aggregation::aggregate($courseid, $gradecategoryid, $users);
         }
 
-        // Warning message on top level
+        // Warning message on top level.
         $istoplevel = \local_gugrades\aggregation::is_top_level($gradecategoryid);
 
         // Add the columns to the user fields.

@@ -463,7 +463,7 @@ class conversion {
                 continue;
             }
 
-            // If the grade is an admin grade, then the converted grade is still an admin grade
+            // If the grade is an admin grade, then the converted grade is still an admin grade.
             if ($provisional->admingrade) {
                 \local_gugrades\grades::write_grade(
                     courseid:           $courseid,

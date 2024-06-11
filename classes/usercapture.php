@@ -163,7 +163,7 @@ class usercapture {
      * @return boolean
      */
     public function is_gradebookhidden() {
-        $gradegrade = new \grade_grade(array('itemid' => $this->gradeitemid, 'userid' => $this->userid), true);
+        $gradegrade = new \grade_grade(['itemid' => $this->gradeitemid, 'userid' => $this->userid], true);
         $hidden = $gradegrade->get_hidden();
 
         return $hidden;
@@ -191,7 +191,7 @@ class usercapture {
 
         $this->provisional = null;
 
-        // id is a proxy for time added.
+        // ...id is a proxy for time added.
         // Cannot use the timestamp as the unit tests write the test grades all in the
         // same second (potentially).
         $grades = $DB->get_records('local_gugrades_grade', [

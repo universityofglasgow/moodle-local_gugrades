@@ -140,7 +140,7 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
      * anything that makes sense...
      * @param object $gradeitem
      * @param int $userid
-     * @param float $rawgrade
+     * @param float|string $rawgrade
      */
     protected function write_grade_grades(object $gradeitem, int $userid, float|string $rawgrade) {
         global $DB;

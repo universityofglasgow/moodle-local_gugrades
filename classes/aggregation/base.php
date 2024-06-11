@@ -33,12 +33,22 @@ namespace local_gugrades\aggregation;
 class base {
 
     /**
+     * @var int $courseid
+     */
+    private int $courseid;
+
+    /**
+     * @var string $atype
+     */
+
+    /**
      * Constructor
      * @param int $courseid
      * @param string $atype
      */
-    public function __construct(public int $courseid, public string $atype) {
-
+    public function __construct(int $courseid, string $atype) {
+        $this->courseid = $courseid;
+        $this->atype = $atype;
     }
 
     /**
@@ -141,7 +151,7 @@ class base {
      * Establish the maximum grade according to $atype (the aggregated type)
      */
     protected function get_max_grade() {
-        if (($this->atype == \local_gugrades\GRADETYPE_SCHEDULEA) or ($this->atype == \local_gugrades\GRADETYPE_SCHEDULEB)) {
+        if (($this->atype == \local_gugrades\GRADETYPE_SCHEDULEA) || ($this->atype == \local_gugrades\GRADETYPE_SCHEDULEB)) {
             return 22;
         }
         if ($this->atype == \local_gugrades\GRADETYPE_POINTS) {
@@ -150,7 +160,6 @@ class base {
 
         // If we get here, $atype was presumably ERROR (or something we don't know about).
         throw new \moodle_exception('Unhandled aggregation type - ' . $this->atype);
-        //return 100;
     }
 
     /**

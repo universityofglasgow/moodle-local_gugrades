@@ -397,7 +397,7 @@ class grades {
     public static function get_provisional_from_id(int $gradeitemid, int $userid) {
         global $DB;
 
-        // id is a proxy for time added.
+        // ...id is a proxy for time added.
         // Cannot use the timestamp as the unit tests write the test grades all in the
         // same second (potentially).
         $grades = $DB->get_records('local_gugrades_grade', [
