@@ -145,6 +145,7 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
         $this->assertEquals('Grades missing', $juan['error']);
         $this->assertEquals('No data', $juan['fields'][2]['display']);
         $fred = $users[0];
+        //var_dump($fred); die;
         $this->assertEquals("47.23333", $fred['fields'][0]['display']);
 
     }
@@ -273,7 +274,7 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
         );
 
         $this->assertFalse($page['toplevel']);
-        $this->assertEquals('E', $page['atype']);
+        $this->assertEquals('P', $page['atype']);
         $fred = $page['users'][0];
         $this->assertEquals(47.23333, $fred['total']);
         $this->assertEquals('', $fred['error']);

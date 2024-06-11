@@ -442,18 +442,14 @@ class aggregation {
         // Pre-process.
         $items = $aggregation->pre_process_items($items);
 
-        // The first item will tell us if we are dealing with scale or points.
-        $isscale = $items[0]->isscale;
+        // Need to have a valid aggregation type to actually do the aggregation.
+        if ($category->atype == \local_gugrades\GRADETYPE_ERROR) {
+            return [null, $completion, get_string('gradesnotmatching', 'local_gugrades')];
+        } else {
 
-        // Now check that all items are the same.
-        foreach ($items as $item) {
-            if ($item->isscale != $isscale) {
-                return [null, $completion, get_string('gradesnotmatching', 'local_gugrades')];
-            }
+            // Now call the appropriate aggregation function to do the sums.
+            $aggregatedgrade = call_user_func([$aggregation, $aggfunction], $items);
         }
-
-        // Now call the appropriate aggregation function to do the sums.
-        $aggregatedgrade = call_user_func([$aggregation, $aggfunction], $items);
 
         return [$aggregatedgrade, $completion, ''];
     }

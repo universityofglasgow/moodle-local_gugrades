@@ -163,8 +163,8 @@ class base {
         }
 
         // If we get here, $atype was presumably ERROR (or something we don't know about).
-        //throw new \moodle_exception('Unhandled aggregation type - ' . $this->atype);
-        return 100;
+        throw new \moodle_exception('Unhandled aggregation type - ' . $this->atype);
+        //return 100;
     }
 
     /**

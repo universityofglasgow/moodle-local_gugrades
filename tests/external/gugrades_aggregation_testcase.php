@@ -87,6 +87,12 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
                         $gradeitem->scaleid = $this->scaleb->id;
                         $gradeitem->aggregationcoef = $weight;
                         $DB->update_record('grade_items', $gradeitem);
+                    } else if ($type == "points") {
+                        $gradeitem->gradetype = GRADE_TYPE_VALUE;
+                        $gradeitem->grademax = 100;
+                        $gradeitem->grademin = 0;
+                        $gradeitem->aggregationcoef = $weight;
+                        $DB->update_record('grade_items', $gradeitem);
                     } else {
                         throw new moodle_exception('JSON contains invalid grade type - ' . $type);
                     }
