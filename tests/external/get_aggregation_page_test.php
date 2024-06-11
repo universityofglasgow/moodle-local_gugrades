@@ -36,7 +36,7 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_aggregatio
 /**
  * Test(s) for get_aggregation_page webservice
  */
-class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggregation_testcase {
+final class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggregation_testcase {
 
     /**
      * @var int $gradeitemsecondx
@@ -66,13 +66,13 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
 
         parent::setUp();
 
-        // Install test schema
+        // Install test schema.
         $this->gradeitemids = $this->load_schema('schema1');
 
-        // Get the grade category 'summative'
+        // Get the grade category 'summative'.
         $this->gradecatsummative = $DB->get_record('grade_categories', ['fullname' => 'Summative'], '*', MUST_EXIST);
 
-        // Make a conversion map
+        // Make a conversion map.
         $this->mapid = $this->make_conversion_map();
     }
 
@@ -108,6 +108,7 @@ class get_aggregation_page_test extends \local_gugrades\external\gugrades_aggreg
      * Checking basic (good) get page
      *
      * @covers \local_gugrades\external\get_aggregation_page::execute
+     * @return void
      */
     public function test_basic_aggregation_page() {
         global $DB;
