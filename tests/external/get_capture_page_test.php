@@ -36,7 +36,7 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test(s) for get_all_strings webservice
  */
-class get_capture_page_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class get_capture_page_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * @var int $gradeitemsecondx
@@ -63,7 +63,7 @@ class get_capture_page_test extends \local_gugrades\external\gugrades_advanced_t
      *
      * @covers \local_gugrades\external\get_capture_page::execute
      */
-    public function test_basic_capture_page() {
+    public function test_basic_capture_page(): void {
         global $DB;
 
         // Make sure that we're a teacher.
@@ -104,7 +104,7 @@ class get_capture_page_test extends \local_gugrades\external\gugrades_advanced_t
      *
      * @covers \local_gugrades\external\get_capture_page::execute
      */
-    public function test_invalid_capture_page() {
+    public function test_invalid_capture_page(): void {
         global $DB;
 
         // Make sure that we're a teacher.

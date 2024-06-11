@@ -51,8 +51,9 @@ final class get_all_strings_test extends externallib_advanced_testcase {
      * Just check that strings are returned
      *
      * @covers \local_gugrades\external\get_all_strings::execute
+     * @return void
      */
-    public function test_get_all_strings_returns_data() {
+    public function test_get_all_strings_returns_data(): void {
         $mstrings = get_all_strings::execute();
 
         // Clean up return values.

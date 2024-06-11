@@ -110,7 +110,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
      * @covers \local_gugrades\external\get_aggregation_page::execute
      * @return void
      */
-    public function test_basic_aggregation_page() {
+    public function test_basic_aggregation_page(): void {
         global $DB;
 
         // Make sure that we're a teacher.
@@ -124,7 +124,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         // Install test data for student.
         $this->load_data('data1a', $this->student->id);
 
-        // Import ALL gradeitems
+        // Import ALL gradeitems.
         foreach ($this->gradeitemids as $gradeitemid) {
             $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
             $status = external_api::clean_returnvalue(
@@ -146,15 +146,15 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         $this->assertEquals('Grades missing', $juan['error']);
         $this->assertEquals('No data', $juan['fields'][2]['display']);
         $fred = $users[0];
-        //var_dump($fred); die;
         $this->assertEquals("47.23333", $fred['fields'][0]['display']);
-
     }
 
     /**
      * Incomplete data to check completion percentage
+     *
+     * @covers \local_gugrades\external\get_aggregation_page::execute
      */
-    public function test_completion_score() {
+    public function test_completion_score(): void {
         global $DB;
 
         // Make sure that we're a teacher.
@@ -168,7 +168,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         // Install test data for student.
         $this->load_data('data1b', $this->student->id);
 
-        // Import ALL gradeitems
+        // Import ALL gradeitems.
         foreach ($this->gradeitemids as $gradeitemid) {
             $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
             $status = external_api::clean_returnvalue(
@@ -189,7 +189,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         $this->assertEquals("Grades missing", $fred['error']);
 
         // Convert
-        // Apply the test conversion map to all items
+        // Apply the test conversion map to all items.
         foreach ($this->gradeitemids as $gradeitemid) {
             $nothing = select_conversion::execute($this->course->id, $gradeitemid, $this->mapid);
             $nothing = external_api::clean_returnvalue(
@@ -241,8 +241,10 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
 
     /**
      * Test sub-category aggregated data
+     *
+     * @covers \local_gugrades\external\get_aggregation_page::execute
      */
-    public function test_sub_category() {
+    public function test_sub_category(): void {
 
         // Make sure that we're a teacher.
         $this->setUser($this->teacher);
@@ -255,7 +257,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         // Install test data for student.
         $this->load_data('data1b', $this->student->id);
 
-        // Import ALL gradeitems
+        // Import ALL gradeitems.
         foreach ($this->gradeitemids as $gradeitemid) {
             $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
             $status = external_api::clean_returnvalue(
@@ -264,7 +266,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
             );
         }
 
-        // Get category id for grade category 'Summer exam'
+        // Get category id for grade category 'Summer exam'.
         $summerexamid = $this->get_grade_category('Summer exam');
 
         // Get aggregation page for above
@@ -283,8 +285,10 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
 
     /**
      * Test sub-category aggregated data with Schedule A
+     *
+     * @covers \local_gugrades\external\get_aggregation_page::execute
      */
-    public function test_schedulea_sub_category() {
+    public function test_schedulea_sub_category(): void {
 
         // Make sure that we're a teacher.
         $this->setUser($this->teacher);
@@ -297,7 +301,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         // Install test data for student.
         $this->load_data('data1a', $this->student->id);
 
-        // Import ALL gradeitems
+        // Import ALL gradeitems.
         foreach ($this->gradeitemids as $gradeitemid) {
             $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
             $status = external_api::clean_returnvalue(
@@ -306,16 +310,14 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
             );
         }
 
-        // Get category id for grade category 'Summer exam'
+        // Get category id for grade category 'Summer exam'.
         $scaleexamid = $this->get_grade_category('Scale exam');
 
-        // Get aggregation page for above
+        // Get aggregation page for above.
         $page = get_aggregation_page::execute($this->course->id, $scaleexamid, '', '', 0, true);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
         );
-
-        //var_dump($page);
     }
 }

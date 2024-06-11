@@ -90,7 +90,15 @@ class import_grades_users extends external_api {
             if ($additional && \local_gugrades\grades::user_has_grades($gradeitemid, $userid)) {
                 continue;
             }
-            if (\local_gugrades\api::import_grade($courseid, $gradeitemid, $conversion, $activity, intval($userid), $additional, $fillns)) {
+            if (\local_gugrades\api::import_grade(
+                $courseid,
+                $gradeitemid,
+                $conversion,
+                $activity,
+                intval($userid),
+                $additional,
+                $fillns
+                )) {
                 $importcount++;
             }
         }

@@ -36,14 +36,14 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test get_add_grade_form web service.
  */
-class get_add_grade_form_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class get_add_grade_form_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Check that expected form structure is returned
      *
      * @covers \local_gugrades\external\get_add_grade_form::execute
      */
-    public function test_get_activities_with_scale() {
+    public function test_get_activities_with_scale(): void {
         global $DB;
 
         // Test ws function.
@@ -110,7 +110,7 @@ class get_add_grade_form_test extends \local_gugrades\external\gugrades_advanced
      *
      * @covers \local_gugrades\external\get_add_grade_form::execute
      */
-    public function test_get_activities_with_points() {
+    public function test_get_activities_with_points(): void {
         global $DB;
 
         // Test ws function.
@@ -173,7 +173,7 @@ class get_add_grade_form_test extends \local_gugrades\external\gugrades_advanced
      * properly in the 'gradetypes' field
      * @covers \local_gugrades\external\get_add_grade_form::execute
      */
-    public function test_gradetypes_multiple_others() {
+    public function test_gradetypes_multiple_others(): void {
         global $DB;
 
         // Insert 'other' gradetype data.

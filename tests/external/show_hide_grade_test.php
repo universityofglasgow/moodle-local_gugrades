@@ -36,14 +36,14 @@ require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_advanced_t
 /**
  * Test has_capability web service.
  */
-class show_hide_grade_test extends \local_gugrades\external\gugrades_advanced_testcase {
+final class show_hide_grade_test extends \local_gugrades\external\gugrades_advanced_testcase {
 
     /**
      * Test that setting and clearing condition works
      *
      * @covers \local_gugrades\external\show_hide_grade::execute
      */
-    public function test_show_hide() {
+    public function test_show_hide(): void {
 
         // Log in as teacher.
         $this->setUser($this->teacher);
