@@ -43,7 +43,7 @@ final class get_dashboard_enabled_test extends \local_gugrades\external\gugrades
      *
      * @covers \local_gugrades\external\get_dashboard_enabled::execute
      */
-    public function test_get_dashboard_enabled_states(): void  {
+    public function test_get_dashboard_enabled_states(): void {
         global $DB;
 
         // Use the test teacher.

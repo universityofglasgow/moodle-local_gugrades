@@ -127,7 +127,7 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
         $filecontents = file_get_contents($path);
 
         $json = json_decode($filecontents);
-        $this->build_schema($json, null);
+        $this->build_schema($json, 0);
 
         // Get gradeitems.
         $gradeitems = $DB->get_records('grade_items', ['itemtype' => 'manual']);
