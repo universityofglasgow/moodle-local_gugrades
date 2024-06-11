@@ -37,7 +37,7 @@ require_once($CFG->dirroot . '/webservice/tests/helpers.php');
 /**
  * Test(s) for get_all_strings webservice
  */
-class get_all_strings_test extends externallib_advanced_testcase {
+final class get_all_strings_test extends externallib_advanced_testcase {
 
     /**
      * Called before every test

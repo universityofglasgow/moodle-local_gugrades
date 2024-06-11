@@ -30,8 +30,6 @@ use core_external\external_multiple_structure;
 use core_external\external_single_structure;
 use core_external\external_value;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * User has selected conversion for gradeitemid
  */

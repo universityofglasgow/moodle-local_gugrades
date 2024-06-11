@@ -135,7 +135,7 @@ class aggregation {
             $column->schedule = $conversion->get_schedule();
         }
 
-        // Get aggregation type for these columns (i.e. this grade category)
+        // Get aggregation type for these columns (i.e. this grade category).
         $atype = self::get_aggregation_type($columns);
 
         return [$columns, $atype];
@@ -295,7 +295,7 @@ class aggregation {
         }
 
         // Schedule to label category for further aggregation
-        // A, B or empty
+        // A, B or empty.
         $atype = \local_gugrades\GRADETYPE_POINTS;
 
         // If sumofweights is zero, we're going to get divide-by-zero
@@ -305,7 +305,7 @@ class aggregation {
             return $atype;
         }
 
-        // Now work out what we have
+        // Now work out what we have.
         if ($countpoints == count($items)) {
             $atype = \local_gugrades\GRADETYPE_POINTS;
         } else if ($countpoints != 0) {
@@ -397,7 +397,7 @@ class aggregation {
      */
     protected static function aggregate_user_category(int $courseid, object $category, array $items, int $level) {
 
-        // Get appropriate aggregation 'rule' set
+        // Get appropriate aggregation 'rule' set.
         $aggregation = self::aggregation_factory($courseid, $category->atype);
 
         // Get basic data about aggregation
@@ -522,7 +522,7 @@ class aggregation {
         // The field 'children' holds all the sub-items and sub-categories that
         // we need to 'add up'.
         // Get array of data to aggregate for this 'level' and then send off to
-        // the aggregation function
+        // the aggregation function.
         $children = $category->children;
         $items = [];
         foreach ($children as $child) {
@@ -601,7 +601,6 @@ class aggregation {
         // First get category tree structure, including all required
         // weighting drop high/low and so on. So we only have to do it once.
         $toplevel = self::recurse_tree($courseid, $gradecategoryid);
-        //var_dump($toplevel); die;
 
         // Run through each user and aggregate their grades.
         foreach ($users as $user) {
