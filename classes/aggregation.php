@@ -444,17 +444,17 @@ class aggregation {
             // Now call the appropriate aggregation function to do the sums.
             $aggregatedgrade = call_user_func([$aggregation, $aggfunction], $items);
 
-            // If this is a scale convert the numeric grade to the appropriate
+            // If this is a scale convert the numeric grade to the appropriate.
             if (($atype == \local_gugrades\GRADETYPE_SCHEDULEA) || ($atype == \local_gugrades\GRADETYPE_SCHEDULEB)) {
-               [$convertedgrade, $convertedgradevalue] = $aggregation->convert($aggregatedgrade, $atype);
+                [$convertedgrade, $convertedgradevalue] = $aggregation->convert($aggregatedgrade, $atype);
 
-               // Should we pass back convertedgradevalue or aggregatedgrade (see MGU-821)
-               $parentgrade = $aggregation->get_grade_for_parent($aggregatedgrade, $convertedgradevalue);
+                // Should we pass back convertedgradevalue or aggregatedgrade (see MGU-821).
+                $parentgrade = $aggregation->get_grade_for_parent($aggregatedgrade, $convertedgradevalue);
 
-               // How do we want to display this
-               $displaygrade = $aggregation->format_displaygrade($convertedgrade, $aggregatedgrade, $convertedgradevalue);
+                // How do we want to display this?
+                $displaygrade = $aggregation->format_displaygrade($convertedgrade, $aggregatedgrade, $convertedgradevalue);
 
-               return [$parentgrade, $aggregatedgrade, $displaygrade, $completion, ''];
+                return [$parentgrade, $aggregatedgrade, $displaygrade, $completion, ''];
             }
         }
 
@@ -630,7 +630,8 @@ class aggregation {
 
             // 1 = level 1 (we need to know what level we're at). Level is incremented
             // as call recurses.
-            [$usertotal, $rawgrade, $displaygrade, $completion, $error] = self::aggregate_user($courseid, $toplevel, $user, $userallitems, 1);
+            [$usertotal, $rawgrade, $displaygrade, $completion, $error] =
+                self::aggregate_user($courseid, $toplevel, $user, $userallitems, 1);
             $user->rawgrade = $rawgrade;
             $user->total = $usertotal;
             $user->displaygrade = $displaygrade;

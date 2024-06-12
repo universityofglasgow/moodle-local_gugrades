@@ -278,7 +278,7 @@ class base {
     public function get_grade_for_parent(float $rawgrade, int $gradepoint) {
 
         // Finger in the air - and use $gradepoint. If you want raw grade
-        // just return the other value
+        // just return the other value.
         return $gradepoint;
     }
 
