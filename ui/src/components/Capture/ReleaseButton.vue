@@ -14,8 +14,12 @@
 
         <div class="p-2 border rounded">
             <h4>{{ mstrings.releasegrades }}</h4>
-            <div class="alert alert-warning">
+            <div v-if="!props.released" class="alert alert-warning">
                 {{ mstrings.releaseconfirm }}
+                <p v-if="grouprelease" class="mt-1"><b>{{ mstrings.releaseconfirmgroup }}</b></p>
+            </div>
+            <div v-if="props.released" class="alert alert-danger">
+                {{ mstrings.releaseconfirmstern }}
                 <p v-if="grouprelease" class="mt-1"><b>{{ mstrings.releaseconfirmgroup }}</b></p>
             </div>
             <button
