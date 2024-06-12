@@ -179,4 +179,118 @@ class base {
         return $this->round_float($sum * $maxgrade / $count);
     }
 
+    /**
+     * Convert numeric 0-22 to Schedule A
+     * @param float $rawgrade
+     * @return [string, int]
+     */
+    protected function convert_schedulea(float $rawgrade) {
+        $schedulea = [
+            0 => 'H',
+            1 => 'G2',
+            2 => 'G1',
+            3 => 'F3',
+            4 => 'F2',
+            5 => 'F1',
+            6 => 'E3',
+            7 => 'E2',
+            8 => 'E1',
+            9 => 'D3',
+            10 => 'D2',
+            11 => 'D1',
+            12 => 'C3',
+            13 => 'C2',
+            14 => 'C1',
+            15 => 'B3',
+            16 => 'B2',
+            17 => 'B1',
+            18 => 'A5',
+            19 => 'A4',
+            20 => 'A3',
+            21 => 'A2',
+            22 => 'A1',
+        ];
+
+        // This MATTERS - round the float rawgrade to an integer
+        // "15.5 and all higher values less than 16.5 should become 16
+        // [Guide to code of assessment].
+        $grade = round($rawgrade, 0, PHP_ROUND_HALF_UP);
+
+        if (!array_key_exists($grade, $schedulea)) {
+            throw new \moodle_exception('Raw grade out of valid range - ' . $rawgrade);
+        }
+
+        return [$schedulea[$grade], $grade];
+    }
+
+    /**
+     * Convert numeric 0-22 to Schedule B
+     * @param float $rawgrade
+     * @return [string, int]
+     */
+    protected function convert_scheduleb(float $rawgrade) {
+        if ($rawgrade < 1) {
+            return ['H', 0];
+        } else if ($rawgrade < 3) {
+            return ['G0', 2];
+        } else if ($rawgrade < 6) {
+            return ['F0', 5];
+        } else if ($rawgrade < 9) {
+            return ['E0', 8];
+        } else if ($rawgrade < 12) {
+            return ['D0', 11];
+        } else if ($rawgrade < 15) {
+            return ['C0', 14];
+        } else if ($rawgrade < 18) {
+            return ['B0', 17];
+        } else if ($rawgrade <= 22) {
+            return ['A0', 22];
+        } else {
+            throw new \moodle_exception('Raw grade out of valid range - ' . $rawgrade);
+        }
+    }
+
+    /**
+     * Convert float grade to Schedule A / B
+     * @param float $rawgrade
+     * @param string $atype
+     * @return [string, int]
+     */
+    public function convert($rawgrade, $atype) {
+        if ($atype == \local_gugrades\GRADETYPE_SCHEDULEA) {
+            return $this->convert_schedulea($rawgrade, $atype);
+        } else if ($atype == \local_gugrades\GRADETYPE_SCHEDULEB) {
+            return $this->convert_scheduleb($rawgrade, $atype);
+        } else {
+            throw new \moodle_exception('Invalid atype - ' . $atype);
+        }
+    }
+
+    /**
+     * Which grade is 'passed up' from aggregation when converting to scale
+     * The 'raw' grade or the graded point after conversion?
+     * This is here in case there are different views about this
+     * See MGU-821
+     * @param float $rawgrade
+     * @param int $gradepoint
+     * @return float|int
+     */
+    public function get_grade_for_parent(float $rawgrade, int $gradepoint) {
+
+        // Finger in the air - and use $gradepoint. If you want raw grade
+        // just return the other value
+        return $gradepoint;
+    }
+
+    /**
+     * Format displaygrade for Schedule A / B
+     * @param string $convertedgrade
+     * @param float $rawgrade
+     * @param float $gradepoint
+     * @return string
+     */
+    public function format_displaygrade(string $convertedgrade, float $rawgrade, float $gradepoint) {
+
+        return $convertedgrade . " ($rawgrade)";
+    }
 }

@@ -319,5 +319,8 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
             get_aggregation_page::execute_returns(),
             $page
         );
+
+
+        var_dump($page);
     }
 }

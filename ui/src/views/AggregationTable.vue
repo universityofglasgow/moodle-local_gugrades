@@ -91,7 +91,7 @@
             <!-- Total -->
             <template #item-total="item">
                 <span v-if="item.error">{{ item.error }}</span>
-                <span v-else>{{ item.total }}</span>
+                <span v-else>{{ item.displaygrade }}</span>
             </template>
 
         </EasyDataTable>
@@ -192,10 +192,12 @@
             return 'Schedule A';
         } else if (atype.value == 'B') {
             return 'Schedule B';
-        } else if (atype.value == 'POINTS') {
+        } else if (atype.value == 'P') {
             return mstrings.points;
-        } else if (atype.value == 'CONVERTED') {
+        } else if (atype.value == 'C') {
             return mstrings.converted;
+        } else if (atype.value == 'E') {
+            return 'Error';
         } else {
             return '[[' + atype.value + ']]';
         }

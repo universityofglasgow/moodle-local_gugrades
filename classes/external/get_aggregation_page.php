@@ -98,7 +98,9 @@ class get_aggregation_page extends external_api {
                     'idnumber' => new external_value(PARAM_TEXT, 'User ID number'),
                     'resitrequired' => new external_value(PARAM_BOOL, 'Is resit required?'),
                     'completed' => new external_value(PARAM_INT, '%age of course completed'),
-                    'total' => new external_value(PARAM_TEXT, 'Content for total column'),
+                    'displaygrade' => new external_value(PARAM_TEXT, 'Content for total column'),
+                    'rawgrade' => new external_value(PARAM_FLOAT, 'Aggregated grade before any conversion'),
+                    'total' => new external_value(PARAM_FLOAT, 'Grade used for further aggregation'),
                     'error' => new external_value(PARAM_TEXT, 'Error condition'),
                     'fields' => new external_multiple_structure(
                         new external_single_structure([
