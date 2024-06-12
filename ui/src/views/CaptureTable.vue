@@ -210,6 +210,27 @@
     });
 
     /**
+     * Reset the page
+     */
+    function reset_page() {
+        usershidden.value = false;
+        users.value = [];
+        itemtype.value = '';
+        itemname.value = '';
+        gradesupported.value = true;
+        gradesimported.value = false;
+        gradehidden.value = false;
+        gradelocked.value = false;
+        columns.value = [];
+        userids.value = [];
+        totalrows.value = 0;
+        showconversion.value = false;
+        converted.value = false;
+        released.value = false;
+        loaded.value = false;
+    }
+
+    /**
      * Get class name for table row depending on criteria
      * Used to show hidden rows
      */
@@ -241,12 +262,17 @@
 
     /**
      * New itemid and/or groupid has been selected
+     * If itemid = 0, then reset the table
      */
     function selecteditemid(itemgroup) {
         itemid.value = itemgroup.itemid;
         groupid.value = itemgroup.groupid;
 
-        reload_page();
+        if (itemid.value == 0) {
+            reset_page();
+        } else {
+            reload_page();
+        }
     }
 
     /**

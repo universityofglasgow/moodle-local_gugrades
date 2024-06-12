@@ -33,6 +33,11 @@
         } else {
             showactivityselect.value = false;
         }
+
+        emits('selecteditemid', {
+            itemid: itemid.value,
+            groupid: groupid.value,
+        });
     }
 
     /**
