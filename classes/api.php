@@ -1421,7 +1421,7 @@ class api {
         $istoplevel = \local_gugrades\aggregation::is_top_level($gradecategoryid);
 
         // Add the columns to the user fields.
-        $users = \local_gugrades\aggregation::add_aggregation_fields_to_users($users, $columns);
+        $users = \local_gugrades\aggregation::add_aggregation_fields_to_users($gradecategoryid, $users, $columns);
 
         // Add pictures to user fields.
         $users = \local_gugrades\users::add_pictures_to_user_records($users);

@@ -188,11 +188,14 @@ class aggregation {
      * Add aggregation data to users.
      * Each user record contains list based on columns
      * Formatted to survive web services (will need reformatted for EasyDataTable)
+     * @param int $gradecategoryid
      * @param array $users
      * @param array $columns
      * @return array
      */
-    public static function add_aggregation_fields_to_users(array $users, array $columns) {
+    public static function add_aggregation_fields_to_users(int $gradecategoryid, array $users, array $columns) {
+        global $DB;
+
         foreach ($users as $user) {
             $fields = [];
             foreach ($columns as $column) {
@@ -214,6 +217,16 @@ class aggregation {
             }
 
             $user->fields = $fields;
+
+            // Read "top level" category for user info
+            // This is needed if no aggregation is performed
+            $gradecatitem = $DB->get_record('grade_items', ['itemtype' => 'category', 'iteminstance' => $gradecategoryid], '*', MUST_EXIST);
+            $item = $DB->get_record('local_gugrades_grade', ['gradeitemid' => $gradecatitem->id, 'gradetype' => 'CATEGORY', 'userid' => $user->id], '*', MUST_EXIST);
+            $user->rawgrade = $item->rawgrade;
+            $user->total = $item->rawgrade;
+            $user->displaygrade = $item->displaygrade;
+            $user->completed = 0; // TODO
+            $user->error = ''; // TODO
         }
 
         return $users;

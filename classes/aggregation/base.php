@@ -279,6 +279,7 @@ class base {
 
         // Finger in the air - and use $gradepoint. If you want raw grade
         // just return the other value.
+        // Decided - Grade Point it is :)
         return $gradepoint;
     }
 
