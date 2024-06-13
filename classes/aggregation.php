@@ -188,16 +188,18 @@ class aggregation {
      * Add aggregation data to users.
      * Each user record contains list based on columns
      * Formatted to survive web services (will need reformatted for EasyDataTable)
+     * @param int $courseid
      * @param int $gradecategoryid
      * @param array $users
      * @param array $columns
      * @return array
      */
-    public static function add_aggregation_fields_to_users(int $gradecategoryid, array $users, array $columns) {
+    public static function add_aggregation_fields_to_users(int $courseid, int $gradecategoryid, array $users, array $columns) {
         global $DB;
 
         foreach ($users as $user) {
             $fields = [];
+            $items = [];
             foreach ($columns as $column) {
 
                 // Field identifier based on gradeitemid (which is unique even for categories).
@@ -212,11 +214,22 @@ class aggregation {
                     'fieldname' => $fieldname,
                     'itemname' => $column->shortname,
                     'display' => $displaygrade,
+                    'schedule' => $column->schedule,
+                    'weight' => $column->weight,
+                    'grademissing' => !empty($provisional),
+                    'admingrade' => '', // TODO - need to get this from provisional somehow.
+                    'isscale' => false, // TODO - need to get this from provisional somehow.
                 ];
                 $fields[] = $data;
+                $items[] = (object)$data;
             }
 
             $user->fields = $fields;
+
+            // Get atype and aggregation rules.
+            // This is why we needed items - array of array vs. array of objects.
+            $atype = self::get_aggregation_type($items);
+            $aggregation = self::aggregation_factory($courseid, $atype);
 
             // Read "top level" category for user info
             // This is needed if no aggregation is performed
@@ -225,8 +238,8 @@ class aggregation {
             $user->rawgrade = $item->rawgrade;
             $user->total = $item->rawgrade;
             $user->displaygrade = $item->displaygrade;
-            $user->completed = 0; // TODO
-            $user->error = ''; // TODO
+            $user->completed = $aggregation->completion($items);
+            $user->error = $item->displaygrade; // TODO (Check it really is same as displaygrade).
         }
 
         return $users;

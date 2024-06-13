@@ -150,7 +150,6 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
 
         // Get page again but without aggregation step
         $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, false);
-//var_dump($page);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
