@@ -147,6 +147,14 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         $this->assertEquals('No data', $juan['fields'][2]['display']);
         $fred = $users[0];
         $this->assertEquals("47.23333", $fred['fields'][0]['display']);
+
+        // Get page again but without aggregation step
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, false);
+//var_dump($page);
+        $page = external_api::clean_returnvalue(
+            get_aggregation_page::execute_returns(),
+            $page
+        );
     }
 
     /**

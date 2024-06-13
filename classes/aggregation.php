@@ -475,6 +475,7 @@ class aggregation {
         // Aggregation function returns null in error condition but write_grade expects a float.
         if (is_null($category->grade)) {
             $grade = 0.0;
+            $rawgrade = 0.0;
             if (!$category->error) {
                 throw new \moodle_exception('No error text when grade=null');
             }
@@ -484,6 +485,7 @@ class aggregation {
             $iserror = false;
             $displaygrade = $category->grade; // TODO ?
             $grade = $category->grade;
+            $rawgrade = $category->rawgrade;
         }
 
         // Does this category grade already exist?
@@ -504,7 +506,7 @@ class aggregation {
             gradeitemid:    $category->itemid,
             userid:         $user->id,
             admingrade:     '',
-            rawgrade:       $grade,
+            rawgrade:       $rawgrade,
             convertedgrade: $grade, // TODO?
             displaygrade:   $displaygrade, // TODO?
             weightedgrade:  0,
@@ -620,6 +622,10 @@ class aggregation {
     public static function aggregate(int $courseid, int $gradecategoryid, array $users) {
         global $DB;
 
+        // Get the category data (for later)
+        $gradecat = $DB->get_record('grade_categories', ['id' => $gradecategoryid], '*', MUST_EXIST);
+        $gradecatitem = $DB->get_record('grade_items', ['itemtype' => 'category', 'iteminstance' => $gradecategoryid], '*', MUST_EXIST);
+
         // First get category tree structure, including all required
         // weighting drop high/low and so on. So we only have to do it once.
         $toplevel = self::recurse_tree($courseid, $gradecategoryid);
@@ -637,6 +643,23 @@ class aggregation {
             $user->displaygrade = $displaygrade;
             $user->completed = $completion;
             $user->error = $error;
+
+            // Write the category to the database
+            $item = (object)[
+                'itemid' => $gradecatitem->id,
+                'categoryid' => $gradecategoryid,
+                'iscategory' => true,
+                'isscale' => $gradecatitem->scaleid != null,
+                'grademissing' => $usertotal == null,
+                'grade' => $usertotal,
+                'rawgrade' => $rawgrade,
+                'displaygrade' => $displaygrade,
+                'admingrade' => '',
+                'grademax' => $gradecatitem->grademax,
+                'weight' => $gradecatitem->aggregationcoef,
+                'error' => $error,
+            ];
+            self::write_aggregated_category($courseid, $item, $user);
         }
 
         return $users;
