@@ -234,7 +234,7 @@ class aggregation {
             // Read "top level" category for user info
             // This is needed if no aggregation is performed
             $gradecatitem = $DB->get_record('grade_items', ['itemtype' => 'category', 'iteminstance' => $gradecategoryid], '*', MUST_EXIST);
-            $item = $DB->get_record('local_gugrades_grade', ['gradeitemid' => $gradecatitem->id, 'gradetype' => 'CATEGORY', 'userid' => $user->id], '*', MUST_EXIST);
+            $item = $DB->get_record('local_gugrades_grade', ['gradeitemid' => $gradecatitem->id, 'gradetype' => 'CATEGORY', 'userid' => $user->id, 'iscurrent' => 1], '*', MUST_EXIST);
             $user->rawgrade = $item->rawgrade;
             $user->total = $item->rawgrade;
             $user->displaygrade = $item->displaygrade;
