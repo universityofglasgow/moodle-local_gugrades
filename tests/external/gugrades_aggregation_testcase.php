@@ -57,45 +57,45 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
 
         foreach ($items as $item) {
 
+            // Get weight ('aggregationcoef' in the grade_items table).
+            if (!empty($item->weight)) {
+                $weight = $item->weight;
+            } else {
+                $weight = 1;
+            }
+
             // Is it a grade item?
             if (!$item->category) {
                 $gradeitem = $this->getDataGenerator()->create_grade_item(
                     ['courseid' => $this->course->id, 'itemname' => $item->name]
                 );
 
-                // Get weight ('aggregationcoef' in the grade_items table).
-                if (!empty($item->weight)) {
-                    $weight = $item->weight;
-                } else {
-                    $weight = 1;
-                }
+                // default is points
+                $type = empty($item->type) ? "points" : $item->type;
 
                 // Is it a scale (default is points)?
-                if (!empty($item->type)) {
-                    $type = $item->type;
-                    if ($type == 'schedulea') {
-                        $gradeitem->gradetype = GRADE_TYPE_SCALE;
-                        $gradeitem->grademax = 23.0;
-                        $gradeitem->grademin = 1.0;
-                        $gradeitem->scaleid = $this->scale->id;
-                        $gradeitem->aggregationcoef = $weight;
-                        $DB->update_record('grade_items', $gradeitem);
-                    } else if ($type == 'scheduleb') {
-                        $gradeitem->gradetype = GRADE_TYPE_SCALE;
-                        $gradeitem->grademax = 8.0;
-                        $gradeitem->grademin = 1.0;
-                        $gradeitem->scaleid = $this->scaleb->id;
-                        $gradeitem->aggregationcoef = $weight;
-                        $DB->update_record('grade_items', $gradeitem);
-                    } else if ($type == "points") {
-                        $gradeitem->gradetype = GRADE_TYPE_VALUE;
-                        $gradeitem->grademax = 100;
-                        $gradeitem->grademin = 0;
-                        $gradeitem->aggregationcoef = $weight;
-                        $DB->update_record('grade_items', $gradeitem);
-                    } else {
-                        throw new moodle_exception('JSON contains invalid grade type - ' . $type);
-                    }
+                if ($type == 'schedulea') {
+                    $gradeitem->gradetype = GRADE_TYPE_SCALE;
+                    $gradeitem->grademax = 23.0;
+                    $gradeitem->grademin = 1.0;
+                    $gradeitem->scaleid = $this->scale->id;
+                    $gradeitem->aggregationcoef = $weight;
+                    $DB->update_record('grade_items', $gradeitem);
+                } else if ($type == 'scheduleb') {
+                    $gradeitem->gradetype = GRADE_TYPE_SCALE;
+                    $gradeitem->grademax = 8.0;
+                    $gradeitem->grademin = 1.0;
+                    $gradeitem->scaleid = $this->scaleb->id;
+                    $gradeitem->aggregationcoef = $weight;
+                    $DB->update_record('grade_items', $gradeitem);
+                } else if ($type == "points") {
+                    $gradeitem->gradetype = GRADE_TYPE_VALUE;
+                    $gradeitem->grademax = 100;
+                    $gradeitem->grademin = 0;
+                    $gradeitem->aggregationcoef = $weight;
+                    $DB->update_record('grade_items', $gradeitem);
+                } else {
+                    throw new moodle_exception('JSON contains invalid grade type - ' . $type);
                 }
                 $this->move_gradeitem_to_category($gradeitem->id, $gradeitemid);
                 $this->gradeitems[] = $gradeitem;
@@ -105,6 +105,11 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
                 $gradecategory = $this->getDataGenerator()->create_grade_category(
                     ['courseid' => $this->course->id, 'fullname' => $item->name, 'parent' => $gradeitemid]
                 );
+
+                // Set weight (aggregationcoef)
+                $gradeitem = $DB->get_record('grade_items', ['itemtype' => 'category', 'iteminstance' => $gradecategory->id], '*', MUST_EXIST);
+                $gradeitem->aggregationcoef = $weight;
+                $DB->update_record('grade_items', $gradeitem);
 
                 // Create child items (if present).
                 if (!empty($item->children)) {

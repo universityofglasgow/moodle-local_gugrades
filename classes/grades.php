@@ -392,7 +392,7 @@ class grades {
      * gradeitemid / userid
      * @param int $gradeitemid
      * @param int $userid
-     * @return float, string
+     * @return oject|bool
      */
     public static function get_provisional_from_id(int $gradeitemid, int $userid) {
         global $DB;
@@ -409,12 +409,10 @@ class grades {
         // Work out / add provisional grade.
         if ($grades) {
             $lastgrade = end($grades);
-            $grade = $lastgrade->convertedgrade;
-            $display = $lastgrade->displaygrade;
 
-            return [$grade, $display];
+            return $lastgrade;
         } else {
-            return null;
+            return false;
         }
     }
 

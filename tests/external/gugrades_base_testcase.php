@@ -277,7 +277,7 @@ class gugrades_base_testcase extends externallib_advanced_testcase {
         $scaleitemsb = 'H, G0, F0, E0, D0, C0, B0, A0';
         $scaleb = $this->getDataGenerator()->create_scale([
             'name' => 'UofG Schedule B',
-            'scale' => $scaleitems,
+            'scale' => $scaleitemsb,
             'courseid' => $course->id,
         ]);
         $this->fill_scalevalue($scaleitemsb, $scaleb->id, 'scheduleb');

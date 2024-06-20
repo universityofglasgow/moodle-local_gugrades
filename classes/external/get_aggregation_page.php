@@ -100,7 +100,7 @@ class get_aggregation_page extends external_api {
                     'completed' => new external_value(PARAM_INT, '%age of course completed'),
                     'displaygrade' => new external_value(PARAM_TEXT, 'Content for total column'),
                     'rawgrade' => new external_value(PARAM_FLOAT, 'Aggregated grade before any conversion'),
-                    'total' => new external_value(PARAM_FLOAT, 'Grade used for further aggregation'),
+                    'total' => new external_value(PARAM_FLOAT, 'Total grade used for ongoing aggregation'),
                     'error' => new external_value(PARAM_TEXT, 'Error condition'),
                     'fields' => new external_multiple_structure(
                         new external_single_structure([

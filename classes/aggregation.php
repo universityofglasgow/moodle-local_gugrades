@@ -202,24 +202,29 @@ class aggregation {
             $items = [];
             foreach ($columns as $column) {
 
+                // Basic fields
+                $fieldname = 'AGG_' . $column->gradeitemid;
+                $data = [
+                    'fieldname' => $fieldname, // Required by WS.
+                    'itemname' => $column->shortname, // Required by WS.
+                    'display' => '', // Required by WS
+                    'schedule' => $column->schedule,
+                    'weight' => $column->weight,
+                    'grademissing' => true,
+                    'isscale' => $column->isscale,
+                ];
+
                 // Field identifier based on gradeitemid (which is unique even for categories).
                 $provisional = \local_gugrades\grades::get_provisional_from_id($column->gradeitemid, $user->id);
                 if ($provisional) {
-                    [$grade, $displaygrade] = $provisional;
+                    $data['rawgrade'] = $provisional->rawgrade;
+                    $data['display'] = $provisional->displaygrade;
+                    $data['grademissing'] = false;
+                    $data['admingrade'] = $provisional->admingrade;
                 } else {
-                    $displaygrade = get_string('nodata', 'local_gugrades');
+                    $data['display'] = get_string('nodata', 'local_gugrades');
                 }
-                $fieldname = 'AGG_' . $column->gradeitemid;
-                $data = [
-                    'fieldname' => $fieldname,
-                    'itemname' => $column->shortname,
-                    'display' => $displaygrade,
-                    'schedule' => $column->schedule,
-                    'weight' => $column->weight,
-                    'grademissing' => !empty($provisional),
-                    'admingrade' => '', // TODO - need to get this from provisional somehow.
-                    'isscale' => false, // TODO - need to get this from provisional somehow.
-                ];
+
                 $fields[] = $data;
                 $items[] = (object)$data;
             }
@@ -232,14 +237,19 @@ class aggregation {
             $aggregation = self::aggregation_factory($courseid, $atype);
 
             // Read "top level" category for user info
-            // This is needed if no aggregation is performed
-            $gradecatitem = $DB->get_record('grade_items', ['itemtype' => 'category', 'iteminstance' => $gradecategoryid], '*', MUST_EXIST);
-            $item = $DB->get_record('local_gugrades_grade', ['gradeitemid' => $gradecatitem->id, 'gradetype' => 'CATEGORY', 'userid' => $user->id, 'iscurrent' => 1], '*', MUST_EXIST);
+            // This is needed if no aggregation is performed.
+            $gradecatitem = $DB->get_record('grade_items',
+                ['itemtype' => 'category', 'iteminstance' => $gradecategoryid], '*', MUST_EXIST);
+            $item = $DB->get_record('local_gugrades_grade',
+                ['gradeitemid' => $gradecatitem->id, 'gradetype' => 'CATEGORY', 'userid' => $user->id, 'iscurrent' => 1],
+                '*', MUST_EXIST);
             $user->rawgrade = $item->rawgrade;
-            $user->total = $item->rawgrade;
+            $user->total = $item->convertedgrade;
             $user->displaygrade = $item->displaygrade;
             $user->completed = $aggregation->completion($items);
-            $user->error = $item->displaygrade; // TODO (Check it really is same as displaygrade).
+            if (empty($user->error)) {
+                $user->error = ''; // TODO Not sure how to check for error. May need new field in DB for aggregation.
+            }
         }
 
         return $users;
@@ -509,7 +519,7 @@ class aggregation {
             $displaygrade = $category->error;
         } else {
             $iserror = false;
-            $displaygrade = $category->grade; // TODO ?
+            $displaygrade = $category->displaygrade; // TODO ?
             $grade = $category->grade;
             $rawgrade = $category->rawgrade;
         }
@@ -532,9 +542,9 @@ class aggregation {
             gradeitemid:    $category->itemid,
             userid:         $user->id,
             admingrade:     '',
-            rawgrade:       $rawgrade,
-            convertedgrade: $grade, // TODO?
-            displaygrade:   $displaygrade, // TODO?
+            rawgrade:       $rawgrade, // Grade before rounding or lookup.
+            convertedgrade: $grade, // Grade for ongoing aggregation.
+            displaygrade:   $displaygrade, // As displayed to the user.
             weightedgrade:  0,
             gradetype:      'CATEGORY',
             other:          '',
@@ -586,7 +596,7 @@ class aggregation {
                     'categoryid' => $child->categoryid,
                     'iscategory' => true,
                     'isscale' => $child->isscale,
-                    'grademissing' => $childcategorytotal == null,
+                    'grademissing' => !is_numeric($childcategorytotal),
                     'grade' => $childcategorytotal,
                     'rawgrade' => $rawgrade,
                     'displaygrade' => $display,
@@ -648,9 +658,10 @@ class aggregation {
     public static function aggregate(int $courseid, int $gradecategoryid, array $users) {
         global $DB;
 
-        // Get the category data (for later)
+        // Get the category data (for later).
         $gradecat = $DB->get_record('grade_categories', ['id' => $gradecategoryid], '*', MUST_EXIST);
-        $gradecatitem = $DB->get_record('grade_items', ['itemtype' => 'category', 'iteminstance' => $gradecategoryid], '*', MUST_EXIST);
+        $gradecatitem = $DB->get_record('grade_items',
+            ['itemtype' => 'category', 'iteminstance' => $gradecategoryid], '*', MUST_EXIST);
 
         // First get category tree structure, including all required
         // weighting drop high/low and so on. So we only have to do it once.
@@ -670,13 +681,13 @@ class aggregation {
             $user->completed = $completion;
             $user->error = $error;
 
-            // Write the category to the database
+            // Write the category to the database.
             $item = (object)[
                 'itemid' => $gradecatitem->id,
                 'categoryid' => $gradecategoryid,
                 'iscategory' => true,
                 'isscale' => $gradecatitem->scaleid != null,
-                'grademissing' => $usertotal == null,
+                'grademissing' => !is_numeric($usertotal),
                 'grade' => $usertotal,
                 'rawgrade' => $rawgrade,
                 'displaygrade' => $displaygrade,

@@ -3,25 +3,30 @@
     {
         "name": "Summative",
         "category": true,
+        "weight": 1.0,
         "children": [
             {
                 "name": "Item 1",
                 "category": false,
+                "type": "points",
                 "weight": 0.5
             },
             {
                 "name": "Item 2",
                 "category": false,
+                "type": "points",
                 "weight": 0.5
             },
             {
                 "name": "Item 3",
                 "category": false,
+                "type": "points",
                 "weight": 0.5
             },
             {
                 "name": "Summer exam",
                 "category": true,
+                "weight": 1.0,
                 "children": [
                     {
                         "name": "Question 1",
@@ -46,6 +51,7 @@
             {
                 "name": "Scale exam",
                 "category": true,
+                "weight": 1.0,
                 "children": [
                     {
                         "name": "Question A",
@@ -64,6 +70,31 @@
                         "category": false,
                         "type": "schedulea",
                         "weight": 0.3
+                    },
+                    {
+                        "name": "Schedule B exam",
+                        "category": true,
+                        "weight": 0.25,
+                        "children": [
+                            {
+                                "name": "Question X",
+                                "category": false,
+                                "type": "scheduleb",
+                                "weight": 0.75
+                            },
+                            {
+                                "name": "Question Y",
+                                "category": false,
+                                "type": "scheduleb",
+                                "weight": 0.65
+                            },
+                            {
+                                "name": "Question Z",
+                                "category": false,
+                                "type": "scheduleb",
+                                "weight": 0.3
+                            }
+                        ]
                     }
                 ]
             }

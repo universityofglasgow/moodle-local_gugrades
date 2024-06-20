@@ -258,9 +258,9 @@ class base {
      */
     public function convert($rawgrade, $atype) {
         if ($atype == \local_gugrades\GRADETYPE_SCHEDULEA) {
-            return $this->convert_schedulea($rawgrade, $atype);
+            return $this->convert_schedulea($rawgrade);
         } else if ($atype == \local_gugrades\GRADETYPE_SCHEDULEB) {
-            return $this->convert_scheduleb($rawgrade, $atype);
+            return $this->convert_scheduleb($rawgrade);
         } else {
             throw new \moodle_exception('Invalid atype - ' . $atype);
         }
@@ -279,7 +279,7 @@ class base {
 
         // Finger in the air - and use $gradepoint. If you want raw grade
         // just return the other value.
-        // Decided - Grade Point it is :)
+        // Decided - Grade Point it is.
         return $gradepoint;
     }
 
