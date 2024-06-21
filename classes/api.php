@@ -1406,6 +1406,12 @@ class api {
         bool $aggregate
         ) {
 
+        // Get the level 1 parent category
+        $level1id = \local_gugrades\grades::get_level_one_parent($gradecategoryid);
+
+        // build (and cache) grade structure
+        \local_gugrades\aggregation::recurse_tree($courseid, $level1id, $aggregate);
+
         // Get categories and items at this level.
         [$columns, $atype] = \local_gugrades\aggregation::get_columns($courseid, $gradecategoryid);
 

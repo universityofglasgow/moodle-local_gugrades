@@ -74,6 +74,24 @@ class grades {
     }
 
     /**
+     * Get first level (summative / formative etc) category id for given category id
+     * Depth == 2 for the first level
+     * @param int $gradecategorid
+     * @return int
+     */
+    public static function get_level_one_parent(int $gradecategoryid) {
+        global $DB;
+
+        $gradecategory = $DB->get_record('grade_categories', ['id' => $gradecategoryid], '*', MUST_EXIST);
+        $cats = explode('/', trim($gradecategory->path, '/'));
+        if (isset($cats[1])) {
+            return $cats[1];
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Get the category/item tree beneath the selected depth==2 category.
      * @param int $courseid
      * @param int $categoryid

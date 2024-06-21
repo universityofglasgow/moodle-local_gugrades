@@ -358,63 +358,78 @@ class aggregation {
 
     /**
      * Recursive helper to build grade-item tree
+     * force==true, disregard caches and build new structure (and cache)
      * @param int $courseid
      * @param int $gradecategoryid
+     * @param bool $force
      * @return object
      */
-    protected static function recurse_tree(int $courseid, int $gradecategoryid) {
+    public static function recurse_tree(int $courseid, int $gradecategoryid, bool $force) {
         global $DB;
+
+        // cache the data if possible.
+        $cache = \cache::make('local_gugrades', 'gradeitems');
 
         // Get the category and corresponding instance.
         $gcat = $DB->get_record('grade_categories', ['id' => $gradecategoryid], '*', MUST_EXIST);
         $gradeitem = $DB->get_record('grade_items',
             ['iteminstance' => $gradecategoryid, 'itemtype' => 'category'], '*', MUST_EXIST);
-        $categorynode = (object)[
-            'iscategory' => true,
-            'categoryid' => $gradecategoryid,
-            'itemid' => $gradeitem->id,
-            'name' => $gcat->fullname,
-            'keephigh' => $gcat->keephigh,
-            'droplow' => $gcat->droplow,
-            'aggregation' => $gcat->aggregation,
-            'weight' => $gradeitem->aggregationcoef,
-            'grademax' => $gradeitem->grademax,
-            'isscale' => false,  // TODO - need to figure this out properly.
-            'children' => [],
-        ];
 
-        // Get any categories at this level (and recurse into them).
-        // Categories are stored in the grade_items table but (for some reason)
-        // the (parent) categoryid field is null. So...
-        $childcategories = $DB->get_records('grade_categories', ['parent' => $gradecategoryid]);
-        foreach ($childcategories as $childcategory) {
-            $categorynode->children[] = self::recurse_tree($courseid, $childcategory->id);
-        }
-
-        // Get grade items in this grade category.
-        $items = $DB->get_records('grade_items', ['categoryid' => $gradecategoryid]);
-        foreach ($items as $item) {
-
-            // Get the conversion object, so we can tell what sort of grade we're dealing with.
-            $conversion = \local_gugrades\grades::conversion_factory($courseid, $item->id);
-            $node = (object)[
-                'itemid' => $item->id,
-                'name' => $item->itemname,
-                'iscategory' => false,
-                'isscale' => $conversion->is_scale(),
-                'schedule' => $conversion->get_schedule(),
-                'weight' => $item->aggregationcoef,
-                'grademax' => $item->grademax,
+        if (!($categorynode = $cache->get($gradeitem->id)) || $force) {
+            $categorynode = (object)[
+                'iscategory' => true,
+                'categoryid' => $gradecategoryid,
+                'itemid' => $gradeitem->id,
+                'name' => $gcat->fullname,
+                'keephigh' => $gcat->keephigh,
+                'droplow' => $gcat->droplow,
+                'aggregation' => $gcat->aggregation,
+                'weight' => $gradeitem->aggregationcoef,
+                'grademax' => $gradeitem->grademax,
+                'isscale' => false,  // Calculated further down.
+                'children' => [],
             ];
 
-            $categorynode->children[] = $node;
-        }
+            // Get any categories at this level (and recurse into them).
+            // Categories are stored in the grade_items table but (for some reason)
+            // the (parent) categoryid field is null. So...
+            $childcategories = $DB->get_records('grade_categories', ['parent' => $gradecategoryid]);
+            foreach ($childcategories as $childcategory) {
+                $categorynode->children[] = self::recurse_tree($courseid, $childcategory->id, $force);
+            }
 
-        // Process $categorynode->children such that we know what the category's
-        // aggregation type is (Schedule A, B, POINTS).
-        $atype = self::get_aggregation_type($categorynode->children);
-        $categorynode->atype = $atype;
-        $categorynode->schedule = $atype;
+            // Get grade items in this grade category.
+            $items = $DB->get_records('grade_items', ['categoryid' => $gradecategoryid]);
+            foreach ($items as $item) {
+
+                // Get the conversion object, so we can tell what sort of grade we're dealing with.
+                if (!($node = $cache->get($item->id)) || $force) {
+                    $conversion = \local_gugrades\grades::conversion_factory($courseid, $item->id);
+                    $node = (object)[
+                        'itemid' => $item->id,
+                        'name' => $item->itemname,
+                        'iscategory' => false,
+                        'isscale' => $conversion->is_scale(),
+                        'schedule' => $conversion->get_schedule(),
+                        'weight' => $item->aggregationcoef,
+                        'grademax' => $item->grademax,
+                    ];
+                    $cache->set($item->id, $node);
+                }
+
+                $categorynode->children[] = $node;
+            }
+
+            // Process $categorynode->children such that we know what the category's
+            // aggregation type is (Schedule A, B, POINTS).
+            $atype = self::get_aggregation_type($categorynode->children);
+            $categorynode->atype = $atype;
+            $categorynode->schedule = $atype;
+            $categorynode->isscale = ($atype == 'A') || ($atype == 'B');
+
+            // Write category node to cache
+            $cache->set($gradeitem->id, $categorynode);
+        }
 
         return $categorynode;
     }
@@ -665,7 +680,7 @@ class aggregation {
 
         // First get category tree structure, including all required
         // weighting drop high/low and so on. So we only have to do it once.
-        $toplevel = self::recurse_tree($courseid, $gradecategoryid);
+        $toplevel = self::recurse_tree($courseid, $gradecategoryid, false);
 
         // Run through each user and aggregate their grades.
         foreach ($users as $user) {

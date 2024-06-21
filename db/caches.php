@@ -15,19 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Cache definition
  *
  * @package    local_gugrades
- * @copyright  2022
+ * @copyright  2024
  * @author     Howard Miller
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->version      = 2024062000;
-$plugin->requires     = 2022041900; // Moodle 4.0.
-$plugin->component    = 'local_gugrades';
-
-$plugin->maturity     = MATURITY_ALPHA;
-
+$definitions = [
+    'gradeitems' => [
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+        'staticacceleration' => true,
+    ],
+];

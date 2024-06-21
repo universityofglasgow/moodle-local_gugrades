@@ -40,6 +40,7 @@ $string['auditlog'] = 'Audit log';
 $string['awaitingcapture'] = 'Awaiting capture';
 $string['band'] = 'Band';
 $string['by'] = 'By';
+$string['cachedef_gradeitem'] = 'Grade item info when building aggregation tree structure';
 $string['cancel'] = 'Cancel';
 $string['captureaggregation'] = '\'MyGrades\' Grade capture and aggregation';
 $string['category'] = 'Grade category';
