@@ -63,24 +63,22 @@ class aggregation {
     public static function get_columns(int $courseid, int $gradecategoryid) {
         global $DB;
 
-        $sql = "SELECT *, gi.id AS gradeitemid, gc.id AS gradecategoryid FROM {grade_categories} gc
-            JOIN {grade_items} gi ON gi.iteminstance = gc.id
-            WHERE gi.itemtype = 'category'
-            AND gc.courseid = :courseid
-            AND gc.parent = :parent
-            AND gc.hidden = :hidden";
-        $gradecategories = $DB->get_records_sql($sql, [
+        // Get list of grade categories
+        $sql = "SELECT * FROM {grade_categories}
+            WHERE courseid = :courseid
+            AND parent = :parent
+            AND hidden = :hidden";
+        $rawcats = $DB->get_records_sql($sql, [
             'courseid' => $courseid,
             'parent' => $gradecategoryid,
             'hidden' => 0,
         ]);
 
-        // Run over and create short name to make table sane.
-        $gradecategories = array_map(function($gc) {
-            $gc->shortname = shorten_text($gc->fullname, SHORTNAME_LENGTH);
-            $gc->weight = $gc->aggregationcoef;
-            return $gc;
-        }, $gradecategories);
+        // Run over above and fetch enhanced category information from (hopefully) cache.
+        $gradecategories = [];
+        foreach ($rawcats as $rawcat) {
+            $gradecategories[] = self::get_enhanced_grade_category($courseid, $rawcat->id);
+        }
 
         $sql = "SELECT * FROM {grade_items}
             WHERE (itemtype = 'mod' OR itemtype = 'manual')
@@ -103,36 +101,36 @@ class aggregation {
         $columns = [];
         foreach ($gradecategories as $gradecategory) {
             $columns[] = (object)[
-                'fieldname' => 'AGG_' . $gradecategory->gradeitemid,
-                'gradeitemid' => $gradecategory->gradeitemid,
-                'categoryid' => $gradecategory->gradecategoryid,
+                'fieldname' => 'AGG_' . $gradecategory->itemid,
+                'gradeitemid' => $gradecategory->itemid,
+                'categoryid' => $gradecategory->categoryid,
                 'shortname' => $gradecategory->shortname,
-                'fullname' => $gradecategory->fullname,
+                'fullname' => $gradecategory->name,
+                'gradetype' => $gradecategory->gradetype,
+                'grademax' => $gradecategory->grademax,
+                'isscale' => $gradecategory->isscale,
+                'schedule' => $gradecategory->schedule,
 
                 // TODO - may not be so simple.
                 'weight' => round($gradecategory->weight * 100),
             ];
         }
         foreach ($gradeitems as $gradeitem) {
+            $conversion = \local_gugrades\grades::conversion_factory($courseid, $gradeitem->gradeitemid);
             $columns[] = (object)[
                 'fieldname' => 'AGG_' . $gradeitem->gradeitemid,
                 'gradeitemid' => $gradeitem->gradeitemid,
                 'categoryid' => 0,
                 'shortname' => $gradeitem->shortname,
                 'fullname' => $gradeitem->itemname,
+                'gradetype' => $conversion->name(),
+                'grademax' => $conversion->get_maximum_grade(),
+                'isscale' => $conversion->is_scale(),
+                'schedule' => $conversion->get_schedule(),
 
                 // TODO - may not be so simple.
                 'weight' => round($gradeitem->weight * 100),
             ];
-        }
-
-        // Add gradetypes and maximum points to columns.
-        foreach ($columns as $column) {
-            $conversion = \local_gugrades\grades::conversion_factory($courseid, $column->gradeitemid);
-            $column->gradetype = $conversion->name();
-            $column->grademax = $conversion->get_maximum_grade();
-            $column->isscale = $conversion->is_scale();
-            $column->schedule = $conversion->get_schedule();
         }
 
         // Get aggregation type for these columns (i.e. this grade category).
@@ -219,7 +217,7 @@ class aggregation {
                 if ($provisional) {
                     $data['rawgrade'] = $provisional->rawgrade;
                     $data['display'] = $provisional->displaygrade;
-                    $data['grademissing'] = false;
+                    $data['grademissing'] = is_null($provisional->rawgrade);
                     $data['admingrade'] = $provisional->admingrade;
                 } else {
                     $data['display'] = get_string('nodata', 'local_gugrades');
@@ -305,8 +303,9 @@ class aggregation {
      * 3. If all Schedule A then result is Schedule A
      * 4. If all Schedule B then result is Schedule B
      * 5. If mix of Schedule A/B then Schedule A if >=50% by weight is Sched A, otherwise Sched B (see MGU-812)
+     * TODO: More finely grained error control.
      * @param array $items
-     * @return array(string, string)
+     * @return $string
      */
     public static function get_aggregation_type(array $items) {
         $sumofweights = 0;
@@ -325,7 +324,7 @@ class aggregation {
                 $sumscheduleaweights += $item->weight;
             } else if ($item->schedule == 'B') {
                 $sumschedulebweights += $item->weight;
-            } else {
+            } else if ($item->schedule == 'P') {
                 $countpoints++;
             }
         }
@@ -336,24 +335,44 @@ class aggregation {
 
         // If sumofweights is zero, we're going to get divide-by-zero
         // errors down the line.
+        // TODO - taking this out because it's confusing as hell.
         if ($sumofweights == 0) {
-            $atype = \local_gugrades\GRADETYPE_ERROR;
-            return $atype;
+            return \local_gugrades\GRADETYPE_ERROR;
         }
 
         // Now work out what we have.
         if ($countpoints == count($items)) {
-            $atype = \local_gugrades\GRADETYPE_POINTS;
+            return \local_gugrades\GRADETYPE_POINTS;
         } else if ($countpoints != 0) {
-            $atype = \local_gugrades\GRADETYPE_ERROR;
-            $schedule = 'E';
+            return \local_gugrades\GRADETYPE_ERROR;
         } else if ($sumscheduleaweights >= ($sumofweights / 2)) {
-            $atype = \local_gugrades\GRADETYPE_SCHEDULEA;
+            return  \local_gugrades\GRADETYPE_SCHEDULEA;
         } else {
-            $atype = \local_gugrades\GRADETYPE_SCHEDULEB;
+            return \local_gugrades\GRADETYPE_SCHEDULEB;
         }
 
-        return $atype;
+        throw new \moodle_exception('Cannot evaluate aggregation type');
+    }
+
+    /**
+     * Translate atype (A, B, P and so on)
+     * Not all strings need translated
+     * @param string $atype
+     * @return string
+     */
+    public static function translate_atype(string $atype) {
+        if ($atype == 'A') {
+            return 'Schedule A';
+        } else if ($atype == 'B') {
+            return 'Schedule B';
+        } else if ($atype == 'P') {
+            return get_string('points', 'local_gugrades');
+        } else if ($atype == 'E') {
+            return get_string('error', 'local_gugrades');
+        } else {
+            throw new \moodle_exception('Unrecognised $atype - ' . $atype);
+        }
+
     }
 
     /**
@@ -381,11 +400,12 @@ class aggregation {
                 'categoryid' => $gradecategoryid,
                 'itemid' => $gradeitem->id,
                 'name' => $gcat->fullname,
-                'keephigh' => $gcat->keephigh,
-                'droplow' => $gcat->droplow,
-                'aggregation' => $gcat->aggregation,
-                'weight' => $gradeitem->aggregationcoef,
-                'grademax' => $gradeitem->grademax,
+                'shortname' => shorten_text($gcat->fullname, SHORTNAME_LENGTH),
+                'keephigh' => (int)$gcat->keephigh,
+                'droplow' => (int)$gcat->droplow,
+                'aggregation' => (int)$gcat->aggregation,
+                'weight' => (float)$gradeitem->aggregationcoef,
+                'grademax' => (float)$gradeitem->grademax,
                 'isscale' => false,  // Calculated further down.
                 'children' => [],
             ];
@@ -427,11 +447,42 @@ class aggregation {
             $categorynode->schedule = $atype;
             $categorynode->isscale = ($atype == 'A') || ($atype == 'B');
 
+            // Human name of whatever grade type this contains
+            $categorynode->gradetype = self::translate_atype($atype);
+
             // Write category node to cache
             $cache->set($gradeitem->id, $categorynode);
         }
 
         return $categorynode;
+    }
+
+    /**
+     * Get grade category with enhanced info
+     * Any grade category depends on looking at its children (recursively),
+     * so this either gets the cached grade category or (if it doesn't exist)
+     * it calls recurse_tree to get it.
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @return object
+     */
+    public static function get_enhanced_grade_category(int $courseid, int $gradecategoryid) {
+        global $DB;
+
+        // The cache uses the corresponding grade item id
+        $gradeitem = $DB->get_record('grade_items',
+            ['iteminstance' => $gradecategoryid, 'itemtype' => 'category'], '*', MUST_EXIST);
+
+        // Get cache instance
+        $cache = \cache::make('local_gugrades', 'gradeitems');
+
+        // Is the category in the cache. If not (re)build
+        // (anc cache) that part of the category tree.
+        if ($gradecategory = $cache->get($gradeitem->id)) {
+            return $gradecategory;
+        } else {
+            return self::recurse_tree($courseid, $gradeitemid, false);
+        }
     }
 
     /**
@@ -450,7 +501,7 @@ class aggregation {
      * @param object $category
      * @param array $items
      * @param int $level
-     * @return array [grade val, grade disp, completion, error]
+     * @return array ['rounded' grade, grade val, grade disp, completion, error]
      */
     protected static function aggregate_user_category(int $courseid, object $category, array $items, int $level) {
 
@@ -523,10 +574,10 @@ class aggregation {
     protected static function write_aggregated_category(int $courseid, object $category, object $user) {
         global $DB;
 
-        // Aggregation function returns null in error condition but write_grade expects a float.
+        // Aggregation function returns null in error .
         if (is_null($category->grade)) {
-            $grade = 0.0;
-            $rawgrade = 0.0;
+            $grade = null;
+            $rawgrade = null;
             if (!$category->error) {
                 throw new \moodle_exception('No error text when grade=null');
             }
@@ -630,6 +681,7 @@ class aggregation {
                 // Provisional will be null if nothing has been imported.
                 $usercapture = new \local_gugrades\usercapture($courseid, $child->itemid, $user->id);
                 $provisional = $usercapture->get_provisional();
+                var_dump($provisional);
                 if ($provisional) {
                     $item = (object)[
                         'itemid' => $child->itemid,

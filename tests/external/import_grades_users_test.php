@@ -112,4 +112,35 @@ final class import_grades_users_test extends \local_gugrades\external\gugrades_a
         $this->assertEquals('B1:17', $grades[0]->displaygrade);
         $this->assertEquals('NS', $grades[1]->displaygrade);
     }
+
+    /**
+     * Test ScheduleB import
+     *
+     * @covers \local_gugrades\external\import_grades_users::execute
+     */
+    public function test_scheduleb_import(): void {
+        global $DB;
+
+        $userlist = [
+            $this->student->id,
+            $this->student2->id,
+        ];
+
+        // Assign4 (which is useing scale).
+        $status = import_grades_users::execute($this->course->id, $this->gradeitemidassignb1, false, true, $userlist);
+        $status = external_api::clean_returnvalue(
+            import_grades_users::execute_returns(),
+            $status
+        );
+
+        $grades = array_values($DB->get_records('local_gugrades_grade', [
+            'gradeitemid' => $this->gradeitemidassignb1,
+        ]));
+
+        var_dump($grades); die;
+
+        $this->assertCount(2, $grades);
+        $this->assertEquals('B1:17', $grades[0]->displaygrade);
+        $this->assertEquals('NS', $grades[1]->displaygrade);
+    }
 }

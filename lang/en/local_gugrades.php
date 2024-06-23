@@ -81,6 +81,7 @@ $string['downloadtocsv'] = 'Download to CSV';
 $string['edit'] = 'Edit';
 $string['enabledashboard'] = 'Enable MyGrades in student dashboard for this course';
 $string['entrytype'] = 'Entry type';
+$string['error'] = 'Error';
 $string['eventadditionalgrade'] = 'Add additional grade';
 $string['eventdeleteconversionmap'] = 'Delete conversion map';
 $string['eventeditconversionmap'] = 'Edit/create conversion map';

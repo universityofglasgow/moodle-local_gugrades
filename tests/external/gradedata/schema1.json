@@ -99,5 +99,26 @@
                 ]
             }
         ]
+    },
+    {
+        "name": "SummativeB",
+        "category": true,
+        "weight": 1.0,
+        "children": [
+            {
+                "name": "Item B1",
+                "category": false,
+                "type": "scheduleb",
+                "weight": 0.5
+            },
+            {
+                "name": "Item B2",
+                "category": false,
+                "type": "scheduleb",
+                "weight": 0.5
+            }
+        ]
+
     }
+
 ]

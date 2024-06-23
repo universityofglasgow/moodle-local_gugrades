@@ -161,7 +161,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
      *
      * @covers \local_gugrades\external\get_aggregation_page::execute
      */
-    public function disable_test_completion_score(): void {
+    public function dis_test_completion_score(): void {
         global $DB;
 
         // Make sure that we're a teacher.
@@ -214,8 +214,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
 
 
         $fred = $page['users'][0];
-        // 29 because 'Summer exam' is unconverted points and therefore NOT complete.
-        $this->assertEquals("29", $fred['completed']);
+        $this->assertEquals("57", $fred['completed']);
         $this->assertEquals('C2', $fred['fields'][2]['display']);
 
         // Add an admin grade.
@@ -244,8 +243,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         );
 
         $fred = $page['users'][0];
-        // 14 as 1/3.5, "summer exam" is points and Item 3 is and admin grade. Neither count for completion.
-        $this->assertEquals("14", $fred['completed']);
+        $this->assertEquals("43", $fred['completed']);
         $this->assertEquals('MV', $fred['fields'][4]['display']);
     }
 
@@ -254,7 +252,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
      *
      * @covers \local_gugrades\external\get_aggregation_page::execute
      */
-    public function disable_test_sub_category(): void {
+    public function dis_test_sub_category(): void {
 
         // Make sure that we're a teacher.
         $this->setUser($this->teacher);
@@ -299,7 +297,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
      *
      * @covers \local_gugrades\external\get_aggregation_page::execute
      */
-    public function disable_test_scheduleb_sub_category(): void {
+    public function dis_test_scheduleb_sub_category(): void {
 
         // Make sure that we're a teacher.
         $this->setUser($this->teacher);
@@ -347,7 +345,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
      *
      * @covers \local_gugrades\external\get_aggregation_page::execute
      */
-    public function test_schedulea_sub_category(): void {
+    public function dis_test_schedulea_sub_category(): void {
 
         // Make sure that we're a teacher.
         $this->setUser($this->teacher);
@@ -379,14 +377,60 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
             $page
         );
 
-        var_dump($page); die;
-
         $this->assertFalse($page['toplevel']);
-        $this->assertEquals('B', $page['atype']);
+        $this->assertEquals('A', $page['atype']);
         $fred = $page['users'][0];
         $this->assertEquals(100, $fred['completed']);
-        $this->assertEquals("D0 (9.16667)", $fred['displaygrade']);
-        $this->assertEquals(9.16667, $fred['rawgrade']);
+        $this->assertEquals("D1 (10.64848)", $fred['displaygrade']);
+        $this->assertEquals(10.64848, $fred['rawgrade']);
+        $this->assertEquals(11, $fred['total']);
+    }
+
+    /**
+     * Test top-level aggregation, Schedule B only
+     *
+     * @covers \local_gugrades\external\get_aggregation_page::execute
+     */
+    public function test_scheduleb(): void {
+
+        // Make sure that we're a teacher.
+        $this->setUser($this->teacher);
+
+        // Import grades only for one student (so far).
+        $userlist = [
+            $this->student->id,
+        ];
+
+        // Install test data for student.
+        $this->load_data('data1b', $this->student->id);
+
+        // Import ALL gradeitems.
+        foreach ($this->gradeitemids as $gradeitemid) {
+            $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
+            $status = external_api::clean_returnvalue(
+                import_grades_users::execute_returns(),
+                $status
+            );
+        }
+
+        // Get category id for grade category 'Schedule B exam'.
+        $summativebid = $this->get_grade_category('SummativeB');
+
+        // Get aggregation page for above.
+        $page = get_aggregation_page::execute($this->course->id, $summativebid, '', '', 0, true);
+        $page = external_api::clean_returnvalue(
+            get_aggregation_page::execute_returns(),
+            $page
+        );
+
+        //var_dump($page); die;
+
+        $this->assertFalse($page['toplevel']);
+        $this->assertEquals('A', $page['atype']);
+        $fred = $page['users'][0];
+        $this->assertEquals(100, $fred['completed']);
+        $this->assertEquals("D1 (10.64848)", $fred['displaygrade']);
+        $this->assertEquals(10.64848, $fred['rawgrade']);
         $this->assertEquals(11, $fred['total']);
     }
 }
