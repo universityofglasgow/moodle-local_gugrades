@@ -79,6 +79,7 @@ class import_grades_users extends external_api {
         }
 
         // Get conversion object for whatever grade type this is.
+        // Used to convert from Moodle grade to MyGrades format.
         $conversion = \local_gugrades\grades::conversion_factory($courseid, $gradeitemid);
         $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid);
 

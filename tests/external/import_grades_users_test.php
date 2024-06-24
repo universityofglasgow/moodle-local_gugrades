@@ -121,6 +121,8 @@ final class import_grades_users_test extends \local_gugrades\external\gugrades_a
     public function test_scheduleb_import(): void {
         global $DB;
 
+        $vals = $DB->get_records('local_gugrades_scalevalue');
+
         $userlist = [
             $this->student->id,
             $this->student2->id,
@@ -137,10 +139,10 @@ final class import_grades_users_test extends \local_gugrades\external\gugrades_a
             'gradeitemid' => $this->gradeitemidassignb1,
         ]));
 
-        var_dump($grades); die;
-
         $this->assertCount(2, $grades);
-        $this->assertEquals('B1:17', $grades[0]->displaygrade);
-        $this->assertEquals('NS', $grades[1]->displaygrade);
+        $this->assertEquals('C0', $grades[0]->displaygrade);
+        $this->assertEquals(14.0, $grades[0]->convertedgrade);
+        $this->assertEquals('F0', $grades[1]->displaygrade);
+        $this->assertEquals(5.0, $grades[1]->convertedgrade);
     }
 }

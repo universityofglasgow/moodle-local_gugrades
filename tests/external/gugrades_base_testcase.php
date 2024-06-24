@@ -93,15 +93,14 @@ class gugrades_base_testcase extends externallib_advanced_testcase {
 
     /**
      * Fill local_gugrades_scalevalue table
-     * @param string $scale
+     * @param array $scale
      * @param int $scaleid
      * @param string $type
      */
     protected function fill_scalevalue($scale, $scaleid, $type) {
         global $DB;
 
-        $items = explode(',', $scale);
-        foreach ($items as $value => $item) {
+        foreach ($scale as $value => $item) {
             $scalevalue = new \stdClass;
             $scalevalue->scaleid = $scaleid;
             $scalevalue->item = trim($item);
@@ -269,7 +268,12 @@ class gugrades_base_testcase extends externallib_advanced_testcase {
             'scale' => $scaleitems,
             'courseid' => $course->id,
         ]);
-        $this->fill_scalevalue($scaleitems, $scale->id, 'schedulea');
+        $schedulea = [
+            0 => 'H:0', 1 => 'G2:1', 2 => 'G1:2', 3 => 'F3:3', 4 => 'F2:4', 5 => 'F1:5', 6 => 'E3:6', 7 => 'E2:7', 8 => 'E1:8',
+            9 => 'D3:9', 10 => 'D2:10', 11 => 'D1:11', 12 => 'C3:12', 13 => 'C2:13', 14 => 'C1:14', 15 => 'B3:15', 16 => 'B2:16',
+            17 => 'B1:17', 18 => 'A5:18', 19 => 'A4:19', 20 => 'A3:20', 21 => 'A2:21', 22 => 'A1:22'
+        ];
+        $this->fill_scalevalue($schedulea, $scale->id, 'schedulea');
         $this->scale = $scale;
 
         // Add another scale.
@@ -280,7 +284,8 @@ class gugrades_base_testcase extends externallib_advanced_testcase {
             'scale' => $scaleitemsb,
             'courseid' => $course->id,
         ]);
-        $this->fill_scalevalue($scaleitemsb, $scaleb->id, 'scheduleb');
+        $scheduleb = [0 => 'H', 2 => 'G0', 5 => 'F0', 8 => 'E0', 11 => 'D0', 14 => 'C0', 17 => 'B0', 22 => 'A0'];
+        $this->fill_scalevalue($scheduleb, $scaleb->id, 'scheduleb');
         $this->scaleb = $scaleb;
 
         // Add a teacher to the course.

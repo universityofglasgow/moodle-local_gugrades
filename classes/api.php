@@ -383,6 +383,8 @@ class api {
             if ($conversion->validate($rawgrade)) {
                 [$convertedgrade, $displaygrade] = $conversion->import($rawgrade);
 
+                // TODO: Is rawgrade correct? For scheduleB this will be completely
+                // unrelated. E.g. rawgrade 6 = converted grade = 14.
                 \local_gugrades\grades::write_grade(
                     courseid:       $courseid,
                     gradeitemid:    $gradeitemid,

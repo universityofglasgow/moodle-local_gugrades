@@ -72,7 +72,7 @@ final class get_activities_test extends \local_gugrades\external\gugrades_advanc
         $this->assertObjectHasProperty('items', $data);
         $items = $data->items;
         $this->assertIsArray($items);
-        $this->assertCount(4, $items);
+        $this->assertCount(5, $items);
         $readassign1 = $items[0];
         $this->assertIsObject($readassign1);
         $this->assertObjectHasProperty('itemname', $readassign1);

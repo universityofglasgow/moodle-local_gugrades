@@ -681,7 +681,6 @@ class aggregation {
                 // Provisional will be null if nothing has been imported.
                 $usercapture = new \local_gugrades\usercapture($courseid, $child->itemid, $user->id);
                 $provisional = $usercapture->get_provisional();
-                var_dump($provisional);
                 if ($provisional) {
                     $item = (object)[
                         'itemid' => $child->itemid,
