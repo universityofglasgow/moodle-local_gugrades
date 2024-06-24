@@ -423,14 +423,12 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
             $page
         );
 
-        //var_dump($page); die;
-
-        $this->assertFalse($page['toplevel']);
-        $this->assertEquals('A', $page['atype']);
+        $this->assertTrue($page['toplevel']);
+        $this->assertEquals('B', $page['atype']);
         $fred = $page['users'][0];
         $this->assertEquals(100, $fred['completed']);
-        $this->assertEquals("D1 (10.64848)", $fred['displaygrade']);
-        $this->assertEquals(10.64848, $fred['rawgrade']);
-        $this->assertEquals(11, $fred['total']);
+        $this->assertEquals("B0 (15.5)", $fred['displaygrade']);
+        $this->assertEquals(15.5, $fred['rawgrade']);
+        $this->assertEquals(17, $fred['total']);
     }
 }

@@ -432,7 +432,7 @@ class aggregation {
                         'isscale' => $conversion->is_scale(),
                         'schedule' => $conversion->get_schedule(),
                         'weight' => $item->aggregationcoef,
-                        'grademax' => $item->grademax,
+                        'grademax' => $conversion->get_grademax(),
                     ];
                     $cache->set($item->id, $node);
                 }

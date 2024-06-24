@@ -78,6 +78,13 @@ class scheduleb extends base {
     }
 
     /**
+     * Get maximum grade
+     */
+    public function get_grademax() {
+        return 22;
+    }
+
+    /**
      * Does this represent Schedule A/B or neither
      * Return A, B or empty string
      */

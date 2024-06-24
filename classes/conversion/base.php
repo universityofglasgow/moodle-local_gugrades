@@ -80,6 +80,13 @@ abstract class base {
     }
 
     /**
+     * Get maximum grade
+     */
+    public function get_grademax() {
+        return $this->gradeitem->grademax;
+    }
+
+    /**
      * Is the conversion a 'converted' scale
      * @return bool
      */

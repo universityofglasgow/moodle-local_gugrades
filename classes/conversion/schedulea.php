@@ -70,6 +70,13 @@ class schedulea extends base {
     }
 
     /**
+     * Get maximum grade
+     */
+    public function get_grademax() {
+        return 22;
+    }
+
+    /**
      * Is the conversion a scale (as opposed to points)?
      * @return bool
      */
