@@ -166,6 +166,7 @@ $string['mapdefaultschedulea'] = 'Default mappings for Schedule A';
 $string['mapdefaultscheduleb'] = 'Default mappings for Schedule B';
 $string['mapnotinorder'] = 'Map values are not in ascending order';
 $string['maxgrade'] = "Maximum grade";
+$string['message'] = "Message";
 $string['mod'] = 'Activity';
 $string['module'] = 'Activity';
 $string['moodlegrade'] = 'Moodle grade';
