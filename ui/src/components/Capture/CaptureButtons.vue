@@ -8,6 +8,7 @@
         <ViewFullNamesButton v-if="props.usershidden"  @viewfullnames="viewfullnames"></ViewFullNamesButton>
         <ConversionButton v-if="showconversion" :itemid="props.itemid" @converted="emit('refreshtable')"></ConversionButton>
         <InfoButton :itemid="props.itemid" size="2"></InfoButton>
+        <ReloadButton size="3" @refreshtable="refresh_clicked"></ReloadButton>
     </div>
 </template>
 
@@ -21,6 +22,7 @@
     import AddMultipleButton from '@/components/Capture/AddMultipleButton.vue';
     import ConversionButton from '@/components/Capture/ConversionButton.vue';
     import InfoButton from '@/components/InfoButton.vue';
+    import ReloadButton from '@/components/ReloadButton.vue';
 
     const props = defineProps({
         itemid: Number,
@@ -52,6 +54,13 @@
      */
     function multipleclicked(cellform) {
         emit('editcolumn', cellform);
+    }
+
+    /**
+     * Refresh icon was clicked
+     */
+    function refresh_clicked() {
+        emit('refreshtable');
     }
 
 </script>

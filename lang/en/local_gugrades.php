@@ -108,6 +108,7 @@ $string['gradenotsupported'] = '<b><i class="fa fa-exclamation-triangle" aria-hi
 $string['gradenoun'] = 'Grade';
 $string['gradesimported'] = 'Grades have already been imported. Existing values may be changed/overwritten. Do you really want to continue?';
 $string['gradesimportedsuccess'] = 'Grades successfully imported';
+$string['gradeiteminfo'] = 'Grade item info';
 $string['gradesmissing'] = 'Grades missing';
 $string['gradesnotmatching'] = 'Grades not matching';
 $string['gradesreleased'] = 'Grades successfully released';
@@ -196,6 +197,7 @@ $string['reasonforammendment'] = 'Reason for ammendment';
 $string['recordid'] = 'Identifier';
 $string['recursiveimport'] = 'Recursive import';
 $string['recursiveimporthelp'] = 'Import this item plus all its peers and children';
+$string['refreshpage'] = 'Refresh page';
 $string['relateduser'] = 'Related user';
 $string['releaseconfirm'] = 'WARNING: You are about to release the provisional grades to students. Do you wish to continue?';
 $string['releaseconfirmgroup'] = "NOTE: Grades will only be released for the selected group.";

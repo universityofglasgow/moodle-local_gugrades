@@ -1,6 +1,6 @@
 <template>
     <!-- info button -->
-    <a href="#" class="ml-2" @click="info_clicked">
+    <a href="#" class="ml-2" @click="info_clicked" data-toggle="tooltip" data-placement="bottom" :title="mstrings.gradeiteminfo">
         <i class="fa fa-info-circle align-middle" :class="[fasizeclass]" aria-hidden="true"></i>
     </a>
 
@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-    import {ref, inject, defineProps, defineEmits, computed} from '@vue/runtime-core';
+    import {ref, inject, defineProps, computed} from '@vue/runtime-core';
     import { useToast } from "vue-toastification";
 
     const showinfomodal = ref(false);
@@ -103,4 +103,5 @@
 
         showinfomodal.value = true;
     }
+
 </script>
