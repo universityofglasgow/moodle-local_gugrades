@@ -9,7 +9,7 @@
     <div v-if="level1category" class="mt-2">
 
         <!-- warning if not all scales (TODO - think this may not be correct) -->
-            <div v-if="(atype = 'POINTS') && toplevel" class="alert alert-warning alert-dismissible fade show" role="alert">
+            <div v-if="(atype == 'POINTS') && toplevel" class="alert alert-warning alert-dismissible fade show" role="alert">
                 {{ mstrings.notallscales }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>

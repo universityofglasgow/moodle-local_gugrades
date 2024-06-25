@@ -554,7 +554,8 @@ class aggregation {
                 $parentgrade = $aggregation->get_grade_for_parent($aggregatedgrade, $convertedgradevalue);
 
                 // How do we want to display this?
-                $displaygrade = $aggregation->format_displaygrade($convertedgrade, $aggregatedgrade, $convertedgradevalue);
+                $displaygrade = $aggregation->format_displaygrade(
+                    $convertedgrade, $aggregatedgrade, $convertedgradevalue, $completion);
 
                 return [$parentgrade, $aggregatedgrade, $displaygrade, $completion, ''];
             }

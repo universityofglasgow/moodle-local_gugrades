@@ -194,6 +194,19 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
     }
 
     /**
+     * Get gradeitemid for given name of item
+     * @param string $itemname
+     * @return int
+     */
+    public function get_gradeitemid(string $itemname) {
+        global $DB;
+
+        $item = $DB->get_record('grade_items', ['itemname' => $itemname], '*', MUST_EXIST);
+
+        return $item->id;
+    }
+
+    /**
      * Import json data
      * Data refers to item names already uploaded in the schema,
      * so make sure the data matches the schema!
@@ -201,7 +214,7 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
      * @param string $name
      * @param int $userid
      */
-    public function load_data(string $name, int $userid) {
+    public function load_data(string $name, int $userid): void {
         global $CFG, $DB;
 
         $path = $CFG->dirroot . '/local/gugrades/tests/external/gradedata/' . $name . '.json';
@@ -216,6 +229,32 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
             $gradeitem = $DB->get_record('grade_items', ['itemname' => $item->item], '*', MUST_EXIST);
             $this->write_grade_grades($gradeitem, $userid, $item->grade);
         }
+    }
+
+    /**
+     * Apply admingrade - grade needs to be imported / exist first
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param int $userid
+     * @param string $admingrade
+     */
+    public function apply_admingrade(int $courseid, int $gradeitemid, int $userid, string $admingrade): void {
+        \local_gugrades\grades::write_grade(
+            courseid:       $courseid,
+            gradeitemid:    $gradeitemid,
+            userid:         $userid,
+            admingrade:     $admingrade,
+            rawgrade:       0,
+            convertedgrade: 0,
+            displaygrade:   $admingrade,
+            weightedgrade:  0,
+            gradetype:      'AGREED',
+            other:          '',
+            iscurrent:      true,
+            iserror:        false,
+            auditcomment:   '',
+            ispoints:       false,
+        );
     }
 
 

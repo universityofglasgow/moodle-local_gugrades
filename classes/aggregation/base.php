@@ -285,13 +285,19 @@ class base {
 
     /**
      * Format displaygrade for Schedule A / B
+     * Depends on completion (<75% or not)
      * @param string $convertedgrade
      * @param float $rawgrade
      * @param float $gradepoint
+     * @param int $completion
      * @return string
      */
-    public function format_displaygrade(string $convertedgrade, float $rawgrade, float $gradepoint) {
+    public function format_displaygrade(string $convertedgrade, float $rawgrade, float $gradepoint, int $completion) {
 
-        return $convertedgrade . " ($rawgrade)";
+        if ($completion > 75) {
+            return $convertedgrade . " ($rawgrade)";
+        } else {
+            return "$rawgrade";
+        }
     }
 }
