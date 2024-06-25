@@ -126,7 +126,8 @@
                     <!-- show warning if grades do not agree -->
                     <template #item-alert="item">
                         <span v-if="item.alert" class="badge badge-danger mb-1">{{ mstrings.discrepancy }}</span><br />
-                        <span v-if="item.gradebookhidden" class="badge badge-success">{{ mstrings.hiddengradebook }}</span>
+                        <span v-if="item.gradebookhidden" class="badge badge-success mb-1">{{ mstrings.hiddengradebook }}</span><br />
+                        <span v-if="item.gradehidden" class="badge badge-warning">{{ mstrings.hiddenmygrades }}</span>
                     </template>
                 </EasyDataTable>
 
@@ -409,7 +410,7 @@
         users.forEach(user => {
 
             // Only show alert/discrepancy column if there are any
-            if (user.alert || user.gradebookhidden) {
+            if (user.alert || user.gradebookhidden || user.gradehidden) {
                 showalert.value = true;
             }
 
