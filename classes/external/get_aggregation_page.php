@@ -90,6 +90,11 @@ class get_aggregation_page extends external_api {
         return new external_single_structure([
             'toplevel' => new external_value(PARAM_BOOL, 'Is this the topmost level?'),
             'atype' => new external_value(PARAM_TEXT, 'Aggregated grade type (A, B, P, E - if mixed'),
+            'warnings' => new external_multiple_structure(
+                new external_single_structure([
+                    'message' => new external_value(PARAM_TEXT, 'Warning message'),
+                ])
+            ),
             'users' => new external_multiple_structure(
                 new external_single_structure([
                     'id' => new external_value(PARAM_INT, 'User ID'),

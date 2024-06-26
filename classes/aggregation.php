@@ -58,10 +58,13 @@ class aggregation {
      * Get aggregation tale columns for supplied gradecategoryid
      * @param int $courseid
      * @param int $gradecategoryid
-     * @return [array, string]
+     * @return [$columns, $atype, $warnings]
      */
     public static function get_columns(int $courseid, int $gradecategoryid) {
         global $DB;
+
+        // Accumulate any warnings
+        $warnings = [];
 
         // Get list of grade categories
         $sql = "SELECT * FROM {grade_categories}
@@ -134,9 +137,9 @@ class aggregation {
         }
 
         // Get aggregation type for these columns (i.e. this grade category).
-        $atype = self::get_aggregation_type($columns);
+        [$atype, $warnings] = self::get_aggregation_type($columns);
 
-        return [$columns, $atype];
+        return [$columns, $atype, $warnings];
     }
 
     /**
@@ -231,7 +234,7 @@ class aggregation {
 
             // Get atype and aggregation rules.
             // This is why we needed items - array of array vs. array of objects.
-            $atype = self::get_aggregation_type($items);
+            [$atype, $warnings] = self::get_aggregation_type($items);
             $aggregation = self::aggregation_factory($courseid, $atype);
 
             // Read "top level" category for user info
@@ -303,21 +306,28 @@ class aggregation {
      * 3. If all Schedule A then result is Schedule A
      * 4. If all Schedule B then result is Schedule B
      * 5. If mix of Schedule A/B then Schedule A if >=50% by weight is Sched A, otherwise Sched B (see MGU-812)
+     * 6. If sum of weights is zro then its an error
      * TODO: More finely grained error control.
+     * Also checks for some possible error conditions
+     * a. Error in any child
+     * b. All weights are zero
+     * c. mixture of points and scales (mixture of scales ok)
      * @param array $items
-     * @return $string
+     * @return [$atype, $warnings]
      */
     public static function get_aggregation_type(array $items) {
         $sumofweights = 0;
         $sumscheduleaweights = 0;
         $sumschedulebweights = 0;
         $countpoints = 0;
+        $warnings = [];
+        $atype = null;
         foreach ($items as $item) {
 
             // If any item schedule is an error, then the result is as well.
             if ($item->schedule == 'E') {
                 $atype = \local_gugrades\GRADETYPE_ERROR;
-                return $atype;
+                $warnings[] = ['message' => get_string('childerror', 'local_gugrades')];
             }
             $sumofweights += $item->weight;
             if ($item->schedule == 'A') {
@@ -329,29 +339,37 @@ class aggregation {
             }
         }
 
-        // Schedule to label category for further aggregation
-        // A, B or empty.
-        $atype = \local_gugrades\GRADETYPE_POINTS;
-
         // If sumofweights is zero, we're going to get divide-by-zero
         // errors down the line.
         // TODO - taking this out because it's confusing as hell.
         if ($sumofweights == 0) {
-            return \local_gugrades\GRADETYPE_ERROR;
+            $atype = \local_gugrades\GRADETYPE_ERROR;
+            $warnings[] = ['message' => get_string('weightszero', 'local_gugrades')];
+        }
+
+        // Points must be all items or no items.
+        if (($countpoints != 0) && ($countpoints != count($items))) {
+            $atype = \local_gugrades\GRADETYPE_ERROR;
+            $warnings[] = ['message' => get_string('mixture', 'local_gugrades')];
+        }
+
+        // If we have found an error by this point then give up.
+        if ($atype == \local_gugrades\GRADETYPE_ERROR) {
+            return [$atype, $warnings];
         }
 
         // Now work out what we have.
         if ($countpoints == count($items)) {
-            return \local_gugrades\GRADETYPE_POINTS;
-        } else if ($countpoints != 0) {
-            return \local_gugrades\GRADETYPE_ERROR;
+            $atype = \local_gugrades\GRADETYPE_POINTS;
         } else if ($sumscheduleaweights >= ($sumofweights / 2)) {
-            return  \local_gugrades\GRADETYPE_SCHEDULEA;
+            $atype =  \local_gugrades\GRADETYPE_SCHEDULEA;
+        } else if ($sumscheduleaweights < ($sumofweights / 2)){
+            $atype = \local_gugrades\GRADETYPE_SCHEDULEB;
         } else {
-            return \local_gugrades\GRADETYPE_SCHEDULEB;
+            throw new \moodle_exception('Cannot evaluate aggregation type');
         }
 
-        throw new \moodle_exception('Cannot evaluate aggregation type');
+        return [$atype, []];
     }
 
     /**
@@ -442,10 +460,11 @@ class aggregation {
 
             // Process $categorynode->children such that we know what the category's
             // aggregation type is (Schedule A, B, POINTS).
-            $atype = self::get_aggregation_type($categorynode->children);
+            [$atype, $warnings] = self::get_aggregation_type($categorynode->children);
             $categorynode->atype = $atype;
             $categorynode->schedule = $atype;
             $categorynode->isscale = ($atype == 'A') || ($atype == 'B');
+            $categorynode->warnings = $warnings;
 
             // Human name of whatever grade type this contains
             $categorynode->gradetype = self::translate_atype($atype);
@@ -540,7 +559,7 @@ class aggregation {
 
         // Need to have a valid aggregation type to actually do the aggregation.
         if ($category->atype == \local_gugrades\GRADETYPE_ERROR) {
-            return [null, null, null, $completion, get_string('gradesnotmatching', 'local_gugrades')];
+            return [null, null, null, $completion, get_string('cannotaggregate', 'local_gugrades')];
         } else {
 
             // Now call the appropriate aggregation function to do the sums.

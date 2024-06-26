@@ -8,13 +8,15 @@
 
     <div v-if="level1category" class="mt-2">
 
-        <!-- warning if not all scales (TODO - think this may not be correct) -->
-            <div v-if="(atype == 'POINTS') && toplevel" class="alert alert-warning alert-dismissible fade show" role="alert">
-                {{ mstrings.notallscales }}
+        <!-- display warnings -->
+        <div v-if="toplevel">
+            <div v-for="warning in warnings" class="alert alert-warning alert-dismissible fade show mb-1" role="alert">
+                {{ warning.message }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+        </div>
 
         <!-- Filter on initials -->
         <NameFilter @selected="filter_selected" ref="namefilterref"></NameFilter>
@@ -122,6 +124,7 @@
     const completed = ref(0);
     const atype = ref('');
     const formattedatype = ref('');
+    const warnings = ref([]);
 
     let firstname = '';
     let lastname = '';
@@ -309,6 +312,7 @@
             //items.value = result.items;
             //categories.value = result.categories;
             users.value = result.users;
+            warnings.value = result.warnings;
             columns.value = result.columns;
             breadcrumb.value = result.breadcrumb;
             toplevel.value = result.toplevel;

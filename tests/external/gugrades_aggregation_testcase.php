@@ -58,7 +58,7 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
         foreach ($items as $item) {
 
             // Get weight ('aggregationcoef' in the grade_items table).
-            if (!empty($item->weight)) {
+            if (isset($item->weight)) {
                 $weight = $item->weight;
             } else {
                 $weight = 1;

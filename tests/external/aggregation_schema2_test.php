@@ -16,6 +16,8 @@
 
 /**
  * Test functions around get_aggregation_page
+ * Schema2 tests the "75% rule" - we check the displayed grade when completion
+ * is less than and greater than 75%
  * @package    local_gugrades
  * @copyright  2024
  * @author     Howard Miller
@@ -34,7 +36,7 @@ require_once($CFG->dirroot . '/webservice/tests/helpers.php');
 require_once($CFG->dirroot . '/local/gugrades/tests/external/gugrades_aggregation_testcase.php');
 
 /**
- * Test(s) for get_aggregation_page webservice
+ * More test(s) for get_aggregation_page webservice
  */
 final class aggregation_schema2_test extends \local_gugrades\external\gugrades_aggregation_testcase {
 

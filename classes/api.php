@@ -1415,7 +1415,7 @@ class api {
         \local_gugrades\aggregation::recurse_tree($courseid, $level1id, $aggregate);
 
         // Get categories and items at this level.
-        [$columns, $atype] = \local_gugrades\aggregation::get_columns($courseid, $gradecategoryid);
+        [$columns, $atype, $warnings] = \local_gugrades\aggregation::get_columns($courseid, $gradecategoryid);
 
         // Get all the students.
         $users = \local_gugrades\aggregation::get_users($courseid, $firstname, $lastname, $groupid);
@@ -1440,6 +1440,7 @@ class api {
         return [
             'toplevel' => $istoplevel,
             'atype' => $atype,
+            'warnings' => $warnings,
             'columns' => $columns,
             'users' => $users,
             'breadcrumb' => $breadcrumb,
