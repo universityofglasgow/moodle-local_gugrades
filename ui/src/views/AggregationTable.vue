@@ -46,8 +46,14 @@
 
             <!-- additional information in header cells -->
             <template #header="header">
-                <div class="aggregation-header">
+                <div v-if="header.value == 'back'">
+                    <a class="text-white" href="#" @click="expand_clicked(backid)" data-toggle="tooltip" data-placement="bottom" :title="mstrings.goback">
+                        <i class="fa fa-arrow-circle-left fa-xl" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div v-else class="aggregation-header">
                     <div data-toggle="tooltip" :title="header.fullname" :data-original-title="header.fullname">
+
                         <div>
                             {{ header.text }}
                         </div>
@@ -99,7 +105,7 @@
 </template>
 
 <script setup>
-    import {ref, defineEmits, computed, inject} from '@vue/runtime-core';
+    import {ref, computed, inject} from '@vue/runtime-core';
     import LevelOneSelect from '@/components/LevelOneSelect.vue';
     import NameFilter from '@/components/NameFilter.vue';
     import GroupSelect from '@/components/GroupSelect.vue';
@@ -120,6 +126,7 @@
     const columns = ref([]);
     const categories = ref([]);
     const breadcrumb = ref([]);
+    const backid = ref(0);
     const toplevel = ref(false);
     const completed = ref(0);
     const atype = ref('');
@@ -215,6 +222,14 @@
         heads.push({text: mstrings.userpicture, value: "slotuserpicture", infocol: true});
         heads.push({text: mstrings.firstnamelastname, value: "displayname", sortable: true, infocol: true})
         heads.push({text: mstrings.idnumber, value: "idnumber", sortable: true, infocol: true});
+
+        // 'Back' button column on everything but "top level"
+        if (!toplevel.value) {
+            heads.push({
+                text: '??', // Dealt with by template
+                value: "back", // Fake
+            });
+        }
 
         // Grade categories and items.
         columns.value.forEach(column => {
@@ -317,6 +332,9 @@
             breadcrumb.value = result.breadcrumb;
             toplevel.value = result.toplevel;
             atype.value = result.atype;
+
+            // Get id of one back from breadcrumb
+            backid.value = breadcrumb.value.slice(-2)[0].id;
 
             users.value = process_users(users.value);
             formattedatype.value = get_formattedatype();

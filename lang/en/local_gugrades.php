@@ -99,6 +99,7 @@ $string['export'] = 'Export';
 $string['exportworksheet'] = 'Export worksheet';
 $string['firstname'] = 'First name';
 $string['firstnamelastname'] = 'Firstname / lastname';
+$string['goback'] = 'Go back';
 $string['grade'] = 'Grade';
 $string['gradeadded'] = 'Grade added';
 $string['gradehidden'] = '<b>Grade is hidden</b><br />This grade item is hidden in the Gradebook. It is not visible to students';
