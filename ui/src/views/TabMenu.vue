@@ -1,6 +1,6 @@
 <template>
     <div id="tabmenu">
-        <TabsNav @tabchange="tabChange"></TabsNav>
+        <TabsNav @tabchange="tabChange" :viewaggregation="viewaggregation"></TabsNav>
 
         <div v-if="currenttab == 'capture'">
             <CaptureTable></CaptureTable>
@@ -10,7 +10,7 @@
             <ConversionPage></ConversionPage>
         </div>
 
-        <div v-if="currenttab == 'aggregation'">
+        <div v-if="(currenttab == 'aggregation') && viewaggregation">
             <AggregationTable></AggregationTable>
         </div>
 
@@ -39,6 +39,7 @@
     const showactivityselect = ref(false);
     const itemid = ref(0);
     const enabledashboard = ref(false);
+    const viewaggregation = ref(true);
 
     const toast = useToast();
 
@@ -86,7 +87,7 @@
     }
 
     /**
-     * get enable dashboard and set logo
+     * Check for aggregation tab permission
      */
      onMounted(() => {
         const GU = window.GU;
@@ -94,5 +95,21 @@
         const fetchMany = GU.fetchMany;
 
         get_dashboard_enabled();
+
+
+        fetchMany([{
+            methodname: 'local_gugrades_has_capability',
+            args: {
+                courseid: courseid,
+                capability: 'local/gugrades:viewaggregation'
+            }
+        }])[0]
+        .then((result) => {
+            viewaggregation.value = result.hascapability;
+            window.console.log(viewaggregation.value);
+        })
+        .catch((error) => {
+            window.console.log(error);
+        });
     })
 </script>

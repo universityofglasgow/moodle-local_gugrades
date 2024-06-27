@@ -136,6 +136,7 @@ $string['gugrades:readotheraudit'] = 'Read another user\'s audit trail';
 $string['gugrades:readotherdashboard'] = 'Read another user\'s Dashboard data';
 $string['gugrades:resetcourse'] = 'Delete all MyGrades data from course.';
 $string['gugrades:view'] = 'View gugrades tool';
+$string['gugrades:viewaggregation'] = 'View aggregation part of MyGrades';
 $string['gugrades:viewhiddennames'] = 'Reveal hidden names';
 $string['hiddengradebook'] = 'Hidden grade / activity';
 $string['hiddenmygrades'] = 'Hidden in MyGrades';

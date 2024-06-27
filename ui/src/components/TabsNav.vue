@@ -13,7 +13,7 @@
                     {{ mstrings.conversion }}
                 </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="props.viewaggregation">
                 <a class="nav-link btn btn-secondary" :class="{active: activetab == 'aggregation'}" @click="clickTab('aggregation')">
                     <i class="fa fa-compress" aria-hidden="true"></i>&nbsp;
                     {{ mstrings.coursegradeaggregation }}
@@ -36,12 +36,16 @@
 </template>
 
 <script setup>
-    import {ref, defineEmits, inject, onMounted} from '@vue/runtime-core';
+    import {ref, defineEmits, defineProps, inject, onMounted} from '@vue/runtime-core';
     import { useToast } from "vue-toastification";
 
     const activetab = ref('capture');
     const settingscapability = ref(false);
     const mstrings = inject('mstrings');
+
+    const props = defineProps({
+        viewaggregation: Boolean,
+    });
 
     const toast = useToast();
 
