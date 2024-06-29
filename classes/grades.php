@@ -787,4 +787,18 @@ class grades {
         return $DB->record_exists('local_gugrades_grade',
             ['courseid' => $courseid, 'gradeitemid' => $gradeitemid, 'gradetype' => 'RELEASED', 'iscurrent' => 1]);
     }
+
+    /**
+     * Get gradeitem level
+     * Our level 1 is 'depth' in the table minus 1 (in core, depth 1 is the course)
+     * @param int $gradecategoryid
+     * @return int
+     */
+    public static function get_gradecategory_level(int $gradecategoryid) {
+        global $DB;
+
+        $gradecategory = $DB->get_record('grade_categories', ['id' => $gradecategoryid], '*', MUST_EXIST);
+
+        return $gradecategory->depth - 1;
+    }
 }

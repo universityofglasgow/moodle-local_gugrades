@@ -574,7 +574,7 @@ class aggregation {
 
                 // How do we want to display this?
                 $displaygrade = $aggregation->format_displaygrade(
-                    $convertedgrade, $aggregatedgrade, $convertedgradevalue, $completion);
+                    $convertedgrade, $aggregatedgrade, $convertedgradevalue, $completion, $level);
 
                 return [$parentgrade, $aggregatedgrade, $displaygrade, $completion, ''];
             }
@@ -749,6 +749,10 @@ class aggregation {
         $gradecatitem = $DB->get_record('grade_items',
             ['itemtype' => 'category', 'iteminstance' => $gradecategoryid], '*', MUST_EXIST);
 
+        // The 'level' we are at is the depth in the grade_items table minus 1
+        // (depth = 1 is the course level).
+        $level = $gradecat->depth - 1;
+
         // First get category tree structure, including all required
         // weighting drop high/low and so on. So we only have to do it once.
         $toplevel = self::recurse_tree($courseid, $gradecategoryid, false);
@@ -760,7 +764,7 @@ class aggregation {
             // 1 = level 1 (we need to know what level we're at). Level is incremented
             // as call recurses.
             [$usertotal, $rawgrade, $displaygrade, $completion, $error] =
-                self::aggregate_user($courseid, $toplevel, $user, $userallitems, 1);
+                self::aggregate_user($courseid, $toplevel, $user, $userallitems, $level);
             $user->rawgrade = $rawgrade;
             $user->total = $usertotal;
             $user->displaygrade = $displaygrade;

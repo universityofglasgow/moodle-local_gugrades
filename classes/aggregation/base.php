@@ -290,10 +290,17 @@ class base {
      * @param float $rawgrade
      * @param float $gradepoint
      * @param int $completion
+     * @param int $level
      * @return string
      */
-    public function format_displaygrade(string $convertedgrade, float $rawgrade, float $gradepoint, int $completion) {
+    public function format_displaygrade(string $convertedgrade, float $rawgrade, float $gradepoint, int $completion, int $level) {
 
+        // If >level 1, then we always return the combination (no 75% rule).
+        if ($level > 1) {
+            return $convertedgrade;
+        }
+
+        // Must be level 1, so grade displayed depends on completion %age.
         if ($completion > 75) {
             return $convertedgrade . " ($rawgrade)";
         } else {
