@@ -53,6 +53,20 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
     protected function build_schema(array $items, int $gradeitemid) {
         global $DB;
 
+
+        // Array defines which aggregation type calls which function.
+        $lookup = [
+            'mean' => \GRADE_AGGREGATE_MEAN,
+            'median' => \GRADE_AGGREGATE_MEDIAN,
+            'min' => \GRADE_AGGREGATE_MIN,
+            'max' => \GRADE_AGGREGATE_MAX,
+            'mode' => \GRADE_AGGREGATE_MODE,
+            'weighted_mean' => \GRADE_AGGREGATE_WEIGHTED_MEAN,
+            'weighted_mean2' => \GRADE_AGGREGATE_WEIGHTED_MEAN2,
+            'extracredit_mean' => \GRADE_AGGREGATE_EXTRACREDIT_MEAN,
+            'sum' => \GRADE_AGGREGATE_MEAN, // Natural does the same thing as mean.
+        ];
+
         $this->gradeitems = [];
 
         foreach ($items as $item) {
@@ -101,10 +115,20 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
                 $this->gradeitems[] = $gradeitem;
             } else {
 
+                // Aggregation? (default is weighted_mean).
+                if (!empty($item->aggregation)) {
+                    $aggregation = $lookup[$item->aggregation];
+                } else {
+                    $aggregation = \GRADE_AGGREGATE_WEIGHTED_MEAN;
+                }
+
                 // In which case it must be a grade category.
                 $gradecategory = $this->getDataGenerator()->create_grade_category(
-                    ['courseid' => $this->course->id, 'fullname' => $item->name, 'parent' => $gradeitemid]
-                );
+                    ['courseid' => $this->course->id,
+                    'fullname' => $item->name,
+                    'parent' => $gradeitemid,
+                    'aggregation' => $aggregation,
+                ]);
 
                 // Set weight (aggregationcoef)
                 $gradeitem = $DB->get_record('grade_items', ['itemtype' => 'category', 'iteminstance' => $gradecategory->id], '*', MUST_EXIST);

@@ -170,7 +170,7 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
         $this->assertEquals('A', $page['atype']);
         $fred = $page['users'][0];
         $this->assertEquals(55, $fred['completed']);
-        $this->assertEquals("7.25", $fred['displaygrade']);
+        $this->assertEquals("7.8", $fred['displaygrade']);
     }
 
     /**
@@ -215,7 +215,7 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
         $this->assertEquals('A', $page['atype']);
         $fred = $page['users'][0];
         $this->assertEquals(80, $fred['completed']);
-        $this->assertEquals("D3 (9.25)", $fred['displaygrade']);
-        $this->assertEquals(9.25, $fred['rawgrade']);
+        $this->assertEquals("D2 (9.8)", $fred['displaygrade']);
+        $this->assertEquals(9.8, $fred['rawgrade']);
     }
 }

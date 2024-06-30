@@ -133,7 +133,7 @@ class base {
             \GRADE_AGGREGATE_WEIGHTED_MEAN => 'weighted_mean',
             \GRADE_AGGREGATE_WEIGHTED_MEAN2 => 'weighted_mean2',
             \GRADE_AGGREGATE_EXTRACREDIT_MEAN => 'extracredit_mean',
-            \GRADE_AGGREGATE_SUM => 'sum',
+            \GRADE_AGGREGATE_SUM => 'mean', // Natural does the same thing as mean
         ];
         if (array_key_exists($aggregationid, $lookup)) {
             $agf = $lookup[$aggregationid];
@@ -142,7 +142,7 @@ class base {
         }
 
         // TODO - force everything to me mean for testing, for now.
-        $agf = 'mean';
+        //$agf = 'mean';
 
         return "strategy_" .$agf;
     }
@@ -177,6 +177,25 @@ class base {
         }
 
         return $this->round_float($sum * $maxgrade / $count);
+    }
+
+    /**
+     * Strategy - weighted mean of grades
+     * @param array $items
+     * @return float
+     */
+    public function strategy_weighted_mean(array $items) {
+        $sum = 0.0;
+        $count = 0;
+        $sumweights = 0;
+        $maxgrade = $this->get_max_grade();
+        foreach ($items as $item) {
+            $sum += $item->weight * $item->grade / $item->grademax;
+            $sumweights += $item->weight;
+            $count++;
+        }
+
+        return $this->round_float($sum * $maxgrade / $sumweights);
     }
 
     /**

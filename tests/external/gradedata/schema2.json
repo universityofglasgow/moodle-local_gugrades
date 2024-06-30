@@ -4,6 +4,7 @@
         "name": "Summative",
         "category": true,
         "weight": 1.0,
+        "aggregation": "weighted_mean",
         "children": [
             {
                 "name": "Item 1",
