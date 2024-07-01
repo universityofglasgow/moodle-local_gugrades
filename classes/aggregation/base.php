@@ -131,14 +131,14 @@ class base {
             \GRADE_AGGREGATE_MAX => 'max',
             \GRADE_AGGREGATE_MODE => 'mode',
             \GRADE_AGGREGATE_WEIGHTED_MEAN => 'weighted_mean',
-            \GRADE_AGGREGATE_WEIGHTED_MEAN2 => 'weighted_mean2',
-            \GRADE_AGGREGATE_EXTRACREDIT_MEAN => 'extracredit_mean',
+            \GRADE_AGGREGATE_WEIGHTED_MEAN2 => 'simple_weighted_mean',
+            // \GRADE_AGGREGATE_EXTRACREDIT_MEAN => 'extracredit_mean',
             \GRADE_AGGREGATE_SUM => 'mean', // Natural does the same thing as mean
         ];
         if (array_key_exists($aggregationid, $lookup)) {
             $agf = $lookup[$aggregationid];
         } else {
-            throw new \moodle_exception('Unknown aggregation strategy');
+            throw new \moodle_exception('Unknown or unsupported aggregation strategy');
         }
 
         // TODO - force everything to me mean for testing, for now.
@@ -196,6 +196,107 @@ class base {
         }
 
         return $this->round_float($sum * $maxgrade / $sumweights);
+    }
+
+    /**
+     * Strategy - simple weighted mean of grades
+     * (Essentially - sum of grades divided by sum of max grades)
+     * @param array $items
+     * @return float
+     */
+    public function strategy_simple_weighted_mean(array $items) {
+        $sum = 0.0;
+        $sumgrademax = 0;
+        $maxgrade = $this->get_max_grade();
+        foreach ($items as $item) {
+            $sum += $item->grade;
+            $sumgrademax += $item->grademax;
+        }
+
+        return $this->round_float(100 * $sum / $sumgrademax);
+    }
+
+    /**
+     * Strategy - minimum grade
+     * Note that the normalised percentage grade is returned
+     * @param array $items
+     * @return float
+     */
+    public function strategy_min(array $items) {
+        $grades = [];
+        foreach ($items as $item) {
+            $norm = 100 * $item->grade / $item->grademax;
+            $grades[] = $norm;
+        }
+
+        return $this->round_float(min($grades));
+    }
+
+    /**
+     * Strategy - maximum grade
+     * Note that the normalised percentage grade is returned
+     * @param array $items
+     * @return float
+     */
+    public function strategy_max(array $items) {
+        $grades = [];
+        foreach ($items as $item) {
+            $norm = 100 * $item->grade / $item->grademax;
+            $grades[] = $norm;
+        }
+
+        return $this->round_float(max($grades));
+    }
+
+    /**
+     * Strategy - median grade
+     * Note that the normalised percentage grade is returned
+     * @param array $items
+     * @return float
+     */
+    public function strategy_median(array $items) {
+        $grades = [];
+        foreach ($items as $item) {
+            $norm = 100 * $item->grade / $item->grademax;
+            $grades[] = $norm;
+        }
+
+        sort($grades);
+
+        // If odd number of grades it's just the middle value
+        $medianindex = count($grades) / 2;
+        $roundindex = round($medianindex);
+        if ($roundindex != $medianindex) {
+            return $this->round_float($grades[$medianindex]);
+        } else {
+
+            // It's the mean of the two middle values
+            $midh = $grades[$roundindex];
+            $midl = $grades[$roundindex - 1];
+
+            return $this->round_float(($midh + $midl) / 2);
+        }
+    }
+
+    /**
+     * Strategy - median mode
+     * Note that the normalised percentage grade is returned
+     * This is rounded to int - which makes sense to me!
+     * @param array $items
+     * @return float
+     */
+    public function strategy_mode(array $items) {
+        $grades = [];
+        foreach ($items as $item) {
+            $norm = round(100 * $item->grade / $item->grademax);
+            $grades[] = (int)$norm;
+        }
+
+        // Witchcraft!
+        $values = array_count_values($grades);
+        $mode = array_search(max($values), $values);
+
+        return $this->round_float($mode);
     }
 
     /**

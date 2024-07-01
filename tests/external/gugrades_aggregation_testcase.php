@@ -78,6 +78,13 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
                 $weight = 1;
             }
 
+            // Get grademax for points only (default is 100)
+            if (isset($item->grademax)) {
+                $grademax = $item->grademax;
+            } else {
+                $grademax = 100;
+            }
+
             // Is it a grade item?
             if (!$item->category) {
                 $gradeitem = $this->getDataGenerator()->create_grade_item(
@@ -104,7 +111,7 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
                     $DB->update_record('grade_items', $gradeitem);
                 } else if ($type == "points") {
                     $gradeitem->gradetype = GRADE_TYPE_VALUE;
-                    $gradeitem->grademax = 100;
+                    $gradeitem->grademax = $grademax;
                     $gradeitem->grademin = 0;
                     $gradeitem->aggregationcoef = $weight;
                     $DB->update_record('grade_items', $gradeitem);
@@ -161,6 +168,19 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
         // Get gradeitems.
         $gradeitems = $DB->get_records('grade_items', ['itemtype' => 'manual']);
         return array_column($gradeitems, 'id');
+    }
+
+    /**
+     * Set the aggregation strategy for a gradecategorid
+     * @param int $gradecategoryid
+     * @parm int $aggregation
+     */
+    public function set_strategy(int $gradecategoryid, int $aggregation): void {
+        global $DB;
+
+        $gcat = $DB->get_record('grade_categories', ['id' => $gradecategoryid], '*', MUST_EXIST);
+        $gcat->aggregation = $aggregation;
+        $DB->update_record('grade_categories', $gcat);
     }
 
     /**
