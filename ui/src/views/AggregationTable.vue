@@ -60,6 +60,9 @@
                         <div v-if="!header.infocol">{{ header.weight }}%</div>
                         <div v-if="header.gradetype">{{ header.gradetype }} <span v-if="!header.isscale">({{ header.grademax }})</span></div>
                     </div>
+                    <div class="py-1" v-if="header.strategy">
+                        <i>{{ header.strategy }}</i>
+                    </div>
                     <div v-if="header.categoryid">
                         <a href="#" @click="expand_clicked(header.categoryid)">
                             <span class="badge badge-light mt-2" >
@@ -132,6 +135,7 @@
     const atype = ref('');
     const formattedatype = ref('');
     const warnings = ref([]);
+    const strategy = ref('');
 
     let firstname = '';
     let lastname = '';
@@ -243,6 +247,7 @@
                 gradetype: column.gradetype,
                 grademax: column.grademax,
                 isscale: column.isscale,
+                strategy: column.strategy,
             });
         });
 
@@ -268,6 +273,7 @@
                 text: mstrings.coursetotal,
                 value: "total",
                 infocol: true,
+                strategy: strategy.value,
             });
         } else {
 
@@ -277,6 +283,7 @@
                 atype: atype.value,
                 value: "total",
                 infocol: true,
+                strategy: strategy.value,
             });
         }
         return heads;
@@ -332,6 +339,7 @@
             breadcrumb.value = result.breadcrumb;
             toplevel.value = result.toplevel;
             atype.value = result.atype;
+            strategy.value = result.strategy;
 
             // Get id of one back from breadcrumb
             backid.value = breadcrumb.value.slice(-2)[0].id;

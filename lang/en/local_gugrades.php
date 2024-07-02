@@ -246,6 +246,7 @@ $string['time'] = 'Time';
 $string['type'] = 'Type';
 $string['unreleasegrades'] = '(Un)release grades';
 $string['unreleasegradesgroup'] = '(Un)release grades for group';
+$string['unsupportedweight'] = 'Unsupported weight strategy';
 $string['username'] = 'User name';
 $string['userpicture'] = 'Pic';
 $string['viewfullnames'] = 'View full names';

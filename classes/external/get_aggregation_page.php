@@ -90,6 +90,7 @@ class get_aggregation_page extends external_api {
         return new external_single_structure([
             'toplevel' => new external_value(PARAM_BOOL, 'Is this the topmost level?'),
             'atype' => new external_value(PARAM_TEXT, 'Aggregated grade type (A, B, P, E - if mixed'),
+            'strategy' => new external_value(PARAM_TEXT, 'Aggregation strategy formatted for display'),
             'warnings' => new external_multiple_structure(
                 new external_single_structure([
                     'message' => new external_value(PARAM_TEXT, 'Warning message'),
@@ -128,6 +129,7 @@ class get_aggregation_page extends external_api {
                     'grademax' => new external_value(PARAM_INT, 'Maximum grade'),
                     'isscale' => new external_value(PARAM_BOOL, 'True if a scale, otherwise points'),
                     'schedule' => new external_value(PARAM_TEXT, 'A, B or empty string'),
+                    'strategy' => new external_value(PARAM_TEXT, 'If a category, then aggregation strategy formatted for display'),
                 ])
             ),
             'breadcrumb' => new external_multiple_structure(

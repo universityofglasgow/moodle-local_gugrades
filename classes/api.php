@@ -1442,6 +1442,7 @@ class api {
         return [
             'toplevel' => $istoplevel,
             'atype' => $atype,
+            'strategy' => \local_gugrades\aggregation::get_formatted_strategy($gradecategoryid),
             'warnings' => $warnings,
             'columns' => $columns,
             'users' => $users,

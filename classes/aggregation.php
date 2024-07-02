@@ -55,6 +55,38 @@ class aggregation {
     }
 
     /**
+     * Get aggregation strategy formatted for display
+     * @param int $gradecategoryid
+     * @return string
+     *
+     */
+    public static function get_formatted_strategy(int $gradecategoryid) {
+        global $DB;
+
+        $gcat = $DB->get_record('grade_categories', ['id' => $gradecategoryid], '*', MUST_EXIST);
+        $agg = $gcat->aggregation;
+
+        // Array translates aggregation id
+        $lookup = [
+            \GRADE_AGGREGATE_MEAN => get_string('aggregatemean', 'grades'),
+            \GRADE_AGGREGATE_MEDIAN => get_string('aggregatemedian', 'grades'),
+            \GRADE_AGGREGATE_MIN => get_string('aggregatemin', 'grades'),
+            \GRADE_AGGREGATE_MAX => get_string('aggregatemax', 'grades'),
+            \GRADE_AGGREGATE_MODE => get_string('aggregatemode', 'grades'),
+            \GRADE_AGGREGATE_WEIGHTED_MEAN => get_string('aggregateweightedmean', 'grades'),
+            \GRADE_AGGREGATE_WEIGHTED_MEAN2 => get_string('aggregateweightedmean2', 'grades'),
+            \GRADE_AGGREGATE_EXTRACREDIT_MEAN => get_string('unsupportedweight', 'local_gugrades'),
+            \GRADE_AGGREGATE_SUM => get_string('aggregatesum', 'grades'),
+        ];
+
+        if (array_key_exists($agg, $lookup)) {
+            return $lookup[$agg];
+        } else {
+            throw new \moodle_exception('Unknown aggregation strategy - ' . $agg);
+        }
+    }
+
+    /**
      * Get aggregation tale columns for supplied gradecategoryid
      * @param int $courseid
      * @param int $gradecategoryid
@@ -113,6 +145,7 @@ class aggregation {
                 'grademax' => $gradecategory->grademax,
                 'isscale' => $gradecategory->isscale,
                 'schedule' => $gradecategory->schedule,
+                'strategy' => self::get_formatted_strategy($gradecategory->categoryid),
 
                 // TODO - may not be so simple.
                 'weight' => round($gradecategory->weight * 100),
@@ -130,6 +163,7 @@ class aggregation {
                 'grademax' => $conversion->get_maximum_grade(),
                 'isscale' => $conversion->is_scale(),
                 'schedule' => $conversion->get_schedule(),
+                'strategy' => '',
 
                 // TODO - may not be so simple.
                 'weight' => round($gradeitem->weight * 100),
