@@ -57,6 +57,7 @@ final class get_dashboard_enabled_test extends \local_gugrades\external\gugrades
         );
 
         $this->assertFalse($enabled['enabled']);
+        $this->assertFalse($enabled['gradesreleased']);
 
         // MyGrades is enabled by releasing grades for a course.
         $userlist = [
@@ -82,6 +83,7 @@ final class get_dashboard_enabled_test extends \local_gugrades\external\gugrades
         );
 
         $this->assertTrue($enabled['enabled']);
+        $this->assertTrue($enabled['gradesreleased']);
 
         // Switch off the course.
         $this->disable_dashboard($this->course->id, true);
@@ -94,5 +96,6 @@ final class get_dashboard_enabled_test extends \local_gugrades\external\gugrades
         );
 
         $this->assertFalse($enabled['enabled']);
+        $this->assertTrue($enabled['gradesreleased']);
     }
 }

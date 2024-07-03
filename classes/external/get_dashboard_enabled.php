@@ -59,9 +59,12 @@ class get_dashboard_enabled extends external_api {
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        $enabled = \local_gugrades\api::is_mygrades_enabled_for_course($courseid);
+        [$enabled, $gradesreleased] = \local_gugrades\api::get_dashboard_enabled($courseid);
 
-        return ['enabled' => $enabled];
+        return [
+            'enabled' => $enabled,
+            'gradesreleased' => $gradesreleased,
+        ];
     }
 
     /**
@@ -71,6 +74,7 @@ class get_dashboard_enabled extends external_api {
     public static function execute_returns() {
         return new external_single_structure([
             'enabled' => new external_value(PARAM_BOOL, 'Is MyGrades enabled (for the dashboard) in this course.'),
+            'gradesreleased' => new external_value(PARAM_BOOL, 'Have grades been released?'),
         ]);
     }
 

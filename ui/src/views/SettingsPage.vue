@@ -2,10 +2,17 @@
     <div>
         <h1>{{ mstrings.settings }}</h1>
 
+
         <FormKit type="form" @submit="submit_form">
+
+            <div v-if="!gradesreleased" class="alert alert-warning">
+                {{ mstrings.gradesnotreleased }}
+            </div>
+
             <FormKit
                 type="checkbox"
                 :label="mstrings.disabledashboard"
+                :disabled="!gradesreleased"
                 v-model="disabledashboard"
                 >
             </FormKit>
@@ -25,6 +32,7 @@
 
     const mstrings = inject('mstrings');
     const disabledashboard = ref(false);
+    const gradesreleased = ref(false);
 
     const toast = useToast();
 
@@ -43,7 +51,9 @@
             }
         }])[0]
         .then((result) => {
+            gradesreleased.value = result.gradesreleased;
             const enabled = result.enabled;
+            window.console.log(gradesreleased.value);
 
             // Bodge to get jQuery needed for Bootstrap JS.
             const $ = window.jQuery;
@@ -98,6 +108,8 @@
         const GU = window.GU;
         const courseid = GU.courseid;
         const fetchMany = GU.fetchMany;
+
+        get_dashboard_enabled();
 
         fetchMany([{
             methodname: 'local_gugrades_get_settings',

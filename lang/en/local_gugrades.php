@@ -114,6 +114,7 @@ $string['gradesimportedsuccess'] = 'Grades successfully imported';
 $string['gradeiteminfo'] = 'Grade item info';
 $string['gradesmissing'] = 'Grades missing';
 $string['gradesnotmatching'] = 'Grades not matching';
+$string['gradesnotreleased'] = 'One or more grades must be released on the capture tab to enable MyGrades for this course on the Learner Dashboard';
 $string['gradesreleased'] = 'Grades successfully released';
 $string['gradesunreleased'] = 'Grades successfully un-released';
 $string['gradetype'] = 'Grade type';

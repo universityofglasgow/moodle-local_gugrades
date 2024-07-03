@@ -993,11 +993,13 @@ class api {
     /**
      * Is MyGrades "enabled" for this course
      * Are there any released grades and/or is MyGrades
-     * disabled for this course.
+     * disabled for this course in the settings
+     * dashboardenabled == grades released AND !$disaledashboard
+     * gradesreleased == grades released
      * @param int $courseid
-     * @return bool
+     * @return [bool, bool]
      */
-    public static function is_mygrades_enabled_for_course(int $courseid) {
+    public static function get_dashboard_enabled(int $courseid) {
         global $DB;
 
         // Get setting. If that's set to disabled then nothing else to do.
@@ -1007,15 +1009,20 @@ class api {
             AND $sqlname = :name
             AND value = :value";
         if ($DB->record_exists_sql($sql, ['courseid' => $courseid, 'name' => 'disabledashboard', 'value' => 1])) {
-            return false;
+            $disabledashboard = true;
+        } else {
+            $disabledashboard = false;
         }
 
-        // If that passes, then check if there are any 'released' grades.
+        // If not disabled, then check if there are any 'released' grades.
+        // If not, dashboard is disabled (again).
         if ($DB->record_exists('local_gugrades_grade', ['courseid' => $courseid, 'gradetype' => 'RELEASED', 'iscurrent' => 1])) {
-            return true;
+            $gradesreleased = true;
+        } else {
+            $gradesreleased = false;
         }
 
-        return false;
+        return [$gradesreleased && !$disabledashboard, $gradesreleased];
     }
 
     /**
@@ -1081,7 +1088,7 @@ class api {
             $course->firstlevel = [];
 
             // Check if MyGrades is enabled for this course?
-            $course->gugradesenabled = self::is_mygrades_enabled_for_course($id);
+            [$course->gugradesenabled, $gradesreleased] = self::get_dashboard_enabled($id);
 
             // Check if (old) GCAT is enabled for this course?
             $sqlshortname = $DB->sql_compare_text('shortname');
