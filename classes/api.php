@@ -1417,7 +1417,7 @@ class api {
         bool $aggregate
         ) {
 
-        // Get the level 1 parent category
+        // Get the level 1 parent category.
         $level1id = \local_gugrades\grades::get_level_one_parent($gradecategoryid);
 
         // build (and cache) grade structure (whole tree).
@@ -1426,7 +1426,7 @@ class api {
         // Get categories and items at this level.
         [$columns, $atype, $warnings] = \local_gugrades\aggregation::get_columns($courseid, $gradecategoryid);
 
-        // Don't have duplicate warnings
+        // Don't have duplicate warnings.
         $warnings = array_intersect_key($warnings, array_unique(array_map('serialize', $warnings)));
 
         // Get all the students.

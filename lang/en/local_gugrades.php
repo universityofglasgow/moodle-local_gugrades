@@ -106,12 +106,12 @@ $string['gradehidden'] = '<b>Grade is hidden</b><br />This grade item is hidden 
 $string['gradehistory'] = 'Grade history';
 $string['gradeimporteduser'] = 'Grade was imported for this user';
 $string['gradeitem'] = 'Grade item';
+$string['gradeiteminfo'] = 'Grade item info';
 $string['gradelocked'] = '<b><i class="fa fa-radiation"></i>Grade is locked</b><br />This grade item is locked in the Gradebook settings. Grades cannot be changed';
 $string['gradenotsupported'] = '<b><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Grade type is not supported</b><br/>Make sure grade is either points or a scale. If a scale, check that it is a supported one.';
 $string['gradenoun'] = 'Grade';
 $string['gradesimported'] = 'Grades have already been imported. Existing values may be changed/overwritten. Do you really want to continue?';
 $string['gradesimportedsuccess'] = 'Grades successfully imported';
-$string['gradeiteminfo'] = 'Grade item info';
 $string['gradesmissing'] = 'Grades missing';
 $string['gradesnotmatching'] = 'Grades not matching';
 $string['gradesnotreleased'] = 'One or more grades must be released on the capture tab to enable MyGrades for this course on the Learner Dashboard';

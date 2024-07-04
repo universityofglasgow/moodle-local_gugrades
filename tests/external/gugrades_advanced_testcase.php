@@ -116,7 +116,7 @@ class gugrades_advanced_testcase extends gugrades_base_testcase {
         $assign3 = $this->getDataGenerator()->create_module('assign', ['course' => $course->id]);
         $assign4 = $this->getDataGenerator()->create_module('assign', ['course' => $course->id]);
 
-        // Add one assignment just for scheduleb
+        // Add one assignment just for scheduleb.
         $assignb1 = $this->getDataGenerator()->create_module('assign', ['course' => $course->id]);
 
         // Get gradeitemids.
@@ -167,7 +167,7 @@ class gugrades_advanced_testcase extends gugrades_base_testcase {
         // Item 4 only has one - other student is (deliberately) not graded.
         $this->add_assignment_grade($assign4->id, $student->id, 18);
 
-        // Schedule B grades
+        // Schedule B grades.
         $this->add_assignment_grade($assignb1->id, $student->id, 6);
         $this->add_assignment_grade($assignb1->id, $student2->id, 3);
 

@@ -94,7 +94,7 @@ final class aggregation_strategies_test extends \local_gugrades\external\gugrade
             );
         }
 
-        // Get "Summer exam" category
+        // Get "Summer exam" category.
         $summerexamid = $this->get_grade_category("Summer exam");
 
         // Switch to mean
@@ -140,10 +140,10 @@ final class aggregation_strategies_test extends \local_gugrades\external\gugrade
             );
         }
 
-        // Get "Summer exam" category
+        // Get "Summer exam" category.
         $summerexamid = $this->get_grade_category("Summer exam");
 
-        // Switch to mean
+        // Switch to mean.
         $this->set_strategy($summerexamid, \GRADE_AGGREGATE_WEIGHTED_MEAN2);
 
         // Get aggregation page for above.
@@ -185,10 +185,10 @@ final class aggregation_strategies_test extends \local_gugrades\external\gugrade
             );
         }
 
-        // Get "Summer exam" category
+        // Get "Summer exam" category.
         $summerexamid = $this->get_grade_category("Summer exam");
 
-        // Switch to mean
+        // Switch to mean.
         $this->set_strategy($summerexamid, \GRADE_AGGREGATE_MIN);
 
         // Get aggregation page for above.
@@ -230,7 +230,7 @@ final class aggregation_strategies_test extends \local_gugrades\external\gugrade
             );
         }
 
-        // Get "Summer exam" category
+        // Get "Summer exam" category.
         $summerexamid = $this->get_grade_category("Summer exam");
 
         // Switch to mean
@@ -278,7 +278,7 @@ final class aggregation_strategies_test extends \local_gugrades\external\gugrade
         // Get "Summer exam" category
         $summerexamid = $this->get_grade_category("Summer exam");
 
-        // Switch to mean
+        // Switch to mean.
         $this->set_strategy($summerexamid, \GRADE_AGGREGATE_MEDIAN);
 
         // Get aggregation page for above.
@@ -320,7 +320,7 @@ final class aggregation_strategies_test extends \local_gugrades\external\gugrade
             );
         }
 
-        // Get "Summer exam" category
+        // Get "Summer exam" category.
         $summerexamid = $this->get_grade_category("Summer exam");
 
         // Switch to mean

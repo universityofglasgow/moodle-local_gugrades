@@ -153,7 +153,7 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
             );
         }
 
-        // Add admin grades to 'Item 2' and 'Item 4'
+        // Add admin grades to 'Item 2' and 'Item 4'.
         $item2id = $this->get_gradeitemid('Item 2');
         $this->apply_admingrade($this->course->id, $item2id, $this->student->id, 'MV');
         $item4id = $this->get_gradeitemid('Item 4');
@@ -200,7 +200,7 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
             );
         }
 
-        // Add admin grades to 'Item 4'
+        // Add admin grades to 'Item 4'.
         $item4id = $this->get_gradeitemid('Item 4');
         $this->apply_admingrade($this->course->id, $item4id, $this->student->id, 'MV');
 

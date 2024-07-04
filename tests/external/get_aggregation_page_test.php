@@ -212,7 +212,6 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
             $page
         );
 
-
         $fred = $page['users'][0];
         $this->assertEquals("57", $fred['completed']);
         $this->assertEquals('C2', $fred['fields'][2]['display']);
@@ -287,7 +286,6 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         $this->assertFalse($page['toplevel']);
         $this->assertEquals('P', $page['atype']);
         $fred = $page['users'][0];
-        //var_dump($fred); die;
         $this->assertEquals(47.23333, $fred['total']);
         $this->assertEquals('', $fred['error']);
     }
@@ -320,7 +318,6 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         }
 
         // Get category id for grade category 'Schedule B exam'.
-        //$scaleexamid = $this->get_grade_category('Scale exam');
         $scaleexamid = $this->get_grade_category("Schedule B exam");
 
         // Get aggregation page for above.
@@ -329,7 +326,6 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
             get_aggregation_page::execute_returns(),
             $page
         );
-
 
         $this->assertFalse($page['toplevel']);
         $this->assertEquals('B', $page['atype']);

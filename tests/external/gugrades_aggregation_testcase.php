@@ -173,7 +173,7 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
     /**
      * Set the aggregation strategy for a gradecategorid
      * @param int $gradecategoryid
-     * @parm int $aggregation
+     * @param int $aggregation
      */
     public function set_strategy(int $gradecategoryid, int $aggregation): void {
         global $DB;

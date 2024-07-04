@@ -138,8 +138,7 @@ class base {
             \GRADE_AGGREGATE_MODE => 'mode',
             \GRADE_AGGREGATE_WEIGHTED_MEAN => 'weighted_mean',
             \GRADE_AGGREGATE_WEIGHTED_MEAN2 => 'simple_weighted_mean',
-            // \GRADE_AGGREGATE_EXTRACREDIT_MEAN => 'extracredit_mean',
-            \GRADE_AGGREGATE_SUM => 'mean', // Natural does the same thing as mean
+            \GRADE_AGGREGATE_SUM => 'mean', // Natural does the same thing as mean.
         ];
         if (array_key_exists($aggregationid, $lookup)) {
             $agf = $lookup[$aggregationid];
@@ -148,7 +147,6 @@ class base {
         }
 
         // TODO - force everything to me mean for testing, for now.
-        //$agf = 'mean';
 
         return "strategy_" .$agf;
     }
@@ -269,14 +267,14 @@ class base {
 
         sort($grades);
 
-        // If odd number of grades it's just the middle value
+        // If odd number of grades it's just the middle value.
         $medianindex = count($grades) / 2;
         $roundindex = round($medianindex);
         if ($roundindex != $medianindex) {
             return $this->round_float($grades[$medianindex]);
         } else {
 
-            // It's the mean of the two middle values
+            // It's the mean of the two middle values.
             $midh = $grades[$roundindex];
             $midl = $grades[$roundindex - 1];
 

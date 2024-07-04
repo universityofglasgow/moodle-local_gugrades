@@ -66,7 +66,7 @@ class aggregation {
         $gcat = $DB->get_record('grade_categories', ['id' => $gradecategoryid], '*', MUST_EXIST);
         $agg = $gcat->aggregation;
 
-        // Array translates aggregation id
+        // Array translates aggregation id.
         $lookup = [
             \GRADE_AGGREGATE_MEAN => get_string('aggregatemean', 'grades'),
             \GRADE_AGGREGATE_MEDIAN => get_string('aggregatemedian', 'grades'),
@@ -95,10 +95,10 @@ class aggregation {
     public static function get_columns(int $courseid, int $gradecategoryid) {
         global $DB;
 
-        // Accumulate any warnings
+        // Accumulate any warnings.
         $warnings = [];
 
-        // Get list of grade categories
+        // Get list of grade categories.
         $sql = "SELECT * FROM {grade_categories}
             WHERE courseid = :courseid
             AND parent = :parent
@@ -237,12 +237,12 @@ class aggregation {
             $items = [];
             foreach ($columns as $column) {
 
-                // Basic fields
+                // Basic fields.
                 $fieldname = 'AGG_' . $column->gradeitemid;
                 $data = [
                     'fieldname' => $fieldname, // Required by WS.
                     'itemname' => $column->shortname, // Required by WS.
-                    'display' => '', // Required by WS
+                    'display' => '', // Required by WS.
                     'schedule' => $column->schedule,
                     'weight' => $column->weight,
                     'grademissing' => true,
@@ -396,8 +396,8 @@ class aggregation {
         if ($countpoints == count($items)) {
             $atype = \local_gugrades\GRADETYPE_POINTS;
         } else if ($sumscheduleaweights >= ($sumofweights / 2)) {
-            $atype =  \local_gugrades\GRADETYPE_SCHEDULEA;
-        } else if ($sumscheduleaweights < ($sumofweights / 2)){
+            $atype = \local_gugrades\GRADETYPE_SCHEDULEA;
+        } else if ($sumscheduleaweights < ($sumofweights / 2)) {
             $atype = \local_gugrades\GRADETYPE_SCHEDULEB;
         } else {
             throw new \moodle_exception('Cannot evaluate aggregation type');
@@ -438,7 +438,7 @@ class aggregation {
     public static function recurse_tree(int $courseid, int $gradecategoryid, bool $force) {
         global $DB;
 
-        // cache the data if possible.
+        // Cache the data if possible.
         $cache = \cache::make('local_gugrades', 'gradeitems');
 
         // Get the category and corresponding instance.
@@ -500,10 +500,10 @@ class aggregation {
             $categorynode->isscale = ($atype == 'A') || ($atype == 'B');
             $categorynode->warnings = $warnings;
 
-            // Human name of whatever grade type this contains
+            // Human name of whatever grade type this contains.
             $categorynode->gradetype = self::translate_atype($atype);
 
-            // Write category node to cache
+            // Write category node to cache.
             $cache->set($gradeitem->id, $categorynode);
         }
 
@@ -516,17 +516,17 @@ class aggregation {
      * so this either gets the cached grade category or (if it doesn't exist)
      * it calls recurse_tree to get it.
      * @param int $courseid
-     * @param int $gradeitemid
+     * @param int $gradecategoryid
      * @return object
      */
     public static function get_enhanced_grade_category(int $courseid, int $gradecategoryid) {
         global $DB;
 
-        // The cache uses the corresponding grade item id
+        // The cache uses the corresponding grade item id.
         $gradeitem = $DB->get_record('grade_items',
             ['iteminstance' => $gradecategoryid, 'itemtype' => 'category'], '*', MUST_EXIST);
 
-        // Get cache instance
+        // Get cache instance.
         $cache = \cache::make('local_gugrades', 'gradeitems');
 
         // Is the category in the cache. If not (re)build

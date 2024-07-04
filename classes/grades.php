@@ -58,12 +58,12 @@ class grades {
     private static function find_child_item(int $categoryid) {
         global $DB;
 
-        // Search for any grade items at this level (that's the end of it)
+        // Search for any grade items at this level (that's the end of it).
         if ($DB->record_exists('grade_items', ['categoryid' => $categoryid])) {
             return true;
         }
 
-        // Failing that, search any child categories
+        // Failing that, search any child categories.
         if ($childcats = $DB->get_records('grade_categories', ['parent' => $categoryid])) {
             foreach ($childcats as $childcat) {
                 if (self::find_child_item($childcat->id)) {
@@ -72,7 +72,7 @@ class grades {
             }
         }
 
-        // Failing all of that, there can't be any
+        // Failing all of that, there can't be any.
         return false;
     }
 
@@ -106,8 +106,8 @@ class grades {
     /**
      * Get first level (summative / formative etc) category id for given category id
      * Depth == 2 for the first level
-     * @param int $gradecategorid
-     * @return int
+     * @param int $gradecategoryid
+     * @return bool
      */
     public static function get_level_one_parent(int $gradecategoryid) {
         global $DB;
