@@ -9,7 +9,7 @@
     <div v-if="level1category" class="mt-2">
 
         <!-- display warnings -->
-        <div v-if="toplevel">
+        <div>
             <div v-for="warning in warnings" class="alert alert-warning alert-dismissible fade show mb-1" role="alert">
                 {{ warning.message }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
