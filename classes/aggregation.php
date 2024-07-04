@@ -171,7 +171,7 @@ class aggregation {
         }
 
         // Get aggregation type for these columns (i.e. this grade category).
-        [$atype, $warnings] = self::get_aggregation_type($columns);
+        [$atype, $warnings] = self::get_aggregation_type($columns, $gradecategoryid);
 
         return [$columns, $atype, $warnings];
     }
@@ -268,7 +268,7 @@ class aggregation {
 
             // Get atype and aggregation rules.
             // This is why we needed items - array of array vs. array of objects.
-            [$atype, $warnings] = self::get_aggregation_type($items);
+            [$atype, $warnings] = self::get_aggregation_type($items, $gradecategoryid);
             $aggregation = self::aggregation_factory($courseid, $atype);
 
             // Read "top level" category for user info
@@ -347,9 +347,14 @@ class aggregation {
      * b. All weights are zero
      * c. mixture of points and scales (mixture of scales ok)
      * @param array $items
+     * @param int $gradecategoryid
      * @return [$atype, $warnings]
      */
-    public static function get_aggregation_type(array $items) {
+    public static function get_aggregation_type(array $items, $gradecategoryid) {
+        global $DB;
+
+        $gradecategory = $DB->get_record('grade_categories', ['id' => $gradecategoryid], '*', MUST_EXIST);
+
         $sumofweights = 0;
         $sumscheduleaweights = 0;
         $sumschedulebweights = 0;
@@ -373,10 +378,10 @@ class aggregation {
             }
         }
 
+        // ONLY if weighted mean aggregation...
         // If sumofweights is zero, we're going to get divide-by-zero
         // errors down the line.
-        // TODO - taking this out because it's confusing as hell.
-        if ($sumofweights == 0) {
+        if ($sumofweights == 0 && ($gradecategory->aggregation == \GRADE_AGGREGATE_WEIGHTED_MEAN)) {
             $atype = \local_gugrades\GRADETYPE_ERROR;
             $warnings[] = ['message' => get_string('weightszero', 'local_gugrades')];
         }
@@ -494,7 +499,7 @@ class aggregation {
 
             // Process $categorynode->children such that we know what the category's
             // aggregation type is (Schedule A, B, POINTS).
-            [$atype, $warnings] = self::get_aggregation_type($categorynode->children);
+            [$atype, $warnings] = self::get_aggregation_type($categorynode->children, $gradecategoryid);
             $categorynode->atype = $atype;
             $categorynode->schedule = $atype;
             $categorynode->isscale = ($atype == 'A') || ($atype == 'B');
