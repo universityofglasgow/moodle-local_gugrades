@@ -100,10 +100,9 @@ final class dashboard_get_courses_test extends \local_gugrades\external\gugrades
 
         // Check top-level grade categories.
         $catcourse = $courses[4];
-        $this->assertCount(2, $catcourse['firstlevel']);
+        $this->assertCount(1, $catcourse['firstlevel']);
         $this->assertEquals('Summative', $catcourse['firstlevel'][0]['fullname']);
         $this->assertIsInt($catcourse['firstlevel'][0]['id']);
-        $this->assertEquals('Formative', $catcourse['firstlevel'][1]['fullname']);
 
         // Check GUGCAT enabled.
         $this->assertTrue($courses[1]['gcatenabled']);

@@ -89,6 +89,12 @@ class base {
             }
         }
 
+        // Ideally, we shouldn't be here if countall or totalweights are zero.
+        // However, just for robustness...
+        if (($countall == 0) || ($totalweights == 0)) {
+            return 0;
+        }
+
         // Calculation and rounding.
         // If $totalweights == 0 then there are no weights, then use
         // counts instead.

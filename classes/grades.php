@@ -50,6 +50,33 @@ class grades {
     }
 
     /**
+     * Recursively search child categories for one or more grad items
+     * We just care that one exists
+     * @param int $categoryid
+     * @return boolean
+     */
+    private static function find_child_item(int $categoryid) {
+        global $DB;
+
+        // Search for any grade items at this level (that's the end of it)
+        if ($DB->record_exists('grade_items', ['categoryid' => $categoryid])) {
+            return true;
+        }
+
+        // Failing that, search any child categories
+        if ($childcats = $DB->get_records('grade_categories', ['parent' => $categoryid])) {
+            foreach ($childcats as $childcat) {
+                if (self::find_child_item($childcat->id)) {
+                    return true;
+                }
+            }
+        }
+
+        // Failing all of that, there can't be any
+        return false;
+    }
+
+    /**
      * Get first level categories (should be summative / formative and so on)
      * Actually depth==2 in the database (1 == top level)
      * @param int $courseid
@@ -58,19 +85,22 @@ class grades {
     public static function get_firstlevel(int $courseid) {
         global $DB;
 
+        // First level is depth 2. Depth 1 is the course.
         $gradecategories = $DB->get_records('grade_categories', [
             'courseid' => $courseid,
             'hidden' => 0,
+            'depth' => 2,
         ]);
 
-        $cats = [];
+        // We're only interested in categories that have some grade items
+        // Somewhere in their tree.
         foreach ($gradecategories as $category) {
-            if ($category->depth == 2) {
-                $cats[] = $category;
+            if (!self::find_child_item($category->id)) {
+                unset($gradecategories[$category->id]);
             }
         }
 
-        return $cats;
+        return $gradecategories;
     }
 
     /**
