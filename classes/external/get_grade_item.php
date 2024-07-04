@@ -77,7 +77,7 @@ class get_grade_item extends external_api {
             'categoryid' => new external_value(PARAM_INT, 'Grade category ID'),
             'itemname' => new external_value(PARAM_TEXT, 'Name of grade item'),
             'itemtype' => new external_value(PARAM_TEXT, 'course / mod / category / manual'),
-            'itemmodule' => new external_value(PARAM_ALPHA, 'Module type (if module)'),
+            'itemmodule' => new external_value(PARAM_TEXT, 'Module type (if module)'),
             'iteminstance' => new external_value(PARAM_INT, 'Module instance ID'),
             'isscale' => new external_value(PARAM_BOOL, 'True if grade item is a scale'),
             'scalename' => new external_value(PARAM_TEXT, 'Name of scale (if it is a scale'),

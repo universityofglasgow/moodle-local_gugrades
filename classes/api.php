@@ -313,13 +313,22 @@ class api {
             $scalename = '';
         }
 
+        // Get module name.
+        if ($item->itemtype == 'mod') {
+            $modname = get_string('pluginname', 'mod_' . $item->itemmodule);
+        } else if ($item->itemtype == 'manual') {
+            $modname = get_string('manual', 'local_gugrades');
+        } else {
+            $modname = get_string($item->itemtype);
+        }
+
         return [
             'id' => $item->id,
             'courseid' => $item->courseid,
             'categoryid' => $item->categoryid,
             'itemname' => $itemname,
             'itemtype' => get_string($item->itemtype, 'local_gugrades'),
-            'itemmodule' => $item->itemmodule,
+            'itemmodule' => $modname,
             'iteminstance' => $item->iteminstance,
             'isscale' => !empty($item->scaleid),
             'scalename' => $scalename,
