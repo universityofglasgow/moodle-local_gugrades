@@ -97,7 +97,7 @@ final class aggregation_strategies_test extends \local_gugrades\external\gugrade
         // Get "Summer exam" category.
         $summerexamid = $this->get_grade_category("Summer exam");
 
-        // Switch to mean
+        // Switch to mean.
         $this->set_strategy($summerexamid, \GRADE_AGGREGATE_MEAN);
 
         // Get aggregation page for above.
@@ -233,7 +233,7 @@ final class aggregation_strategies_test extends \local_gugrades\external\gugrade
         // Get "Summer exam" category.
         $summerexamid = $this->get_grade_category("Summer exam");
 
-        // Switch to mean
+        // Switch to mean.
         $this->set_strategy($summerexamid, \GRADE_AGGREGATE_MAX);
 
         // Get aggregation page for above.
@@ -275,7 +275,7 @@ final class aggregation_strategies_test extends \local_gugrades\external\gugrade
             );
         }
 
-        // Get "Summer exam" category
+        // Get "Summer exam" category.
         $summerexamid = $this->get_grade_category("Summer exam");
 
         // Switch to mean.
@@ -323,7 +323,7 @@ final class aggregation_strategies_test extends \local_gugrades\external\gugrade
         // Get "Summer exam" category.
         $summerexamid = $this->get_grade_category("Summer exam");
 
-        // Switch to mean
+        // Switch to mean.
         $this->set_strategy($summerexamid, \GRADE_AGGREGATE_MODE);
 
         // Get aggregation page for above.

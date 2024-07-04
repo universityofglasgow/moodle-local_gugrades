@@ -53,7 +53,6 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
     protected function build_schema(array $items, int $gradeitemid) {
         global $DB;
 
-
         // Array defines which aggregation type calls which function.
         $lookup = [
             'mean' => \GRADE_AGGREGATE_MEAN,
@@ -78,7 +77,7 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
                 $weight = 1;
             }
 
-            // Get grademax for points only (default is 100)
+            // Get grademax for points only (default is 100).
             if (isset($item->grademax)) {
                 $grademax = $item->grademax;
             } else {
@@ -91,7 +90,7 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
                     ['courseid' => $this->course->id, 'itemname' => $item->name]
                 );
 
-                // default is points
+                // Default is points.
                 $type = empty($item->type) ? "points" : $item->type;
 
                 // Is it a scale (default is points)?
@@ -130,15 +129,16 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
                 }
 
                 // In which case it must be a grade category.
-                $gradecategory = $this->getDataGenerator()->create_grade_category(
-                    ['courseid' => $this->course->id,
+                $gradecategory = $this->getDataGenerator()->create_grade_category([
+                    'courseid' => $this->course->id,
                     'fullname' => $item->name,
                     'parent' => $gradeitemid,
                     'aggregation' => $aggregation,
                 ]);
 
-                // Set weight (aggregationcoef)
-                $gradeitem = $DB->get_record('grade_items', ['itemtype' => 'category', 'iteminstance' => $gradecategory->id], '*', MUST_EXIST);
+                // Set weight (aggregationcoef).
+                $gradeitem = $DB->get_record('grade_items',
+                    ['itemtype' => 'category', 'iteminstance' => $gradecategory->id], '*', MUST_EXIST);
                 $gradeitem->aggregationcoef = $weight;
                 $DB->update_record('grade_items', $gradeitem);
 

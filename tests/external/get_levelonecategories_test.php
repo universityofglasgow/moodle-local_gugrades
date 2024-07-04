@@ -52,7 +52,7 @@ final class get_levelonecategories_test extends \local_gugrades\external\gugrade
         );
 
         // Check data is correct.
-        // Formative has no items, so will not be included
+        // Formative has no items, so will not be included.
         $this->assertIsArray($categories);
         $this->assertCount(1, $categories);
         $this->assertEquals('Summative', $categories[0]['fullname']);
