@@ -18,6 +18,7 @@
  * Test functions around get_aggregation_page
  * Schema2 tests the "75% rule" - we check the displayed grade when completion
  * is less than and greater than 75%
+ * Also tests all aggregation strategies for scales
  * @package    local_gugrades
  * @copyright  2024
  * @author     Howard Miller
