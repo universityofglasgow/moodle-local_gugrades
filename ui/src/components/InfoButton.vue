@@ -25,7 +25,7 @@
                     <th>{{  mstrings.scale }}</th>
                     <td>{{ scalename }}</td>
                 </tr>
-                <tr v-if="!isscale">
+                <tr v-if="!isscale && grademax">
                     <th>{{ mstrings.maxgrade }}</th>
                     <td>{{ grademax }}</td>
                 </tr>

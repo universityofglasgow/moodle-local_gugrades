@@ -462,7 +462,7 @@ class aggregation {
                 'droplow' => (int)$gcat->droplow,
                 'aggregation' => (int)$gcat->aggregation,
                 'weight' => (float)$gradeitem->aggregationcoef,
-                'grademax' => (float)$gradeitem->grademax,
+                'grademax' => 0.0, // Calculated further down.
                 'isscale' => false,  // Calculated further down.
                 'children' => [],
             ];
@@ -504,6 +504,7 @@ class aggregation {
             $categorynode->schedule = $atype;
             $categorynode->isscale = ($atype == 'A') || ($atype == 'B');
             $categorynode->warnings = $warnings;
+            $categorynode->grademax = ($atype == 'A') || ($atype == 'B') ? 22.0 : 100;
 
             // Human name of whatever grade type this contains.
             $categorynode->gradetype = self::translate_atype($atype);

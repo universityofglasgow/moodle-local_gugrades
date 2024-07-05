@@ -110,7 +110,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
      * @covers \local_gugrades\external\get_aggregation_page::execute
      * @return void
      */
-    public function disable_test_basic_aggregation_page(): void {
+    public function test_basic_aggregation_page(): void {
         global $DB;
 
         // Make sure that we're a teacher.
@@ -161,7 +161,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
      *
      * @covers \local_gugrades\external\get_aggregation_page::execute
      */
-    public function dis_test_completion_score(): void {
+    public function test_completion_score(): void {
         global $DB;
 
         // Make sure that we're a teacher.
@@ -251,7 +251,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
      *
      * @covers \local_gugrades\external\get_aggregation_page::execute
      */
-    public function dis_test_sub_category(): void {
+    public function test_sub_category(): void {
 
         // Make sure that we're a teacher.
         $this->setUser($this->teacher);
@@ -295,7 +295,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
      *
      * @covers \local_gugrades\external\get_aggregation_page::execute
      */
-    public function dis_test_scheduleb_sub_category(): void {
+    public function test_scheduleb_sub_category(): void {
 
         // Make sure that we're a teacher.
         $this->setUser($this->teacher);
@@ -331,8 +331,8 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         $this->assertEquals('B', $page['atype']);
         $fred = $page['users'][0];
         $this->assertEquals(100, $fred['completed']);
-        $this->assertEquals("D0 (9.16667)", $fred['displaygrade']);
-        $this->assertEquals(9.16667, $fred['rawgrade']);
+        $this->assertEquals("D0", $fred['displaygrade']);
+        $this->assertEquals(11.70588, $fred['rawgrade']);
         $this->assertEquals(11, $fred['total']);
     }
 
@@ -341,7 +341,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
      *
      * @covers \local_gugrades\external\get_aggregation_page::execute
      */
-    public function dis_test_schedulea_sub_category(): void {
+    public function test_schedulea_sub_category(): void {
 
         // Make sure that we're a teacher.
         $this->setUser($this->teacher);
@@ -377,9 +377,9 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         $this->assertEquals('A', $page['atype']);
         $fred = $page['users'][0];
         $this->assertEquals(100, $fred['completed']);
-        $this->assertEquals("D1 (10.64848)", $fred['displaygrade']);
-        $this->assertEquals(10.64848, $fred['rawgrade']);
-        $this->assertEquals(11, $fred['total']);
+        $this->assertEquals("C1", $fred['displaygrade']);
+        $this->assertEquals(13.58974, $fred['rawgrade']);
+        $this->assertEquals(14.0, $fred['total']);
     }
 
     /**

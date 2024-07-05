@@ -332,7 +332,7 @@ class api {
             'iteminstance' => $item->iteminstance,
             'isscale' => !empty($item->scaleid),
             'scalename' => $scalename,
-            'grademax' => $item->grademax,
+            'grademax' => $item->itemtype == 'category' ? 0 :$item->grademax,
             'weight' => round($item->aggregationcoef * 100),
         ];
     }
