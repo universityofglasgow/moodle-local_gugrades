@@ -176,6 +176,7 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
     /**
      * Test top-level aggregation, Schedule A/B mix.
      * Test with data - more than 75% completion
+     * Also tests default weighted mean
      *
      * @covers \local_gugrades\external\get_aggregation_page::execute
      */
@@ -220,8 +221,7 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
     }
 
     /**
-     * Test top-level aggregation, Schedule A/B mix.
-     * Test with data - more than 75% completion
+     * Test simple weighted mean
      *
      * @covers \local_gugrades\external\get_aggregation_page::execute
      */
@@ -262,5 +262,181 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
         $this->assertEquals(100, $fred['completed']);
         $this->assertEquals("D1 (10.5)", $fred['displaygrade']);
         $this->assertEquals(10.5, $fred['rawgrade']);
+    }
+
+    /**
+     * Test mode
+     *
+     * @covers \local_gugrades\external\get_aggregation_page::execute
+     */
+    public function test_mode(): void {
+
+        // Make sure that we're a teacher.
+        $this->setUser($this->teacher);
+
+        // Import grades only for one student (so far).
+        $userlist = [
+            $this->student->id,
+        ];
+
+        // Install test data for student.
+        $this->load_data('data2c', $this->student->id);
+
+        foreach ($this->gradeitemids as $gradeitemid) {
+            $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
+            $status = external_api::clean_returnvalue(
+                import_grades_users::execute_returns(),
+                $status
+            );
+        }
+
+        // Set aggregation strategy
+        $this->set_strategy($this->gradecatsummative->id, \GRADE_AGGREGATE_MODE);
+
+        // Get aggregation page for above.
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = external_api::clean_returnvalue(
+            get_aggregation_page::execute_returns(),
+            $page
+        );
+
+        $this->assertTrue($page['toplevel']);
+        $this->assertEquals('A', $page['atype']);
+        $fred = $page['users'][0];
+        $this->assertEquals(100, $fred['completed']);
+        $this->assertEquals("A5 (18)", $fred['displaygrade']);
+        $this->assertEquals(18.0, $fred['rawgrade']);
+    }
+
+    /**
+     * Test median
+     *
+     * @covers \local_gugrades\external\get_aggregation_page::execute
+     */
+    public function test_median(): void {
+
+        // Make sure that we're a teacher.
+        $this->setUser($this->teacher);
+
+        // Import grades only for one student (so far).
+        $userlist = [
+            $this->student->id,
+        ];
+
+        // Install test data for student.
+        $this->load_data('data2c', $this->student->id);
+
+        foreach ($this->gradeitemids as $gradeitemid) {
+            $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
+            $status = external_api::clean_returnvalue(
+                import_grades_users::execute_returns(),
+                $status
+            );
+        }
+
+        // Set aggregation strategy
+        $this->set_strategy($this->gradecatsummative->id, \GRADE_AGGREGATE_MEDIAN);
+
+        // Get aggregation page for above.
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = external_api::clean_returnvalue(
+            get_aggregation_page::execute_returns(),
+            $page
+        );
+
+        $this->assertTrue($page['toplevel']);
+        $this->assertEquals('A', $page['atype']);
+        $fred = $page['users'][0];
+        $this->assertEquals(100, $fred['completed']);
+        $this->assertEquals("D2 (9.5)", $fred['displaygrade']);
+        $this->assertEquals(9.5, $fred['rawgrade']);
+    }
+
+    /**
+     * Test max
+     *
+     * @covers \local_gugrades\external\get_aggregation_page::execute
+     */
+    public function test_max(): void {
+
+        // Make sure that we're a teacher.
+        $this->setUser($this->teacher);
+
+        // Import grades only for one student (so far).
+        $userlist = [
+            $this->student->id,
+        ];
+
+        // Install test data for student.
+        $this->load_data('data2c', $this->student->id);
+
+        foreach ($this->gradeitemids as $gradeitemid) {
+            $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
+            $status = external_api::clean_returnvalue(
+                import_grades_users::execute_returns(),
+                $status
+            );
+        }
+
+        // Set aggregation strategy
+        $this->set_strategy($this->gradecatsummative->id, \GRADE_AGGREGATE_MAX);
+
+        // Get aggregation page for above.
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = external_api::clean_returnvalue(
+            get_aggregation_page::execute_returns(),
+            $page
+        );
+
+        $this->assertTrue($page['toplevel']);
+        $this->assertEquals('A', $page['atype']);
+        $fred = $page['users'][0];
+        $this->assertEquals(100, $fred['completed']);
+        $this->assertEquals("A5 (18)", $fred['displaygrade']);
+        $this->assertEquals(18.0, $fred['rawgrade']);
+    }
+
+    /**
+     * Test min
+     *
+     * @covers \local_gugrades\external\get_aggregation_page::execute
+     */
+    public function test_min(): void {
+
+        // Make sure that we're a teacher.
+        $this->setUser($this->teacher);
+
+        // Import grades only for one student (so far).
+        $userlist = [
+            $this->student->id,
+        ];
+
+        // Install test data for student.
+        $this->load_data('data2c', $this->student->id);
+
+        foreach ($this->gradeitemids as $gradeitemid) {
+            $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
+            $status = external_api::clean_returnvalue(
+                import_grades_users::execute_returns(),
+                $status
+            );
+        }
+
+        // Set aggregation strategy
+        $this->set_strategy($this->gradecatsummative->id, \GRADE_AGGREGATE_MIN);
+
+        // Get aggregation page for above.
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = external_api::clean_returnvalue(
+            get_aggregation_page::execute_returns(),
+            $page
+        );
+
+        $this->assertTrue($page['toplevel']);
+        $this->assertEquals('A', $page['atype']);
+        $fred = $page['users'][0];
+        $this->assertEquals(100, $fred['completed']);
+        $this->assertEquals("F1 (5)", $fred['displaygrade']);
+        $this->assertEquals(5.0, $fred['rawgrade']);
     }
 }

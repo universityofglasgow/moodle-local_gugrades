@@ -228,8 +228,9 @@ class base {
      */
     public function strategy_min(array $items) {
         $grades = [];
+        $maxgrade = $this->get_max_grade();
         foreach ($items as $item) {
-            $norm = 100 * $item->grade / $item->grademax;
+            $norm = $maxgrade * $item->grade / $item->grademax;
             $grades[] = $norm;
         }
 
@@ -244,8 +245,9 @@ class base {
      */
     public function strategy_max(array $items) {
         $grades = [];
+        $maxgrade = $this->get_max_grade();
         foreach ($items as $item) {
-            $norm = 100 * $item->grade / $item->grademax;
+            $norm = $maxgrade * $item->grade / $item->grademax;
             $grades[] = $norm;
         }
 
@@ -260,8 +262,9 @@ class base {
      */
     public function strategy_median(array $items) {
         $grades = [];
+        $maxgrade = $this->get_max_grade();
         foreach ($items as $item) {
-            $norm = 100 * $item->grade / $item->grademax;
+            $norm = $maxgrade * $item->grade / $item->grademax;
             $grades[] = $norm;
         }
 
@@ -291,8 +294,9 @@ class base {
      */
     public function strategy_mode(array $items) {
         $grades = [];
+        $maxgrade = $this->get_max_grade();
         foreach ($items as $item) {
-            $norm = round(100 * $item->grade / $item->grademax);
+            $norm = round($maxgrade * $item->grade / $item->grademax);
             $grades[] = (int)$norm;
         }
 
