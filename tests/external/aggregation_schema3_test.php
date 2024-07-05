@@ -89,6 +89,22 @@ final class aggregation_schema3_test extends \local_gugrades\external\gugrades_a
         $this->assertCount(1, $warnings);
         $this->assertEquals(get_string('weightszero', 'local_gugrades'), $warnings[0]['message']);
         $fred = $page['users'][0];
+
+        // Change aggregation to non-weighted.
+        // This should not care aout weights.
+        $this->set_strategy($this->gradecatsummative->id, \GRADE_AGGREGATE_MEAN);
+
+        // Get aggregation page for above.
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = external_api::clean_returnvalue(
+            get_aggregation_page::execute_returns(),
+            $page
+        );
+
+        $this->assertTrue($page['toplevel']);
+        $this->assertEquals('A', $page['atype']);
+        $warnings = $page['warnings'];
+        $this->assertCount(0, $warnings);
     }
 
 }

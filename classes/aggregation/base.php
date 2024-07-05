@@ -217,7 +217,7 @@ class base {
             $sumgrademax += $item->grademax;
         }
 
-        return $this->round_float(100 * $sum / $sumgrademax);
+        return $this->round_float($maxgrade * $sum / $sumgrademax);
     }
 
     /**

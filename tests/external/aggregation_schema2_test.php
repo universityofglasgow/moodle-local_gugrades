@@ -218,4 +218,49 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
         $this->assertEquals("D2 (9.8)", $fred['displaygrade']);
         $this->assertEquals(9.8, $fred['rawgrade']);
     }
+
+    /**
+     * Test top-level aggregation, Schedule A/B mix.
+     * Test with data - more than 75% completion
+     *
+     * @covers \local_gugrades\external\get_aggregation_page::execute
+     */
+    public function test_simple_weighted_mean(): void {
+
+        // Make sure that we're a teacher.
+        $this->setUser($this->teacher);
+
+        // Import grades only for one student (so far).
+        $userlist = [
+            $this->student->id,
+        ];
+
+        // Install test data for student.
+        $this->load_data('data2c', $this->student->id);
+
+        foreach ($this->gradeitemids as $gradeitemid) {
+            $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
+            $status = external_api::clean_returnvalue(
+                import_grades_users::execute_returns(),
+                $status
+            );
+        }
+
+        // Set aggregation strategy
+        $this->set_strategy($this->gradecatsummative->id, \GRADE_AGGREGATE_WEIGHTED_MEAN2);
+
+        // Get aggregation page for above.
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = external_api::clean_returnvalue(
+            get_aggregation_page::execute_returns(),
+            $page
+        );
+
+        $this->assertTrue($page['toplevel']);
+        $this->assertEquals('A', $page['atype']);
+        $fred = $page['users'][0];
+        $this->assertEquals(100, $fred['completed']);
+        $this->assertEquals("D1 (10.5)", $fred['displaygrade']);
+        $this->assertEquals(10.5, $fred['rawgrade']);
+    }
 }
