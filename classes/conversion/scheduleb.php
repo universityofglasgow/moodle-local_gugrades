@@ -154,4 +154,15 @@ class scheduleb extends base {
         return [$converted, $scaleitem];
     }
 
+    /**
+     * Validate the grade
+     * It should be a valid Schedule B grade 0 <= g <= 22
+     * This is because (I think) the old GCAT can write an invalid 0 into assign_grade / grade_grade
+     * @param float $grade
+     * @return bool
+     */
+    public function validate(float $grade) {
+        return ($grade >= 0) && ($grade <= 22);
+    }
+
 }

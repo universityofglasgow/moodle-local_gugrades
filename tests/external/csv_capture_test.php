@@ -81,6 +81,27 @@ final class csv_capture_test extends \local_gugrades\external\gugrades_advanced_
     ];
 
     /**
+     * @var array $uploaddatab
+     */
+    private $uploaddatab = [
+        [
+            "Name",
+            "ID number",
+            "Grade",
+        ],
+        [
+            "Fred Bloggs",
+            "1234567",
+            "B0",
+        ],
+        [
+            "Juan Perez",
+            "1234560",
+            "D0",
+        ],
+    ];
+
+    /**
      * Create csv from array
      * @param array $lines
      * @return string
@@ -182,5 +203,34 @@ final class csv_capture_test extends \local_gugrades\external\gugrades_advanced_
         $this->assertEquals(2, $addcount);
         $this->assertCount(2, $grades);
         $this->assertEquals(18.0, $grades[1]->rawgrade);
+    }
+
+    /**
+     * Checking sending CSV file for Schedule grade
+     *
+     * @covers \local_gugrades\external\upload_csv::execute
+     */
+    public function test_upload_csv_scheduleb(): void {
+        global $DB;
+
+        // Make sure that we're a teacher.
+        $this->setUser($this->teacher);
+
+        // Get first csv test string.
+        $csv = $this->make_csv($this->uploaddatab);
+        $data = upload_csv::execute($this->course->id, $this->gradeitemidassignb1, 0, true, 'SECOND', '', $csv);
+        $data = external_api::clean_returnvalue(
+            upload_csv::execute_returns(),
+            $data
+        );
+        $lines = $data['lines'];
+        $errorcount = $data['errorcount'];
+        $addcount = $data['addcount'];
+
+        $this->assertCount(2, $lines);
+        $this->assertEquals(17, $lines[0]['gradevalue']);
+        $this->assertEquals(1, $lines[0]['state']);
+        $this->assertEquals(11, $lines[1]['gradevalue']);
+        $this->assertEquals(1, $lines[1]['state']);
     }
 }
