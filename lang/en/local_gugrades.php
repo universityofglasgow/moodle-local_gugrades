@@ -45,6 +45,7 @@ $string['cancel'] = 'Cancel';
 $string['cannotaggregate'] = 'Cannot aggregate';
 $string['captureaggregation'] = '\'MyGrades\' Grade capture and aggregation';
 $string['category'] = 'Grade category';
+$string['categoryerror'] = 'WARNING: There may be a discrepancy between the calculated category type/grades and that configured in the Gradebook.';
 $string['childerror'] = 'One or more sub-categories could not be aggregated preventing further aggregation.';
 $string['close'] = 'Close';
 $string['comment'] = 'Comment';

@@ -33,6 +33,11 @@
                     <th>{{ mstrings.weight }}</th>
                     <td>{{  weight }}</td>
                 </tr>
+                <tr v-if="categoryerror">
+                    <div class="alert alert-warning">
+                        {{ mstrings.categoryerror }}
+                    </div>
+                </tr>
             </tbody>
         </table>
 
@@ -56,6 +61,7 @@
     const scalename = ref('');
     const grademax = ref(0);
     const weight = ref(0);
+    const categoryerror = ref(false);
     const mstrings = inject('mstrings');
 
     const props = defineProps({
@@ -95,6 +101,7 @@
             scalename.value = result.scalename;
             grademax.value = result.grademax;
             weight.value = result.weight;
+            categoryerror.value = result.categoryerror;
         })
         .catch((error) => {
             window.console.error(error);

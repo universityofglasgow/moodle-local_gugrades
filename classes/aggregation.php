@@ -540,7 +540,7 @@ class aggregation {
         if ($gradecategory = $cache->get($gradeitem->id)) {
             return $gradecategory;
         } else {
-            return self::recurse_tree($courseid, $gradeitemid, false);
+            return self::recurse_tree($courseid, $gradecategoryid, false);
         }
     }
 

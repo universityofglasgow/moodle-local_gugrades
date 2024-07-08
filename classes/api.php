@@ -296,17 +296,26 @@ class api {
 
         // Get item.
         $item = $DB->get_record('grade_items', ['id' => $itemid], '*', MUST_EXIST);
+        $courseid = $item->courseid;
 
-        // If the type is a category, get that as well.
+        // If the type is a category, get that as well
         if ($item->itemtype == 'category') {
             $category = $DB->get_record('grade_categories', ['id' => $item->iteminstance], '*', MUST_EXIST);
             $itemname = $category->fullname;
+
+            // Get 'enhanced' version from aggregation
+            $enhancedcat = \local_gugrades\aggregation::get_enhanced_grade_category($category->courseid, $category->id);
         } else {
             $itemname = $item->itemname;
+            $enhancedcat = null;
         }
+        //var_dump($enhancedcat); die;
 
         // Get the scale name.
-        if ($item->scaleid) {
+        if ($item->itemtype == 'category') {
+            $conversion = \local_gugrades\grades::conversion_factory($courseid, $itemid);
+            $scalename = $conversion->name();
+        } else if ($item->scaleid) {
             $scale = $DB->get_record('scale', ['id' => $item->scaleid], '*', MUST_EXIST);
             $scalename = $scale->name;
         } else {
@@ -322,6 +331,14 @@ class api {
             $modname = get_string($item->itemtype);
         }
 
+        // Does calculated category match real one?
+        $categoryerror = false;
+        if ($item->itemtype == 'category') {
+            if ($enhancedcat->grademax != $item->grademax) {
+                $categoryerror = true;
+            }
+        }
+
         return [
             'id' => $item->id,
             'courseid' => $item->courseid,
@@ -330,10 +347,11 @@ class api {
             'itemtype' => get_string($item->itemtype, 'local_gugrades'),
             'itemmodule' => $modname,
             'iteminstance' => $item->iteminstance,
-            'isscale' => !empty($item->scaleid),
+            'isscale' => $item->itemtype == 'category' ? $enhancedcat->isscale : !empty($item->scaleid),
             'scalename' => $scalename,
-            'grademax' => $item->itemtype == 'category' ? 0 :$item->grademax,
+            'grademax' => $item->itemtype == 'category' ? $enhancedcat->grademax :$item->grademax,
             'weight' => round($item->aggregationcoef * 100),
+            'categoryerror' => $categoryerror,
         ];
     }
 
