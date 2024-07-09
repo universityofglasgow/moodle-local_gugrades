@@ -63,6 +63,33 @@ class base {
     }
 
     /**
+     * Drop lowest n items from grades
+     * @param array $items
+     * @param int $n
+     * @return array
+     */
+    public function droplow(array $items, int $n) {
+
+        // If we're not going to return anything, anyway...
+        if ($n >= count($items)) {
+            return [];
+        }
+
+        // Sort items by grade (ascending).
+        usort($items, function($g1, $g2) {
+
+            // usort only likes integers, so the 100* is required.
+            $normalised1 = 100 * $g1->grade / $g1->grademax;
+            $normalised2 = 100 * $g2->grade / $g2->grademax;
+            return $normalised1 - $normalised2;
+        });
+
+        $dropitems = array_slice($items, $n);
+
+        return $dropitems;
+    }
+
+    /**
      * Calculate completion %age for items
      * Need to be "sympathetic" with rounding on this as
      * stuff will be blocked if completion != 100%

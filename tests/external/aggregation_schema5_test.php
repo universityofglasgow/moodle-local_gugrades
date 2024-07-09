@@ -16,7 +16,7 @@
 
 /**
  * Test functions around get_aggregation_page
- * Schema4 tests all the different aggregation strategies for points
+ * Schema5 tests all the different aggregation strategies for points
  * @package    local_gugrades
  * @copyright  2024
  * @author     Howard Miller
@@ -62,7 +62,7 @@ final class aggregation_schema5_test extends \local_gugrades\external\gugrades_a
     }
 
     /**
-     * Test simple weighted mean
+     * Test weighted mean
      *
      * @covers \local_gugrades\external\get_aggregation_page::execute
      */

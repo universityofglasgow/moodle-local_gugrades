@@ -115,7 +115,7 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
                     $gradeitem->aggregationcoef = $weight;
                     $DB->update_record('grade_items', $gradeitem);
                 } else {
-                    throw new moodle_exception('JSON contains invalid grade type - ' . $type);
+                    throw new \moodle_exception('JSON contains invalid grade type - ' . $type);
                 }
                 $this->move_gradeitem_to_category($gradeitem->id, $gradeitemid);
                 $this->gradeitems[] = $gradeitem;
@@ -128,12 +128,20 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
                     $aggregation = \GRADE_AGGREGATE_WEIGHTED_MEAN;
                 }
 
+                // Drop lowest (droplow)?
+                if (!empty($item->droplow)) {
+                    $droplow = $item->droplow;
+                } else {
+                    $droplow = 0;
+                }
+
                 // In which case it must be a grade category.
                 $gradecategory = $this->getDataGenerator()->create_grade_category([
                     'courseid' => $this->course->id,
                     'fullname' => $item->name,
                     'parent' => $gradeitemid,
                     'aggregation' => $aggregation,
+                    'droplow' => $droplow,
                 ]);
 
                 // Set weight (aggregationcoef).
@@ -300,7 +308,6 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
             ispoints:       false,
         );
     }
-
 
     /**
      * Called before every test

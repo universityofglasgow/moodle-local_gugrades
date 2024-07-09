@@ -597,8 +597,14 @@ class aggregation {
         // Pre-process.
         $items = $aggregation->pre_process_items($items);
 
+        // "drop lowest" items
+        if ($droplow > 0) {
+            $items = $aggregation->droplow($items, $droplow);
+        }
+
         // Need to have a valid aggregation type to actually do the aggregation.
-        if ($category->atype == \local_gugrades\GRADETYPE_ERROR) {
+        // OR, we've ended up with no items left after droplow.
+        if (($category->atype == \local_gugrades\GRADETYPE_ERROR) || (count($items) == 0)) {
             return [null, null, null, $completion, get_string('cannotaggregate', 'local_gugrades')];
         } else {
 
