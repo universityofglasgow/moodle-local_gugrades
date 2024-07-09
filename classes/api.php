@@ -1053,6 +1053,17 @@ class api {
     }
 
     /**
+     * Deprecated function name
+     * @param int $courseid
+     * @return boolean
+     */
+    public static function is_mygrades_enabled_for_course(int $courseid) {
+        [$gradesenabled, $gradesreleased] = self::get_dashboard_enaled($courseid);
+
+        return $gradesenabled;
+    }
+
+    /**
      * Get list of user's courses
      * (and first level categories)
      * @param int $userid UserID of student
