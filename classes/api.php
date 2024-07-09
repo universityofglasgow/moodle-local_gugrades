@@ -1058,7 +1058,7 @@ class api {
      * @return boolean
      */
     public static function is_mygrades_enabled_for_course(int $courseid) {
-        [$gradesenabled, $gradesreleased] = self::get_dashboard_enaled($courseid);
+        [$gradesenabled, $gradesreleased] = self::get_dashboard_enabled($courseid);
 
         return $gradesenabled;
     }
