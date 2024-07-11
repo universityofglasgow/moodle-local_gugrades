@@ -153,22 +153,27 @@ class base {
      * Completion is...
      * (sum of weights of completed items) * 100 / (sum of all weights)
      *
+     * If a non-weighted aggregation strategy is used then set
+     * $weighted=false. In this case weight is assumed to be 1 for all items
+     *
      * NOTE: Points grades do NOT count. Admingrades do NOT count.
      * @param array $items
+     * @param bool $weighted
      * @return int
      */
-    public function completion(array $items) {
-        //var_dump($items); die;
+    public function completion(array $items, bool $weighted) {
+
         $totalweights = 0.0;
         $countall = 0;
         $totalcompleted = 0.0;
         $countcompleted = 0;
 
         foreach ($items as $item) {
-            $totalweights += $item->weight;
+            $weight = $weighted ? $item->weight : 1;
+            $totalweights += $weight;
             $countall++;
             if (!$item->grademissing && !$item->admingrade && $item->isscale) {
-                $totalcompleted += $item->weight;
+                $totalcompleted += $weight;
                 $countcompleted++;
             }
         }
@@ -199,6 +204,17 @@ class base {
      */
     public function round_float(float $value) {
         return round($value, 5);
+    }
+
+    /**
+     * Does aggregation strategy allow specification of weights?
+     * NOTE: simple weighted mean, does NOT use weights
+     * @param int $aggregationid
+     * @return bool
+     */
+    public function is_strategy_weighted(int $aggregationid) {
+
+        return $aggregationid == \GRADE_AGGREGATE_WEIGHTED_MEAN;
     }
 
     //

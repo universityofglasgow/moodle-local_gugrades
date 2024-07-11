@@ -146,6 +146,7 @@ class aggregation {
                 'isscale' => $gradecategory->isscale,
                 'schedule' => $gradecategory->schedule,
                 'strategy' => self::get_formatted_strategy($gradecategory->categoryid),
+                'strategyid' => $gradecategory->aggregation,
 
                 // TODO - may not be so simple.
                 'weight' => round($gradecategory->weight * 100),
@@ -164,6 +165,7 @@ class aggregation {
                 'isscale' => $conversion->is_scale(),
                 'schedule' => $conversion->get_schedule(),
                 'strategy' => '',
+                'strategyid' => 0,
 
                 // TODO - may not be so simple.
                 'weight' => round($gradeitem->weight * 100),
@@ -232,6 +234,8 @@ class aggregation {
     public static function add_aggregation_fields_to_users(int $courseid, int $gradecategoryid, array $users, array $columns) {
         global $DB;
 
+        $gcat = $DB->get_record('grade_categories', ['id' => $gradecategoryid], '*', MUST_EXIST);
+
         foreach ($users as $user) {
             $fields = [];
             $items = [];
@@ -281,7 +285,8 @@ class aggregation {
             $user->rawgrade = $item->rawgrade;
             $user->total = $item->convertedgrade;
             $user->displaygrade = $item->displaygrade;
-            $user->completed = $aggregation->completion($items);
+            $weighted = $aggregation->is_strategy_weighted($gcat->aggregation);
+            $user->completed = $aggregation->completion($items, $weighted);
             if (empty($user->error)) {
                 $user->error = ''; // TODO Not sure how to check for error. May need new field in DB for aggregation.
             }
@@ -581,7 +586,8 @@ class aggregation {
         // This can be calculated even though we can't run rest of aggregation (incomplete).
         $completion = 0;
         if ($level == 1) {
-            $completion = $aggregation->completion($items);
+            $weighted = $aggregation->is_strategy_weighted($aggmethod);
+            $completion = $aggregation->completion($items, $weighted);
         }
 
         // Get the correct aggregation function.

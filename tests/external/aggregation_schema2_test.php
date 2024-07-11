@@ -154,6 +154,9 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
             );
         }
 
+        // Set aggregation strategy.
+        $this->set_strategy($this->gradecatsummative->id, \GRADE_AGGREGATE_WEIGHTED_MEAN);
+
         // Add admin grades to 'Item 2' and 'Item 4'.
         $item2id = $this->get_gradeitemid('Item 2');
         $this->apply_admingrade($this->course->id, $item2id, $this->student->id, 'MV');
@@ -170,6 +173,7 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
         $this->assertTrue($page['toplevel']);
         $this->assertEquals('A', $page['atype']);
         $fred = $page['users'][0];
+        //var_dump($fred); die;
         $this->assertEquals(55, $fred['completed']);
         $this->assertEquals("7.8", $fred['displaygrade']);
     }
