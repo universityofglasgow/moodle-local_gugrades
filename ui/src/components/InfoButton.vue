@@ -1,7 +1,7 @@
 <template>
     <!-- info button -->
-    <a href="#" class="ml-2" @click="info_clicked" data-toggle="tooltip" data-placement="bottom" :title="mstrings.gradeiteminfo">
-        <i class="fa fa-info-circle align-middle" :class="[fasizeclass]" aria-hidden="true"></i>
+    <a href="#" class="ml-2"  @click="info_clicked" data-toggle="tooltip" data-placement="middle" :title="mstrings.gradeiteminfo">
+        <i class="fa fa-info-circle align-middle text-warning" :class="customclasses" aria-hidden="true"></i>
     </a>
 
     <!-- modal to show info-->
@@ -66,17 +66,28 @@
 
     const props = defineProps({
         itemid: Number,
-        size: Number,
+        size: String,
+        color: String,
     });
 
     const toast = useToast();
 
-    const fasizeclass = computed(() => {
-        if (props.size == 0) {
-            return 'fa-sm';
+    const customclasses = computed(() => {
+        var sizeclass = '';
+        var colorclass;
+        if (props.size == '') {
+            sizeclass = 'fa-sm';
         } else {
-            return 'fa-' + props.size + 'x';
+            sizeclass = 'fa-' + props.size;
         }
+
+        if (props.color = '') {
+            colorclass = 'text-primary';
+        } else {
+            colorclass = props.color;
+        }
+
+        return [sizeclass, colorclass];
     })
 
     /**

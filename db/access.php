@@ -60,13 +60,6 @@ $capabilities = [
             'manager' => CAP_ALLOW,
         ],
     ],
-    'local/gugrades:exportworksheet' => [
-        'riskbitmask' => RISK_PERSONAL,
-        'captype' => 'read',
-        'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => [
-        ],
-    ],
     'local/gugrades:readdashboard' => [
         'riskbitmask' => RISK_PERSONAL,
         'captype' => 'read',

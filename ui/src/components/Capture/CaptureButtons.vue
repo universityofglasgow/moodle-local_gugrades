@@ -4,10 +4,9 @@
         <CSVImportButton :itemid="props.itemid" :groupid="props.groupid" :itemname="props.itemname" @uploaded="emit('refreshtable')"></CSVImportButton>
         <AddMultipleButton :itemid="props.itemid"  @editcolumn="multipleclicked"></AddMultipleButton>
         <ReleaseButton v-if="props.gradesimported" :gradeitemid="props.itemid" :groupid="props.groupid" :released="props.released" @released="emit('refreshtable')"></ReleaseButton>
-        <ExportWorksheetButton v-if="itemtype=='assign'" :users="props.users" :itemtype="props.itemtype" :itemname="props.itemname"></ExportWorksheetButton>
         <ViewFullNamesButton v-if="props.usershidden"  @viewfullnames="viewfullnames"></ViewFullNamesButton>
         <ConversionButton v-if="showconversion" :itemid="props.itemid" @converted="emit('refreshtable')"></ConversionButton>
-        <InfoButton :itemid="props.itemid" size="2"></InfoButton>
+        <InfoButton :itemid="props.itemid" size="xl"></InfoButton>
         <ReloadButton size="3" @refreshtable="refresh_clicked"></ReloadButton>
     </div>
 </template>
@@ -17,7 +16,6 @@
     import ImportButton from '@/components/Capture/ImportButton.vue';
     import CSVImportButton from '@/components/Capture/CSVImportButton.vue';
     import ReleaseButton from '@/components/Capture/ReleaseButton.vue';
-    import ExportWorksheetButton from '@/components/Capture/ExportWorksheetButton.vue';
     import ViewFullNamesButton from '@/components/Capture/ViewFullNamesButton.vue';
     import AddMultipleButton from '@/components/Capture/AddMultipleButton.vue';
     import ConversionButton from '@/components/Capture/ConversionButton.vue';
