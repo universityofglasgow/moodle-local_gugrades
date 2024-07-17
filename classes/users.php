@@ -158,4 +158,15 @@ class users {
 
         return $users;
     }
+
+    /**
+     * Count the number of users in a given course
+     * @param int $courseid
+     * @return int
+     */
+    public static function count_participants(int $courseid) {
+        $context = \context_course::instance($courseid);
+
+        return count_enrolled_users($context);
+    }
 }

@@ -1,5 +1,8 @@
 <template>
-    <div id="tabmenu">
+    <div v-if="!available" class="alert alert-danger">
+        MyGrades cannot be used in this course as it has too many enrolled participants.
+    </div>
+    <div v-else id="tabmenu">
         <TabsNav @tabchange="tabChange" :viewaggregation="viewaggregation"></TabsNav>
 
         <div v-if="currenttab == 'capture'">
@@ -40,6 +43,7 @@
     const itemid = ref(0);
     const enabledashboard = ref(false);
     const viewaggregation = ref(true);
+    const available = ref(true);
 
     const toast = useToast();
 
@@ -96,7 +100,22 @@
 
         get_dashboard_enabled();
 
+        // Check that MyGrades is available for this course at all
+        fetchMany([{
+            methodname: 'local_gugrades_is_mygrades_available',
+            args: {
+                courseid: courseid,
+            }
+        }])[0]
+        .then((result) => {
+            available.value = result.available;
+            window.console.log(available.value);
+        })
+        .catch((error) => {
+            window.console.log(error);
+        });
 
+        // Check capability to use the aggregation tab
         fetchMany([{
             methodname: 'local_gugrades_has_capability',
             args: {
@@ -106,7 +125,6 @@
         }])[0]
         .then((result) => {
             viewaggregation.value = result.hascapability;
-            window.console.log(viewaggregation.value);
         })
         .catch((error) => {
             window.console.log(error);

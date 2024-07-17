@@ -67,6 +67,7 @@ $services = [
             'local_gugrades_get_aggregation_page',
             'local_gugrades_resit_required',
             'local_gugrades_get_dashboard_enabled',
+            'local_gugrades_is_mygrades_available',
         ],
         'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,
@@ -312,6 +313,12 @@ $functions = [
     'local_gugrades_get_dashboard_enabled' => [
         'classname' => 'local_gugrades\external\get_dashboard_enabled',
         'description' => 'Is MyGrades enabled for the dashboard in this course.',
+        'type' => 'read',
+        'ajax' => true,
+    ],
+    'local_gugrades_is_mygrades_available' => [
+        'classname' => 'local_gugrades\external\is_mygrades_available',
+        'description' => 'Is MyGrades available in selected course.',
         'type' => 'read',
         'ajax' => true,
     ],

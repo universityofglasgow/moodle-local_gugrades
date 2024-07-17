@@ -81,19 +81,37 @@ if ($hassiteconfig) {
 
     // Schedule A default.
     $defaulta = '10, 15, 20, 24, 27, 30, 34, 37, 40, 44, 47, 50, 54, 57, 60, 64, 67, 70, 74, 79, 85, 92';
-    $mapasetting = new admin_setting_configtext('local_gugrades/mapdefault_schedulea',
+    $mapasetting = new admin_setting_configtext(
+        'local_gugrades/mapdefault_schedulea',
         new lang_string('mapdefaultschedulea', 'local_gugrades'),
-    new lang_string('mapdefaultinfo', 'local_gugrades'),
-    $defaulta, PARAM_TEXT, 70);
+        new lang_string('mapdefaultinfo', 'local_gugrades'),
+        $defaulta,
+        PARAM_TEXT,
+        70
+    );
     $settingspage->add($mapasetting);
 
     // Schedule B default.
     $defaultb = '9, 19, 29, 39, 53, 59, 69';
-    $mapbsetting = new admin_setting_configtext('local_gugrades/mapdefault_scheduleb',
+    $mapbsetting = new admin_setting_configtext(
+        'local_gugrades/mapdefault_scheduleb',
         new lang_string('mapdefaultscheduleb', 'local_gugrades'),
-    new lang_string('mapdefaultinfo', 'local_gugrades'),
-    $defaultb, PARAM_TEXT, 70);
+        new lang_string('mapdefaultinfo', 'local_gugrades'),
+        $defaultb,
+        PARAM_TEXT,
+        70
+    );
     $settingspage->add($mapbsetting);
+
+    // Maximum number of participants in course.
+    $maxparticipants = new admin_setting_configtext(
+        'local_gugrades/maxparticipants',
+        new lang_string('maxparticipants', 'local_gugrades'),
+        new lang_string('maxparticipants_help', 'local_gugrades'),
+        1200,
+        PARAM_INT,
+    );
+    $settingspage->add($maxparticipants);
 
     $ADMIN->add('localplugins', $settingspage);
 }

@@ -1518,4 +1518,20 @@ class api {
             }
         }
     }
+
+    /**
+     * Is mygrades available for given course id?
+     * Currently, only checks number of participants
+     * @param int $courseid
+     * @return bool
+     */
+    public static function is_mygrades_available(int $courseid) {
+        $maxparticipants = get_config('local_gugrades', 'maxparticipants');
+        if (empty($maxparticipants)) {
+            $maxparticipants = 1200;
+        }
+        $participants = \local_gugrades\users::count_participants($courseid);
+
+        return $participants <= $maxparticipants;
+    }
 }
