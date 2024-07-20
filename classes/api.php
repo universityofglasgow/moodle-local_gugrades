@@ -1021,7 +1021,7 @@ class api {
      * Is MyGrades "enabled" for this course
      * Are there any released grades and/or is MyGrades
      * disabled for this course in the settings
-     * dashboardenabled == grades released AND !$disaledashboard
+     * dashboardenabled == grades released AND !$disabledashboard
      * gradesreleased == grades released
      * @param int $courseid
      * @return [bool, bool]
@@ -1533,5 +1533,165 @@ class api {
         $participants = \local_gugrades\users::count_participants($courseid);
 
         return $participants <= $maxparticipants;
+    }
+
+    /**
+     * Return list of selectable columns for capture export
+     * Organise as (kind of) fake Gradetypes
+     * User preferences will be persisted (TODO)
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param int $groupid
+     * @return array
+     */
+    public static function get_capture_export_options(int $courseid, int $gradeitemid, int $groupid) {
+
+        // Get fixed options.
+        $options = [
+            (object)[
+                'gradetype' => 'NAME',
+                'description' => get_string('name', 'local_gugrades'),
+                'other' => '',
+            ],
+            (object)[
+                'gradetype' => 'IDNUMBER',
+                'description' => get_string('idnumber', 'local_gugrades'),
+                'other' => '',
+            ],
+            (object)[
+                'gradetype' => 'EMAIL',
+                'description' => get_string('email'),
+                'other' => '',
+            ],
+            (object)[
+                'gradetype' => 'COURSECODE',
+                'description' => get_string('coursecode', 'local_gugrades'),
+                'other' => '',
+            ],
+            (object)[
+                'gradetype' => 'WARNINGS',
+                'description' => get_string('warnings', 'local_gugrades'),
+                'other' => '',
+            ],
+        ];
+
+        // Get columns shown in table for grade types.
+        $columns = \local_gugrades\grades::get_grade_capture_columns($courseid, $gradeitemid);
+        $options = array_merge($options, $columns);
+
+        // Add selected field for grade types.
+        // TODO - needs linked to user preferences.
+        foreach ($options as $option) {
+            $option->selected = false;
+        }
+
+        return $options;
+    }
+
+    /**
+     * Get data for capture export
+     * User preferences will be persisted (TODO)
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param int $groupid
+     * @param bool $viewfullnames
+     * @param array $options
+     * @return array
+     */
+    public static function get_capture_export_data(
+        int $courseid, int $gradeitemid, int $groupid, bool $viewfullnames, array $options) {
+
+        // Convet options into a simple array of those selected
+        $selected = [];
+        foreach ($options as $option) {
+            if ($option['selected']) {
+                $selected[] = $option['gradetype'];
+            }
+        }
+
+        // Just get the capture page data. We can filter out what we don't need.
+        $page = (object)self::get_capture_page($courseid, $gradeitemid, '', '', $groupid, $viewfullnames);
+
+        // Get the headings.
+        $columns = $page->columns;
+        $headings = [];
+        $gradecolums = [];
+        if (in_array('NAME', $selected)) {
+            $headings[] = get_string('name', 'local_gugrades');
+        }
+        if (in_array('IDNUMBER', $selected)) {
+            $headings[] = get_string('idnumber', 'local_gugrades');
+        }
+        if (in_array('EMAIL', $selected)) {
+            $headings[] = get_string('email');
+        }
+        if (in_array('COURSECODE', $selected)) {
+            $headings[] = get_string('coursecode', 'local_gugrades');
+        }
+        if (in_array('WARNINGS', $selected)) {
+            $headings[] = get_string('warnings', 'local_gugrades');
+        }
+        foreach ($columns as $column) {
+            $gradetype = $column->gradetype;
+            if (in_array($gradetype, $selected)) {
+                $headings[] = $column->description;
+                $gradecolumns[] = $gradetype;
+                if ($gradetype != 'FIRST') {
+                    $headings[] = $column->description . ' ' . get_string('notes', 'local_gugrades');
+                }
+            }
+        }
+
+        // Get the data.
+        $users = $page->users;
+        $data = [$headings];
+        foreach ($users as $user) {
+            $line = [];
+            if (in_array('NAME', $selected)) {
+                $line[] = $user->displayname;
+            }
+            if (in_array('IDNUMBER', $selected)) {
+                $line[] = $user->idnumber;
+            }
+            if (in_array('EMAIL', $selected)) {
+                $line[] = $user->email;
+            }
+            if (in_array('COURSECODE', $selected)) {
+                $line[] = ''; // TODO.
+            }
+            if (in_array('WARNINGS', $selected)) {
+                $line[] = ''; // TODO
+            }
+            $grades = $user->grades;
+
+            // Run through required data columns looking for data in user->grades array.
+            foreach ($gradecolumns as $gradecolumn) {
+                $gradetypegrades = array_column($grades, null, 'gradetype'); // Reindex array by field 'gradetype'.
+                if (array_key_exists($gradecolumn, $gradetypegrades)) {
+                    $grade = $gradetypegrades[$gradecolumn];
+                    $line[] = $grade->displaygrade;
+                    if ($gradecolumn != 'FIRST') {
+                        $line[] = $grade->auditcomment;
+                    }
+                } else {
+                    $line[] = '';
+                    if ($gradecolumn != 'FIRST') {
+                        $line[] = '';
+                    }
+                }
+            }
+            $data[] = $line;
+        }
+
+        // Convert array of arrays to csv string.
+        $csv = '';
+        foreach ($data as $line) {
+            $quoted = array_map(function($str) {
+                return sprintf('"%s"', $str);
+            }, $line);
+            $csv .= implode(',', $quoted) . PHP_EOL;
+        }
+
+        return $csv;
     }
 }

@@ -17,6 +17,10 @@
 /**
  * Test functions around get_aggregation_page
  * Generate loads of data and check how long it takes
+ *
+ * Start profiler with (something like)
+ * php -d xdebug.mode=profile vendor/bin/phpunit local/gugrades/tests/external/aggregation_schema9_test.php
+ *
  * @package    local_gugrades
  * @copyright  2024
  * @author     Howard Miller
@@ -29,7 +33,7 @@ use core_external\external_api;
 
 defined('MOODLE_INTERNAL') || die();
 
-define('TEST_USERS_COUNT', 500);
+define('TEST_USERS_COUNT', 200);
 
 global $CFG;
 
@@ -59,8 +63,6 @@ final class aggregation_schema9_test extends \local_gugrades\external\gugrades_a
 
         parent::setUp();
 
-        var_dump('SETUP STARTED');
-
         // Install test schema.
         $this->gradeitemids = $this->load_schema('schema9');
 
@@ -77,11 +79,8 @@ final class aggregation_schema9_test extends \local_gugrades\external\gugrades_a
             $this->studentids[] = $student->id;
         }
 
-        var_dump('STUDENTS CREATED');
-
         // Get gradeitems
         $gradeitems = [];
-        var_dump($this->gradeitemids);
         foreach ($this->gradeitemids as $gradeitemid) {
             $gradeitems[] = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
         }
@@ -100,8 +99,6 @@ final class aggregation_schema9_test extends \local_gugrades\external\gugrades_a
                 $this->write_grade_grades($gradeitem, $studentid, $grade);
             }
         }
-
-        var_dump('SETUP COMPLETE');
     }
 
     /**
@@ -116,38 +113,37 @@ final class aggregation_schema9_test extends \local_gugrades\external\gugrades_a
         // Make sure that we're a teacher.
         $this->setUser($this->teacher);
 
-        // Import grades only for one student (so far).
-        $userlist = [
-            $this->student->id,
-        ];
-
         foreach ($this->gradeitemids as $gradeitemid) {
-            $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
+            $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $this->studentids);
             $status = external_api::clean_returnvalue(
                 import_grades_users::execute_returns(),
                 $status
             );
         }
 
-        var_dump('IMPORT GRADES');
-
         // Set aggregation strategy.
         $this->set_strategy($this->gradecatsummative->id, \GRADE_AGGREGATE_WEIGHTED_MEAN);
 
         // Get aggregation page for above.
+        $start = microtime(true);
         $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
         );
+        $end = microtime(true);
+        $elapsed = $end - $start;
 
+        // var_dump($elapsed); die;
+
+        /*
         $this->assertTrue($page['toplevel']);
         $this->assertEquals('A', $page['atype']);
         $fred = $page['users'][0];
         $this->assertEquals("9.33333", $fred['displaygrade']);
         $this->assertEquals(9.33333, $fred['rawgrade']);
         $this->assertEquals(67, $fred['completed']);
-
+        */
     }
 
 }

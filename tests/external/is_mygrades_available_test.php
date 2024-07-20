@@ -71,7 +71,7 @@ final class is_mygrades_available_test extends \local_gugrades\external\gugrades
             $this->getDataGenerator()->enrol_user($student->id, $this->course->id, 'student');
         }
 
-        // Reduce the setting
+        // Reduce the setting.
         set_config('maxparticipants', 250, 'local_gugrades');
 
         // Check for default course.

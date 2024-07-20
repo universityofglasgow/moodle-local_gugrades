@@ -68,6 +68,8 @@ $services = [
             'local_gugrades_resit_required',
             'local_gugrades_get_dashboard_enabled',
             'local_gugrades_is_mygrades_available',
+            'local_gugrades_get_capture_export_options',
+            'local_gugrades_get_capture_export_data',
         ],
         'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,
@@ -319,6 +321,18 @@ $functions = [
     'local_gugrades_is_mygrades_available' => [
         'classname' => 'local_gugrades\external\is_mygrades_available',
         'description' => 'Is MyGrades available in selected course.',
+        'type' => 'read',
+        'ajax' => true,
+    ],
+    'local_gugrades_get_capture_export_options' => [
+        'classname' => 'local_gugrades\external\get_capture_export_options',
+        'description' => 'Get array of selectable options for capture export.',
+        'type' => 'read',
+        'ajax' => true,
+    ],
+    'local_gugrades_get_capture_export_data' => [
+        'classname' => 'local_gugrades\external\get_capture_export_data',
+        'description' => 'Get data for capture export (and save user settings).',
         'type' => 'read',
         'ajax' => true,
     ],

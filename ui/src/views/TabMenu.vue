@@ -100,7 +100,7 @@
 
         get_dashboard_enabled();
 
-        // Check that MyGrades is available for this course at all
+        // Check that MyGrades is available for this course at all.
         fetchMany([{
             methodname: 'local_gugrades_is_mygrades_available',
             args: {
@@ -109,13 +109,12 @@
         }])[0]
         .then((result) => {
             available.value = result.available;
-            window.console.log(available.value);
         })
         .catch((error) => {
             window.console.log(error);
         });
 
-        // Check capability to use the aggregation tab
+        // Check capability to use the aggregation tab.
         fetchMany([{
             methodname: 'local_gugrades_has_capability',
             args: {

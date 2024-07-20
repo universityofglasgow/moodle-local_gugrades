@@ -6,6 +6,7 @@
         <ReleaseButton v-if="props.gradesimported" :gradeitemid="props.itemid" :groupid="props.groupid" :released="props.released" @released="emit('refreshtable')"></ReleaseButton>
         <ViewFullNamesButton v-if="props.usershidden"  @viewfullnames="viewfullnames"></ViewFullNamesButton>
         <ConversionButton v-if="showconversion" :itemid="props.itemid" @converted="emit('refreshtable')"></ConversionButton>
+        <ExportCaptureButton :itemid="props.itemid" :groupid="props.groupid" @viewfullnames="viewfullnames"></ExportCaptureButton>
         <InfoButton :itemid="props.itemid" size="xl"></InfoButton>
         <ReloadButton size="3" @refreshtable="refresh_clicked"></ReloadButton>
     </div>
@@ -21,6 +22,7 @@
     import ConversionButton from '@/components/Capture/ConversionButton.vue';
     import InfoButton from '@/components/InfoButton.vue';
     import ReloadButton from '@/components/ReloadButton.vue';
+    import ExportCaptureButton from '@/components/Capture/ExportCaptureButton.vue';
 
     const props = defineProps({
         itemid: Number,
