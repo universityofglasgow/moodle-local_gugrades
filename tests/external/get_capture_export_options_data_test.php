@@ -136,7 +136,6 @@ final class get_capture_export_options_data_test extends \local_gugrades\externa
         foreach ($options as $option) {
             $newoptions[] = [
                 'gradetype' => $option['gradetype'],
-                'other' => $option['other'],
                 'selected' => true,
             ];
         }
@@ -160,6 +159,29 @@ final class get_capture_export_options_data_test extends \local_gugrades\externa
         $this->assertCount(4, $data);
         $this->assertEquals('Email address', $data[0][2]);
         $this->assertEquals('A3:20', $data[1][5]);
+
+        // Unset some options, so we can test user preferences.
+        $newoptions[1]['selected'] = false;
+        $newoptions[3]['selected'] = false;
+        $newoptions[5]['selected'] = false;
+        $newoptions[8]['selected'] = false;
+
+        // Read data (should set preferences).
+        $data = get_capture_export_data::execute($this->course->id, $this->gradeitemidassign2, 0, false, $newoptions);
+        $data = external_api::clean_returnvalue(
+            get_capture_export_data::execute_returns(),
+            $data
+        );
+
+        // Get capture options (should read stored options).
+        $options = get_capture_export_options::execute($this->course->id, $this->gradeitemidassign2, 0);
+        $options = external_api::clean_returnvalue(
+            get_capture_export_options::execute_returns(),
+            $options
+        );
+
+        $this->assertTrue($options[7]['selected']);
+        $this->assertFalse($options[8]['selected']);
     }
 
 }

@@ -1536,6 +1536,24 @@ class api {
     }
 
     /**
+     * Check options array for selected state.
+     * @param string $gradetype
+     * @param string $other
+     * @param array $options
+     * @return bool
+     */
+    private static function is_export_option_selected(string $gradetype, array $options) {
+        foreach ($options as $option) {
+            if ($gradetype != $option['gradetype']) {
+                continue;
+            }
+            return $option['selected'];
+        }
+
+        return false;
+    }
+
+    /**
      * Return list of selectable columns for capture export
      * Organise as (kind of) fake Gradetypes
      * User preferences will be persisted (TODO)
@@ -1545,6 +1563,14 @@ class api {
      * @return array
      */
     public static function get_capture_export_options(int $courseid, int $gradeitemid, int $groupid) {
+
+        // Get preferences (if any).
+        $pref = get_user_preferences('local_gugrades_exportselect');
+        if ($pref) {
+            $savedoptions = unserialize($pref);
+        } else {
+            $savedoptions = [];
+        }
 
         // Get fixed options.
         $options = [
@@ -1582,7 +1608,7 @@ class api {
         // Add selected field for grade types.
         // TODO - needs linked to user preferences.
         foreach ($options as $option) {
-            $option->selected = false;
+            $option->selected = self::is_export_option_selected($option->gradetype, $savedoptions);
         }
 
         return $options;
@@ -1600,6 +1626,9 @@ class api {
      */
     public static function get_capture_export_data(
         int $courseid, int $gradeitemid, int $groupid, bool $viewfullnames, array $options) {
+
+        // Save user's selection
+        set_user_preference('local_gugrades_exportselect', serialize($options));
 
         // Convet options into a simple array of those selected
         $selected = [];
@@ -1657,10 +1686,20 @@ class api {
                 $line[] = $user->email;
             }
             if (in_array('COURSECODE', $selected)) {
-                $line[] = ''; // TODO.
+                $line[] = \local_gugrades\users::get_course_code($courseid, $user->id);
             }
             if (in_array('WARNINGS', $selected)) {
-                $line[] = ''; // TODO
+                $warnings = [];
+                if ($user->alert) {
+                    $warnings[] = get_string('discrepancy', 'local_gugrades');
+                }
+                if ($user->gradebookhidden) {
+                    $warnings[] = get_string('hiddengradebook', 'local_gugrades');
+                }
+                if ($user->gradehidden) {
+                    $warnings[] = get_string('hiddenmygrades', 'local_gugrades');
+                }
+                $line[] = implode(', ', $warnings);
             }
             $grades = $user->grades;
 

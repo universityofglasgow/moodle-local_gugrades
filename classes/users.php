@@ -169,4 +169,23 @@ class users {
 
         return count_enrolled_users($context);
     }
+
+    /**
+     * Get the course code from the gudatabase tables
+     * @param int $courseid
+     * @param int $userid
+     * @return string
+     */
+    public static function get_course_code(int $courseid, int $userid) {
+        global $DB;
+
+        if ($gudatabasecode = $DB->get_record('enrol_gudatabase_users',
+            ['userid' => $userid, 'courseid' => $courseid], '*', IGNORE_MULTIPLE)) {
+            $code = $gudatabasecode->code;
+        } else {
+            $code = '';
+        }
+
+        return $code;
+    }
 }

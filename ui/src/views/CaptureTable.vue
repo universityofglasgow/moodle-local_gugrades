@@ -32,6 +32,7 @@
                         :showconversion="showconversion"
                         :converted="converted"
                         :released="released"
+                        :revealnames="revealnames"
                         @refreshtable="refresh"
                         @viewfullnames="viewfullnames"
                         @editcolumn="editcog_clicked"

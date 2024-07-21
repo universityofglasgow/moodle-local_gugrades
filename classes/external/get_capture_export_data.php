@@ -48,7 +48,6 @@ class get_capture_export_data extends external_api {
             'options' => new external_multiple_structure(
                 new external_single_structure([
                     'gradetype' => new external_value(PARAM_TEXT, 'Short name of grade type'),
-                    'other' => new external_value(PARAM_TEXT, 'Other text or blank'),
                     'selected' => new external_value(PARAM_BOOL, 'Previously selected by this user'),
                 ])
             )

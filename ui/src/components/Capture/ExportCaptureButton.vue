@@ -51,7 +51,8 @@
     const props = defineProps({
         itemid: Number,
         groupid: Number,
-        viewfullnames: Boolean,
+        itemname: String,
+        revealnames: Boolean,
     });
 
     /**
@@ -90,6 +91,23 @@
     });
 
     /**
+     * Convert options to version required
+     * for web service
+     */
+    function get_data_options(options) {
+        let newoptions = [];
+        options.forEach((option) => {
+            newoptions.push({
+                gradetype: option.gradetype,
+                other: option.other,
+                selected: option.selected
+            });
+        });
+
+        return newoptions;
+    }
+
+    /**
      * Download the pro-forma csv file
      */
     function submit_export_form() {
@@ -103,8 +121,8 @@
                 courseid: courseid,
                 gradeitemid: props.itemid,
                 groupid: props.groupid,
-                viewfullnames: props.viewfullnames,
-                options: options.value,
+                viewfullnames: props.revealnames,
+                options: get_data_options(options.value),
             }
         }])[0]
         .then((result) => {
@@ -113,6 +131,8 @@
             const filename = props.itemname + '_' + d.toLocaleString() + '.csv';
             const blob = new Blob([csv], {type: 'text/csv;charset=utf-8'});
             saveAs(blob, filename);
+
+            showexportmodal.value = false;
         })
         .catch((error) => {
             window.console.error(error);
