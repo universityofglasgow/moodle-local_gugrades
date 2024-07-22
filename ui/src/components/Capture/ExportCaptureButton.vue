@@ -7,7 +7,10 @@
             {{  mstrings.exportcapturehelp }}
         </div>
 
+        <PleaseWait v-if="pleasewait"></PleaseWait>
+
         <FormKit
+            v-if="!pleasewait"
             type="form"
             :submit-label="mstrings.export"
             @submit="submit_export_form"
@@ -38,11 +41,13 @@
 
 <script setup>
     import {ref, defineProps, inject, watch} from '@vue/runtime-core';
+    import PleaseWait from '@/components/PleaseWait.vue';
     import { useToast } from "vue-toastification";
     import { saveAs } from 'file-saver';
 
     const showexportmodal = ref(false);
     const allnone = ref(false);
+    const pleasewait = ref(false);
     const options = ref([]);
     const mstrings = inject('mstrings');
 
@@ -62,6 +67,8 @@
         const GU = window.GU;
         const courseid = GU.courseid;
         const fetchMany = GU.fetchMany;
+
+        pleasewait.value = false;
 
         fetchMany([{
             methodname: 'local_gugrades_get_capture_export_options',
@@ -114,6 +121,8 @@
         const GU = window.GU;
         const courseid = GU.courseid;
         const fetchMany = GU.fetchMany;
+
+        pleasewait.value = true;
 
         fetchMany([{
             methodname: 'local_gugrades_get_capture_export_data',

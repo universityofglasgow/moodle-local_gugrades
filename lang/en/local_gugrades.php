@@ -204,6 +204,7 @@ $string['participant'] = 'Participant';
 $string['participantnumber'] = 'Participant {$a}';
 $string['percentage'] = 'Percentage';
 $string['pleasespecify'] = 'Please specify';
+$string['pleasewait'] = 'Please wait...';
 $string['pluginname'] = 'MyGrades';
 $string['points'] = 'Points';
 $string['provisional'] = 'Provisional';
