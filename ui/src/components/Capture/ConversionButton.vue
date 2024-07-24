@@ -1,6 +1,6 @@
 <template>
     <button type="button" class="btn btn-outline-warning  mr-1" @click="conversion_clicked()">
-        {{ mstrings.conversion }}
+        {{ mstrings.convertgrades }}
     </button>
 
     <VueModal v-model="showselectmodal" modalClass="col-11 col-lg-6 rounded" :title="mstrings.conversionselect">

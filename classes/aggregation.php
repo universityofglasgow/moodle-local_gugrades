@@ -87,7 +87,7 @@ class aggregation {
     }
 
     /**
-     * Get aggregation tale columns for supplied gradecategoryid
+     * Get aggregation table columns for supplied gradecategoryid
      * @param int $courseid
      * @param int $gradecategoryid
      * @return [$columns, $atype, $warnings]

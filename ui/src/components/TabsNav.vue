@@ -10,7 +10,7 @@
             <li class="nav-item">
                 <a class="nav-link btn btn-secondary" :class="{active: activetab == 'conversion'}" @click="clickTab('conversion')">
                     <i class="fa fa-exchange" aria-hidden="true"></i>&nbsp;
-                    {{ mstrings.conversion }}
+                    {{ mstrings.manageconversion }}
                 </a>
             </li>
             <li class="nav-item" v-if="props.viewaggregation">

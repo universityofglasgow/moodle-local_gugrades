@@ -17,8 +17,8 @@ Currently tests can be run individually, using (for example)
 
 ## Test configuration
 
-Web service tests, extend the class *gugrades_advanced_testcase*. This creates some basic structure for
-tests to use. Including...
+Web service tests, extend the class *gugrades_base_testcase*, *gugrades_advanced_testcase* and *gugrades_advanced_testcase*. T
+his creates some basic structure for tests to use. Including...
 
 * A course
 * The 22-point scale
@@ -27,10 +27,73 @@ tests to use. Including...
 * Grade categories (confirming to MyGrades requirements)
 * Assignments
 * Some grades for the Assignments
+* gugrades_aggregation_testcase has functionality to load schemas and data from pre-prepared json files
 
 ## Test descriptions
 
-<dl>
-    <dt>[get_activities_test](../tests/external/get_activities_test.php)</dt>
-    <dd>Tests the get_activities web service.</dd>
-</dl>
+### aggregation_schema2_test
+
+Tests aggregation functionality. Tests above or below 75% completion and the basic aggregation strategies with scales.
+
+* Test no data in aggregation
+* Test output where completion < 75%
+* test output where completion > 75%
+* Test simple weighted mean result
+* Test mode result
+* Test median result
+* Test max result
+* Test min result
+
+
+# aggregation_schema3_test
+
+Test exception when all weights are zero in aggregation
+
+* Test all weights being zero for mean aggregation (not an error) and weighted mean (an error)
+
+
+# aggregation_schema5_test
+
+Test aggregation strategies with points
+
+* Test weighted mean
+* Test simple weighted mean
+* Test mode
+* Test median
+* Test max
+* Test min
+
+
+# aggregation_schema6_test
+
+Test grade category 'drop lowest' functionality with points grades
+
+* Test weighted mean with drop lowest selected
+* Test weighted mean with drop lowest exceeding number of items
+
+
+# aggregation_schema7_test
+
+Test drop lowest functionality with scale grades. Test combinations of admin grades
+
+* Test weighted mean with drop lowest selected
+* Test weighted mean with drop lowest exceeding number of items
+* Test NS grades at 2nd level+
+* Test MV/IS grades at 2nd level+
+
+# aggregation_schema8_test
+
+More combination of admin grades tests
+
+
+# aggregation_schema9_test
+
+Performance testing of aggregation in very large datasets.
+
+* Ongoing
+
+# aggregation_strategies_test
+
+More tests for aggregation strategies
+
+# csv_capture_test
