@@ -472,14 +472,27 @@ class grades {
      * @return array
      */
     public static function add_grades_to_user_records(int $courseid, int $gradeitemid, array $users) {
-        foreach ($users as $user) {
-            $usercapture = new usercapture($courseid, $gradeitemid, $user->id);
-            $user->grades = $usercapture->get_grades();
-            $user->alert = $usercapture->alert();
-            $user->gradebookhidden = $usercapture->is_gradebookhidden();
+        foreach ($users as $id => $user) {
+            $users[$id] = self::add_grades_for_user($courseid, $gradeitemid, $user);
         }
 
         return $users;
+    }
+
+    /**
+     * Add grades to single user record
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param object $user
+     * @return array
+     */
+    public static function add_grades_for_user(int $courseid, int $gradeitemid, object $user) {
+        $usercapture = new usercapture($courseid, $gradeitemid, $user->id);
+        $user->grades = $usercapture->get_grades();
+        $user->alert = $usercapture->alert();
+        $user->gradebookhidden = $usercapture->is_gradebookhidden();
+
+        return $user;
     }
 
     /**

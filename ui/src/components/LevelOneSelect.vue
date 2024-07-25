@@ -57,7 +57,7 @@
     onMounted(() => {
         selected.value = localStorage.getItem('level1category');
         getLevelOne();
-        if (selected.value) {
+        if (selected.value != 0) {
             emit('levelchange', selected.value);
         }
     });
