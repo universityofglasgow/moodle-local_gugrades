@@ -57,7 +57,9 @@
                     <div data-toggle="tooltip" :title="header.fullname" :data-original-title="header.fullname">
 
                         <div>
+                            <!-- column title -->
                             <InfoButton v-if="header.gradeitemid" :itemid="header.gradeitemid" :text="header.text" size="lg" color="text-warning"></InfoButton>
+                            <span v-else>{{ header.text }}</span>
                         </div>
                         <div v-if="!header.infocol">{{ header.weight }}%</div>
                         <div v-if="header.gradetype">{{ header.gradetype }} <span v-if="!header.isscale">({{ header.grademax }})</span></div>
@@ -77,7 +79,6 @@
                     <div v-if="header.atype">
                         ({{ formattedatype }})
                     </div>
-                    <!-- <div class="mt-1"><InfoButton v-if="header.gradeitemid" :itemid="header.gradeitemid" size="1"></InfoButton></div> -->
                 </div>
             </template>
 
