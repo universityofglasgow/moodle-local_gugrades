@@ -9,7 +9,7 @@
         </div>
         <select v-else class="form-control border-dark" @change="levelOneChange($event)">
             <option value="0">{{ mstrings.selectgradecategory }}</option>
-            <option v-for="category in level1categories" :key="category.id" :value="category.id">{{ category.fullname }}</option>
+            <option v-for="category in level1categories" :key="category.id" :value="category.id" :selected="selected == category.id">{{ category.fullname }}</option>
         </select>
     </div>
 </template>
@@ -18,6 +18,7 @@
     import {ref, onMounted, defineEmits, inject} from '@vue/runtime-core';
 
     const level1categories = ref([]);
+    const selected = ref(0);
     const notsetup = ref(false);
     const mstrings = inject('mstrings');
 
@@ -49,10 +50,15 @@
     // Handle change of selection in dropdown.
     function levelOneChange(event) {
         const categoryid = event.target.value;
+        localStorage.setItem('level1category', categoryid);
         emit('levelchange', categoryid);
     }
 
     onMounted(() => {
+        selected.value = localStorage.getItem('level1category');
         getLevelOne();
+        if (selected.value) {
+            emit('levelchange', selected.value);
+        }
     });
 </script>
