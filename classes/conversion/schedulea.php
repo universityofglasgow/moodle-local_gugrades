@@ -36,18 +36,32 @@ class schedulea extends base {
     protected array $scaleitems = [];
 
     /**
+     * If Schedule A as proxy for grade exactly out of 22
+     * @var bool $exactgrade22
+     */
+    protected bool $exactgrade22;
+
+    /**
      * Constructor. Get grade info
      * @param int $courseid
      * @param int $gradeitemid
      * @param bool $converted
+     * @param bool $exactgrade22
      */
-    public function __construct(int $courseid, int $gradeitemid, bool $converted = false) {
+    public function __construct(int $courseid, int $gradeitemid, bool $converted = false, bool $exactgrade22 = false) {
         global $DB;
 
         parent::__construct($courseid, $gradeitemid, $converted);
 
-        // If converted, use the built-in grade.
-        if (!$converted) {
+        $this->exactgrade22 = $exactgrade22;
+
+        // If maxgrade = 22 then use the build in map
+        if ($exactgrade22) {
+            $map = $this->get_map();
+            $this->items = array_flip($map);
+        } else if (!$converted) {
+
+            // If converted, use the built-in grade.
 
             // Get scale.
             $scale = $DB->get_record('scale', ['id' => $this->gradeitem->scaleid], '*', MUST_EXIST);
@@ -82,6 +96,14 @@ class schedulea extends base {
      */
     public function is_scale() {
         return true;
+    }
+
+    /**
+     * Is this the *special* grade out of 22 case?
+     * @return bool
+     */
+    public function is_exactgrade22() {
+        return $this->exactgrade22;
     }
 
     /**
@@ -136,7 +158,8 @@ class schedulea extends base {
         // It's a scale, so it can't be a decimal.
         $grade = round($floatgrade);
 
-        if ($this->converted) {
+        // If converted OR maxgrade=22.
+        if ($this->converted || $this->exactgrade22) {
             $map = $this->get_map();
             if (!array_key_exists($grade, $map)) {
                 throw new \moodle_exception('Grade ' . $grade . 'is not in Schedule A');
@@ -145,9 +168,12 @@ class schedulea extends base {
             }
         }
 
-        // Get scale (scales start at 1 not 0).
-        if (isset($this->scaleitems[$grade - 1])) {
-            $scaleitem = $this->scaleitems[$grade - 1];
+        // Get scale (scales start at 1 not 0, unless out of 22).
+        if (!$this->exactgrade22) {
+            $grade = $grade - 1;
+        }
+        if (isset($this->scaleitems[$grade])) {
+            $scaleitem = $this->scaleitems[$grade];
         } else {
             throw new \moodle_exception('Scale item does not exist. Scale id = ' .
                 $this->gradeitem->scaleid . ', value = ' . $grade);

@@ -111,6 +111,14 @@ abstract class base {
     }
 
     /**
+     * Is this the *special* grade out of 22 case?
+     * @return bool
+     */
+    public function is_exactgrade22() {
+        return false;
+    }
+
+    /**
      * Maximum grade.
      * @return int
      */

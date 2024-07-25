@@ -685,6 +685,7 @@ class grades {
 
     /**
      * Factory for conversion class
+     * This means conversion on import, rather than conversion conversion (sorry for confusion)
      * TODO: May need some improvement in detecting correct/supported grade (type)
      * The name of the class is in the scaletype table.
      * @param int $courseid
@@ -729,20 +730,65 @@ class grades {
             return new $classname($courseid, $gradeitemid, $converted);
         } else {
 
-            // We're assuming it's a points scale (already checked for weird types).
+            // It's points. BUT... *special case*
+            // Grading out of 0 to 22 is a proxy for Schedule A.
+            if (($gradeitem->grademin == 0) && ($gradeitem->grademax == 22)) {
+                return new \local_gugrades\conversion\schedulea($courseid, $gradeitemid, false, true);
+            }
+
+            // We're assuming it's a points scale (already checked for weird, unsupported types).
             return new \local_gugrades\conversion\points($courseid, $gradeitemid);
         }
     }
 
     /**
+     * Define ScheduleA "default" mapping
+     * @return array
+     */
+    private static function get_schedulea_map() {
+        return [
+            0 => 'H',
+            1 => 'G2',
+            2 => 'G1',
+            3 => 'F3',
+            4 => 'F2',
+            5 => 'F1',
+            6 => 'E3',
+            7 => 'E2',
+            8 => 'E1',
+            9 => 'D3',
+            10 => 'D2',
+            11 => 'D1',
+            12 => 'C3',
+            13 => 'C2',
+            14 => 'C1',
+            15 => 'B3',
+            16 => 'B2',
+            17 => 'B1',
+            18 => 'A5',
+            19 => 'A4',
+            20 => 'A3',
+            21 => 'A2',
+            22 => 'A1',
+        ];
+    }
+
+    /**
      * Get scale as value => name associative array
-     * This is from our 'scalevalue' table
+     * This is from our 'scalevalue' table.
+     * If scaleid=0 then we'll return a default Schedule A scale
+     * (this is for maxgrade=22 which doesn't have a scale)
      * @param int $scaleid
      * @return array
      *
      */
     public static function get_scale(int $scaleid) {
         global $DB;
+
+        // scaleid=0 used for grademax=22
+        if (!$scaleid) {
+            return self::get_schedulea_map();
+        }
 
         if ($items = $DB->get_records('local_gugrades_scalevalue', ['scaleid' => $scaleid])) {
             $output = [];
@@ -801,6 +847,11 @@ class grades {
 
         $gradeitem = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
         $gradetype = $gradeitem->gradetype;
+
+        // Ropey check for exact 22.
+        if ($gradeitem->grademax == 22) {
+            return false;
+        }
 
         return $gradetype == GRADE_TYPE_VALUE;
     }

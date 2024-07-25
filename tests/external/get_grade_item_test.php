@@ -68,7 +68,7 @@ final class get_grade_item_test extends \local_gugrades\external\gugrades_advanc
         $this->assertEquals('Assignment 2', $item['itemname']);
         $this->assertTrue($item['isscale']);
         $this->assertEquals(23, $item['grademax']);
-        $this->assertEquals('UofG 22 point scale', $item['scalename']);
+        $this->assertEquals('Schedule A', $item['scalename']);
 
         // Manual item.
         $item = get_grade_item::execute($this->gradeitemsecond1);
@@ -80,7 +80,7 @@ final class get_grade_item_test extends \local_gugrades\external\gugrades_advanc
         $this->assertEquals('Grade item 1', $item['itemname']);
         $this->assertFalse($item['isscale']);
         $this->assertEquals(100.0, $item['grademax']);
-        $this->assertEquals('', $item['scalename']);
+        $this->assertEquals('Points', $item['scalename']);
     }
 
     /**
@@ -140,7 +140,7 @@ final class get_grade_item_test extends \local_gugrades\external\gugrades_advanc
 
         $this->assertEquals('Second Level', $item['itemname']);
         $this->assertEquals('Grade category', $item['itemtype']);
-        $this->assertTrue($item['isscale']);
+        $this->assertFalse($item['isscale']);
         $this->assertEquals(22, $item['grademax']);
         $this->assertTrue($item['categoryerror']);
     }

@@ -74,6 +74,11 @@ class gugrades_advanced_testcase extends gugrades_base_testcase {
     protected int $gradeitemidassign4;
 
     /**
+     * @var int $gradeitemidassign22
+     */
+    protected int $gradeitemidassign22;
+
+    /**
      * @var int $gradeitemidassignb1
      */
     protected int $gradeitemidassignb1;
@@ -116,6 +121,9 @@ class gugrades_advanced_testcase extends gugrades_base_testcase {
         $assign3 = $this->getDataGenerator()->create_module('assign', ['course' => $course->id]);
         $assign4 = $this->getDataGenerator()->create_module('assign', ['course' => $course->id]);
 
+        // Assign22 is graded out of 22 (which is a special case)
+        $assign22 = $this->getDataGenerator()->create_module('assign', ['course' => $course->id, 'name' => 'Assign 22']);
+
         // Add one assignment just for scheduleb.
         $assignb1 = $this->getDataGenerator()->create_module('assign', ['course' => $course->id]);
 
@@ -124,6 +132,7 @@ class gugrades_advanced_testcase extends gugrades_base_testcase {
         $this->gradeitemidassign2 = $this->get_grade_item('', 'assign', $assign2->id);
         $this->gradeitemidassign3 = $this->get_grade_item('', 'assign', $assign3->id);
         $this->gradeitemidassign4 = $this->get_grade_item('', 'assign', $assign4->id);
+        $this->gradeitemidassign22 = $this->get_grade_item('', 'assign', $assign22->id);
         $this->gradeitemidassignb1 = $this->get_grade_item('', 'assign', $assignb1->id);
 
         // Modify assignment 2 to use scale.
@@ -148,6 +157,12 @@ class gugrades_advanced_testcase extends gugrades_base_testcase {
         $gradeitem4->scaleid = $scale->id;
         $DB->update_record('grade_items', $gradeitem4);
 
+        // Modify assignment 22 to grade out of 22.
+        $gradeitem22 = $DB->get_record('grade_items', ['id' => $this->gradeitemidassign22], '*', MUST_EXIST);
+        $gradeitem22->grademax = 22.0;
+        $gradeitem22->grademin = 0.0;
+        $DB->update_record('grade_items', $gradeitem22);
+
         // Modify assignment b1 to use ScheduleB scale.
         $gradeitemb1 = $DB->get_record('grade_items', ['id' => $this->gradeitemidassignb1], '*', MUST_EXIST);
         $gradeitemb1->gradetype = GRADE_TYPE_SCALE;
@@ -163,6 +178,8 @@ class gugrades_advanced_testcase extends gugrades_base_testcase {
         $this->add_assignment_grade($assign2->id, $student2->id, 11);
         $this->add_assignment_grade($assign3->id, $student->id, 0);
         $this->add_assignment_grade($assign3->id, $student2->id, 23.0);
+        $this->add_assignment_grade($assign22->id, $student->id, 0);
+        $this->add_assignment_grade($assign22->id, $student2->id, 22.0);
 
         // Item 4 only has one - other student is (deliberately) not graded.
         $this->add_assignment_grade($assign4->id, $student->id, 18);
@@ -178,7 +195,7 @@ class gugrades_advanced_testcase extends gugrades_base_testcase {
             $DB->update_record('grade_items', $item);
         }
 
-        // Create a "second level" grade category and pu some iems in it.
+        // Create a "second level" grade category and put some iems in it.
         $gradecatsecond = $this->getDataGenerator()->create_grade_category(
             ['courseid' => $course->id, 'fullname' => 'Second Level', 'parent' => $gradecatsumm->id]);
         $seconditem1 = $this->getDataGenerator()->create_grade_item(['courseid' => $course->id, 'fullname' => 'Second item 1']);

@@ -298,6 +298,9 @@ class api {
         $item = $DB->get_record('grade_items', ['id' => $itemid], '*', MUST_EXIST);
         $courseid = $item->courseid;
 
+        // Get the 'conversion' class.
+        $conversion = \local_gugrades\grades::conversion_factory($courseid, $itemid);
+
         // If the type is a category, get that as well
         if ($item->itemtype == 'category') {
             $category = $DB->get_record('grade_categories', ['id' => $item->iteminstance], '*', MUST_EXIST);
@@ -309,9 +312,11 @@ class api {
             $itemname = $item->itemname;
             $enhancedcat = null;
         }
-        //var_dump($enhancedcat); die;
 
         // Get the scale name.
+        $scalename = $conversion->name();
+
+        /*
         if ($item->itemtype == 'category') {
             $conversion = \local_gugrades\grades::conversion_factory($courseid, $itemid);
             $scalename = $conversion->name();
@@ -321,6 +326,7 @@ class api {
         } else {
             $scalename = '';
         }
+        */
 
         // Get module name.
         if ($item->itemtype == 'mod') {
@@ -347,7 +353,7 @@ class api {
             'itemtype' => get_string($item->itemtype, 'local_gugrades'),
             'itemmodule' => $modname,
             'iteminstance' => $item->iteminstance,
-            'isscale' => $item->itemtype == 'category' ? $enhancedcat->isscale : !empty($item->scaleid),
+            'isscale' => $conversion->is_scale(),
             'scalename' => $scalename,
             'grademax' => $item->itemtype == 'category' ? $enhancedcat->grademax :$item->grademax,
             'weight' => round($item->aggregationcoef * 100),
@@ -748,7 +754,11 @@ class api {
     public static function get_add_grade_form(int $courseid, int $gradeitemid, int $userid) {
         global $DB;
 
+        // Has it been converted?
         $converted = \local_gugrades\conversion::is_conversion_applied($courseid, $gradeitemid);
+
+        // Get "conversion" class.
+        $conversion = \local_gugrades\grades::conversion_factory($courseid, $gradeitemid);
 
         // Get gradetype.
         $gradetypes = \local_gugrades\gradetype::get_menu($gradeitemid, LOCAL_GUGRADES_FORMENU);
@@ -777,12 +787,16 @@ class api {
         }
         $grademax = ($gradeitem->gradetype == GRADE_TYPE_VALUE) ? $gradeitem->grademax : 0;
 
-        // Scale.
+        // Get the right scale.
         if ($converted) {
             $scale = \local_gugrades\conversion::get_conversion_scale($courseid, $gradeitemid);
             $scalemenu = self::formkit_menu($scale, true);
-        } else if ($gradeitem->gradetype == GRADE_TYPE_SCALE) {
-            $scale = \local_gugrades\grades::get_scale($gradeitem->scaleid);
+        } else if ($conversion->is_scale()) {
+            if ($conversion->is_exactgrade22()) {
+                $scale = \local_gugrades\grades::get_scale(0);
+            } else {
+                $scale = \local_gugrades\grades::get_scale($gradeitem->scaleid);
+            }
             $scalemenu = self::formkit_menu($scale, true);
         } else {
             $scalemenu = [];
@@ -798,7 +812,7 @@ class api {
             'itemname' => $gradeitem->itemname,
             'fullname' => fullname($user),
             'idnumber' => $user->idnumber,
-            'usescale' => ($itemtype == 'scale') || ($itemtype == 'scale22') || $converted,
+            'usescale' => $conversion->is_scale() || $converted,
             'grademax' => $grademax,
             'scalemenu' => $scalemenu,
             'adminmenu' => $adminmenu,
