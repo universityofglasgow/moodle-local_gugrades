@@ -785,7 +785,7 @@ class grades {
     public static function get_scale(int $scaleid) {
         global $DB;
 
-        // scaleid=0 used for grademax=22
+        // Scaleid=0 used for grademax=22.
         if (!$scaleid) {
             return self::get_schedulea_map();
         }

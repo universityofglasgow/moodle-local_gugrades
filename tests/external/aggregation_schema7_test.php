@@ -88,7 +88,7 @@ final class aggregation_schema7_test extends \local_gugrades\external\gugrades_a
             );
         }
 
-        // Set aggregation strategy
+        // Set aggregation strategy.
         $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_WEIGHTED_MEAN);
 
         // Get aggregation page for above.
@@ -132,10 +132,10 @@ final class aggregation_schema7_test extends \local_gugrades\external\gugrades_a
             );
         }
 
-        // Set aggregation strategy
+        // Set aggregation strategy.
         $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_WEIGHTED_MEAN);
 
-        // Update droplow
+        // Update droplow.
         $category = $DB->get_record('grade_categories', ['id' => $this->gradecatsummer->id], '*', MUST_EXIST);
         $category->droplow = 8;
         $DB->update_record('grade_categories', $category);
@@ -185,7 +185,7 @@ final class aggregation_schema7_test extends \local_gugrades\external\gugrades_a
         // Set aggregation strategy.
         $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_WEIGHTED_MEAN);
 
-        // Update droplow
+        // Update droplow.
         $category = $DB->get_record('grade_categories', ['id' => $this->gradecatsummer->id], '*', MUST_EXIST);
         $category->droplow = 0;
         $DB->update_record('grade_categories', $category);
@@ -207,7 +207,7 @@ final class aggregation_schema7_test extends \local_gugrades\external\gugrades_a
         $this->assertEquals("NS", $fred['displaygrade']);
         $this->assertEquals(0, $fred['rawgrade']);
 
-        // Set MV for question 4. Should still be NS
+        // Set MV for question 4. Should still be NS.
         $q3itemid = $this->get_gradeitemid('Question 4');
         $this->apply_admingrade($this->course->id, $q3itemid, $this->student->id, 'MV');
 
@@ -256,7 +256,7 @@ final class aggregation_schema7_test extends \local_gugrades\external\gugrades_a
         // Set aggregation strategy.
         $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_WEIGHTED_MEAN);
 
-        // Update droplow
+        // Update droplow.
         $category = $DB->get_record('grade_categories', ['id' => $this->gradecatsummer->id], '*', MUST_EXIST);
         $category->droplow = 0;
         $DB->update_record('grade_categories', $category);

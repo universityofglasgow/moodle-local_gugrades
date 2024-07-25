@@ -121,7 +121,7 @@ class gugrades_advanced_testcase extends gugrades_base_testcase {
         $assign3 = $this->getDataGenerator()->create_module('assign', ['course' => $course->id]);
         $assign4 = $this->getDataGenerator()->create_module('assign', ['course' => $course->id]);
 
-        // Assign22 is graded out of 22 (which is a special case)
+        // Assign22 is graded out of 22 (which is a special case).
         $assign22 = $this->getDataGenerator()->create_module('assign', ['course' => $course->id, 'name' => 'Assign 22']);
 
         // Add one assignment just for scheduleb.

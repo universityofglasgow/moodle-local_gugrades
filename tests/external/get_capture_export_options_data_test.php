@@ -155,7 +155,7 @@ final class get_capture_export_options_data_test extends \local_gugrades\externa
             $data[] = str_getcsv($line);
         }
 
-        // Finel PHP_EOL causes a null final line
+        // Finel PHP_EOL causes a null final line.
         $this->assertCount(4, $data);
         $this->assertEquals('Email address', $data[0][2]);
         $this->assertEquals('A3:20', $data[1][5]);

@@ -55,7 +55,7 @@ class schedulea extends base {
 
         $this->exactgrade22 = $exactgrade22;
 
-        // If maxgrade = 22 then use the build in map
+        // If maxgrade = 22 then use the build in map.
         if ($exactgrade22) {
             $map = $this->get_map();
             $this->items = array_flip($map);

@@ -301,12 +301,12 @@ class api {
         // Get the 'conversion' class.
         $conversion = \local_gugrades\grades::conversion_factory($courseid, $itemid);
 
-        // If the type is a category, get that as well
+        // If the type is a category, get that as well.
         if ($item->itemtype == 'category') {
             $category = $DB->get_record('grade_categories', ['id' => $item->iteminstance], '*', MUST_EXIST);
             $itemname = $category->fullname;
 
-            // Get 'enhanced' version from aggregation
+            // Get 'enhanced' version from aggregation.
             $enhancedcat = \local_gugrades\aggregation::get_enhanced_grade_category($category->courseid, $category->id);
         } else {
             $itemname = $item->itemname;
@@ -315,18 +315,6 @@ class api {
 
         // Get the scale name.
         $scalename = $conversion->name();
-
-        /*
-        if ($item->itemtype == 'category') {
-            $conversion = \local_gugrades\grades::conversion_factory($courseid, $itemid);
-            $scalename = $conversion->name();
-        } else if ($item->scaleid) {
-            $scale = $DB->get_record('scale', ['id' => $item->scaleid], '*', MUST_EXIST);
-            $scalename = $scale->name;
-        } else {
-            $scalename = '';
-        }
-        */
 
         // Get module name.
         if ($item->itemtype == 'mod') {
@@ -355,7 +343,7 @@ class api {
             'iteminstance' => $item->iteminstance,
             'isscale' => $conversion->is_scale(),
             'scalename' => $scalename,
-            'grademax' => $item->itemtype == 'category' ? $enhancedcat->grademax :$item->grademax,
+            'grademax' => $item->itemtype == 'category' ? $enhancedcat->grademax : $item->grademax,
             'weight' => round($item->aggregationcoef * 100),
             'categoryerror' => $categoryerror,
         ];
@@ -1641,10 +1629,10 @@ class api {
     public static function get_capture_export_data(
         int $courseid, int $gradeitemid, int $groupid, bool $viewfullnames, array $options) {
 
-        // Save user's selection
+        // Save user's selection.
         set_user_preference('local_gugrades_exportselect', serialize($options));
 
-        // Convet options into a simple array of those selected
+        // Convet options into a simple array of those selected.
         $selected = [];
         foreach ($options as $option) {
             if ($option['selected']) {

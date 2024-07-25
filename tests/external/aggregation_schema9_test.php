@@ -70,7 +70,7 @@ final class aggregation_schema9_test extends \local_gugrades\external\gugrades_a
         $this->gradecatsummative = $DB->get_record('grade_categories', ['fullname' => 'Summative'], '*', MUST_EXIST);
 
         // Create LOTS of users.
-        // ID number is just in sequence so it's unique
+        // ID number is just in sequence so it's unique.
         $this->studentids = [];
         $idnumber = 1111111;
         for ($i = 0; $i <= TEST_USERS_COUNT; $i++) {
@@ -79,7 +79,7 @@ final class aggregation_schema9_test extends \local_gugrades\external\gugrades_a
             $this->studentids[] = $student->id;
         }
 
-        // Get gradeitems
+        // Get gradeitems.
         $gradeitems = [];
         foreach ($this->gradeitemids as $gradeitemid) {
             $gradeitems[] = $DB->get_record('grade_items', ['id' => $gradeitemid], '*', MUST_EXIST);
@@ -91,7 +91,7 @@ final class aggregation_schema9_test extends \local_gugrades\external\gugrades_a
             17 => 'B1:17', 18 => 'A5:18', 19 => 'A4:19', 20 => 'A3:20', 21 => 'A2:21', 22 => 'A1:22',
         ];
 
-        // Generate lots of random grades
+        // Generate lots of random grades.
         foreach ($this->studentids as $studentid) {
             foreach ($gradeitems as $gradeitem) {
                 $gradevalue = rand(0, 22);
@@ -134,16 +134,5 @@ final class aggregation_schema9_test extends \local_gugrades\external\gugrades_a
         $end = microtime(true);
         $elapsed = $end - $start;
 
-        // var_dump($elapsed); die;
-
-        /*
-        $this->assertTrue($page['toplevel']);
-        $this->assertEquals('A', $page['atype']);
-        $fred = $page['users'][0];
-        $this->assertEquals("9.33333", $fred['displaygrade']);
-        $this->assertEquals(9.33333, $fred['rawgrade']);
-        $this->assertEquals(67, $fred['completed']);
-        */
-    }
 
 }

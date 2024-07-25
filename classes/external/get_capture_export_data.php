@@ -49,7 +49,7 @@ class get_capture_export_data extends external_api {
                 new external_single_structure([
                     'gradetype' => new external_value(PARAM_TEXT, 'Short name of grade type'),
                     'selected' => new external_value(PARAM_BOOL, 'Previously selected by this user'),
-                ])
+                ]),
             )
         ]);
     }

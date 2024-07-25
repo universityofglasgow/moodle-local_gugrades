@@ -94,9 +94,10 @@ final class get_grade_item_test extends \local_gugrades\external\gugrades_advanc
         // Use the test teacher.
         $this->setUser($this->teacher->id);
 
-        // Category to test
+        // Category to test.
         $gradecategoryid = $this->gradecatsecond->id;
-        $gradeitem = $DB->get_record('grade_items', ['itemtype' => 'category', 'iteminstance' => $gradecategoryid], '*', MUST_EXIST);
+        $gradeitem = $DB->get_record('grade_items',
+            ['itemtype' => 'category', 'iteminstance' => $gradecategoryid], '*', MUST_EXIST);
 
         $item = get_grade_item::execute($gradeitem->id);
         $item = external_api::clean_returnvalue(
@@ -110,7 +111,7 @@ final class get_grade_item_test extends \local_gugrades\external\gugrades_advanc
         $this->assertEquals(100, $item['grademax']);
         $this->assertFalse($item['categoryerror']);
 
-        // Modify two grades in Second level to be ScheduleA
+        // Modify two grades in Second level to be ScheduleA.
         $gradeitem1 = $DB->get_record('grade_items', ['id' => $this->gradeitemsecond1], '*', MUST_EXIST);
         $gradeitem1->gradetype = GRADE_TYPE_SCALE;
         $gradeitem1->grademax = 23.0;
@@ -130,7 +131,8 @@ final class get_grade_item_test extends \local_gugrades\external\gugrades_advanc
 
         // Category to test with scales.
         $gradecategoryid = $this->gradecatsecond->id;
-        $gradeitem = $DB->get_record('grade_items', ['itemtype' => 'category', 'iteminstance' => $gradecategoryid], '*', MUST_EXIST);
+        $gradeitem = $DB->get_record('grade_items',
+            ['itemtype' => 'category', 'iteminstance' => $gradecategoryid], '*', MUST_EXIST);
 
         $item = get_grade_item::execute($gradeitem->id);
         $item = external_api::clean_returnvalue(

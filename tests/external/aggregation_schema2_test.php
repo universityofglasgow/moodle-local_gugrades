@@ -173,7 +173,6 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
         $this->assertTrue($page['toplevel']);
         $this->assertEquals('A', $page['atype']);
         $fred = $page['users'][0];
-        //var_dump($fred); die;
         $this->assertEquals(55, $fred['completed']);
         $this->assertEquals("7.8", $fred['displaygrade']);
     }
@@ -251,7 +250,7 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
             );
         }
 
-        // Set aggregation strategy
+        // Set aggregation strategy.
         $this->set_strategy($this->gradecatsummative->id, \GRADE_AGGREGATE_WEIGHTED_MEAN2);
 
         // Get aggregation page for above.
@@ -295,7 +294,7 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
             );
         }
 
-        // Set aggregation strategy
+        // Set aggregation strategy.
         $this->set_strategy($this->gradecatsummative->id, \GRADE_AGGREGATE_MODE);
 
         // Get aggregation page for above.
@@ -339,7 +338,7 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
             );
         }
 
-        // Set aggregation strategy
+        // Set aggregation strategy.
         $this->set_strategy($this->gradecatsummative->id, \GRADE_AGGREGATE_MEDIAN);
 
         // Get aggregation page for above.
@@ -383,7 +382,7 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
             );
         }
 
-        // Set aggregation strategy
+        // Set aggregation strategy.
         $this->set_strategy($this->gradecatsummative->id, \GRADE_AGGREGATE_MAX);
 
         // Get aggregation page for above.
@@ -427,7 +426,7 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
             );
         }
 
-        // Set aggregation strategy
+        // Set aggregation strategy.
         $this->set_strategy($this->gradecatsummative->id, \GRADE_AGGREGATE_MIN);
 
         // Get aggregation page for above.

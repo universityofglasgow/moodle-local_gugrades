@@ -78,7 +78,7 @@ class base {
         // Sort items by grade (ascending).
         usort($items, function($g1, $g2) {
 
-            // usort only likes integers, so the 100* is required.
+            // Usort only likes integers, so the 100* is required.
             $normalised1 = 100 * $g1->grade / $g1->grademax;
             $normalised2 = 100 * $g2->grade / $g2->grademax;
             return $normalised1 - $normalised2;

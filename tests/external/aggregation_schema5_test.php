@@ -87,7 +87,7 @@ final class aggregation_schema5_test extends \local_gugrades\external\gugrades_a
             );
         }
 
-        // Set aggregation strategy
+        // Set aggregation strategy.
         $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_WEIGHTED_MEAN);
 
         // Get aggregation page for above.
@@ -130,7 +130,7 @@ final class aggregation_schema5_test extends \local_gugrades\external\gugrades_a
             );
         }
 
-        // Set aggregation strategy
+        // Set aggregation strategy.
         $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_WEIGHTED_MEAN2);
 
         // Get aggregation page for above.
@@ -259,7 +259,7 @@ final class aggregation_schema5_test extends \local_gugrades\external\gugrades_a
             );
         }
 
-        // Set aggregation strategy
+        // Set aggregation strategy.
         $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_MAX);
 
         // Get aggregation page for above.
@@ -302,7 +302,7 @@ final class aggregation_schema5_test extends \local_gugrades\external\gugrades_a
             );
         }
 
-        // Set aggregation strategy
+        // Set aggregation strategy.
         $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_MIN);
 
         // Get aggregation page for above.

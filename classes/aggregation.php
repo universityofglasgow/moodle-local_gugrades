@@ -603,7 +603,7 @@ class aggregation {
         // Pre-process.
         $items = $aggregation->pre_process_items($items);
 
-        // "drop lowest" items
+        // "drop lowest" items.
         if ($droplow > 0) {
             $items = $aggregation->droplow($items, $droplow);
         }
@@ -614,7 +614,7 @@ class aggregation {
             return [null, null, '', null, $completion, get_string('cannotaggregate', 'local_gugrades')];
         } else {
 
-            // if >=level2 then check for admin grades (see MGU-726)
+            // If >=level2 then check for admin grades (see MGU-726).
             if ($level >= 2) {
                 if ($admingrade = $aggregation->admin_grades_level2($items)) {
                     return [0, 0, $admingrade, $admingrade, $completion, ''];
@@ -641,7 +641,6 @@ class aggregation {
             return [$aggregatedgrade, $aggregatedgrade, '', $aggregatedgrade, $completion, ''];
         }
 
-        //return [$aggregatedgrade, $aggregatedgrade, $aggregatedgrade, $completion, ''];
         throw new \moodle_exception('Should never be here');
     }
 
@@ -790,7 +789,8 @@ class aggregation {
 
         // List of items should hold list for this gradecategory only, ready
         // to aggregate.
-        [$total, $rawgrade, $admingrade, $display, $completion, $error] = self::aggregate_user_category($courseid, $category, $items, $level);
+        [$total, $rawgrade, $admingrade, $display, $completion, $error] =
+            self::aggregate_user_category($courseid, $category, $items, $level);
 
         return [$total, $rawgrade, $admingrade, $display, $completion, $error];
     }

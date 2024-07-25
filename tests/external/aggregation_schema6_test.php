@@ -87,7 +87,7 @@ final class aggregation_schema6_test extends \local_gugrades\external\gugrades_a
             );
         }
 
-        // Set aggregation strategy
+        // Set aggregation strategy.
         $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_WEIGHTED_MEAN);
 
         // Get aggregation page for above.
@@ -131,10 +131,10 @@ final class aggregation_schema6_test extends \local_gugrades\external\gugrades_a
             );
         }
 
-        // Set aggregation strategy
+        // Set aggregation strategy.
         $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_WEIGHTED_MEAN);
 
-        // Update droplow
+        // Update droplow.
         $category = $DB->get_record('grade_categories', ['id' => $this->gradecatsummer->id], '*', MUST_EXIST);
         $category->droplow = 8;
         $DB->update_record('grade_categories', $category);
