@@ -64,7 +64,9 @@
                     table-class-name="capture-table"
                     :items="users"
                     :headers="headers"
+                    header-text-direction="center"
                     :body-row-class-name="table_row_class"
+                    :body-item-class-name="table_item_class"
                     >
 
                     <!-- add header text and edit cog next to cell if required -->
@@ -243,6 +245,15 @@
             return 'gradebookhidden-row';
         } else {
             return 'non-hidden-row';
+        }
+    }
+
+    /**
+     * Get class name for table items
+     */
+    function table_item_class(column) {
+        if (column != 'displayname') {
+            return 'text-center';
         }
     }
 

@@ -1,7 +1,8 @@
 <template>
     <!-- info button -->
     <a href="#" class="ml-2"  @click="info_clicked" data-toggle="tooltip" data-placement="middle" :title="mstrings.gradeiteminfo">
-        <i class="fa fa-info-circle align-middle text-warning" :class="customclasses" aria-hidden="true"></i>
+        <span v-if="props.text" class="text-light"><u>{{ props.text }}</u></span>
+        <i v-else class="fa fa-info-circle align-middle text-warning" :class="customclasses" aria-hidden="true"></i>
     </a>
 
     <!-- modal to show info-->
@@ -68,6 +69,7 @@
         itemid: Number,
         size: String,
         color: String,
+        text: String,
     });
 
     const toast = useToast();

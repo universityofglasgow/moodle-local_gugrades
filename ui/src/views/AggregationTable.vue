@@ -40,6 +40,8 @@
             buttons-pagination
             alternating
             table-class-name="aggregation-table"
+            header-text-direction="center"
+            :body-item-class-name="table_item_class"
             :items="users"
             :headers="headers"
         >
@@ -55,7 +57,7 @@
                     <div data-toggle="tooltip" :title="header.fullname" :data-original-title="header.fullname">
 
                         <div>
-                            {{ header.text }} <InfoButton v-if="header.gradeitemid" :itemid="header.gradeitemid" size="lg" color="text-warning"></InfoButton>
+                            <InfoButton v-if="header.gradeitemid" :itemid="header.gradeitemid" :text="header.text" size="lg" color="text-warning"></InfoButton>
                         </div>
                         <div v-if="!header.infocol">{{ header.weight }}%</div>
                         <div v-if="header.gradetype">{{ header.gradetype }} <span v-if="!header.isscale">({{ header.grademax }})</span></div>
@@ -156,6 +158,15 @@
      function groupselected(gid) {
         groupid.value = Number(gid);
         table_update();
+    }
+
+    /**
+     * Get class name for table items
+     */
+     function table_item_class(column) {
+        if (column != 'displayname') {
+            return 'text-center';
+        }
     }
 
     /**
