@@ -133,6 +133,6 @@ final class aggregation_schema9_test extends \local_gugrades\external\gugrades_a
         );
         $end = microtime(true);
         $elapsed = $end - $start;
-
+    }
 
 }
