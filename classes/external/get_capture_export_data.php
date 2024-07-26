@@ -80,6 +80,19 @@ class get_capture_export_data extends external_api {
 
         $csv = \local_gugrades\api::get_capture_export_data($courseid, $gradeitemid, $groupid, $viewfullnames, $options);
 
+        // Log.
+        $event = \local_gugrades\event\export_capture::create([
+            'objectid' => $gradeitemid,
+            'context' => \context_course::instance($courseid),
+            'other' => [
+                'gradeitemid' => $gradeitemid,
+            ],
+        ]);
+        $event->trigger();
+
+        // Audit.
+        \local_gugrades\audit::write($courseid, 0, $gradeitemid, 'Grade capture data exported.');
+
         return ['csv' => $csv];
     }
 

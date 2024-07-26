@@ -92,6 +92,7 @@ $string['error'] = 'Error';
 $string['eventadditionalgrade'] = 'Add additional grade';
 $string['eventdeleteconversionmap'] = 'Delete conversion map';
 $string['eventeditconversionmap'] = 'Edit/create conversion map';
+$string['eventexportcapture'] = 'Export from capture page';
 $string['eventimportgradesusers'] = 'Import grades for user list';
 $string['eventreleasegrades'] = 'Release grades';
 $string['eventreset'] = 'Reset course';
