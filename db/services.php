@@ -70,6 +70,7 @@ $services = [
             'local_gugrades_is_mygrades_available',
             'local_gugrades_get_capture_export_options',
             'local_gugrades_get_capture_export_data',
+            'local_gugrades_get_capture_user',
         ],
         'requiredcapability' => 'local/gugrades:view',
         'restrictedusers' => 1,
@@ -333,6 +334,12 @@ $functions = [
     'local_gugrades_get_capture_export_data' => [
         'classname' => 'local_gugrades\external\get_capture_export_data',
         'description' => 'Get data for capture export (and save user settings).',
+        'type' => 'read',
+        'ajax' => true,
+    ],
+    'local_gugrades_get_capture_user' => [
+        'classname' => 'local_gugrades\external\get_capture_user',
+        'description' => 'Get capture data for individual user.',
         'type' => 'read',
         'ajax' => true,
     ],

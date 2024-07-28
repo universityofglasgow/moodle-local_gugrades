@@ -73,6 +73,29 @@ class assign_activity extends base {
     }
 
     /**
+     * Get details for individual user
+     * @param object $assigninstance
+     * @param object $user
+     * @return object
+     */
+    private function get_user_info(object $assigninstance, object $user) {
+        $uniqueid = \assign::get_uniqueid_for_user_static($assigninstance->id, $user->id);
+        $user->uniqueid = $uniqueid;
+        $user->fullname = fullname($user);
+        $hidden = $this->is_names_hidden();
+        if ($hidden) {
+            $user->displayname = get_string('participantnumber', 'local_gugrades', $uniqueid);
+            if ($this->viewfullnames) {
+                $user->displayname .= ' (' . fullname($user) . ')';
+            }
+        } else {
+            $user->displayname = fullname($user);
+        }
+
+        return $user;
+    }
+
+    /**
      * Implement get_users()
      */
     public function get_users() {
@@ -84,18 +107,8 @@ class assign_activity extends base {
 
         // Displayname and uniqueid.
         $hidden = $this->is_names_hidden();
-        foreach ($users as $user) {
-            $uniqueid = \assign::get_uniqueid_for_user_static($assigninstance->id, $user->id);
-            $user->uniqueid = $uniqueid;
-            $user->fullname = fullname($user);
-            if ($hidden) {
-                $user->displayname = get_string('participantnumber', 'local_gugrades', $uniqueid);
-                if ($this->viewfullnames) {
-                    $user->displayname .= ' (' . fullname($user) . ')';
-                }
-            } else {
-                $user->displayname = fullname($user);
-            }
+        foreach ($users as $id => $user) {
+            $users[$id] = $this->get_user_info($assigninstance, $user);
         }
 
         // Re-order by uniqueid.
@@ -106,6 +119,19 @@ class assign_activity extends base {
         }
 
         return $users;
+    }
+
+    /**
+     * Get (and check) single user
+     * @param int $user
+     * @return object
+     */
+    public function get_user(int $userid) {
+        $user = parent::get_user($userid);
+        $assigninstance = $this->assign->get_instance();
+        $user = $this->get_user_info($assigninstance, $user);
+
+        return $user;
     }
 
     /**

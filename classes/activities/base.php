@@ -123,6 +123,21 @@ abstract class base {
     }
 
     /**
+     * Get (and check) single user
+     * @param int $user
+     * @return object
+     */
+    public function get_user(int $userid) {
+        $context = \context_course::instance($this->courseid);
+        $user = \local_gugrades\users::get_gradeable_user($context, $userid);
+
+        // Add displayname
+        $user->displayname = fullname($user);
+
+        return $user;
+    }
+
+    /**
      * Should the student names be hidden to normal users?
      * Probabl mostly applies to Assignment
      * @return boolean

@@ -104,6 +104,25 @@ class users {
     }
 
     /**
+     * Get user record from userid
+     * Check that user is a valid "student" in the course
+     * @param \context $connext
+     * @param int $userid
+     * @return object
+     */
+    public static function get_gradeable_user(\context $context, int $userid) {
+        global $DB;
+
+        if (!is_enrolled($context, $userid, 'moodle/grade:view')) {
+            throw new \moodle_exception('Not a gradeable user in this course. Userid = ' . $userid);
+        }
+
+        $user = $DB->get_record('user', ['id' => $userid], '*', MUST_EXIST);
+
+        return $user;
+    }
+
+    /**
      * Get available users for given activity
      * @param object $cmi (cm_info)
      * @param \context $context
@@ -132,14 +151,25 @@ class users {
      * @return array
      */
     public static function add_pictures_to_user_records(array $users) {
-        global $PAGE;
-
-        foreach ($users as $user) {
-            $userpicture = new \user_picture($user);
-            $user->pictureurl = $userpicture->get_url($PAGE)->out(false);
+        foreach ($users as $id => $user) {
+            $users[$id] = self::add_picture_to_user_record($user);
         }
 
         return $users;
+    }
+
+    /**
+     * Add picture to single user record
+     * @param object $user
+     * @param return object
+     */
+    public static function add_picture_to_user_record(object $user) {
+        global $PAGE;
+
+        $userpicture = new \user_picture($user);
+        $user->pictureurl = $userpicture->get_url($PAGE)->out(false);
+
+        return $user;
     }
 
     /**
@@ -149,14 +179,26 @@ class users {
      * @return array
      */
     public static function add_gradehidden_to_user_records(array $users, int $gradeitemid) {
-        global $DB;
-
-        foreach ($users as $user) {
-            $user->gradehidden = $DB->record_exists('local_gugrades_hidden',
-                ['gradeitemid' => $gradeitemid, 'userid' => $user->id]);
+        foreach ($users as $id => $user) {
+            $users[$id] = self::add_gradehidden_to_user_record($user, $gradeitemid);
         }
 
         return $users;
+    }
+
+    /**
+     * Add gradehidden to user record
+     * @param object $user
+     * @param int $gradeitemid
+     * @return $user
+     */
+    public static function add_gradehidden_to_user_record(object $user, int $gradeitemid) {
+        global $DB;
+
+        $user->gradehidden = $DB->record_exists('local_gugrades_hidden',
+            ['gradeitemid' => $gradeitemid, 'userid' => $user->id]);
+
+        return $user;
     }
 
     /**

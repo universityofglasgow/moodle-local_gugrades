@@ -12,24 +12,22 @@
 </template>
 
 <script setup>
-    import {defineProps, defineEmits, onMounted} from '@vue/runtime-core';
+    import {defineProps, defineEmits} from '@vue/runtime-core';
     import HistoryButton from '@/components/Capture/HistoryButton.vue';
     import ImportUserGradeButton from '@/components/Capture/ImportUserGradeButton.vue';
     import AddGradeButton from '@/components/Capture/AddGradeButton.vue';
     import HideShowButton from '@/components/Capture/HideShowButton.vue';
 
-    //const mstrings = inject('mstrings');
-
     const props = defineProps({
-            userid: Number,
-            item: Object,
-            itemid: Number,
-            itemname: String,
-            name: String,
-            awaitingcapture: Boolean,
-            gradehidden: Boolean,
-            converted: Boolean,
-        });
+        userid: Number,
+        item: Object,
+        itemid: Number,
+        itemname: String,
+        name: String,
+        awaitingcapture: Boolean,
+        gradehidden: Boolean,
+        converted: Boolean,
+    });
 
     const emit = defineEmits([
         'gradeadded'

@@ -116,6 +116,35 @@ class api {
     }
 
     /**
+     * Get capture page data only for a single user
+     * Use after changes to that user (only)
+     * @param int $courseid
+     * @param int $gradeitemid
+     * @param int $userid
+     * @param bool $viewfullnames
+     * @return array
+     */
+    public static function get_capture_user(int $courseid, int $gradeitemid, int $userid, int $viewfullnames) {
+
+        // Check and get the user object.
+        // Don't care about groups (really).
+        $activity = \local_gugrades\users::activity_factory($gradeitemid, $courseid, 0);
+        $activity->set_viewfullnames($viewfullnames);
+        $user = $activity->get_user($userid);
+
+        // Add/update the grades.
+        $user = \local_gugrades\grades::add_grades_for_user($courseid, $gradeitemid, $user);
+
+        // Add/update picture
+        $user = \local_gugrades\users::add_picture_to_user_record($user);
+
+        // Add/update gradehidden
+        $user = \local_gugrades\users::add_gradehidden_to_user_record($user, $gradeitemid);
+
+        return $user;
+    }
+
+    /**
      * Unpack a (string) CSV file
      * @param string $csv
      * @return array

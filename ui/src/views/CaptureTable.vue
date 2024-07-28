@@ -121,7 +121,7 @@
                             :awaitingcapture="item.awaitingcapture"
                             :gradehidden="item.gradehidden"
                             :converted="converted"
-                            @gradeadded = "get_page_data(itemid, firstname, lastname, groupid)"
+                            @gradeadded = "get_user_data(item.id)"
                             >
                         </CaptureMenu>
                     </template>
@@ -410,47 +410,58 @@
     }
 
     /**
+     * Add the column/grade data for individual user
+     *
+     */
+    function add_user_grades(user, columns) {
+        let grade = {};
+
+        // Only show alert/discrepancy column if there are any
+        if (user.alert || user.gradebookhidden || user.gradehidden) {
+            showalert.value = true;
+        }
+
+        // Allow import if there are no grades for this user.
+        user.awaitingcapture = true;
+        columns.forEach(column => {
+            const columnname = 'GRADE' + column.id;
+            grade = user.grades.find((element) => {
+                return (element.columnid == column.id);
+            });
+            if (grade) {
+                user.awaitingcapture = false;
+                user[columnname] = grade.displaygrade;
+            } else if (column.gradetype == 'FIRST') {
+                user[columnname] = mstrings.awaitingcapture;
+            } else {
+                user[columnname] = ' ';
+            }
+
+            // Is this column in 'editing mode'?
+            // If so, we add the 'editcolumn' ta (true) to each cell in that column
+            // The table slot can then pick it up and display an edit box
+            // Similarly the reason/gradetype stuff
+            user.editcolumn = (columnname == editcolumn.value);
+            user.reason = column.gradetype;
+            user.other = column.other;
+            user.gradeitemid = column.gradeitemid;
+        });
+
+        return user;
+    }
+
+    /**
      * Add grade columns into 'users' data so the table component can display them
      * @param users
      * @param columns
      * @return array
      */
     function add_grades(users, columns) {
-        let grade = {};
 
         showalert.value = false;
         users.forEach(user => {
 
-            // Only show alert/discrepancy column if there are any
-            if (user.alert || user.gradebookhidden || user.gradehidden) {
-                showalert.value = true;
-            }
-
-            // Allow import if there are no grades for this user.
-            user.awaitingcapture = true;
-            columns.forEach(column => {
-                const columnname = 'GRADE' + column.id;
-                grade = user.grades.find((element) => {
-                    return (element.columnid == column.id);
-                });
-                if (grade) {
-                    user.awaitingcapture = false;
-                    user[columnname] = grade.displaygrade;
-                } else if (column.gradetype == 'FIRST') {
-                    user[columnname] = mstrings.awaitingcapture;
-                } else {
-                    user[columnname] = ' ';
-                }
-
-                // Is this column in 'editing mode'?
-                // If so, we add the 'editcolumn' ta (true) to each cell in that column
-                // The table slot can then pick it up and display an edit box
-                // Similarly the reason/gradetype stuff
-                user.editcolumn = (columnname == editcolumn.value);
-                user.reason = column.gradetype;
-                user.other = column.other;
-                user.gradeitemid = column.gradeitemid;
-            });
+            add_user_grades(user, columns);
         });
 
         return users;
@@ -508,6 +519,70 @@
             users.value = add_grades(users.value, columns.value);
 
             loaded.value = true;
+        })
+        .catch((error) => {
+            window.console.error(error);
+            toast.error('Error communicating with server (see console)');
+        });
+    }
+
+    /**
+     * Work out if user data contains any additional columns
+     * If a new column has been added then
+     * Return true if missing columns
+     */
+    function missing_columns(usergrades) {
+
+        // Flag a missing gradetype inside the callback
+        let missing = false;
+
+        usergrades.forEach((grade) => {
+            const gradetype = grade.gradetype;
+            const found = columns.value.find((column) => {
+                return column.gradetype == gradetype;
+            });
+
+            // found returns undefined if not found. Only need one to be not found
+            if (found === undefined) {
+                missing = true;
+            }
+        });
+
+        return missing;
+    }
+
+    /**
+     * Get the data for an individual user
+     * (If grade added and so on)
+     */
+    function get_user_data(userid) {
+        const GU = window.GU;
+        const courseid = GU.courseid;
+        const fetchMany = GU.fetchMany;
+
+        fetchMany([{
+            methodname: 'local_gugrades_get_capture_user',
+            args: {
+                courseid: courseid,
+                gradeitemid: itemid.value,
+                userid: userid,
+                viewfullnames: revealnames.value,
+            }
+        }])[0]
+        .then((result) => {
+            const updateduser = add_user_grades(result, columns.value);
+
+            // If this seems to have added more columns then do a page reload.
+            if (missing_columns(updateduser.grades)) {
+                reload_page();
+            } else {
+                const found = users.value.findIndex((user) => {
+                    return user.id == updateduser.id;
+                });
+                if (found > -1) {
+                    users.value[found] = result;
+                }
+            }
         })
         .catch((error) => {
             window.console.error(error);
