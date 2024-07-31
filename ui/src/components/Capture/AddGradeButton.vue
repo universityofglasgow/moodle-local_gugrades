@@ -17,7 +17,11 @@
                 v-model="reason"
                 :options="gradetypes"
                 :placeholder="mstrings.selectareason"
+                :validation-messages="{
+                    required: 'This field is required.',
+                }"
                 validation="required"
+                validation-visibility="live"
             />
             <FormKit
                 v-if = 'reason == "OTHER"'
