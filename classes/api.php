@@ -309,6 +309,9 @@ class api {
                     ispoints:       !$conversion->is_scale(),
                 );
                 $addcount++;
+
+                // Re-aggregate this user
+                \local_gugrades\aggregation::aggregate_user_helper($courseid, $conversion->get_gradecategoryid(), $user->id);
             }
         }
 
@@ -452,6 +455,9 @@ class api {
                     ispoints:       !$conversion->is_scale(),
                 );
 
+                // Re-aggregate this user
+                \local_gugrades\aggregation::aggregate_user_helper($courseid, $conversion->get_gradecategoryid(), $userid);
+
                 return true;
             }
         } else if ($fillns) {
@@ -475,6 +481,9 @@ class api {
                 auditcomment:   get_string('import', 'local_gugrades'),
                 ispoints:       false,
             );
+
+            // Re-aggregate this user
+            \local_gugrades\aggregation::aggregate_user_helper($courseid, $conversion->get_gradecategoryid(), $userid);
 
             return true;
         }
