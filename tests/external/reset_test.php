@@ -70,9 +70,9 @@ final class reset_test extends \local_gugrades\external\gugrades_advanced_testca
 
         // Check that we have data in the grades and columns table for this course.
         $grades = $DB->get_records('local_gugrades_grade', ['courseid' => $courseid]);
-        $this->assertCount(4, $grades);
+        $this->assertCount(6, $grades);
         $columns = $DB->get_records('local_gugrades_column', ['courseid' => $courseid]);
-        $this->assertCount(6, $columns);
+        $this->assertCount(8, $columns);
 
         // Perform reset.
         $nullreturn = reset::execute($courseid);

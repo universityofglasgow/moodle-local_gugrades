@@ -201,8 +201,8 @@ final class csv_capture_test extends \local_gugrades\external\gugrades_advanced_
         $grades = array_values($grades);
 
         $this->assertEquals(2, $addcount);
-        $this->assertCount(2, $grades);
-        $this->assertEquals(18.0, $grades[1]->rawgrade);
+        $this->assertCount(6, $grades);
+        $this->assertEquals(18.0, $grades[3]->rawgrade);
     }
 
     /**

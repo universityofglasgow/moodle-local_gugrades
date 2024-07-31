@@ -101,16 +101,19 @@ final class import_grades_recursive_test extends \local_gugrades\external\gugrad
         $grades = array_values($grades);
 
         $this->assertIsArray($grades);
-        $this->assertCount(2, $grades);
+        $this->assertCount(5, $grades);
 
-        $this->assertEquals('16.7', $grades[0]->displaygrade);
-        $this->assertEquals(16.7000, $grades[0]->rawgrade);
-        $this->assertEquals('FIRST', $grades[0]->gradetype);
-        $this->assertEquals(1, $grades[0]->iscurrent);
+        $this->assertEquals('16.7', $grades[3]->displaygrade);
+        $this->assertEquals(16.7000, $grades[3]->rawgrade);
+        $this->assertEquals('FIRST', $grades[3]->gradetype);
+        $this->assertEquals(1, $grades[3]->iscurrent);
 
-        $this->assertEquals('48.5', $grades[1]->displaygrade);
-        $this->assertEquals(48.5000, $grades[1]->rawgrade);
-        $this->assertEquals('FIRST', $grades[1]->gradetype);
-        $this->assertEquals(1, $grades[1]->iscurrent);
+        $this->assertEquals('48.5', $grades[4]->displaygrade);
+        $this->assertEquals(48.5000, $grades[4]->rawgrade);
+        $this->assertEquals('FIRST', $grades[4]->gradetype);
+        $this->assertEquals(1, $grades[4]->iscurrent);
+
+        $this->assertEquals('CATEGORY', $grades[2]->gradetype);
+        $this->assertEquals('32.6', $grades[2]->displaygrade);
     }
 }
