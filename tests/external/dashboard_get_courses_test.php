@@ -140,7 +140,7 @@ final class dashboard_get_courses_test extends \local_gugrades\external\gugrades
         );
         $this->assertIsArray($courses);
         $this->assertCount(3, $courses);
-        $this->assertEquals('Current Course Two', $courses[1]['fullname']);
+        $this->assertEquals('Current Course One', $courses[1]['fullname']);
 
         // MyGrades is enabled by releasing grades for a course.
         $userlist = [

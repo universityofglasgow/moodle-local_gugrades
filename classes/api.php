@@ -970,6 +970,9 @@ class api {
             auditcomment:   $notes,
             ispoints:       !$conversion->is_scale(),
         );
+
+        // Re-aggregate this user
+        \local_gugrades\aggregation::aggregate_user_helper($courseid, $conversion->get_gradecategoryid(), $userid);
     }
 
     /**
@@ -1503,7 +1506,7 @@ class api {
 
         // Recalculate?
         if ($aggregate) {
-            $users = \local_gugrades\aggregation::aggregate($courseid, $gradecategoryid, $users);
+            \local_gugrades\aggregation::aggregate($courseid, $gradecategoryid, $users);
         }
 
         // Warning message on top level.

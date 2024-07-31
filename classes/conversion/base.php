@@ -87,6 +87,14 @@ abstract class base {
     }
 
     /**
+     * Get gradecategoryid
+     * @return int
+     */
+    public function get_gradecategoryid() {
+        return $this->gradeitem->categoryid;
+    }
+
+    /**
      * Is the conversion a 'converted' scale
      * @return bool
      */
