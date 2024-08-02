@@ -202,7 +202,12 @@
      * Custom rule for points values
      */
     function validate_points(node) {
-        return (node.value >= 0) && (node.value <= maxgrade.value);
+
+        // Careful about text fields not being treated as numbers properly.
+        const points = Number(node.value);
+        const validated = (points >= 0) && (points <= maxgrade.value);
+
+        return validated;
     }
 
     /**
