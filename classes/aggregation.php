@@ -251,7 +251,18 @@ class aggregation {
 
         $gcat = $DB->get_record('grade_categories', ['id' => $gradecategoryid], '*', MUST_EXIST);
 
+        // Get the grad eitem corresponding to this category.
+        $gradecatitem = $DB->get_record('grade_items',
+            ['itemtype' => 'category', 'iteminstance' => $gradecategoryid], '*', MUST_EXIST);
+
         foreach ($users as $user) {
+
+            // The agregated 'CATEGORY' field should already be in the grades table.
+            // If it's not, we need to aggregate this user
+            if (!$DB->record_exists('local_gugrades_grade', ['gradeitemid' => $gradecatitem->id, 'gradetype' => 'CATEGORY', 'userid' => $user->id, 'iscurrent' => 1])) {
+                self::aggregate_user_helper($courseid, $gradecategoryid, $user->id);
+            }
+
             $fields = [];
             $items = [];
             foreach ($columns as $column) {
@@ -292,8 +303,6 @@ class aggregation {
 
             // Read "top level" category for user info
             // This is needed if no aggregation is performed.
-            $gradecatitem = $DB->get_record('grade_items',
-                ['itemtype' => 'category', 'iteminstance' => $gradecategoryid], '*', MUST_EXIST);
             $item = $DB->get_record('local_gugrades_grade',
                 ['gradeitemid' => $gradecatitem->id, 'gradetype' => 'CATEGORY', 'userid' => $user->id, 'iscurrent' => 1],
                 '*', MUST_EXIST);
@@ -693,6 +702,7 @@ class aggregation {
 
         // Does this category grade already exist?
         // Give up, if not.
+        /*
         if ($DB->record_exists('local_gugrades_grade', [
             'gradetype' => 'CATEGORY',
             'gradeitemid' => $category->itemid,
@@ -703,6 +713,7 @@ class aggregation {
         ])) {
             return;
         }
+        */
 
         \local_gugrades\grades::write_grade(
             courseid:       $courseid,
@@ -719,6 +730,7 @@ class aggregation {
             iserror:        $iserror,
             auditcomment:   $category->error,  // Hide the error message here
             ispoints:       !$category->isscale,
+            overwrite:      true,
         );
     }
 
@@ -797,6 +809,8 @@ class aggregation {
                     ];
                 }
             }
+
+            // Construct items array for aggregation
             $items[$child->itemid] = $item;
         }
 
@@ -806,7 +820,7 @@ class aggregation {
             self::aggregate_user_category($courseid, $category, $items, $level);
 
         // Write the aggregated category to the gugrades_grades table.
-        $item = (object)[
+        $aggregatedcategory = (object)[
             'itemid' => $category->itemid, // TODO mapped itemid of category
             'categoryid' => $category->categoryid,
             'iscategory' => true,
@@ -820,7 +834,7 @@ class aggregation {
             'weight' => $category->weight, // TODO need gradeitem
             'error' => $error,
         ];
-        self::write_aggregated_category($courseid, $userid, $item);
+        self::write_aggregated_category($courseid, $userid, $aggregatedcategory);
 
         return [$total, $rawgrade, $admingrade, $display, $completion, $error];
     }
@@ -848,8 +862,8 @@ class aggregation {
     }
 
     /**
-     * Entry point for calculating aggregations
-     * Returns completion
+     * Entry point for calculating complete aggregations
+     * In reality, we shouldn't really need this.
      * @param int $courseid
      * @param int $gradecategoryid
      * @param array $users
@@ -878,16 +892,7 @@ class aggregation {
             // as call recurses.
             [$usertotal, $rawgrade, $admingrade, $displaygrade, $completion, $error] =
                 self::aggregate_user($courseid, $toplevel, $user->id, $level);
-            /*
-            $user->rawgrade = $rawgrade;
-            $user->total = $usertotal;
-            $user->displaygrade = $displaygrade;
-            $user->completed = $completion;
-            $user->error = $error;
-            */
         }
-
-        //return $users;
     }
 
 }

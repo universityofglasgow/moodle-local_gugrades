@@ -105,8 +105,8 @@ final class dashboard_get_courses_test extends \local_gugrades\external\gugrades
         $this->assertIsInt($catcourse['firstlevel'][0]['id']);
 
         // Check GUGCAT enabled.
-        $this->assertTrue($courses[1]['gcatenabled']);
-        $this->assertTrue($courses[3]['gcatenabled']);
+        $this->assertTrue($courses[0]['gcatenabled']);
+        $this->assertTrue($courses[2]['gcatenabled']);
 
         // Get only 'current' courses
         // Default course should be included as enddate is disabled (= 0).
@@ -117,7 +117,7 @@ final class dashboard_get_courses_test extends \local_gugrades\external\gugrades
         );
         $this->assertIsArray($courses);
         $this->assertCount(3, $courses);
-        $this->assertEquals('Current Course Two', $courses[0]['fullname']);
+        $this->assertEquals('Current Course One', $courses[0]['fullname']);
 
         // Get only 'past' courses.
         $courses = dashboard_get_courses::execute($studentid, false, true, '');
@@ -126,7 +126,7 @@ final class dashboard_get_courses_test extends \local_gugrades\external\gugrades
             $courses
         );
         $this->assertIsArray($courses);
-        $this->assertEquals('Past Course Two', $courses[0]['fullname']);
+        $this->assertEquals('Past Course One', $courses[0]['fullname']);
 
         // Check the courses that should be not enabled for MyGrades.
         $this->assertFalse($courses[0]['gugradesenabled']);
@@ -140,7 +140,7 @@ final class dashboard_get_courses_test extends \local_gugrades\external\gugrades
         );
         $this->assertIsArray($courses);
         $this->assertCount(3, $courses);
-        $this->assertEquals('Current Course One', $courses[1]['fullname']);
+        $this->assertEquals('Current Course Two', $courses[1]['fullname']);
 
         // MyGrades is enabled by releasing grades for a course.
         $userlist = [

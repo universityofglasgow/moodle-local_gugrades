@@ -339,7 +339,7 @@
                 firstname: firstname,
                 lastname: lastname,
                 groupid: groupid.value,
-                aggregate: true,
+                aggregate: false,
             }
         }])[0]
         .then((result) => {

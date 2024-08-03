@@ -154,6 +154,14 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
             get_aggregation_page::execute_returns(),
             $page
         );
+
+        $users = $page['users'];
+        $this->assertCount(2, $users);
+        $juan = $users[1];
+        $this->assertEquals('Grades missing', $juan['error']);
+        $this->assertEquals('No data', $juan['fields'][2]['display']);
+        $fred = $users[0];
+        $this->assertEquals("47.23333", $fred['fields'][0]['display']);
     }
 
     /**
@@ -185,7 +193,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         }
 
         // Get first csv test string.
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
@@ -206,14 +214,14 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         }
 
         // Get aggregated page, now it should all be Schedule A.
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
         );
 
         $fred = $page['users'][0];
-        $this->assertEquals("57", $fred['completed']);
+        $this->assertEquals("29", $fred['completed']);
         $this->assertEquals('C2', $fred['fields'][2]['display']);
 
         // Add an admin grade.
@@ -235,14 +243,14 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         );
 
         // Get aggregated page, now it should now reflect admin grade.
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
         );
 
         $fred = $page['users'][0];
-        $this->assertEquals("43", $fred['completed']);
+        $this->assertEquals("14", $fred['completed']);
         $this->assertEquals('MV', $fred['fields'][4]['display']);
     }
 
@@ -277,7 +285,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         $summerexamid = $this->get_grade_category('Summer exam');
 
         // Get aggregation page for above.
-        $page = get_aggregation_page::execute($this->course->id, $summerexamid, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $summerexamid, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
@@ -321,7 +329,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         $scaleexamid = $this->get_grade_category("Schedule B exam");
 
         // Get aggregation page for above.
-        $page = get_aggregation_page::execute($this->course->id, $scaleexamid, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $scaleexamid, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
@@ -367,7 +375,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         $scaleexamid = $this->get_grade_category('Scale exam');
 
         // Get aggregation page for above.
-        $page = get_aggregation_page::execute($this->course->id, $scaleexamid, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $scaleexamid, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
@@ -413,7 +421,7 @@ final class get_aggregation_page_test extends \local_gugrades\external\gugrades_
         $summativebid = $this->get_grade_category('SummativeB');
 
         // Get aggregation page for above.
-        $page = get_aggregation_page::execute($this->course->id, $summativebid, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $summativebid, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page

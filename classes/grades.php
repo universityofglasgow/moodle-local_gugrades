@@ -324,6 +324,7 @@ class grades {
 
     /**
      * Write grade to local_gugrades_grade table
+     * NOTE: $overwrite means that we don't make multiple copies (for aggregated categories)
      *
      * @param int $courseid
      * @param int $gradeitemid
@@ -339,6 +340,7 @@ class grades {
      * @param bool $iserror
      * @param string $auditcomment
      * @param bool $ispoints
+     * @param bool $overwrite
      */
     public static function write_grade(
         int $courseid,
@@ -354,7 +356,8 @@ class grades {
         bool $iscurrent,
         bool $iserror,
         string $auditcomment,
-        bool $ispoints
+        bool $ispoints,
+        bool $overwrite = false
     ) {
         global $DB, $USER;
 
@@ -383,6 +386,31 @@ class grades {
                 // It's not current any more.
                 $oldgrade->iscurrent = false;
                 $DB->update_record('local_gugrades_grade', $oldgrade);
+            }
+        }
+
+        // Are we overwriting an existing grade (probably CATEGORY)?
+        if ($overwrite) {
+
+            // Find the existing entry - if not, create a new one anyway
+            if ($gugrade = $DB->get_record('local_gugrades_grade', ['courseid' => $courseid, 'gradeitemid' => $gradeitemid, 'userid' => $userid, 'columnid' => $column->id])) {
+                $gugrade->rawgrade = $rawgrade;
+                $gugrade->admingrade = $admingrade;
+                $gugrade->convertedgrade = $convertedgrade;
+                $gugrade->displaygrade = $displaygrade;
+                $gugrade->weightedgrade = $weightedgrade;
+                $gugrade->gradetype = $gradetype;
+                $gugrade->other = $other;
+                $gugrade->iscurrent = true;
+                $gugrade->iserror = $iserror;
+                $gugrade->auditby = $USER->id;
+                $gugrade->audittimecreated = time();
+                $gugrade->auditcomment = $auditcomment;
+                $gugrade->points = $ispoints;
+
+                $DB->update_record('local_gugrades_grade', $gugrade);
+
+                return;
             }
         }
 

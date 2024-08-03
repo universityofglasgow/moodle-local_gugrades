@@ -1126,8 +1126,10 @@ class api {
             'enddate',
             'showgrades',
         ];
+
+        // If in doubt, just sort on fullname.
         if (!$sort) {
-            $sort = null;
+            $sort = 'fullname';
         }
         $courses = enrol_get_users_courses($userid, true, $additionalfields, $sort);
 

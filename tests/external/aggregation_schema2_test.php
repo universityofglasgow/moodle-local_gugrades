@@ -114,7 +114,7 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
         ];
 
         // Get aggregation page for above.
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
@@ -134,6 +134,7 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
      * @covers \local_gugrades\external\get_aggregation_page::execute
      */
     public function test_below_75(): void {
+        global $DB;
 
         // Make sure that we're a teacher.
         $this->setUser($this->teacher);
@@ -159,12 +160,14 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
 
         // Add admin grades to 'Item 2' and 'Item 4'.
         $item2id = $this->get_gradeitemid('Item 2');
-        $this->apply_admingrade($this->course->id, $item2id, $this->student->id, 'MV');
+        $this->apply_admingrade($this->course->id, $this->gradecatsummative->id, $item2id, $this->student->id, 'MV');
         $item4id = $this->get_gradeitemid('Item 4');
-        $this->apply_admingrade($this->course->id, $item4id, $this->student->id, 'MV');
+        $this->apply_admingrade($this->course->id, $this->gradecatsummative->id, $item4id, $this->student->id, 'MV');
+
+        $grades = $DB->get_records('local_gugrades_grade', ['userid' => $this->student->id]);
 
         // Get aggregation page for above.
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
@@ -207,10 +210,10 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
 
         // Add admin grades to 'Item 4'.
         $item4id = $this->get_gradeitemid('Item 4');
-        $this->apply_admingrade($this->course->id, $item4id, $this->student->id, 'MV');
+        $this->apply_admingrade($this->course->id, $this->gradecatsummative->id, $item4id, $this->student->id, 'MV');
 
         // Get aggregation page for above.
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
@@ -254,7 +257,7 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
         $this->set_strategy($this->gradecatsummative->id, \GRADE_AGGREGATE_WEIGHTED_MEAN2);
 
         // Get aggregation page for above.
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
@@ -298,7 +301,7 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
         $this->set_strategy($this->gradecatsummative->id, \GRADE_AGGREGATE_MODE);
 
         // Get aggregation page for above.
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
@@ -342,7 +345,7 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
         $this->set_strategy($this->gradecatsummative->id, \GRADE_AGGREGATE_MEDIAN);
 
         // Get aggregation page for above.
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
@@ -386,7 +389,7 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
         $this->set_strategy($this->gradecatsummative->id, \GRADE_AGGREGATE_MAX);
 
         // Get aggregation page for above.
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
@@ -430,7 +433,7 @@ final class aggregation_schema2_test extends \local_gugrades\external\gugrades_a
         $this->set_strategy($this->gradecatsummative->id, \GRADE_AGGREGATE_MIN);
 
         // Get aggregation page for above.
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page

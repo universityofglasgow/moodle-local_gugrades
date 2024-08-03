@@ -26,6 +26,11 @@
 namespace local_gugrades\external;
 
 use externallib_advanced_testcase;
+use core_external\external_api;
+use core_external\external_function_parameters;
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
+use core_external\external_value;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -286,26 +291,26 @@ class gugrades_aggregation_testcase extends gugrades_base_testcase {
     /**
      * Apply admingrade - grade needs to be imported / exist first
      * @param int $courseid
+     * @param int $gradecategoryid
      * @param int $gradeitemid
      * @param int $userid
      * @param string $admingrade
      */
-    public function apply_admingrade(int $courseid, int $gradeitemid, int $userid, string $admingrade): void {
-        \local_gugrades\grades::write_grade(
+    public function apply_admingrade(int $courseid, int $gradecategoryid, int $gradeitemid, int $userid, string $admingrade): void {
+        $nothing = write_additional_grade::execute(
             courseid:       $courseid,
             gradeitemid:    $gradeitemid,
             userid:         $userid,
-            admingrade:     $admingrade,
-            rawgrade:       0,
-            convertedgrade: 0,
-            displaygrade:   $admingrade,
-            weightedgrade:  0,
-            gradetype:      'AGREED',
+            reason:         'AGREED',
             other:          '',
-            iscurrent:      true,
-            iserror:        false,
-            auditcomment:   '',
-            ispoints:       false,
+            admingrade:     $admingrade,
+            scale:          0,
+            grade:          0,
+            notes:          'Agreed grade'
+        );
+        $nothing = external_api::clean_returnvalue(
+            write_additional_grade::execute_returns(),
+            $nothing
         );
     }
 
