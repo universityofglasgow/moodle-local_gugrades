@@ -126,7 +126,7 @@ final class aggregation_schema9_test extends \local_gugrades\external\gugrades_a
 
         // Get aggregation page for above.
         $start = microtime(true);
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page

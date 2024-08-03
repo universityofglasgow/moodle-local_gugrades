@@ -101,16 +101,18 @@ final class aggregation_schema8_test extends \local_gugrades\external\gugrades_a
         $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_WEIGHTED_MEAN);
 
         // Update droplow.
+        // This won't update aggregation.
         $category = $DB->get_record('grade_categories', ['id' => $this->gradecatsummer->id], '*', MUST_EXIST);
         $category->droplow = 0;
         $DB->update_record('grade_categories', $category);
 
         // Set NS for question 3.
+        // This will.
         $q3itemid = $this->get_gradeitemid('Question 3');
-        $this->apply_admingrade($this->course->id, $q3itemid, $this->student->id, 'NS');
+        $this->apply_admingrade($this->course->id, $this->gradecatsummative->id, $q3itemid, $this->student->id, 'NS');
 
         // Get aggregation page for above.
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page

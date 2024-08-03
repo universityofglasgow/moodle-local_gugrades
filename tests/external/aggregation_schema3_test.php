@@ -77,7 +77,7 @@ final class aggregation_schema3_test extends \local_gugrades\external\gugrades_a
         ];
 
         // Get aggregation page for above.
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
@@ -95,6 +95,7 @@ final class aggregation_schema3_test extends \local_gugrades\external\gugrades_a
         $this->set_strategy($this->gradecatsummative->id, \GRADE_AGGREGATE_MEAN);
 
         // Get aggregation page for above.
+        // (this has to be true to force reaggregation after above).
         $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummative->id, '', '', 0, true);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),

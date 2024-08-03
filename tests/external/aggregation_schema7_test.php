@@ -192,7 +192,7 @@ final class aggregation_schema7_test extends \local_gugrades\external\gugrades_a
 
         // Set NS for question 3.
         $q3itemid = $this->get_gradeitemid('Question 3');
-        $this->apply_admingrade($this->course->id, $q3itemid, $this->student->id, 'NS');
+        $this->apply_admingrade($this->course->id, $this->gradecatsummer->id, $q3itemid, $this->student->id, 'NS');
 
         // Get aggregation page for above.
         $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummer->id, '', '', 0, true);
@@ -209,7 +209,7 @@ final class aggregation_schema7_test extends \local_gugrades\external\gugrades_a
 
         // Set MV for question 4. Should still be NS.
         $q3itemid = $this->get_gradeitemid('Question 4');
-        $this->apply_admingrade($this->course->id, $q3itemid, $this->student->id, 'MV');
+        $this->apply_admingrade($this->course->id, $this->gradecatsummer->id, $q3itemid, $this->student->id, 'MV');
 
         // Get aggregation page for above.
         $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummer->id, '', '', 0, true);
@@ -263,14 +263,14 @@ final class aggregation_schema7_test extends \local_gugrades\external\gugrades_a
 
         // Set MV for question 3.
         $q3itemid = $this->get_gradeitemid('Question 3');
-        $this->apply_admingrade($this->course->id, $q3itemid, $this->student->id, 'MV');
+        $this->apply_admingrade($this->course->id, $this->gradecatsummer->id, $q3itemid, $this->student->id, 'MV');
 
         // Set MV for question 4.
         $q3itemid = $this->get_gradeitemid('Question 4');
-        $this->apply_admingrade($this->course->id, $q3itemid, $this->student->id, 'MV');
+        $this->apply_admingrade($this->course->id, $this->gradecatsummer->id, $q3itemid, $this->student->id, 'MV');
 
         // Get aggregation page for above.
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummer->id, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummer->id, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
@@ -279,12 +279,12 @@ final class aggregation_schema7_test extends \local_gugrades\external\gugrades_a
         $this->assertFalse($page['toplevel']);
         $this->assertEquals('A', $page['atype']);
         $fred = $page['users'][0];
-        $this->assertEquals("MV", $fred['displaygrade']);
-        $this->assertEquals(0, $fred['rawgrade']);
+        $this->assertEquals("B3", $fred['displaygrade']);
+        $this->assertEquals(15.4, $fred['rawgrade']);
 
         // Set IS for question 7. Should still be MV.
         $q3itemid = $this->get_gradeitemid('Question 7');
-        $this->apply_admingrade($this->course->id, $q3itemid, $this->student->id, 'IS');
+        $this->apply_admingrade($this->course->id, $this->gradecatsummer->id, $q3itemid, $this->student->id, 'IS');
 
         // Get aggregation page for above.
         $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummer->id, '', '', 0, true);

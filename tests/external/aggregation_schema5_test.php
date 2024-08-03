@@ -79,6 +79,9 @@ final class aggregation_schema5_test extends \local_gugrades\external\gugrades_a
         // Install test data for student.
         $this->load_data('data5a', $this->student->id);
 
+        // Set aggregation strategy.
+        $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_WEIGHTED_MEAN);
+
         foreach ($this->gradeitemids as $gradeitemid) {
             $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
             $status = external_api::clean_returnvalue(
@@ -87,11 +90,8 @@ final class aggregation_schema5_test extends \local_gugrades\external\gugrades_a
             );
         }
 
-        // Set aggregation strategy.
-        $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_WEIGHTED_MEAN);
-
         // Get aggregation page for above.
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummer->id, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummer->id, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
@@ -122,6 +122,9 @@ final class aggregation_schema5_test extends \local_gugrades\external\gugrades_a
         // Install test data for student.
         $this->load_data('data5a', $this->student->id);
 
+        // Set aggregation strategy.
+        $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_WEIGHTED_MEAN2);
+
         foreach ($this->gradeitemids as $gradeitemid) {
             $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
             $status = external_api::clean_returnvalue(
@@ -130,11 +133,8 @@ final class aggregation_schema5_test extends \local_gugrades\external\gugrades_a
             );
         }
 
-        // Set aggregation strategy.
-        $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_WEIGHTED_MEAN2);
-
         // Get aggregation page for above.
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummer->id, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummer->id, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
@@ -165,6 +165,9 @@ final class aggregation_schema5_test extends \local_gugrades\external\gugrades_a
         // Install test data for student.
         $this->load_data('data5a', $this->student->id);
 
+        // Set aggregation strategy.
+        $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_MODE);
+
         foreach ($this->gradeitemids as $gradeitemid) {
             $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
             $status = external_api::clean_returnvalue(
@@ -173,11 +176,8 @@ final class aggregation_schema5_test extends \local_gugrades\external\gugrades_a
             );
         }
 
-        // Set aggregation strategy.
-        $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_MODE);
-
         // Get aggregation page for above.
-        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummer->id, '', '', 0, true);
+        $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummer->id, '', '', 0, false);
         $page = external_api::clean_returnvalue(
             get_aggregation_page::execute_returns(),
             $page
@@ -208,6 +208,9 @@ final class aggregation_schema5_test extends \local_gugrades\external\gugrades_a
         // Install test data for student.
         $this->load_data('data5a', $this->student->id);
 
+        // Set aggregation strategy.
+        $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_MEDIAN);
+
         foreach ($this->gradeitemids as $gradeitemid) {
             $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
             $status = external_api::clean_returnvalue(
@@ -215,9 +218,6 @@ final class aggregation_schema5_test extends \local_gugrades\external\gugrades_a
                 $status
             );
         }
-
-        // Set aggregation strategy.
-        $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_MEDIAN);
 
         // Get aggregation page for above.
         $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummer->id, '', '', 0, true);
@@ -251,6 +251,9 @@ final class aggregation_schema5_test extends \local_gugrades\external\gugrades_a
         // Install test data for student.
         $this->load_data('data5a', $this->student->id);
 
+        // Set aggregation strategy.
+        $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_MAX);
+
         foreach ($this->gradeitemids as $gradeitemid) {
             $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
             $status = external_api::clean_returnvalue(
@@ -258,9 +261,6 @@ final class aggregation_schema5_test extends \local_gugrades\external\gugrades_a
                 $status
             );
         }
-
-        // Set aggregation strategy.
-        $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_MAX);
 
         // Get aggregation page for above.
         $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummer->id, '', '', 0, true);
@@ -294,6 +294,9 @@ final class aggregation_schema5_test extends \local_gugrades\external\gugrades_a
         // Install test data for student.
         $this->load_data('data5a', $this->student->id);
 
+        // Set aggregation strategy.
+        $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_MIN);
+
         foreach ($this->gradeitemids as $gradeitemid) {
             $status = import_grades_users::execute($this->course->id, $gradeitemid, false, false, $userlist);
             $status = external_api::clean_returnvalue(
@@ -301,9 +304,6 @@ final class aggregation_schema5_test extends \local_gugrades\external\gugrades_a
                 $status
             );
         }
-
-        // Set aggregation strategy.
-        $this->set_strategy($this->gradecatsummer->id, \GRADE_AGGREGATE_MIN);
 
         // Get aggregation page for above.
         $page = get_aggregation_page::execute($this->course->id, $this->gradecatsummer->id, '', '', 0, true);
