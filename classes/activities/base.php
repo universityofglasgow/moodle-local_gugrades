@@ -189,4 +189,22 @@ abstract class base {
         return $this->gradeitem->itemname;
     }
 
+    /**
+     * Action to take when releasing grades
+     * Default is do nothing
+     * @param int $userid
+     */
+    public function release_grades(int $userid) {
+        return;
+    }
+
+    /**
+     * Action to take when un-releasing grades
+     * Default is to do nothing
+     * @param int $userid
+     */
+    public function unrelease_grades(int $userid) {
+        return;
+    }
+
 }

@@ -194,4 +194,34 @@ class assign_activity extends base {
         return 'assign';
     }
 
+    /**
+     * Action to take when releasing grades
+     * For Assignment, update workflow
+     * @param int $userid
+     */
+    public function release_grades(int $userid) {
+        $data = (object) [
+            'attemptnumber' => 0,
+            'workflowstate' => 'released',
+        ];
+        $this->assign->save_grade($userid, $data);
+
+        return;
+    }
+
+    /**
+     * Action to take when un-releasing grades
+     * Default is to do nothing
+     * @param int $userid
+     */
+    public function unrelease_grades(int $userid) {
+        $data = (object) [
+            'attemptnumber' => 0,
+            'workflowstate' => 'readyforrelease',
+        ];
+        $this->assign->save_grade($userid, $data);
+
+        return;
+    }
+
 }

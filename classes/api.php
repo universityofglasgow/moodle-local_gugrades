@@ -1262,6 +1262,9 @@ class api {
 
                 // Remove any columns that this has orphaned.
                 \local_gugrades\grades::cleanup_empty_columns($gradeitemid);
+
+                // Activity action.
+                $activity->unrelease_grades($user->id);
             } else {
                 $usercapture = new usercapture($courseid, $gradeitemid, $user->id);
                 $released = $usercapture->get_released();
@@ -1284,6 +1287,9 @@ class api {
                         ispoints: $released->points,
                     );
                 }
+
+                // Activity action .
+                $activity->release_grades($user->id);
             }
         }
     }
