@@ -543,7 +543,7 @@ final class get_write_conversion_maps_test extends \local_gugrades\external\gugr
         );
 
         // What's in the grades table?
-        $grades = array_values($DB->get_records('local_gugrades_grade', ['gradeitemid' => $this->gradeitemidassign1]));
+        $grades = array_values($DB->get_records('local_gugrades_grade', ['gradeitemid' => $this->gradeitemidassign1], 'id'));
 
         $this->assertCount(4, $grades);
         $this->assertEquals(1, $grades[0]->points);

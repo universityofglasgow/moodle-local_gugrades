@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/gugrades/db" VERSION="20240419" COMMENT="XMLDB file for Moodle local/gugrades"
+<XMLDB PATH="local/gugrades/db" VERSION="20240805" COMMENT="XMLDB file for Moodle local/gugrades"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -22,6 +22,9 @@
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
+      <INDEXES>
+        <INDEX NAME="column_si" UNIQUE="false" FIELDS="scaleid"/>
+      </INDEXES>
     </TABLE>
     <TABLE NAME="local_gugrades_column" COMMENT="Grade columns on import table (because there can be multiple OTHER columns)">
       <FIELDS>
@@ -37,6 +40,7 @@
       </KEYS>
       <INDEXES>
         <INDEX NAME="gc_gi" UNIQUE="false" FIELDS="gradeitemid"/>
+        <INDEX NAME="column_gigt" UNIQUE="false" FIELDS="gradeitemid, gradetype"/>
       </INDEXES>
     </TABLE>
     <TABLE NAME="local_gugrades_grade" COMMENT="Contains each grade instance">
@@ -64,6 +68,9 @@
       </KEYS>
       <INDEXES>
         <INDEX NAME="locguggra_cogrus" UNIQUE="false" FIELDS="courseid, gradeitemid, userid"/>
+        <INDEX NAME="logugradesgigtuiic" UNIQUE="false" FIELDS="gradeitemid, gradetype, userid, iscurrent"/>
+        <INDEX NAME="localgugrade_cigiuici" UNIQUE="false" FIELDS="courseid, gradeitemid, userid, columnid"/>
+        <INDEX NAME="local_gugrades_giuiic" UNIQUE="false" FIELDS="gradeitemid, userid, iscurrent"/>
       </INDEXES>
     </TABLE>
     <TABLE NAME="local_gugrades_audit" COMMENT="Contains audit trail of errors, warnings and info">
