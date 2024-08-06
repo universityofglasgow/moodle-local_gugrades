@@ -47,8 +47,8 @@ final class dashboard_get_courses_test extends \local_gugrades\external\gugrades
     public function test_filter_courses_by_date(): void {
         global $DB;
 
-        // We're the test student.
-        $this->setUser($this->student->id);
+        // Staff for next bit
+        $this->setUser($this->teacher->id);
 
         // Create some courses with suitable end dates.
         $oneyear = 86400 * 365;
@@ -88,6 +88,9 @@ final class dashboard_get_courses_test extends \local_gugrades\external\gugrades
         $this->getDataGenerator()->enrol_user($studentid, $currentcourse2->id);
         $this->getDataGenerator()->enrol_user($studentid, $pastcourse1->id);
         $this->getDataGenerator()->enrol_user($studentid, $pastcourse2->id);
+
+        // We're the test student.
+        $this->setUser($this->student->id);
 
         // Check that all courses are returned if no past/current.
         $courses = dashboard_get_courses::execute($studentid, false, false, '');
@@ -142,6 +145,9 @@ final class dashboard_get_courses_test extends \local_gugrades\external\gugrades
         $this->assertCount(3, $courses);
         $this->assertEquals('Current Course Two', $courses[1]['fullname']);
 
+        // Staff for next bit
+        $this->setUser($this->teacher->id);
+
         // MyGrades is enabled by releasing grades for a course.
         $userlist = [
             $this->student->id,
@@ -157,6 +163,9 @@ final class dashboard_get_courses_test extends \local_gugrades\external\gugrades
             release_grades::execute_returns(),
             $status
         );
+
+        // We're the test student (again).
+        $this->setUser($this->student->id);
 
         // Check again for mygrades.
         $courses = dashboard_get_courses::execute($studentid, true, false, '');

@@ -49,7 +49,7 @@ final class reset_test extends \local_gugrades\external\gugrades_advanced_testca
         // Use the test student.
         $studentid = $this->student->id;
         $courseid = $this->course->id;
-        $this->setUser($studentid);
+        $this->setUser($this->teacher->id);
 
         // Summative grade category.
         $gradecategoryid = $this->gradecatsumm->id;
