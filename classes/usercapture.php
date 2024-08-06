@@ -163,10 +163,13 @@ class usercapture {
      * @return boolean
      */
     public function is_gradebookhidden() {
-        $gradegrade = new \grade_grade(['itemid' => $this->gradeitemid, 'userid' => $this->userid], true);
-        $hidden = $gradegrade->get_hidden();
+        global $DB;
 
-        return $hidden;
+        if ($grade = $DB->get_record('grade_grades', ['itemid' => $this->gradeitemid, 'userid' => $this->userid])) {
+            return $grade->hidden != 0;
+        }
+
+        return false;
     }
 
     /**
