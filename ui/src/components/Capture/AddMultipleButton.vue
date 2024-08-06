@@ -1,5 +1,5 @@
 <template>
-    <button type="button" class="btn btn-outline-danger  mr-1" @click="add_multiple_button_click()">
+    <button type="button" class="btn btn-outline-primary  mr-1" @click="add_multiple_button_click()">
         {{ mstrings.addmultiple }}
     </button>
 

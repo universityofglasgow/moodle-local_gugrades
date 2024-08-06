@@ -1,5 +1,5 @@
 <template>
-    <button type="button" class="btn btn-outline-success mr-1" @click="showreleasemodal=true">
+    <button type="button" class="btn btn-outline-primary mr-1" @click="showreleasemodal=true">
         <span v-if="props.released">
             <span v-if="grouprelease">{{ mstrings.unreleasegradesgroup }}</span>
             <span v-else>{{ mstrings.unreleasegrades }}</span>

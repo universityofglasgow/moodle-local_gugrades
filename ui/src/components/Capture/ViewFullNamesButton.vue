@@ -1,5 +1,5 @@
 <template>
-    <button v-if="hascapability" type="button" class="btn btn-outline-success  mr-1" @click="toggle_view()">
+    <button v-if="hascapability" type="button" class="btn btn-outline-primary  mr-1" @click="toggle_view()">
         <span v-if="!togglereveal">{{ mstrings.viewfullnames }}</span>
         <span v-if="togglereveal">{{ mstrings.hidefullnames }}</span>
     </button>

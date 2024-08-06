@@ -1,5 +1,5 @@
 <template>
-    <button type="button" class="btn btn-outline-warning  mr-1" @click="conversion_clicked()">
+    <button type="button" class="btn btn-outline-primary  mr-1" @click="conversion_clicked()">
         {{ mstrings.convertgrades }}
     </button>
 
