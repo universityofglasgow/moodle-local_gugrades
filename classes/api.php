@@ -102,7 +102,8 @@ class api {
         return [
             'users' => $users,
             'columns' => $columns,
-            'hidden' => $activity->is_names_hidden() || self::is_gradeitem_hidden($gradeitemid),
+            //'hidden' => $activity->is_names_hidden() || self::is_gradeitem_hidden($gradeitemid),
+            'hidden' => $activity->is_names_hidden(),
             'itemtype' => $activity->get_itemtype(),
             'itemname' => $activity->get_itemname(),
             'gradesupported' => true,
