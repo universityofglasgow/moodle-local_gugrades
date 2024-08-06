@@ -186,7 +186,11 @@ class api {
         $csv .= get_string('name', 'local_gugrades') . ',' . get_string('idnumber', 'local_gugrades') . ',' .
             get_string('grade', 'local_gugrades') . PHP_EOL;
         foreach ($users as $user) {
-            $csv .= $user->displayname . ',' . $user->idnumber . ',' . PHP_EOL;
+
+            // MGU-897: Don't include users with no idnumber (we can't re-import them, anyway).
+            if ($user->idnumber) {
+                $csv .= $user->displayname . ',' . $user->idnumber . ',' . PHP_EOL;
+            }
         }
 
         return $csv;
