@@ -3,8 +3,8 @@
         <div class="border rounded p-2 mt-2">
             <div class="col-12 mb-2">
                 <button class="badge badge-primary" @click="selectcollapse">
-                    <span v-if="collapsed"><i class="fa fa-arrow-right"></i> {{ mstrings.show }}</span>
-                    <span v-else><i class="fa fa-arrow-down"></i> {{ mstrings.hide }}</span>
+                    <span v-if="collapsed"><i class="fa fa-arrow-right"></i> {{ mstrings.showcategories }}</span>
+                    <span v-else><i class="fa fa-arrow-down"></i> {{ mstrings.hidecategories }}</span>
                 </button>
             </div>
 
