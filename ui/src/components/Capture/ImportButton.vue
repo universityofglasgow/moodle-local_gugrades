@@ -142,7 +142,7 @@
             const importcount = result['importcount'];
             emit('imported');
             if (importcount) {
-                toast.success(mstrings.gradesimportedsuccess + ' (' + importcount + ')');
+                toast.success(mstrings.gradesimportedsuccess);
             } else {
                 toast.warning(mstrings.nogradestoimport);
             }
@@ -176,7 +176,7 @@
             const gradecount = result.gradecount;
             emit('imported');
             if (gradecount) {
-                toast.success(mstrings.gradesimportedsuccess + ' (' + itemcount + ', ' + gradecount + ')');
+                toast.success(mstrings.gradesimportedsuccess);
             } else {
                 toast.warning(mstrings.nogradestoimport);
             }
