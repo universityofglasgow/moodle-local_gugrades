@@ -329,6 +329,11 @@
         const courseid = GU.courseid;
         const fetchMany = GU.fetchMany;
 
+        // If we happen to end up here with no categoryid then just bail out.
+        if (!Number.isInteger(categoryid.value)) {
+            return;
+        }
+
         loading.value = true;
 
         fetchMany([{
