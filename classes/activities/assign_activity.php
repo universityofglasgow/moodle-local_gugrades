@@ -204,6 +204,7 @@ class assign_activity extends base {
             'attemptnumber' => 0,
             'workflowstate' => 'released',
             'feedbackformat' => 0,
+            'commentformat' => 0,
         ];
         $this->assign->save_grade($userid, $data);
 
@@ -220,6 +221,7 @@ class assign_activity extends base {
             'attemptnumber' => 0,
             'workflowstate' => 'readyforrelease',
             'feedbackformat' => 0,
+            'commentformat' => 0,
         ];
         $this->assign->save_grade($userid, $data);
 
