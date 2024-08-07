@@ -29,6 +29,7 @@ $courseid = required_param('id', PARAM_INT);
 
 $url = new moodle_url('/local/gugrades/ui/dist/index.php', ['id' => $courseid]);
 $PAGE->set_url($url);
+$PAGE->add_body_class("gugrades");
 
 // Stuff to include.
 $PAGE->requires->js_call_amd('local_gugrades/interface', 'init', [['courseid' => $courseid]]);
