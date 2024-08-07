@@ -204,7 +204,10 @@ class assign_activity extends base {
             'attemptnumber' => 0,
             'workflowstate' => 'released',
             'feedbackformat' => 0,
-            'assignfeedbackcommentsformat' => 0,
+            'assignfeedbackcomments_editor' => [
+                'text' => '',
+                'format' => 0,
+            ],
         ];
         $this->assign->save_grade($userid, $data);
 
@@ -221,7 +224,10 @@ class assign_activity extends base {
             'attemptnumber' => 0,
             'workflowstate' => 'readyforrelease',
             'feedbackformat' => 0,
-            'assignfeedbackcommentsformat' => 0,
+            'assignfeedbackcomments_editor' => [
+                'text' => '',
+                'format' => 0,
+            ],
         ];
         $this->assign->save_grade($userid, $data);
 
