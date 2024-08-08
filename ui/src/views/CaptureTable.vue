@@ -135,9 +135,9 @@
 
                     <!-- show warning if grades do not agree -->
                     <template #item-alert="item">
-                        <span v-if="item.alert" class="badge badge-danger mb-1">{{ mstrings.discrepancy }}</span><br />
-                        <span v-if="item.gradebookhidden" class="badge badge-success mb-1">{{ mstrings.hiddengradebook }}</span><br />
-                        <span v-if="item.gradehidden" class="badge badge-warning">{{ mstrings.hiddenmygrades }}</span>
+                        <div v-if="item.alert" class="badge badge-danger mb-1 mr-1">{{ mstrings.discrepancy }}</div>
+                        <div v-if="item.gradebookhidden" class="badge badge-success mb-1 mr-1">{{ mstrings.hiddengradebook }}</div>
+                        <div v-if="item.gradehidden" class="badge badge-warning mb-1">{{ mstrings.hiddenmygrades }}</div>
                     </template>
                 </EasyDataTable>
 
