@@ -81,6 +81,13 @@
                         <img :src="item.pictureurl" :alt="item.displayname" class="userpicture defaultuserpic" width="35" height="35"/>
                     </template>
 
+                    <!-- Provisional column -->
+                    <template v-slot:[provisionalslot]="item">
+                        <span v-if="item.gradehidden && !item.gradebookhidden" class="border border-lg border-warning rounded p-1">{{ item[provisionalid] }}</span>
+                        <span v-if="item.gradebookhidden" class="border border-lg border-success rounded p-1">{{ item[provisionalid] }}</span>
+                        <span v-if="!item.gradebookhidden && !item.gradehidden">{{ item[provisionalid] }}</span>
+                    </template>
+
                     <!--
                     <template #item-grade="item">
                         <CaptureGrades :grades="item.grades"></CaptureGrades>
@@ -196,6 +203,8 @@
     const editnotes = ref('');
     const editcancelled = ref(false);
     const showconversion = ref(false);
+    const provisionalslot = ref('');
+    const provisionalid = ref('');
 
     const toast = useToast();
 
@@ -239,6 +248,7 @@
      * Used to show hidden rows
      */
     function table_row_class(item) {
+        return 'non-hidden-row'
         if (item.gradehidden) {
             return 'hidden-row';
         } else if (item.gradebookhidden) {
@@ -382,6 +392,13 @@
 
         // Add the grades columns
         columns.value.forEach(column => {
+
+            // grab the value of the provisional column
+            // We'll use it to style the column in the table.
+            if (column.gradetype == 'PROVISIONAL') {
+                provisionalslot.value = 'item-GRADE' + column.id;
+                provisionalid.value = 'GRADE' + column.id;
+            }
 
             // Make sure that the value is a string
             heads.push({
@@ -648,5 +665,9 @@
         --easy-table-header-background-color: #005c8a;
 
         --easy-table-header-item-padding: 10px 15px;
+    }
+
+    .border-lg {
+        border-width: thick !important;
     }
 </style>
