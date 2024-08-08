@@ -1,4 +1,4 @@
-<?php
+/<?php
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -112,6 +112,15 @@ if ($hassiteconfig) {
         PARAM_INT,
     );
     $settingspage->add($maxparticipants);
+
+    // Start date after for past tab
+    $startdateafter = new \local_gugrades\adminsetting\admin_setting_configdate(
+        'local_gugrades/startdateafter',
+        get_string('startdateafter', 'local_gugrades'),
+        get_string('startdateafter_help', 'local_gugrades'),
+        strtotime('2024-08-05'),
+    );
+    $settingspage->add($startdateafter);
 
     $ADMIN->add('localplugins', $settingspage);
 }

@@ -1123,6 +1123,9 @@ class api {
     public static function dashboard_get_courses(int $userid, bool $current, bool $past, string $sort) {
         global $DB, $USER;
 
+        // startdate filter value.
+        $startdateafter = get_config('local_gugrades', 'startdateafter');
+
         // If this isn't current user, do they have the rights to look at other users.
         $context = \context_system::instance();
 
@@ -1149,8 +1152,8 @@ class api {
                 continue;
             }
 
-            // Current/past cutoff is enddate + 30 days.
-            $cutoffdate = $course->enddate + (86400 * 30);
+            // Current/past cutoff is enddate.
+            $cutoffdate = $course->enddate;
 
             // If current selected only return 'current' courses
             // enddate == 0 is taken to be current, regardless.
@@ -1163,8 +1166,13 @@ class api {
 
             // If past is selected only return past courses
             // enddate == 0 is taken to be NOT past, regardless.
+            // startdate has to be >= startdateafter.
             if ($past) {
                 if (!$course->enddate || (time() < $cutoffdate)) {
+                    unset($courses[$id]);
+                    continue;
+                }
+                if ($course->startdate < $startdateafter) {
                     unset($courses[$id]);
                     continue;
                 }
@@ -1177,19 +1185,6 @@ class api {
 
             // Check if MyGrades is enabled for this course?
             [$course->gugradesenabled, $gradesreleased] = self::get_dashboard_enabled($id);
-
-            // Check if (old) GCAT is enabled for this course?
-            $sqlshortname = $DB->sql_compare_text('shortname');
-            $sql = "SELECT * FROM {customfield_data} cd
-                JOIN {customfield_field} cf ON cf.id = cd.fieldid
-                WHERE cd.instanceid = :courseid
-                AND cd.intvalue = 1
-                AND $sqlshortname = 'show_on_studentdashboard'";
-            if ($DB->record_exists_sql($sql, ['courseid' => $id])) {
-
-                // TODO: does this need any capability checks?
-                $course->gcatenabled = true;
-            }
 
             // Get first-level grade categories.
             $categories = \local_gugrades\grades::get_firstlevel($id);
