@@ -218,15 +218,15 @@
         let currentpoints = 0;
         let inorder = true;
         items.value.forEach((item) => {
-            if (currentpercent > item.boundpc) {
+            if (currentpercent > Number(item.boundpc)) {
                 inorder = false;
             } else {
-                currentpercent = item.boundpc;
+                currentpercent = Number(item.boundpc);
             }
-            if (currentpoints > item.boundpoints) {
+            if (currentpoints > Number(item.boundpoints)) {
                 inorder = false;
             } else {
-                currentpoints = item.boundpoints;
+                currentpoints = Number(item.boundpoints);
             }
         });
 
