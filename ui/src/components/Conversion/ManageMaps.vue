@@ -14,9 +14,11 @@
                     <span v-else>{{ mstrings.no }}</span>
                 </template>
                 <template #item-actions="map">
-                    <button class="btn btn-success btn-sm mr-1" @click="edit_clicked(map.id)">{{ mstrings.edit }}</button>
-                    <button class="btn btn-danger btn-sm mr-1" :class="{ disabled: map.inuse }" :disabled="map.inuse" @click="delete_clicked(map.id)">{{ mstrings.delete }}</button>
-                    <button class="btn btn-info btn-sm mr-1" @click="export_clicked(map.id)">{{ mstrings.export }}</button>
+                    <div class="btn-group" role="group" aria-label="Actions">
+                        <button class="btn btn-primary btn-sm mr-1" @click="edit_clicked(map.id)">{{ mstrings.edit }}</button>
+                        <button class="btn btn-primary btn-sm mr-1" :class="{ disabled: map.inuse }" :disabled="map.inuse" @click="delete_clicked(map.id)">{{ mstrings.delete }}</button>
+                        <button class="btn btn-primary btn-sm mr-1" @click="export_clicked(map.id)">{{ mstrings.export }}</button>
+                    </div>
                 </template>
             </EasyDataTable>
 

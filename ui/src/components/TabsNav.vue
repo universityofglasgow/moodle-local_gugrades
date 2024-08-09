@@ -1,38 +1,44 @@
 <template>
-    <div id="tabsnav">
-        <ul class="nav nav-pills mb-4 border-bottom">
-            <li class="nav-item">
-                <a class="nav-link btn btn-secondary" :class="{active: activetab == 'capture'}" @click="clickTab('capture')">
-                    <i class="fa fa-download" aria-hidden="true"></i>&nbsp;
-                    {{ mstrings.assessmentgradecapture }}
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link btn btn-secondary" :class="{active: activetab == 'conversion'}" @click="clickTab('conversion')">
-                    <i class="fa fa-exchange" aria-hidden="true"></i>&nbsp;
-                    {{ mstrings.manageconversion }}
-                </a>
-            </li>
-            <li class="nav-item" v-if="props.viewaggregation">
-                <a class="nav-link btn btn-secondary" :class="{active: activetab == 'aggregation'}" @click="clickTab('aggregation')">
-                    <i class="fa fa-compress" aria-hidden="true"></i>&nbsp;
-                    {{ mstrings.coursegradeaggregation }}
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link btn btn-secondary" :class="{active: activetab == 'audit'}" @click="clickTab('audit')">
-                    <i class="fa fa-history" aria-hidden="true"></i>&nbsp;
-                    {{ mstrings.auditlog }}
-                </a>
-            </li>
-            <li class="nav-item" v-if="settingscapability">
-                <a class="nav-link btn btn-secondary" :class="{active: activetab == 'settings'}" @click="clickTab('settings')">
-                    <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;
-                    {{ mstrings.settings }}
-                </a>
-            </li>
-        </ul>
-    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary rounded mb-2">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item" :class="{active: activetab == 'capture'}">
+                    <a class="nav-link" @click="clickTab('capture')">
+                        <i class="fa fa-download" aria-hidden="true"></i>&nbsp;
+                        {{ mstrings.assessmentgradecapture }}
+                    </a>
+                </li>
+                <li class="nav-item" :class="{active: activetab == 'conversion'}">
+                    <a class="nav-link"  @click="clickTab('conversion')">
+                        <i class="fa fa-exchange" aria-hidden="true"></i>&nbsp;
+                        {{ mstrings.manageconversion }}
+                    </a>
+                </li>
+                <li class="nav-item" v-if="props.viewaggregation" :class="{active: activetab == 'aggregation'}">
+                    <a class="nav-link"  @click="clickTab('aggregation')">
+                        <i class="fa fa-compress" aria-hidden="true"></i>&nbsp;
+                        {{ mstrings.coursegradeaggregation }}
+                    </a>
+                </li>
+                <li class="nav-item" :class="{active: activetab == 'audit'}">
+                    <a class="nav-link"  @click="clickTab('audit')">
+                        <i class="fa fa-history" aria-hidden="true"></i>&nbsp;
+                        {{ mstrings.auditlog }}
+                    </a>
+                </li>
+                <li class="nav-item" v-if="settingscapability" :class="{active: activetab == 'settings'}">
+                    <a class="nav-link"  @click="clickTab('settings')">
+                        <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;
+                        {{ mstrings.settings }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 </template>
 
 <script setup>
