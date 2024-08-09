@@ -1,5 +1,5 @@
 <template>
-    <a href="#" class="ml-1"><i class="fa fa-cogs fa-lg" aria-hidden="true" @click="cog_clicked"></i></a>
+    <a href="#" class="ml-1" aria-label="Bulk edit"><i class="fa fa-cogs fa-lg" aria-hidden="true" @click="cog_clicked"  title="Bulk edit"></i></a>
 </template>
 
 <script setup>

@@ -78,7 +78,7 @@
 
                     <!-- User picture column -->
                     <template #item-slotuserpicture="item">
-                        <img :src="item.pictureurl" :alt="item.displayname" class="userpicture defaultuserpic" width="35" height="35"/>
+                        <img :src="item.pictureurl" alt="" class="userpicture defaultuserpic" width="35" height="35"/>
                     </template>
 
                     <!-- Provisional column -->
@@ -132,9 +132,11 @@
 
                     <!-- show warning if grades do not agree -->
                     <template #item-alert="item">
-                        <div v-if="item.alert" class="badge badge-danger mb-1 mr-1">{{ mstrings.discrepancy }}</div>
-                        <div v-if="item.gradebookhidden" class="badge badge-success mb-1 mr-1">{{ mstrings.hiddengradebook }}</div>
-                        <div v-if="item.gradehidden" class="badge badge-warning mb-1">{{ mstrings.hiddenmygrades }}</div>
+                        <div class="capture-warning">
+                            <div v-if="item.alert" class="badge badge-pill badge-danger mb-1 mr-1">{{ mstrings.discrepancy }}</div>
+                            <div v-if="item.gradebookhidden" class="badge badge-pill badge-success mb-1 mr-1">{{ mstrings.hiddengradebook }}</div>
+                            <div v-if="item.gradehidden" class="badge badge-pill badge-warning mb-1">{{ mstrings.hiddenmygrades }}</div>
+                        </div>
                     </template>
                 </EasyDataTable>
 
@@ -409,7 +411,7 @@
         });
 
         // Space for the buttons column
-        heads.push({text: "", value: "actions"});
+        heads.push({text: mstrings.actions, value: "actions"});
 
         return heads;
     });
@@ -658,7 +660,7 @@
     .capture-table {
         --easy-table-header-font-size: 14px;
         --easy-table-header-height: 50px;
-        --easy-table-header-font-color: #c1cad4;
+        --easy-table-header-font-color: #ffffff;
         --easy-table-header-background-color: #005c8a;
 
         --easy-table-header-item-padding: 10px 15px;
@@ -666,5 +668,9 @@
 
     .border-lg {
         border-width: thick !important;
+    }
+
+    .capture-warning {
+        font-size: 125%;
     }
 </style>

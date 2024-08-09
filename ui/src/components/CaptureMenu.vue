@@ -1,6 +1,6 @@
 <template>
     <div class="tn-group dropright">
-        <button class="btn btn-outline-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="btn btn-outline-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="Actions">
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <ImportUserGradeButton v-if="props.awaitingcapture && !props.converted" :itemid="props.itemid" :userid="props.userid" @imported="grade_added()"></ImportUserGradeButton>
