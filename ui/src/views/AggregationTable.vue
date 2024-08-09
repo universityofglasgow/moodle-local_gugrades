@@ -10,12 +10,14 @@
 
         <!-- display warnings -->
         <div>
-            <div v-for="warning in warnings" class="alert alert-warning alert-dismissible fade show mb-1" role="alert">
-                {{ warning.message }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+            <small>
+                <div v-for="warning in warnings" class="alert alert-warning alert-dismissible fade show mb-1" role="alert">
+                    {{ warning.message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </small>
         </div>
 
         <!-- Filter on initials -->
