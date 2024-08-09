@@ -83,16 +83,13 @@
 
                     <!-- Provisional column -->
                     <template v-slot:[provisionalslot]="item">
-                        <span v-if="item.gradehidden && !item.gradebookhidden" class="border border-lg border-warning rounded p-1">{{ item[provisionalid] }}</span>
-                        <span v-if="item.gradebookhidden" class="border border-lg border-success rounded p-1">{{ item[provisionalid] }}</span>
-                        <span v-if="!item.gradebookhidden && !item.gradehidden">{{ item[provisionalid] }}</span>
+                        <div v-if="item[provisionalid]">
+                            <span v-if="item.gradehidden && !item.gradebookhidden" class="border border-lg border-warning rounded p-1">{{ item[provisionalid] }}</span>
+                            <span v-if="item.gradebookhidden" class="border border-lg border-success rounded p-1">{{ item[provisionalid] }}</span>
+                            <span v-if="!item.gradebookhidden && !item.gradehidden">{{ item[provisionalid] }}</span>
+                        </div>
                     </template>
 
-                    <!--
-                    <template #item-grade="item">
-                        <CaptureGrades :grades="item.grades"></CaptureGrades>
-                    </template>
-                    -->
 
                     <!-- switch to input for bulk editing (if selected) -->
                     <template v-slot:[editcolumnslot]="item">
@@ -451,7 +448,7 @@
             } else if (column.gradetype == 'FIRST') {
                 user[columnname] = mstrings.awaitingcapture;
             } else {
-                user[columnname] = ' ';
+                user[columnname] = '';
             }
 
             // Is this column in 'editing mode'?
