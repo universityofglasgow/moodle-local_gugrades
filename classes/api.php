@@ -137,7 +137,7 @@ class api {
         $user = \local_gugrades\grades::add_grades_for_user($courseid, $gradeitemid, $user);
 
         // Add/update picture
-        $user = \local_gugrades\users::add_picture_to_user_record($user);
+        $user = \local_gugrades\users::add_picture_and_profile_to_user_record($courseid, $user);
 
         // Add/update gradehidden
         $user = \local_gugrades\users::add_gradehidden_to_user_record($user, $gradeitemid);
@@ -1533,7 +1533,7 @@ class api {
         $users = \local_gugrades\aggregation::add_aggregation_fields_to_users($courseid, $gradecategoryid, $users, $columns);
 
         // Add pictures to user fields.
-        $users = \local_gugrades\users::add_pictures_to_user_records($users);
+        //$users = \local_gugrades\users::add_pictures_and_profiles_to_user_records($users);
 
         // Get breadcrumb trail.
         $breadcrumb = \local_gugrades\aggregation::get_breadcrumb($gradecategoryid);

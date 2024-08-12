@@ -41,6 +41,8 @@
             v-if="!loading"
             buttons-pagination
             alternating
+            sort-by="displayname"
+            sort-type="asc"
             table-class-name="aggregation-table"
             header-text-direction="center"
             :body-item-class-name="table_item_class"
@@ -86,7 +88,9 @@
 
             <!-- User picture column -->
             <template #item-slotuserpicture="item">
-                <img :src="item.pictureurl" :alt="item.displayname" class="userpicture defaultuserpic" width="35" height="35"/>
+                <a :href="item.profileurl">
+                    <img :src="item.pictureurl" :alt="item.displayname" class="userpicture defaultuserpic" width="35" height="35"/>
+                </a>
             </template>
 
             <!-- Resit required -->

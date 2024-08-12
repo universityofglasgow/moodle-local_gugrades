@@ -101,6 +101,7 @@ class get_aggregation_page extends external_api {
                     'id' => new external_value(PARAM_INT, 'User ID'),
                     'displayname' => new external_value(PARAM_TEXT, 'Name to display for this user'),
                     'pictureurl' => new external_value(PARAM_URL, 'URL of user avatar'),
+                    'profileurl' => new external_value(PARAM_URL, 'Like to user profile page'),
                     'idnumber' => new external_value(PARAM_TEXT, 'User ID number'),
                     'resitrequired' => new external_value(PARAM_BOOL, 'Is resit required?'),
                     'completed' => new external_value(PARAM_INT, '%age of course completed'),

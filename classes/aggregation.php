@@ -231,7 +231,7 @@ class aggregation {
         }
 
         // Pictures.
-        $users = \local_gugrades\users::add_pictures_to_user_records($users);
+        $users = \local_gugrades\users::add_pictures_and_profiles_to_user_records($courseid, $users);
 
         return array_values($users);
     }
