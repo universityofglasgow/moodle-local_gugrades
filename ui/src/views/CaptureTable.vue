@@ -80,7 +80,9 @@
 
                     <!-- User picture column -->
                     <template #item-slotuserpicture="item">
-                        <img :src="item.pictureurl" alt="" class="userpicture defaultuserpic" width="35" height="35"/>
+                        <a :href="item.profileurl">
+                            <img :src="item.pictureurl" alt="" class="userpicture defaultuserpic" width="35" height="35"/>
+                        </a>
                     </template>
 
                     <!-- Provisional column -->

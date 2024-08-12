@@ -147,12 +147,13 @@ class users {
 
     /**
      * Add pictures to user records
+     * @param int $courseid
      * @param array $users
      * @return array
      */
-    public static function add_pictures_to_user_records(array $users) {
+    public static function add_pictures_and_profiles_to_user_records(int $courseid, array $users) {
         foreach ($users as $id => $user) {
-            $users[$id] = self::add_picture_to_user_record($user);
+            $users[$id] = self::add_picture_and_profile_to_user_record($courseid, $user);
         }
 
         return $users;
@@ -160,14 +161,19 @@ class users {
 
     /**
      * Add picture to single user record
+     * @param int $couseid
      * @param object $user
      * @param return object
      */
-    public static function add_picture_to_user_record(object $user) {
+    public static function add_picture_and_profile_to_user_record(int $courseid, object $user) {
         global $PAGE;
 
         $userpicture = new \user_picture($user);
         $user->pictureurl = $userpicture->get_url($PAGE)->out(false);
+
+        // Also add profile url while we are here
+        $profile = new \moodle_url('/user/view.php', ['course' => $courseid, 'id' => $user->id]);
+        $user->profileurl = $profile->out(false);
 
         return $user;
     }

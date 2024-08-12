@@ -92,7 +92,7 @@ class api {
         // Will be everybody for 'manual' grades or filtered list for modules.
         $users = $activity->get_users();
         $users = \local_gugrades\grades::add_grades_to_user_records($courseid, $gradeitemid, $users);
-        $users = \local_gugrades\users::add_pictures_to_user_records($users);
+        $users = \local_gugrades\users::add_pictures_and_profiles_to_user_records($courseid, $users);
         $users = \local_gugrades\users::add_gradehidden_to_user_records($users, $gradeitemid);
         $columns = \local_gugrades\grades::get_grade_capture_columns($courseid, $gradeitemid);
         $gradesimported = \local_gugrades\grades::is_grades_imported($courseid, $gradeitemid);

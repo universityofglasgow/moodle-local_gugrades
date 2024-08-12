@@ -92,6 +92,7 @@ class get_capture_page extends external_api {
                     'id' => new external_value(PARAM_INT, 'User ID'),
                     'displayname' => new external_value(PARAM_TEXT, 'Name to display for this user'),
                     'pictureurl' => new external_value(PARAM_URL, 'URL of user avatar'),
+                    'profileurl' => new external_value(PARAM_URL, 'Like to user profile page'),
                     'idnumber' => new external_value(PARAM_TEXT, 'User ID number'),
                     'alert' => new external_value(PARAM_BOOL, 'Show discrepancy alert'),
                     'gradehidden' => new external_value(PARAM_BOOL, 'User grades hidden for this grade item'),
