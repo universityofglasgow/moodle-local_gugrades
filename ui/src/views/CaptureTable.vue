@@ -61,6 +61,8 @@
                 <EasyDataTable
                     buttons-pagination
                     alternating
+                    sort-by="displayname"
+                    sort-type="asc"
                     table-class-name="capture-table"
                     :items="users"
                     :headers="headers"
