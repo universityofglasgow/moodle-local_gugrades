@@ -236,4 +236,20 @@ class users {
 
         return $code;
     }
+
+    /**
+     * Allow display of CSV import button
+     * Only if one or more ID number
+     * @param array $users
+     * @return bool
+     */
+    public static function showcsvimport(array $users) {
+        foreach ($users as $user) {
+            if ($user->idnumber) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

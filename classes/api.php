@@ -74,6 +74,7 @@ class api {
                 'showconversion' => false,
                 'converted' => false,
                 'released' => false,
+                'showcsvimport' => false,
             ];
         }
 
@@ -98,6 +99,7 @@ class api {
         $gradesimported = \local_gugrades\grades::is_grades_imported($courseid, $gradeitemid);
         $converted = \local_gugrades\conversion::is_conversion_applied($courseid, $gradeitemid);
         $released = \local_gugrades\grades::is_grades_released($courseid, $gradeitemid);
+        $showcsvimport = \local_gugrades\users::showcsvimport($users);
 
         return [
             'users' => $users,
@@ -113,6 +115,7 @@ class api {
             'showconversion' => $showconversion && $gradesimported,
             'converted' => $converted,
             'released' => $released,
+            'showcsvimport' => $showcsvimport,
         ];
     }
 

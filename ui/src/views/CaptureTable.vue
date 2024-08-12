@@ -33,6 +33,7 @@
                         :converted="converted"
                         :released="released"
                         :revealnames="revealnames"
+                        :showcsvimport="showcsvimport"
                         @refreshtable="refresh"
                         @viewfullnames="viewfullnames"
                         @editcolumn="editcog_clicked"
@@ -208,6 +209,7 @@
     const showconversion = ref(false);
     const provisionalslot = ref('');
     const provisionalid = ref('');
+    const showcsvimport = ref(true);
 
     const toast = useToast();
 
@@ -535,6 +537,7 @@
             showconversion.value = result.showconversion;
             converted.value = result.converted;
             released.value = result.released;
+            showcsvimport.value = result.showcsvimport;
 
             users.value = add_grades(users.value, columns.value);
 
