@@ -43,7 +43,12 @@
                     {{ item.error }}
                 </template>
             </EasyDataTable>
-            <p v-if="errorcount" class="text-danger mt-1">{{ mstrings.lineswitherrors }}: {{ errorcount }}</p>
+            <p v-if="errorcount" class="text-danger mt-1">{{ mstrings.lineswitherrors }}: {{ errorcount }}:</p>
+            <ul class="text-danger">
+                <li v-for="error in errorlist" v-key="error.error">
+                    <span>{{ error.error }}</span>: <b>{{ error.count }} line(s)</b>
+                </li>
+            </ul>
 
             <!-- submit bit (if no errors) -->
             <div v-if="!errorcount" class="mt-2">
@@ -88,6 +93,7 @@
     const pagestate = ref('showuploadpage');
     const csvcontent = ref('');
     const errorcount = ref(0);
+    const errorlist = ref([]);
     const addcount = ref(0);
     const lines = ref([]);
     const headers = ref([]);
@@ -163,6 +169,7 @@
             lines.value = result.lines;
             errorcount.value = result.errorcount;
             addcount.value = result.addcount;
+            errorlist.value = result.errorlist;
             pagestate.value = 'showtestrun';
             if (!testrun) {
                 toast.success(mstrings.csvgradesadded + ' (' + addcount.value + ')');

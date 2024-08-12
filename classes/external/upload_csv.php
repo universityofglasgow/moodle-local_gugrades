@@ -79,7 +79,7 @@ class upload_csv extends external_api {
         $context = \context_course::instance($courseid);
         self::validate_context($context);
 
-        list($lines, $errorcount, $addcount) = \local_gugrades\api::csv_upload($courseid, $gradeitemid, $groupid,
+        [$lines, $errorcount, $addcount, $errorlist] = \local_gugrades\api::csv_upload($courseid, $gradeitemid, $groupid,
             $testrun, $reason, $other, $csv);
 
         // Log.
@@ -99,6 +99,7 @@ class upload_csv extends external_api {
             'lines' => $lines,
             'errorcount' => $errorcount,
             'addcount' => $addcount,
+            'errorlist' => $errorlist,
         ];
     }
 
@@ -120,6 +121,12 @@ class upload_csv extends external_api {
             ),
             'errorcount' => new external_value(PARAM_INT, 'Count of error lines'),
             'addcount' => new external_value(PARAM_INT, 'Count of added grades'),
+            'errorlist' => new external_multiple_structure(
+                new external_single_structure([
+                    'error' => new external_value(PARAM_TEXT, 'Name of error/warning'),
+                    'count' => new external_value(PARAM_INT, 'Error/warning count'),
+                ])
+            )
         ]);
     }
 }

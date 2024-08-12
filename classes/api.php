@@ -236,6 +236,13 @@ class api {
         $addcount = 0;
         $errorcount = 0;
 
+        // Specific errors
+        $errors = [
+            'csvtoofewitems' => 0,
+            'csvidinvalid' => 0,
+            'csvgradeinvalid' => 0,
+        ];
+
         // Iterate over CSV lines, checking and (optionally) adding new grade.
         foreach ($lines as $line) {
 
@@ -252,6 +259,7 @@ class api {
             // We just need the idnumber, so must have at least two entries.
             if (count($line) < 2) {
                 $testrunline['error'] = get_string('csvtoofewitems', 'local_gugrades');
+                $errors['cvstoofewitems']++;
                 $testrunline['state'] = -1;
                 $testrunlines[] = $testrunline;
                 $errorcount++;
@@ -269,6 +277,7 @@ class api {
             // Check we have a (valid) idnumber.
             if (!isset($idusers[$idnumber])) {
                 $testrunline['error'] = get_string('csvidinvalid', 'local_gugrades');
+                $errors['csvidinvalid']++;
                 $testrunline['state'] = -1;
                 $testrunlines[] = $testrunline;
                 $errorcount++;
@@ -281,6 +290,7 @@ class api {
                 list($gradevalid, $gradevalue) = $conversion->csv_value($grade);
                 if (!$gradevalid) {
                     $testrunline['error'] = get_string('csvgradeinvalid', 'local_gugrades');
+                    $errors['csvgradeinvalid']++;
                     $testrunlines[] = $testrunline;
                     $errorcount++;
                     continue;
@@ -294,6 +304,8 @@ class api {
             }
 
             $testrunlines[] = $testrunline;
+
+
 
             // If we get to here and not a testrun, we can actually save the data.
             if (!$testrun) {
@@ -320,7 +332,18 @@ class api {
             }
         }
 
-        return [$testrunlines, $errorcount, $addcount];
+        // Convert errors so web service friendly
+        $errorlist = [];
+        foreach ($errors as $str => $count) {
+            if ($count) {
+                $errorlist[] = [
+                    'error' => get_string($str, 'local_gugrades'),
+                    'count' => $count,
+                ];
+            }
+        }
+
+        return [$testrunlines, $errorcount, $addcount, $errorlist];
     }
 
     /**
